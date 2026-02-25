@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Inter';
+  src: url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+}
+
+:root {
+  --primary: #050505;
+  --surface: #121212;
+  --surface-light: #1e1e1e;
+  --accent: #ff3333;
+  --accent-hover: #e62e2e;
+  --yellow: #facc15;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --border: #27272a;
+}
+
+@layer base {
+  body {
+    background-color: #050505;
+    color: white;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-[#121212]/80 backdrop-blur-md border border-white/5;
+  }
+
+  .glass-card {
+    @apply bg-[#121212] border border-white/[0.05] rounded-[24px] p-6 shadow-2xl transition-all duration-300;
+  }
+
+  .nav-link {
+    @apply flex items-center gap-2 text-zinc-400 hover:text-white transition-all font-medium py-2;
+  }
+
+  .btn-red {
+    @apply px-8 py-2.5 bg-[#ff3333] hover:bg-[#e62e2e] text-white rounded-[12px] font-bold transition-all active:scale-95 shadow-lg shadow-red-600/20;
+  }
+
+  .btn-outline {
+    @apply px-8 py-2.5 border border-zinc-700 hover:border-zinc-500 text-white rounded-[12px] font-bold transition-all active:scale-95;
+  }
+
+  .odds-badge {
+    @apply px-4 py-2 bg-zinc-800/50 rounded-[12px] border border-zinc-700/50 flex flex-col items-center gap-1 min-w-[120px];
+  }
+
+  .cricwin-logo {
+    @apply text-2xl font-black italic tracking-tighter flex items-center gap-0.5;
+  }
+
+  .logo-red {
+    @apply text-[#ff3333];
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-[#050505];
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-zinc-800 rounded-full hover:bg-zinc-700;
+}
+
+.bg-grid {
+  background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+  background-size: 32px 32px;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
