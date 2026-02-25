@@ -3,17 +3,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-    appId: import.meta.env.VITE_FIREBASE_APP_ID
+    apiKey: "AIzaSyAUswd0rJHOZMIyPwkbndY4as6eZqhp0B4",
+    authDomain: "tips-94f01.firebaseapp.com",
+    projectId: "tips-94f01",
+    storageBucket: "tips-94f01.firebasestorage.app",
+    messagingSenderId: "999742745034",
+    appId: "1:999742745034:web:f23d9c2f841f66b5650733"
 };
-
-if (!import.meta.env.VITE_FIREBASE_API_KEY) {
-    console.error("❌ Firebase API Key is missing! Check your .env file and restart the dev server (Ctrl+C and npm run dev).");
-}
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
