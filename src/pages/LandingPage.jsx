@@ -224,7 +224,11 @@ const LandingPage = () => {
 
                             <div className="mb-10 text-center">
                                 <h2 className="text-4xl font-black italic tracking-tighter mb-3 uppercase leading-none">
-                                    {isLogin ? 'Welcome <span className="logo-red">Back</span>' : 'Join the <span className="logo-red">Game</span>'}
+                                    {isLogin ? (
+                                        <>Welcome <span className="logo-red">Back</span></>
+                                    ) : (
+                                        <>Join the <span className="logo-red">Game</span></>
+                                    )}
                                 </h2>
                                 <p className="text-zinc-500 text-sm font-medium">
                                     {isLogin ? 'Login to continue your winning streak.' : 'Create an account and start predicting.'}
