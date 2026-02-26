@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
-import { Trophy, Medal, Star } from 'lucide-react';
+import { Trophy, Medal, Star, Crown, TrendingUp, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Leaderboard = () => {
@@ -29,67 +29,97 @@ const Leaderboard = () => {
 
     const getRankBadge = (rank) => {
         switch (rank) {
-            case 1: return <Medal className="text-yellow-400" size={24} />;
-            case 2: return <Medal className="text-slate-300" size={24} />;
-            case 3: return <Medal className="text-amber-600" size={24} />;
-            default: return <span className="text-slate-500 font-bold ml-1.5">{rank}</span>;
+            case 1: return <div className="bg-yellow-400 p-2 rounded-xl shadow-lg shadow-yellow-400/20"><Crown className="text-black" size={24} /></div>;
+            case 2: return <div className="bg-slate-300 p-2 rounded-xl shadow-lg shadow-slate-300/20"><Medal className="text-black" size={24} /></div>;
+            case 3: return <div className="bg-amber-600 p-2 rounded-xl shadow-lg shadow-amber-600/20"><Medal className="text-black" size={24} /></div>;
+            default: return <span className="text-zinc-600 font-black text-xl italic ml-4">#{rank}</span>;
         }
     };
 
     return (
-        <div className="max-w-4xl mx-auto px-4 py-12">
-            <div className="flex flex-col items-center text-center mb-16 space-y-4">
-                <div className="bg-gradient-to-br from-yellow-400 to-amber-600 p-4 rounded-3xl shadow-2xl shadow-yellow-500/20">
-                    <Trophy className="text-white" size={48} />
+        <div className="max-w-5xl mx-auto space-y-12 pb-20">
+            <div className="flex flex-col items-center text-center space-y-6">
+                <div className="bg-red-500/10 p-5 rounded-[32px] border border-red-500/20 shadow-2xl relative">
+                    <Trophy className="text-red-500 group-hover:animate-float" size={64} />
+                    <div className="absolute -top-2 -right-2 bg-yellow-500 p-2 rounded-full border-4 border-[#050505]">
+                        <Star className="text-black fill-current" size={16} />
+                    </div>
                 </div>
                 <div>
-                    <h1 className="text-5xl font-black mb-2">Hall of Fame</h1>
-                    <p className="text-slate-400">The top predictors in the CricBet universe</p>
+                    <h1 className="text-5xl lg:text-7xl font-black italic tracking-tighter uppercase leading-none mb-4">
+                        Hall of <span className="logo-red">Fame</span>
+                    </h1>
+                    <p className="text-zinc-500 max-w-lg font-medium">The top predictors and master strategists dominating the arena</p>
                 </div>
             </div>
 
-            <div className="glass overflow-hidden rounded-[32px] border-slate-700/50 shadow-2xl">
-                <div className="bg-slate-900/40 p-6 border-b border-slate-800 grid grid-cols-12 gap-4 text-xs font-bold text-slate-500 uppercase tracking-[0.2em]">
-                    <div className="col-span-2">Rank</div>
-                    <div className="col-span-6">User</div>
-                    <div className="col-span-4 text-right">Balance</div>
+            <div className="glass-card !p-0 overflow-hidden border-white/[0.05]">
+                {/* Header Row */}
+                <div className="bg-white/[0.02] p-6 lg:p-8 border-b border-white/[0.05] grid grid-cols-12 gap-4 text-[10px] font-black text-zinc-600 uppercase tracking-[0.2em]">
+                    <div className="col-span-2">Position</div>
+                    <div className="col-span-6">Predictor</div>
+                    <div className="col-span-4 text-right">Points / Balance</div>
                 </div>
 
                 {loading ? (
-                    <div className="p-12 text-center animate-pulse text-slate-700 font-bold">CALCULATING STANDINGS...</div>
+                    <div className="p-20 text-center">
+                        <div className="w-12 h-12 border-4 border-red-500/20 border-t-red-500 rounded-full animate-spin mx-auto mb-4" />
+                        <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Calculating Standings...</span>
+                    </div>
                 ) : (
-                    <div className="divide-y divide-slate-800/50">
+                    <div className="divide-y divide-white/[0.03]">
                         {leaders.map((leader, index) => (
                             <motion.div
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: index * 0.1 }}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.05 }}
                                 key={leader.id}
-                                className={`grid grid-cols-12 gap-4 p-8 items-center transition-colors group ${index === 0 ? 'bg-yellow-400/5' :
-                                        index === 1 ? 'bg-slate-400/5' :
-                                            index === 2 ? 'bg-amber-600/5' : ''
+                                className={`grid grid-cols-12 gap-4 p-6 lg:p-8 items-center group hover:bg-white/[0.01] transition-all ${index === 0 ? 'bg-yellow-400/[0.03]' : ''
                                     }`}
                             >
                                 <div className="col-span-2 flex items-center">
                                     {getRankBadge(leader.rank)}
                                 </div>
-                                <div className="col-span-6 flex items-center gap-4">
-                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-bold border-2 ${index === 0 ? 'bg-yellow-400/10 border-yellow-400/30' :
-                                            'bg-slate-800/50 border-slate-700'
+                                <div className="col-span-6 flex items-center gap-5">
+                                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center relative ${index === 0 ? 'bg-yellow-400/10 border-2 border-yellow-400/30' :
+                                            index === 1 ? 'bg-slate-300/10 border-2 border-slate-300/30' :
+                                                index === 2 ? 'bg-amber-600/10 border-2 border-amber-600/30' :
+                                                    'bg-zinc-900 border border-white/5'
                                         }`}>
-                                        {leader.email?.[0].toUpperCase()}
+                                        <img
+                                            src={`https://api.dicebear.com/7.x/initials/svg?seed=${leader.email}`}
+                                            alt=""
+                                            className="w-full h-full rounded-2xl p-1"
+                                        />
+                                        {index < 3 && (
+                                            <div className="absolute -bottom-1 -right-1 bg-red-500 w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#121212]">
+                                                <Star className="text-white fill-current" size={8} />
+                                            </div>
+                                        )}
                                     </div>
-                                    <div>
-                                        <p className="font-bold text-lg group-hover:text-blue-400 transition-colors uppercase truncate max-w-[200px]">
+                                    <div className="min-w-0">
+                                        <p className={`font-black italic tracking-tight text-lg uppercase truncate ${index === 0 ? 'text-yellow-400' : 'text-zinc-200'
+                                            }`}>
                                             {leader.email?.split('@')[0]}
                                         </p>
-                                        {index === 0 && <span className="text-[10px] font-black text-yellow-400 uppercase tracking-widest">Master Predictor</span>}
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Level {Math.floor((leader.totalBets || 0) / 5) + 1}</span>
+                                            {leader.isAdmin && (
+                                                <span className="text-[8px] bg-red-500/10 text-red-500 px-1.5 py-0.5 rounded border border-red-500/20 font-black uppercase">Admin</span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="col-span-4 text-right">
                                     <div className="flex flex-col items-end">
-                                        <span className="text-2xl font-black text-white">{leader.balance.toLocaleString()}</span>
-                                        <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Coins</span>
+                                        <div className="flex items-center gap-2">
+                                            <span className={`text-2xl lg:text-3xl font-black italic tracking-tighter ${index === 0 ? 'text-yellow-400' : 'text-white'
+                                                }`}>
+                                                {leader.balance?.toLocaleString()}
+                                            </span>
+                                            <TrendingUp size={16} className={index === 0 ? 'text-yellow-400' : 'text-zinc-700'} />
+                                        </div>
+                                        <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest mt-1">Total Wealth</span>
                                     </div>
                                 </div>
                             </motion.div>
@@ -98,10 +128,27 @@ const Leaderboard = () => {
                 )}
             </div>
 
-            <div className="mt-12 glass p-8 rounded-3xl border-slate-800 text-center">
-                <Star className="mx-auto mb-4 text-blue-500" />
-                <h4 className="font-bold text-lg mb-2">Reach the Top!</h4>
-                <p className="text-slate-400 text-sm max-w-md mx-auto">Winning bets and hitting the 2x Six Powerplay logic will boost your ranking. Every Sunday, the Top 3 win exclusive virtual badges.</p>
+            <div className="grid md:grid-cols-2 gap-8">
+                <div className="glass-card p-10 bg-gradient-to-br from-[#121212] to-[#1a1a1a] relative overflow-hidden group">
+                    <div className="relative z-10">
+                        <div className="bg-red-500/10 w-12 h-12 rounded-2xl flex items-center justify-center text-red-500 mb-6">
+                            <Star size={24} />
+                        </div>
+                        <h4 className="text-2xl font-black italic tracking-tighter uppercase mb-4">Master <span className="logo-red">Rewards</span></h4>
+                        <p className="text-zinc-500 text-sm leading-relaxed mb-8">Top 3 performers every month receive exclusive profile badges and 20,000 bonus coins for our upcoming tournaments. Keep predicting to climb!</p>
+                        <button className="text-[10px] font-black uppercase tracking-widest text-white hover:text-red-500 flex items-center gap-2 group/link">
+                            View Reward Schedule <div className="w-1 h-1 bg-white rounded-full transition-all group-hover/link:w-4 group-hover/link:bg-red-500" />
+                        </button>
+                    </div>
+                </div>
+
+                <div className="glass-card p-10 flex flex-col items-center justify-center text-center border-dashed border-zinc-800">
+                    <div className="bg-zinc-900 w-16 h-16 rounded-full flex items-center justify-center text-zinc-700 mb-6 border border-white/5">
+                        <User size={32} />
+                    </div>
+                    <h4 className="text-xl font-bold text-zinc-500 mb-2">Showcase Your Progress</h4>
+                    <p className="text-zinc-600 text-xs max-w-[200px]">Profiles are public. Win big and let the community see your prediction prowess.</p>
+                </div>
             </div>
         </div>
     );

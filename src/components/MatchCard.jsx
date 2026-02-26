@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { TrendingUp, Zap, Circle } from 'lucide-react';
+import { Calendar, Clock, Trophy, Zap, ChevronRight } from 'lucide-react';
 
 const MatchCard = ({ match, onBet }) => {
     const isLive = match.status === 'Live';
@@ -7,106 +7,105 @@ const MatchCard = ({ match, onBet }) => {
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="group relative bg-[#121212] border border-white/[0.05] rounded-[32px] p-6 lg:p-8 overflow-hidden transition-all duration-300 hover:border-white/10"
+            whileHover={{ y: -5 }}
+            className="glass-card relative overflow-hidden group border-white/[0.05]"
         >
-            {/* Header */}
-            <div className="flex justify-between items-center mb-10">
-                <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-[2px]">
-                    {match.tournament || 'T20 INTERNATIONAL'} • {match.id.slice(0, 8)}
-                </span>
-                {isLive && (
-                    <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 px-3 py-1 rounded-full uppercase italic font-black text-[10px] text-red-500 animate-pulse">
-                        <Circle size={8} className="fill-current" />
-                        Live
-                    </div>
-                )}
-            </div>
+            {/* Live Indicator */}
+            {isLive && (
+                <div className="absolute top-0 right-0 bg-red-500 text-white px-5 py-2 rounded-bl-3xl flex items-center gap-2 z-10 shadow-lg">
+                    <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                    <span className="text-[10px] font-black uppercase tracking-[2px] italic">Live Now</span>
+                </div>
+            )}
 
-            {/* Teams & Score */}
-            <div className="grid grid-cols-3 items-center gap-4 mb-10 text-center">
-                <div className="flex flex-col items-center gap-3">
-                    <div className="w-16 h-16 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-2xl font-black shadow-inner">
-                        {match.teamA[0]}
+            <div className="flex flex-col md:flex-row items-center justify-between gap-10">
+                {/* Team A */}
+                <div className="flex-1 flex flex-col items-center md:items-end text-center md:text-right order-2 md:order-1">
+                    <div className="w-20 h-20 bg-zinc-900 rounded-[32px] border border-white/[0.05] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500 shadow-xl overflow-hidden">
+                        <img
+                            src={`https://api.dicebear.com/7.x/initials/svg?seed=${match.teamA}&backgroundColor=f87171`}
+                            alt={match.teamA}
+                            className="w-full h-full object-cover"
+                        />
                     </div>
-                    <span className="font-black text-lg tracking-tight uppercase">{match.teamA}</span>
+                    <h3 className="text-2xl font-black italic tracking-tighter uppercase mb-1">{match.teamA}</h3>
+                    <div className="px-3 py-1 bg-white/[0.03] rounded-lg border border-white/5 text-[10px] font-black text-zinc-500 uppercase tracking-widest">
+                        Odds: <span className="text-white italic">{match.oddsTeamA}</span>
+                    </div>
                 </div>
 
-                <div className="flex flex-col items-center">
-                    <span className="text-zinc-600 text-[10px] font-black italic mb-2">VS</span>
-                    {isLive ? (
-                        <div className="flex flex-col items-center">
-                            <span className="text-emerald-400 font-black text-xl tracking-tighter animate-pulse">
-                                {match.currentScore || '185/4 (18.4)'}
-                            </span>
+                {/* VS Divider */}
+                <div className="flex flex-col items-center gap-4 z-10 order-1 md:order-2">
+                    <div className="flex flex-col items-center">
+                        <span className="text-[10px] font-black text-zinc-600 uppercase tracking-[4px] mb-2 leading-none">Prediction</span>
+                        <div className="w-14 h-14 bg-red-500 rounded-full flex items-center justify-center text-white shadow-[0_0_30px_rgba(239,68,68,0.3)] border-4 border-[#121212] group-hover:rotate-[360deg] transition-all duration-700">
+                            <span className="text-lg font-black italic leading-none">VS</span>
                         </div>
-                    ) : (
-                        <span className="text-zinc-500 text-xs font-bold uppercase tracking-widest">
-                            {isFinished ? 'Finished' : 'Upcoming'}
-                        </span>
+                    </div>
+
+                    {match.sixInPowerplay && (
+                        <div className="flex items-center gap-1.5 bg-amber-500/10 text-amber-500 px-3 py-1 rounded-full border border-amber-500/20 text-[8px] font-black uppercase tracking-widest animate-pulse">
+                            <Zap size={10} className="fill-current" />
+                            <span>2X Markets Open</span>
+                        </div>
                     )}
                 </div>
 
-                <div className="flex flex-col items-center gap-3">
-                    <div className="w-16 h-16 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-2xl font-black shadow-inner">
-                        {match.teamB[0]}
+                {/* Team B */}
+                <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left order-3">
+                    <div className="w-20 h-20 bg-zinc-900 rounded-[32px] border border-white/[0.05] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500 shadow-xl overflow-hidden">
+                        <img
+                            src={`https://api.dicebear.com/7.x/initials/svg?seed=${match.teamB}&backgroundColor=60a5fa`}
+                            alt={match.teamB}
+                            className="w-full h-full object-cover"
+                        />
                     </div>
-                    <span className="font-black text-lg tracking-tight uppercase">{match.teamB}</span>
+                    <h3 className="text-2xl font-black italic tracking-tighter uppercase mb-1">{match.teamB}</h3>
+                    <div className="px-3 py-1 bg-white/[0.03] rounded-lg border border-white/5 text-[10px] font-black text-zinc-500 uppercase tracking-widest">
+                        Odds: <span className="text-white italic">{match.oddsTeamB}</span>
+                    </div>
                 </div>
             </div>
 
-            {/* Betting Buttons */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
-                <button
-                    onClick={() => onBet({ ...match, selectedTeam: 'teamA' })}
-                    disabled={isFinished}
-                    className="flex flex-col items-center gap-0.5 p-4 rounded-2xl bg-zinc-800/50 border border-white/[0.05] hover:bg-zinc-800 transition-all active:scale-95 disabled:opacity-50"
-                >
-                    <span className="text-[10px] font-black text-zinc-500 uppercase">{match.teamA} WINS</span>
-                    <span className="text-xl font-black text-yellow-500">x{match.oddsTeamA.toFixed(2)}</span>
-                </button>
-                <button
-                    onClick={() => onBet({ ...match, selectedTeam: 'teamB' })}
-                    disabled={isFinished}
-                    className="flex flex-col items-center gap-0.5 p-4 rounded-2xl bg-zinc-800/50 border border-white/[0.05] hover:bg-zinc-800 transition-all active:scale-95 disabled:opacity-50"
-                >
-                    <span className="text-[10px] font-black text-zinc-500 uppercase">{match.teamB} WINS</span>
-                    <span className="text-xl font-black text-yellow-500">x{match.oddsTeamB.toFixed(2)}</span>
-                </button>
-            </div>
-
-            {/* Special Condition */}
-            <div className="relative group/special mt-6">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-2xl blur-lg transition-all group-hover/special:blur-xl opacity-50" />
-                <button
-                    onClick={() => onBet({ ...match, selectedTeam: 'special' })}
-                    disabled={isFinished}
-                    className="relative w-full flex justify-between items-center p-4 rounded-2xl bg-[#1e1432]/60 border border-purple-500/20 hover:border-purple-500/40 transition-all active:scale-[0.98]"
-                >
-                    <div className="flex items-center gap-3">
-                        <div className="bg-purple-600 p-2 rounded-lg">
-                            <Zap size={14} className="fill-current text-white" />
+            {/* Bottom Info Bar */}
+            <div className="mt-10 pt-6 border-t border-white/[0.05] flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-2">
+                        <div className="p-2 bg-zinc-900 rounded-xl">
+                            <Calendar size={14} className="text-zinc-500" />
                         </div>
-                        <div className="text-left">
-                            <p className="text-[10px] font-black text-purple-400 uppercase tracking-widest">SPECIAL</p>
-                            <p className="text-xs font-bold text-zinc-100">Six in First 4 Overs?</p>
+                        <div className="flex flex-col">
+                            <span className="text-[8px] font-black text-zinc-600 uppercase tracking-widest leading-none mb-1">Date</span>
+                            <span className="text-xs font-bold text-zinc-400">{new Date(match.matchTime).toLocaleDateString()}</span>
                         </div>
                     </div>
-                    <span className="text-lg font-black text-yellow-500">x2.00</span>
-                </button>
-            </div>
+                    <div className="flex items-center gap-2">
+                        <div className="p-2 bg-zinc-900 rounded-xl">
+                            <Clock size={14} className="text-zinc-500" />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-[8px] font-black text-zinc-600 uppercase tracking-widest leading-none mb-1">Time</span>
+                            <span className="text-xs font-bold text-zinc-400">{new Date(match.matchTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                    </div>
+                </div>
 
-            {/* Footer */}
-            <div className="mt-8 pt-6 border-t border-white/[0.03] text-center">
-                <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
-                    Match starts: {new Date(match.matchTime).toLocaleString()}
-                </span>
+                <button
+                    onClick={() => onBet(match)}
+                    disabled={isFinished}
+                    className="w-full sm:w-auto btn-red group/btn overflow-hidden relative shadow-red-500/10 disabled:grayscale"
+                >
+                    <span className="relative z-10 flex items-center gap-2">
+                        {isFinished ? 'Market Closed' : 'Predict & Win'} <ChevronRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
+                    </span>
+                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300" />
+                </button>
             </div>
         </motion.div>
     );
 };
 
 export default MatchCard;
-

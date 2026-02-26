@@ -12,59 +12,81 @@
   --text-primary: #ffffff;
   --text-secondary: #a1a1aa;
   --border: #27272a;
+  --sidebar-width: 280px;
 }
 
 @layer base {
   body {
-    background-color: #050505;
-    color: white;
-    min-height: 100vh;
-    font-family: 'Inter', sans-serif;
-    -webkit-font-smoothing: antialiased;
+    @apply bg-[#050505] text-white min-h-screen antialiased;
+    font-family: 'Outfit', 'Inter', sans-serif;
   }
 }
 
 @layer components {
   .glass {
-    @apply bg-[#121212]/80 backdrop-blur-md border border-white/5;
+    @apply bg-[#121212]/80 backdrop-blur-xl border border-white/[0.05];
   }
 
   .glass-card {
-    @apply bg-[#121212] border border-white/[0.05] rounded-[24px] p-6 shadow-2xl transition-all duration-300;
+    @apply bg-[#121212] border border-white/[0.05] rounded-[32px] p-6 shadow-2xl transition-all duration-300 hover:border-white/10;
   }
 
   .nav-link {
-    @apply flex items-center gap-2 text-zinc-400 hover:text-white transition-all font-medium py-2;
+    @apply flex items-center gap-3 text-zinc-400 hover:text-white transition-all font-medium py-3 px-4 rounded-2xl hover:bg-white/[0.03];
+  }
+
+  .nav-link.active {
+    @apply bg-red-500/10 text-red-500 border border-red-500/20;
   }
 
   .btn-red {
-    @apply px-8 py-2.5 bg-[#ff3333] hover:bg-[#e62e2e] text-white rounded-[12px] font-bold transition-all active:scale-95 shadow-lg shadow-red-600/20;
+    @apply px-8 py-3 bg-[#ff3333] hover:bg-[#e62e2e] text-white rounded-2xl font-black italic uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-red-600/20 flex items-center justify-center gap-2;
   }
 
   .btn-outline {
-    @apply px-8 py-2.5 border border-zinc-700 hover:border-zinc-500 text-white rounded-[12px] font-bold transition-all active:scale-95;
+    @apply px-8 py-3 border border-zinc-700 hover:border-zinc-500 text-white rounded-2xl font-bold transition-all active:scale-95 flex items-center justify-center gap-2;
   }
 
   .odds-badge {
-    @apply px-4 py-2 bg-zinc-800/50 rounded-[12px] border border-zinc-700/50 flex flex-col items-center gap-1 min-w-[120px];
+    @apply px-4 py-3 bg-zinc-900 rounded-2xl border border-white/[0.05] flex flex-col items-center gap-1 min-w-[120px] transition-all hover:border-red-500/30;
   }
 
   .cricwin-logo {
-    @apply text-2xl font-black italic tracking-tighter flex items-center gap-0.5;
+    @apply text-3xl font-black italic tracking-tighter flex items-center gap-0.5 select-none;
   }
 
   .logo-red {
     @apply text-[#ff3333];
   }
+
+  .sidebar-item {
+    @apply flex items-center gap-3 px-4 py-3.5 rounded-2xl text-zinc-400 hover:text-white hover:bg-white/[0.03] transition-all font-bold italic uppercase tracking-wider text-sm;
+  }
+
+  .sidebar-item.active {
+    @apply text-red-500 bg-red-500/10 border border-red-500/20;
+  }
+
+  .input-field {
+    @apply w-full bg-zinc-900 border border-white/[0.05] rounded-2xl py-4 px-5 outline-none focus:border-red-500/50 transition-all font-medium text-white placeholder:text-zinc-600;
+  }
+
+  .label-sm {
+    @apply text-[10px] font-black text-zinc-500 uppercase tracking-[2px] mb-2 block pl-1;
+  }
+
+  .card-gradient {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
+  }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-[#050505];
+  @apply bg-transparent;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -72,8 +94,14 @@
 }
 
 .bg-grid {
-  background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
-  background-size: 32px 32px;
+  background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.03) 1px, transparent 0);
+  background-size: 40px 40px;
+}
+
+.mesh-gradient {
+  background-image:
+    radial-gradient(at 0% 0%, rgba(255, 51, 51, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(30, 64, 175, 0.1) 0px, transparent 50%);
 }
 
 @keyframes float {
@@ -89,5 +117,16 @@
 }
 
 .animate-float {
-  animation: float 5s ease-in-out infinite;
+  animation: float 6s ease-in-out infinite;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
 }
