@@ -115,7 +115,7 @@ const BetModal = ({ match, onClose }) => {
                             <label className="label-sm !mb-0">Wager Amount</label>
                             <div className="flex items-center gap-2 text-[10px] font-black text-zinc-500 uppercase">
                                 <Wallet size={12} className="text-yellow-500" />
-                                <span>Balance: {userData.balance?.toLocaleString()}</span>
+                                <span>PISSA {userData.balance?.toLocaleString()}</span>
                             </div>
                         </div>
 
