@@ -14,16 +14,8 @@ const Navbar = () => {
         navigate('/');
     };
 
-    const handleRecharge = async () => {
-        try {
-            const userRef = doc(db, 'users', user.uid);
-            await updateDoc(userRef, {
-                balance: increment(5000)
-            });
-            toast.success('Demo: 5,000 Coins added to your wallet!');
-        } catch (error) {
-            toast.error('Recharge failed');
-        }
+    const handleRecharge = () => {
+        navigate('/add-balance');
     };
 
     if (!user) return null;

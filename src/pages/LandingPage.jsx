@@ -16,7 +16,7 @@ const LandingPage = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [matches, setMatches] = useState([]);
-    const { user } = useAuth();
+    const { user, userData, loading: authLoading } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,7 +27,22 @@ const LandingPage = () => {
         return () => unsubscribe();
     }, []);
 
-    if (user) return <Navigate to="/dashboard" />;
+    // Check if user is logged in and redirect accordingly
+    useEffect(() => {
+        if (user && userData && !authLoading) {
+            if (userData.isAdmin) {
+                navigate('/jrt');
+            } else {
+                navigate('/dashboard');
+            }
+        }
+    }, [user, userData, authLoading, navigate]);
+
+    if (authLoading) return (
+        <div className="flex items-center justify-center min-h-screen bg-[#050505]">
+            <div className="w-12 h-12 border-4 border-red-500/20 border-t-red-500 rounded-full animate-spin"></div>
+        </div>
+    );
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -38,12 +53,12 @@ const LandingPage = () => {
                 toast.success('Welcome back to the arena!');
             } else {
                 await createUserWithEmailAndPassword(auth, email, password);
-                toast.success('Welcome to CricWin!');
+                toast.success('Profile initialized! Ready to play?');
             }
-            navigate('/dashboard');
+            // Redirection is handled by the useEffect above
         } catch (error) {
             console.error("Auth Error:", error);
-            toast.error(error.message);
+            toast.error(error.code === 'auth/user-not-found' ? 'Account not found' : error.message);
         } finally {
             setLoading(false);
         }

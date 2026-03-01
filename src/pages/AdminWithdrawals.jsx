@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, query, onSnapshot, orderBy, doc, updateDoc, increment } from 'firebase/firestore';
-import { Wallet, Clock, CheckCircle2, XCircle, Search, Filter, Mail, CreditCard } from 'lucide-react';
+import { collection, query, onSnapshot, orderBy, doc, updateDoc, increment, serverTimestamp } from 'firebase/firestore';
+import { Wallet, Clock, CheckCircle2, XCircle, Search, Filter, Mail, CreditCard, ArrowRight, ShieldCheck, Activity, AlertCircle, TrendingDown, ExternalLink } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -16,70 +16,105 @@ const AdminWithdrawals = () => {
         const unsubscribe = onSnapshot(q, (snapshot) => {
             setRequests(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
             setLoading(false);
+        }, (error) => {
+            console.error("Snapshot error:", error);
+            setLoading(false);
         });
         return () => unsubscribe();
     }, []);
 
     const handleAction = async (request, action) => {
+        const loadingToast = toast.loading(`Processing ${action}...`);
         try {
             const reqRef = doc(db, 'withdrawals', request.id);
             const userRef = doc(db, 'users', request.userId);
 
             if (action === 'approved') {
-                await updateDoc(reqRef, { status: 'approved' });
-                await updateDoc(userRef, {
-                    activeWithdrawals: increment(-1)
+                await updateDoc(reqRef, {
+                    status: 'approved',
+                    processedAt: serverTimestamp()
                 });
-                toast.success('Withdrawal approved!');
+                await updateDoc(userRef, {
+                    activeWithdrawals: increment(-1),
+                    totalWithdraw: increment(request.amount)
+                });
+                toast.success('Withdrawal approved successfully!', { id: loadingToast });
             } else {
-                await updateDoc(reqRef, { status: 'rejected' });
+                await updateDoc(reqRef, {
+                    status: 'rejected',
+                    processedAt: serverTimestamp()
+                });
                 // Return coins to user balance on rejection
                 await updateDoc(userRef, {
                     balance: increment(request.amount),
                     activeWithdrawals: increment(-1)
                 });
-                toast.success('Withdrawal rejected and coins returned.');
+                toast.success('Withdrawal rejected. Coins returned to user.', { id: loadingToast });
             }
         } catch (error) {
-            toast.error('Failed to update status');
+            console.error('Action error:', error);
+            toast.error('Failed to update transaction status', { id: loadingToast });
         }
     };
 
     const filteredRequests = requests.filter(req => {
         const matchesFilter = filter === 'all' || req.status === filter;
-        const matchesSearch = req.userEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            req.id.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesSearch =
+            req.userEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            req.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            req.method?.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesFilter && matchesSearch;
     });
 
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'pending': return 'text-amber-500 bg-amber-500/10 border-amber-500/20';
+            case 'approved': return 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20';
+            case 'rejected': return 'text-red-500 bg-red-500/10 border-red-500/20';
+            default: return 'text-zinc-500 bg-zinc-500/10 border-zinc-500/20';
+        }
+    };
+
     return (
-        <div className="space-y-8">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div>
-                    <h1 className="text-4xl font-black italic tracking-tighter uppercase">Transaction <span className="logo-red">Requests</span></h1>
-                    <p className="text-zinc-500 font-medium">Review and process withdrawal requests</p>
+        <div className="max-w-7xl mx-auto space-y-12 pb-24">
+            {/* Header Section */}
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 px-4 lg:px-0">
+                <div className="flex items-center gap-6">
+                    <div className="w-20 h-20 bg-emerald-500/10 rounded-[30px] border border-emerald-500/20 flex items-center justify-center text-emerald-500 shadow-2xl">
+                        <CreditCard size={40} />
+                    </div>
+                    <div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <Activity className="text-emerald-500" size={14} />
+                            <span className="text-zinc-500 text-[10px] font-black uppercase tracking-[4px]">Financial Operations</span>
+                        </div>
+                        <h1 className="text-4xl lg:text-5xl font-black text-white italic tracking-tighter uppercase leading-none">
+                            Payout <span className="logo-red">Terminal</span>
+                        </h1>
+                        <p className="text-zinc-500 text-sm font-medium mt-2">Process and audit member withdrawal requests securely.</p>
+                    </div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="relative">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600" size={18} />
+                    <div className="relative group min-w-[280px]">
+                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-red-500 transition-colors" size={18} />
                         <input
                             type="text"
-                            placeholder="Search by email..."
+                            placeholder="Email or Transaction ID..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="bg-zinc-900 border border-white/[0.05] rounded-2xl py-3 pl-12 pr-4 outline-none focus:border-red-500/50 transition-all text-sm w-full sm:w-64"
+                            className="w-full bg-zinc-900 border border-white/[0.05] rounded-2xl py-4 pl-14 pr-6 outline-none focus:border-red-500/30 transition-all text-sm font-medium shadow-2xl"
                         />
                     </div>
 
-                    <div className="flex bg-zinc-900 p-1 rounded-2xl border border-white/[0.05]">
+                    <div className="flex bg-zinc-950 p-1.5 rounded-2xl border border-white/[0.05] shadow-2xl">
                         {['pending', 'approved', 'rejected', 'all'].map(option => (
                             <button
                                 key={option}
                                 onClick={() => setFilter(option)}
-                                className={`px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all ${filter === option
-                                        ? 'bg-red-500 text-white shadow-lg'
-                                        : 'text-zinc-500 hover:text-white'
+                                className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === option
+                                    ? 'bg-red-600 text-white shadow-lg'
+                                    : 'text-zinc-600 hover:text-white hover:bg-white/5'
                                     }`}
                             >
                                 {option}
@@ -89,97 +124,143 @@ const AdminWithdrawals = () => {
                 </div>
             </div>
 
-            {loading ? (
-                <div className="space-y-4">
-                    {[1, 2, 3, 4].map(i => <div key={i} className="h-28 glass-card animate-pulse" />)}
-                </div>
-            ) : (
-                <div className="space-y-4">
-                    {filteredRequests.length === 0 ? (
-                        <div className="glass-card py-20 text-center flex flex-col items-center">
-                            <Filter size={48} className="text-zinc-800 mb-4" />
-                            <p className="text-zinc-500 font-medium">No requests found matching your filter</p>
-                        </div>
-                    ) : (
-                        <AnimatePresence>
-                            {filteredRequests.map(req => (
+            {/* Main Content */}
+            <div className="space-y-6">
+                {loading ? (
+                    <div className="grid gap-6">
+                        {[1, 2, 3].map(i => (
+                            <div key={i} className="h-32 bg-zinc-900/50 rounded-[40px] animate-pulse border border-white/5" />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="grid gap-6">
+                        <AnimatePresence mode='popLayout'>
+                            {filteredRequests.length === 0 ? (
                                 <motion.div
-                                    layout
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.95 }}
-                                    key={req.id}
-                                    className="glass-card hover:bg-white/[0.02] flex flex-col lg:flex-row lg:items-center justify-between gap-6"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="bg-zinc-900/20 border-2 border-dashed border-white/5 rounded-[40px] p-24 text-center"
                                 >
-                                    <div className="flex flex-col sm:flex-row sm:items-center gap-6 flex-1">
-                                        <div className={`w-14 h-14 rounded-2xl shrink-0 flex items-center justify-center ${req.status === 'pending' ? 'bg-amber-500/10 text-amber-500' :
-                                                req.status === 'approved' ? 'bg-emerald-500/10 text-emerald-500' :
-                                                    'bg-red-500/10 text-red-500'
-                                            }`}>
-                                            <Wallet size={24} />
-                                        </div>
-
-                                        <div className="space-y-1 flex-1">
-                                            <div className="flex items-center gap-3">
-                                                <span className="text-2xl font-black text-white italic tracking-tighter">
-                                                    {req.amount.toLocaleString()}
-                                                </span>
-                                                <span className="text-[10px] bg-white/[0.05] border border-white/5 px-2 py-0.5 rounded text-zinc-500 font-black uppercase tracking-widest">
-                                                    Coins
-                                                </span>
-                                            </div>
-                                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-500 font-medium underline-offset-2">
-                                                <div className="flex items-center gap-1.5 hover:text-white transition-colors cursor-default">
-                                                    <Mail size={14} className="text-zinc-600" />
-                                                    {req.userEmail}
-                                                </div>
-                                                <div className="flex items-center gap-1.5">
-                                                    <CreditCard size={14} className="text-zinc-600" />
-                                                    <span className="uppercase text-zinc-400 font-black tracking-widest">{req.method}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="sm:border-l border-white/[0.05] sm:pl-6 space-y-2">
-                                            <span className="label-sm !mb-0 text-zinc-600">Payment Details</span>
-                                            <p className="text-xs font-medium text-zinc-300 bg-zinc-950/50 p-3 rounded-xl border border-white/[0.02] break-all max-w-sm">
-                                                {req.details}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex lg:flex-col items-center lg:items-end justify-between lg:justify-center gap-4 border-t lg:border-t-0 lg:border-l border-white/[0.05] pt-6 lg:pt-0 lg:pl-10 min-w-[180px]">
-                                        <div className="text-right hidden lg:block mb-2">
-                                            <div className="text-[10px] text-zinc-600 font-mono italic">#{req.id.slice(0, 12)}</div>
-                                            <div className="text-[10px] text-zinc-600 font-medium">Requested: {req.createdAt?.toDate().toLocaleString()}</div>
-                                        </div>
-
-                                        {req.status === 'pending' ? (
-                                            <div className="flex gap-2 w-full lg:w-auto">
-                                                <button
-                                                    onClick={() => handleAction(req, 'approved')}
-                                                    className="flex-1 lg:flex-none px-6 py-2.5 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-white border border-emerald-500/20 rounded-xl font-bold text-xs transition-all active:scale-95"
-                                                >
-                                                    Approve
-                                                </button>
-                                                <button
-                                                    onClick={() => handleAction(req, 'rejected')}
-                                                    className="flex-1 lg:flex-none px-6 py-2.5 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/20 rounded-xl font-bold text-xs transition-all active:scale-95"
-                                                >
-                                                    Reject
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <div className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[2px] border ${req.status === 'approved' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-500' : 'bg-red-500/5 border-red-500/20 text-red-500'
-                                                }`}>
-                                                {req.status}
-                                            </div>
-                                        )}
-                                    </div>
+                                    <Filter size={48} className="mx-auto text-zinc-800 mb-6" />
+                                    <h3 className="text-xl font-black text-white italic uppercase tracking-tighter">No Requests Identified</h3>
+                                    <p className="text-zinc-500 text-sm font-medium mt-1">Clear filters or check again later for new submissions.</p>
                                 </motion.div>
-                            ))}
+                            ) : (
+                                filteredRequests.map((req) => (
+                                    <motion.div
+                                        key={req.id}
+                                        layout
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, scale: 0.95 }}
+                                        className="group bg-[#0a0a0a] border border-white/5 rounded-[40px] p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10 hover:border-white/10 transition-all shadow-2xl relative overflow-hidden"
+                                    >
+                                        <div className="flex flex-col sm:flex-row sm:items-center gap-8 flex-1">
+                                            {/* Amount Circle */}
+                                            <div className="relative">
+                                                <div className={`w-24 h-24 rounded-[32px] flex flex-col items-center justify-center shrink-0 border transition-all duration-500 ${getStatusColor(req.status)} shadow-2xl`}>
+                                                    <span className="text-[10px] font-black uppercase tracking-tighter mb-1 opacity-60">Payout</span>
+                                                    <span className="text-2xl font-black italic tracking-tighter leading-none">₹{req.amount.toLocaleString()}</span>
+                                                </div>
+                                                {req.status === 'pending' && (
+                                                    <div className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-amber-500 rounded-full border-4 border-[#0a0a0a] flex items-center justify-center animate-bounce">
+                                                        <Clock size={10} className="text-black" />
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="space-y-4 flex-1">
+                                                <div>
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <div className={`text-[8px] font-black uppercase tracking-[3px] px-3 py-1 rounded-full border ${getStatusColor(req.status)}`}>
+                                                            {req.status}
+                                                        </div>
+                                                        <span className="text-[10px] text-zinc-600 font-mono tracking-widest uppercase">ID: {req.id.slice(0, 10)}</span>
+                                                    </div>
+                                                    <h3 className="text-2xl font-black italic tracking-tighter uppercase text-white leading-none mb-2">
+                                                        {req.userEmail}
+                                                    </h3>
+                                                    <div className="flex flex-wrap items-center gap-4 text-[10px] font-black text-zinc-600 uppercase tracking-widest">
+                                                        <div className="flex items-center gap-2 bg-zinc-900/50 px-3 py-1.5 rounded-xl border border-white/5">
+                                                            <Calendar size={12} className="text-red-500" />
+                                                            {req.createdAt?.toDate().toLocaleDateString()}
+                                                        </div>
+                                                        <div className="flex items-center gap-2 bg-zinc-900/50 px-3 py-1.5 rounded-xl border border-white/5">
+                                                            <Clock size={12} className="text-red-500" />
+                                                            {req.createdAt?.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                        </div>
+                                                        <div className="flex items-center gap-2 bg-zinc-900/50 px-3 py-1.5 rounded-xl border border-white/5">
+                                                            <CreditCard size={12} className="text-red-500" />
+                                                            {req.method}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Details Section */}
+                                            <div className="lg:border-l border-white/[0.05] lg:pl-10 space-y-3 lg:max-w-xs w-full">
+                                                <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest block">Transfer Credentials</span>
+                                                <div className="bg-zinc-950/50 p-5 rounded-3xl border border-white/[0.02] group/details hover:border-white/10 transition-all">
+                                                    <p className="text-xs font-bold text-zinc-400 leading-relaxed font-mono break-all line-clamp-2 group-hover:line-clamp-none transition-all">
+                                                        {req.details}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex flex-col sm:flex-row lg:flex-col items-center lg:items-end justify-between gap-6 min-w-[180px]">
+                                            {req.status === 'pending' ? (
+                                                <div className="flex flex-col sm:flex-row lg:flex-col gap-3 w-full">
+                                                    <button
+                                                        onClick={() => handleAction(req, 'approved')}
+                                                        className="flex-1 px-8 py-4 bg-emerald-500 text-black rounded-[20px] font-black uppercase italic tracking-widest text-xs transition-all hover:scale-105 active:scale-95 shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2"
+                                                    >
+                                                        <CheckCircle2 size={16} />
+                                                        Verify Payout
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleAction(req, 'rejected')}
+                                                        className="flex-1 px-8 py-4 bg-zinc-900 hover:bg-red-600 border border-white/5 text-zinc-500 hover:text-white rounded-[20px] font-black uppercase italic tracking-widest text-xs transition-all active:scale-95 flex items-center justify-center gap-2"
+                                                    >
+                                                        <XCircle size={16} />
+                                                        Decline
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <div className="text-right space-y-2">
+                                                    <div className="flex items-center gap-2 justify-end">
+                                                        {req.status === 'approved' ? <CheckCircle2 className="text-emerald-500" size={16} /> : <XCircle className="text-red-500" size={16} />}
+                                                        <span className={`text-[10px] font-black uppercase tracking-[3px] ${req.status === 'approved' ? 'text-emerald-500' : 'text-red-500'}`}>
+                                                            Transaction {req.status}
+                                                        </span>
+                                                    </div>
+                                                    {req.processedAt && (
+                                                        <span className="text-[10px] text-zinc-600 font-medium block">
+                                                            {req.processedAt.toDate().toLocaleString()}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </motion.div>
+                                ))
+                            )}
                         </AnimatePresence>
-                    )}
+                    </div>
+                )}
+            </div>
+
+            {/* Quick Stats Overlay (Floating or Inline) */}
+            {!loading && filteredRequests.length > 0 && (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-4 lg:px-0 mt-20">
+                    <div className="bg-zinc-900/30 border border-white/5 p-6 rounded-[32px]">
+                        <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-1">Queue Size</p>
+                        <p className="text-2xl font-black italic text-white">{requests.filter(r => r.status === 'pending').length}</p>
+                    </div>
+                    <div className="bg-zinc-900/30 border border-white/5 p-6 rounded-[32px]">
+                        <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-1">Total Audited</p>
+                        <p className="text-2xl font-black italic text-white">{requests.filter(r => r.status !== 'pending').length}</p>
+                    </div>
                 </div>
             )}
         </div>
@@ -187,3 +268,4 @@ const AdminWithdrawals = () => {
 };
 
 export default AdminWithdrawals;
+

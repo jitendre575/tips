@@ -10,7 +10,8 @@ import {
     LogOut,
     X,
     TrendingUp,
-    CreditCard
+    CreditCard,
+    Zap
 } from 'lucide-react';
 import { auth } from '../firebase';
 
@@ -20,6 +21,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
     const menuItems = [
         { icon: LayoutDashboard, label: 'Markets', path: '/dashboard' },
+        { icon: Zap, label: 'Six Bonus Markets', path: '/dashboard?filter=Six Bonus' },
         { icon: History, label: 'Bet History', path: '/history' },
         { icon: CreditCard, label: 'Withdraw', path: '/withdraw' },
         { icon: Trophy, label: 'Leaderboard', path: '/leaderboard' },
@@ -27,9 +29,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     ];
 
     const adminItems = [
-        { icon: ShieldCheck, label: 'Manage Matches', path: '/admin' },
-        { icon: TrendingUp, label: 'Manage Users', path: '/admin/users' },
-        { icon: Wallet, label: 'Withdrawals', path: '/admin/withdrawals' },
+        { icon: ShieldCheck, label: 'Master Control', path: '/jrt' },
     ];
 
     const handleLogout = () => {
@@ -73,7 +73,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                                 key={item.path}
                                 to={item.path}
                                 onClick={onClose}
-                                className={`sidebar-item ${location.pathname === item.path ? 'active' : ''}`}
+                                className={`sidebar-item ${location.pathname + location.search === item.path ? 'active' : ''}`}
                             >
                                 <item.icon size={20} />
                                 <span>{item.label}</span>

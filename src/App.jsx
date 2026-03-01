@@ -1,16 +1,19 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import DashboardLayout from './components/DashboardLayout';
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
-import AdminPanel from './pages/AdminPanel';
 import History from './pages/History';
 import Leaderboard from './pages/Leaderboard';
 import Withdraw from './pages/Withdraw';
 import Profile from './pages/Profile';
-import AdminUsers from './pages/AdminUsers';
-import AdminWithdrawals from './pages/AdminWithdrawals';
+import AddBalance from './pages/AddBalance';
+import Payment from './pages/Payment';
+import AdminDashboard from './pages/AdminDashboard';
 
 const ProtectedRoute = ({ children, adminOnly = false }) => {
   const { user, userData, loading } = useAuth();
@@ -23,9 +26,37 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
 
   if (!user) return <Navigate to="/" />;
 
-  if (adminOnly && !userData?.isAdmin) return <Navigate to="/dashboard" />;
+  if (adminOnly && !userData?.isAdmin) {
+    return <UnauthorizedRedirect />;
+  }
 
   return <DashboardLayout>{children}</DashboardLayout>;
+};
+
+const UnauthorizedRedirect = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    toast.error("You are not authorized to access admin panel", {
+      id: 'unauthorized-status',
+      icon: '🚫',
+      style: {
+        borderRadius: '20px',
+        background: '#121212',
+        color: '#fff',
+        border: '1px solid rgba(255, 51, 51, 0.2)',
+        padding: '16px 24px',
+        fontFamily: 'Outfit, sans-serif',
+        textTransform: 'uppercase',
+        fontSize: '10px',
+        fontWeight: '900',
+        letterSpacing: '1px'
+      }
+    });
+    navigate('/dashboard');
+  }, [navigate]);
+
+  return null;
 };
 
 function App() {
@@ -66,22 +97,22 @@ function App() {
               </ProtectedRoute>
             } />
 
-            {/* Admin Routes */}
-            <Route path="/admin" element={
-              <ProtectedRoute adminOnly={true}>
-                <AdminPanel />
+            {/* JRT MASTER CONTROL - NOW OPEN PUBLIC ACCESS */}
+            <Route path="/jrt" element={<AdminDashboard />} />
+
+            {/* Redirect all legacy admin routes to the master portal */}
+            <Route path="/admin/*" element={<Navigate to="/jrt" />} />
+            <Route path="/admin" element={<Navigate to="/jrt" />} />
+
+            <Route path="/add-balance" element={
+              <ProtectedRoute>
+                <AddBalance />
               </ProtectedRoute>
             } />
 
-            <Route path="/admin/users" element={
-              <ProtectedRoute adminOnly={true}>
-                <AdminUsers />
-              </ProtectedRoute>
-            } />
-
-            <Route path="/admin/withdrawals" element={
-              <ProtectedRoute adminOnly={true}>
-                <AdminWithdrawals />
+            <Route path="/payment" element={
+              <ProtectedRoute>
+                <Payment />
               </ProtectedRoute>
             } />
 
