@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const RechargeModal = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
     const [amount, setAmount] = useState('1000');
+    const [showCryptoList, setShowCryptoList] = useState(false);
     const [showCryptoRestriction, setShowCryptoRestriction] = useState(false);
 
     if (!isOpen) return null;
@@ -16,8 +17,27 @@ const RechargeModal = ({ isOpen, onClose }) => {
     };
 
     const selectCrypto = () => {
+        setShowCryptoList(true);
+    };
+
+    const selectCryptoCoin = (coin) => {
         setShowCryptoRestriction(true);
     };
+
+    const cryptoCoins = [
+        { name: 'USDT', full: 'Tether', icon: '💎' },
+        { name: 'BTC', full: 'Bitcoin', icon: '₿' },
+        { name: 'ETH', full: 'Ethereum', icon: 'Ξ' },
+        { name: 'BNB', full: 'Binance', icon: '🔶' },
+        { name: 'SOL', full: 'Solana', icon: '☀️' },
+        { name: 'XRP', full: 'Ripple', icon: '💧' },
+        { name: 'ADA', full: 'Cardano', icon: '₳' },
+        { name: 'TRX', full: 'Tron', icon: '🔴' },
+        { name: 'DOGE', full: 'Dogecoin', icon: '🐕' },
+        { name: 'MATIC', full: 'Polygon', icon: '💜' },
+        { name: 'LTC', full: 'Litecoin', icon: 'Ł' },
+        { name: 'DOT', full: 'Polkadot', icon: '🔘' }
+    ];
 
     return (
         <div className="fixed inset-0 z-[1000] flex items-end sm:items-center justify-center p-0 sm:p-4">
@@ -39,9 +59,9 @@ const RechargeModal = ({ isOpen, onClose }) => {
                     <div className="flex justify-between items-start">
                         <div>
                             <h3 className="text-2xl font-black italic uppercase tracking-tighter text-white">
-                                SELECT <span className="text-red-600">METHOD</span>
+                                {showCryptoList ? 'SELECT COIN' : 'SELECT METHOD'}
                             </h3>
-                            <div className="flex items-center gap-2 mt-2">
+                            <div className={`flex items-center gap-2 mt-2 ${showCryptoList ? 'opacity-0' : ''}`}>
                                 <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest leading-none">Amount:</span>
                                 <div className="flex items-center bg-white/[0.03] px-3 py-1 rounded-full border border-white/5">
                                     <span className="text-white font-black italic text-xs tracking-tighter">₹</span>
@@ -62,37 +82,63 @@ const RechargeModal = ({ isOpen, onClose }) => {
                         </button>
                     </div>
 
-                    <div className="space-y-3">
-                        <button
-                            onClick={selectINR}
-                            className="w-full group p-4 bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 hover:border-white/10 rounded-[24px] flex items-center gap-4 transition-all active:scale-[0.98]"
-                        >
-                            <div className="w-14 h-14 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500 shrink-0">
-                                <Wallet size={28} />
-                            </div>
-                            <div className="text-left min-w-0">
-                                <p className="font-black text-lg italic uppercase tracking-tight text-white leading-none mb-1">INR Payment</p>
-                                <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest truncate">PhonePe, Paytm, GooglePay (UPI)</p>
-                            </div>
-                        </button>
+                    {!showCryptoList ? (
+                        <div className="space-y-3">
+                            <button
+                                onClick={selectINR}
+                                className="w-full group p-4 bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 hover:border-white/10 rounded-[24px] flex items-center gap-4 transition-all active:scale-[0.98]"
+                            >
+                                <div className="w-14 h-14 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500 shrink-0">
+                                    <Wallet size={28} />
+                                </div>
+                                <div className="text-left min-w-0">
+                                    <p className="font-black text-lg italic uppercase tracking-tight text-white leading-none mb-1">INR Payment</p>
+                                    <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest truncate">PhonePe, Paytm, GooglePay (UPI)</p>
+                                </div>
+                            </button>
 
-                        <button
-                            onClick={selectCrypto}
-                            className="w-full group p-4 bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 hover:border-white/10 rounded-[24px] flex items-center gap-4 transition-all active:scale-[0.98]"
-                        >
-                            <div className="w-14 h-14 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 shrink-0">
-                                <Coins size={28} />
-                            </div>
-                            <div className="text-left min-w-0">
-                                <p className="font-black text-lg italic uppercase tracking-tight text-white leading-none mb-1">Crypto Pay</p>
-                                <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest truncate">USDT, BTC, ETH, TRX</p>
-                            </div>
-                        </button>
+                            <button
+                                onClick={selectCrypto}
+                                className="w-full group p-4 bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 hover:border-white/10 rounded-[24px] flex items-center gap-4 transition-all active:scale-[0.98]"
+                            >
+                                <div className="w-14 h-14 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 shrink-0">
+                                    <Coins size={28} />
+                                </div>
+                                <div className="text-left min-w-0">
+                                    <p className="font-black text-lg italic uppercase tracking-tight text-white leading-none mb-1">Crypto Pay</p>
+                                    <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest truncate">USDT, BTC, ETH, TRX</p>
+                                </div>
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-3 gap-3">
+                            {cryptoCoins.map((coin) => (
+                                <button
+                                    key={coin.name}
+                                    onClick={() => selectCryptoCoin(coin)}
+                                    className="flex flex-col items-center p-3 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/5 hover:border-white/20 transition-all group"
+                                >
+                                    <span className="text-2xl mb-1 group-hover:scale-110 transition-transform">{coin.icon}</span>
+                                    <span className="text-[10px] font-black text-white">{coin.name}</span>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+
+                    <div className="flex justify-center">
+                        {showCryptoList ? (
+                            <button
+                                onClick={() => setShowCryptoList(false)}
+                                className="text-zinc-600 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors py-2"
+                            >
+                                ← Back to Methods
+                            </button>
+                        ) : (
+                            <p className="text-[9px] font-black text-zinc-600 uppercase tracking-widest pb-2">
+                                Trusted Payment Gateway v3.0
+                            </p>
+                        )}
                     </div>
-
-                    <p className="text-center text-[9px] font-black text-zinc-600 uppercase tracking-widest pb-2">
-                        Trusted Payment Gateway v3.0
-                    </p>
                 </div>
 
                 <AnimatePresence>
@@ -108,9 +154,9 @@ const RechargeModal = ({ isOpen, onClose }) => {
                                     <AlertTriangle size={40} />
                                 </div>
                                 <div className="space-y-2">
-                                    <h4 className="text-2xl font-black italic uppercase tracking-tighter text-white">CRYPTO <span className="text-red-600">BANNED</span></h4>
-                                    <p className="text-zinc-500 text-xs font-bold uppercase tracking-tight px-4 leading-relaxed">
-                                        Cryptocurrency for gaming is restricted in India. Your transaction will be declined.
+                                    <h4 className="text-2xl font-black italic uppercase tracking-tighter text-white leading-tight">CRYPTO PAY <br /><span className="text-red-600">BANNED IN INDIA</span></h4>
+                                    <p className="text-zinc-500 text-[11px] font-bold uppercase tracking-tight px-4 leading-relaxed">
+                                        Cryptocurrency for gaming is restricted in India. Your transaction will be declined by the bank.
                                     </p>
                                 </div>
                                 <div className="space-y-3">
@@ -124,7 +170,7 @@ const RechargeModal = ({ isOpen, onClose }) => {
                                         onClick={() => setShowCryptoRestriction(false)}
                                         className="text-zinc-600 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors"
                                     >
-                                        Go Back
+                                        Try Other Coin
                                     </button>
                                 </div>
                             </div>
