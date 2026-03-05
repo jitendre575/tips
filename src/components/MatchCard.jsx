@@ -32,7 +32,7 @@ const MatchCard = ({ match, onBet }) => {
                 {/* VS Center */}
                 <div className="flex flex-col items-center gap-1 sm:gap-3 px-1 sm:px-4 shrink-0">
                     <span className="text-[8px] sm:text-[10px] font-black text-zinc-600 uppercase tracking-[2px] sm:tracking-[4px]">Prediction</span>
-                    <div className="w-10 h-10 sm:w-16 h-16 rounded-full bg-gradient-to-br from-red-600 to-zinc-900 border-2 sm:border-4 border-[#121212] flex items-center justify-center shadow-[0_0_30px_rgba(239,68,68,0.2)]">
+                    <div className="w-10 h-10 sm:w-16 h-16 rounded-full bg-gradient-to-br from-accent to-zinc-900 border-2 sm:border-4 border-[#121212] flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.2)]">
                         <span className="text-white font-black italic text-xs sm:text-xl">VS</span>
                     </div>
                 </div>
@@ -85,7 +85,7 @@ const MatchCard = ({ match, onBet }) => {
             <button
                 onClick={() => onBet(match)}
                 disabled={isFinished}
-                className="w-full bg-red-600 hover:bg-red-500 text-white py-3.5 sm:py-6 rounded-2xl sm:rounded-[28px] font-black italic uppercase tracking-[2px] sm:tracking-[4px] text-lg sm:text-2xl shadow-2xl shadow-red-600/20 active:scale-95 transition-all flex items-center justify-center gap-2 sm:gap-4 group/btn disabled:grayscale whitespace-nowrap"
+                className="w-full bg-accent hover:bg-accent-hover text-white py-3.5 sm:py-6 rounded-2xl sm:rounded-[28px] font-black italic uppercase tracking-[2px] sm:tracking-[4px] text-lg sm:text-2xl shadow-2xl shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-2 sm:gap-4 group/btn disabled:grayscale whitespace-nowrap"
             >
                 {isFinished ? 'Market Closed' : 'Predict & Win'}
                 {!isFinished && <ChevronRight size={20} className="sm:w-7 sm:h-7 group-hover/btn:translate-x-2 transition-transform" />}

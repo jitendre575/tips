@@ -39,8 +39,8 @@ const LandingPage = () => {
     }, [user, userData, authLoading, navigate]);
 
     if (authLoading) return (
-        <div className="flex items-center justify-center min-h-screen bg-[#050505]">
-            <div className="w-12 h-12 border-4 border-red-500/20 border-t-red-500 rounded-full animate-spin"></div>
+        <div className="flex items-center justify-center min-h-screen bg-primary">
+            <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin"></div>
         </div>
     );
 
@@ -65,11 +65,11 @@ const LandingPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#050505] selection:bg-red-500/30 overflow-x-hidden">
+        <div className="min-h-screen bg-primary selection:bg-accent/30 overflow-x-hidden">
             {/* Mesh Background */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-red-500/10 blur-[120px] rounded-full animate-float" />
-                <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[30%] bg-blue-500/5 blur-[100px] rounded-full" />
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-accent/15 blur-[120px] rounded-full animate-float" />
+                <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[30%] bg-indigo-500/10 blur-[100px] rounded-full" />
             </div>
 
             {/* Navbar */}
@@ -77,12 +77,12 @@ const LandingPage = () => {
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <div className="cricwin-logo">
                         <span className="text-white">CRIC</span>
-                        <span className="logo-red underline underline-offset-8 decoration-2 decoration-red-500/30">WIN</span>
+                        <span className="logo-accent underline underline-offset-8 decoration-4 decoration-accent/30">WIN</span>
                     </div>
 
                     <div className="hidden lg:flex items-center gap-10">
                         <Link to="/" className="text-sm font-black italic uppercase tracking-widest text-white flex items-center gap-2 group">
-                            <Home size={16} className="text-red-500 group-hover:scale-125 transition-transform" />
+                            <Home size={16} className="text-accent group-hover:scale-125 transition-transform" />
                             <span>Home</span>
                         </Link>
                         <button onClick={() => setShowAuth(true)} className="text-sm font-black italic uppercase tracking-widest text-zinc-500 hover:text-white transition-colors flex items-center gap-2">
@@ -104,7 +104,7 @@ const LandingPage = () => {
                         </button>
                         <button
                             onClick={() => { setIsLogin(false); setShowAuth(true); }}
-                            className="btn-red px-6 py-2.5 !rounded-xl text-xs"
+                            className="btn-accent px-6 py-2.5 !rounded-xl text-xs"
                         >
                             Join Now
                         </button>
@@ -118,7 +118,7 @@ const LandingPage = () => {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="inline-flex items-center gap-2 px-4 py-1.5 bg-red-500/10 border border-red-500/20 rounded-full text-red-500 text-[10px] font-black uppercase tracking-[3px] mb-8 italic"
+                        className="inline-flex items-center gap-2 px-4 py-1.5 bg-accent/10 border border-accent/20 rounded-full text-accent text-[10px] font-black uppercase tracking-[3px] mb-8 italic"
                     >
                         <Activity size={12} className="animate-pulse" />
                         The Number #1 Cricket Prediction Hub
@@ -130,7 +130,7 @@ const LandingPage = () => {
                         className="text-6xl lg:text-9xl font-black italic tracking-tighter mb-8 leading-[0.9] lg:leading-[0.8]"
                     >
                         PREDICT. WIN. <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-amber-500">DOMINATE.</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-accent to-indigo-500 drop-shadow-[0_15px_30px_rgba(59,130,246,0.3)]">DOMINATE.</span>
                     </motion.h1>
 
                     <motion.p
@@ -150,7 +150,7 @@ const LandingPage = () => {
                     >
                         <button
                             onClick={() => setShowAuth(true)}
-                            className="btn-red w-full sm:w-auto px-10 py-5 text-base"
+                            className="btn-accent w-full sm:w-auto px-10 py-5 text-base"
                         >
                             Start Predicting <ChevronRight size={20} />
                         </button>
@@ -167,13 +167,13 @@ const LandingPage = () => {
                 <div className="mb-32">
                     <div className="flex items-center justify-between mb-12">
                         <div className="flex items-center gap-4">
-                            <div className="w-1 h-12 bg-red-500 rounded-full" />
+                            <div className="w-1 h-12 bg-accent rounded-full" />
                             <div>
-                                <h2 className="text-3xl font-black italic tracking-tighter uppercase">Active <span className="logo-red">Markets</span></h2>
+                                <h2 className="text-3xl font-black italic tracking-tighter uppercase">Active <span className="logo-accent">Markets</span></h2>
                                 <p className="text-zinc-600 text-[10px] font-black uppercase tracking-widest mt-1">Live from global tournaments</p>
                             </div>
                         </div>
-                        <button onClick={() => setShowAuth(true)} className="hidden sm:flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-red-500 transition-colors">
+                        <button onClick={() => setShowAuth(true)} className="hidden sm:flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-accent transition-colors">
                             View All Markets <ChevronRight size={14} />
                         </button>
                     </div>
@@ -201,7 +201,7 @@ const LandingPage = () => {
                         { icon: Activity, title: "Advanced Stats", desc: "Detailed match analysis and history to help you win." }
                     ].map((item, i) => (
                         <div key={i} className="glass-card p-10 group hover:bg-white/[0.02] border-white/5">
-                            <div className="w-14 h-14 rounded-2xl bg-zinc-900 flex items-center justify-center text-red-500 mb-8 border border-white/5 group-hover:scale-110 group-hover:bg-red-500/10 transition-all">
+                            <div className="w-14 h-14 rounded-2xl bg-zinc-900 flex items-center justify-center text-accent mb-8 border border-white/5 group-hover:scale-110 group-hover:bg-accent/10 transition-all">
                                 <item.icon size={28} />
                             </div>
                             <h4 className="text-xl font-black italic tracking-tighter uppercase mb-3">{item.title}</h4>
@@ -226,9 +226,9 @@ const LandingPage = () => {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="relative w-full max-w-md bg-[#050505] border border-white/[0.08] rounded-[40px] p-10 lg:p-12 shadow-2xl overflow-hidden"
+                            className="relative w-full max-w-md bg-primary border border-white/[0.08] rounded-[40px] p-10 lg:p-12 shadow-2xl overflow-hidden"
                         >
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 blur-[60px] rounded-full -mr-16 -mt-16 pointer-events-none" />
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-[60px] rounded-full -mr-16 -mt-16 pointer-events-none" />
 
                             <button
                                 onClick={() => setShowAuth(false)}
@@ -240,9 +240,9 @@ const LandingPage = () => {
                             <div className="mb-10 text-center">
                                 <h2 className="text-4xl font-black italic tracking-tighter mb-3 uppercase leading-none">
                                     {isLogin ? (
-                                        <>Welcome <span className="logo-red">Back</span></>
+                                        <>Welcome <span className="logo-accent">Back</span></>
                                     ) : (
-                                        <>Join the <span className="logo-red">Game</span></>
+                                        <>Join the <span className="logo-accent">Game</span></>
                                     )}
                                 </h2>
                                 <p className="text-zinc-500 text-sm font-medium">
@@ -257,7 +257,7 @@ const LandingPage = () => {
                                         <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600" size={18} />
                                         <input
                                             type="email" required value={email} onChange={e => setEmail(e.target.value)}
-                                            className="w-full bg-zinc-900/50 border border-white/[0.05] rounded-2xl py-5 pl-14 pr-6 outline-none focus:border-red-500/50 transition-all font-medium text-white"
+                                            className="w-full bg-surface-light border border-white/[0.05] rounded-2xl py-5 pl-14 pr-6 outline-none focus:border-accent/50 transition-all font-medium text-white"
                                             placeholder="name@example.com"
                                         />
                                     </div>
@@ -269,7 +269,7 @@ const LandingPage = () => {
                                         <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600" size={18} />
                                         <input
                                             type="password" required value={password} onChange={e => setPassword(e.target.value)}
-                                            className="w-full bg-zinc-900/50 border border-white/[0.05] rounded-2xl py-5 pl-14 pr-6 outline-none focus:border-red-500/50 transition-all font-medium text-white"
+                                            className="w-full bg-surface-light border border-white/[0.05] rounded-2xl py-5 pl-14 pr-6 outline-none focus:border-accent/50 transition-all font-medium text-white"
                                             placeholder="••••••••"
                                         />
                                     </div>
@@ -277,7 +277,7 @@ const LandingPage = () => {
 
                                 <button
                                     type="submit" disabled={loading}
-                                    className="w-full btn-red py-5 mt-4 group relative overflow-hidden"
+                                    className="w-full btn-accent py-5 mt-4 group relative overflow-hidden"
                                 >
                                     <span className="relative z-10 flex items-center justify-center gap-3">
                                         {loading ? (
@@ -296,7 +296,7 @@ const LandingPage = () => {
                             <div className="mt-10 text-center">
                                 <button
                                     onClick={() => setIsLogin(!isLogin)}
-                                    className="text-xs font-black uppercase tracking-[2px] text-zinc-600 hover:text-red-500 transition-colors"
+                                    className="text-xs font-black uppercase tracking-[2px] text-zinc-600 hover:text-accent transition-colors"
                                 >
                                     {isLogin ? "New Player? Register Here" : "Existing Member? Login Here"}
                                 </button>
@@ -312,7 +312,7 @@ const LandingPage = () => {
                     <div>
                         <div className="cricwin-logo mb-2 justify-center lg:justify-start">
                             <span className="text-white">CRIC</span>
-                            <span className="logo-red">WIN</span>
+                            <span className="logo-accent">WIN</span>
                         </div>
                         <p className="text-zinc-600 text-[10px] font-black uppercase tracking-widest">© 2024 CRICWIN GAMING LTD. ALL RIGHTS RESERVED.</p>
                     </div>

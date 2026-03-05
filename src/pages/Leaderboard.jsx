@@ -39,15 +39,15 @@ const Leaderboard = () => {
     return (
         <div className="max-w-5xl mx-auto space-y-12 pb-20">
             <div className="flex flex-col items-center text-center space-y-6">
-                <div className="bg-red-500/10 p-5 rounded-[32px] border border-red-500/20 shadow-2xl relative">
-                    <Trophy className="text-red-500 group-hover:animate-float" size={64} />
+                <div className="bg-accent/10 p-5 rounded-[32px] border border-accent/20 shadow-2xl relative">
+                    <Trophy className="text-accent group-hover:animate-float" size={64} />
                     <div className="absolute -top-2 -right-2 bg-yellow-500 p-2 rounded-full border-4 border-[#050505]">
                         <Star className="text-black fill-current" size={16} />
                     </div>
                 </div>
                 <div>
                     <h1 className="text-5xl lg:text-7xl font-black italic tracking-tighter uppercase leading-none mb-4">
-                        Hall of <span className="logo-red">Fame</span>
+                        Hall of <span className="logo-accent">Fame</span>
                     </h1>
                     <p className="text-zinc-500 max-w-lg font-medium">The top predictors and master strategists dominating the arena</p>
                 </div>
@@ -63,7 +63,7 @@ const Leaderboard = () => {
 
                 {loading ? (
                     <div className="p-20 text-center">
-                        <div className="w-12 h-12 border-4 border-red-500/20 border-t-red-500 rounded-full animate-spin mx-auto mb-4" />
+                        <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin mx-auto mb-4" />
                         <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Calculating Standings...</span>
                     </div>
                 ) : (
@@ -82,9 +82,9 @@ const Leaderboard = () => {
                                 </div>
                                 <div className="col-span-6 flex items-center gap-5">
                                     <div className={`w-14 h-14 rounded-2xl flex items-center justify-center relative ${index === 0 ? 'bg-yellow-400/10 border-2 border-yellow-400/30' :
-                                            index === 1 ? 'bg-slate-300/10 border-2 border-slate-300/30' :
-                                                index === 2 ? 'bg-amber-600/10 border-2 border-amber-600/30' :
-                                                    'bg-zinc-900 border border-white/5'
+                                        index === 1 ? 'bg-slate-300/10 border-2 border-slate-300/30' :
+                                            index === 2 ? 'bg-amber-600/10 border-2 border-amber-600/30' :
+                                                'bg-zinc-900 border border-white/5'
                                         }`}>
                                         <img
                                             src={`https://api.dicebear.com/7.x/initials/svg?seed=${leader.email}`}
@@ -92,7 +92,7 @@ const Leaderboard = () => {
                                             className="w-full h-full rounded-2xl p-1"
                                         />
                                         {index < 3 && (
-                                            <div className="absolute -bottom-1 -right-1 bg-red-500 w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#121212]">
+                                            <div className="absolute -bottom-1 -right-1 bg-accent w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#121212] shadow-[0_0_10px_rgba(var(--accent),0.3)]">
                                                 <Star className="text-white fill-current" size={8} />
                                             </div>
                                         )}
@@ -105,7 +105,7 @@ const Leaderboard = () => {
                                         <div className="flex items-center gap-2">
                                             <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Level {Math.floor((leader.totalBets || 0) / 5) + 1}</span>
                                             {leader.isAdmin && (
-                                                <span className="text-[8px] bg-red-500/10 text-red-500 px-1.5 py-0.5 rounded border border-red-500/20 font-black uppercase">Admin</span>
+                                                <span className="text-[8px] bg-accent/10 text-accent px-1.5 py-0.5 rounded border border-accent/20 font-black uppercase">Admin</span>
                                             )}
                                         </div>
                                     </div>
@@ -131,13 +131,13 @@ const Leaderboard = () => {
             <div className="grid md:grid-cols-2 gap-8">
                 <div className="glass-card p-10 bg-gradient-to-br from-[#121212] to-[#1a1a1a] relative overflow-hidden group">
                     <div className="relative z-10">
-                        <div className="bg-red-500/10 w-12 h-12 rounded-2xl flex items-center justify-center text-red-500 mb-6">
+                        <div className="bg-accent/10 w-12 h-12 rounded-2xl flex items-center justify-center text-accent mb-6">
                             <Star size={24} />
                         </div>
-                        <h4 className="text-2xl font-black italic tracking-tighter uppercase mb-4">Master <span className="logo-red">Rewards</span></h4>
+                        <h4 className="text-2xl font-black italic tracking-tighter uppercase mb-4">Master <span className="logo-accent">Rewards</span></h4>
                         <p className="text-zinc-500 text-sm leading-relaxed mb-8">Top 3 performers every month receive exclusive profile badges and 20,000 bonus coins for our upcoming tournaments. Keep predicting to climb!</p>
-                        <button className="text-[10px] font-black uppercase tracking-widest text-white hover:text-red-500 flex items-center gap-2 group/link">
-                            View Reward Schedule <div className="w-1 h-1 bg-white rounded-full transition-all group-hover/link:w-4 group-hover/link:bg-red-500" />
+                        <button className="text-[10px] font-black uppercase tracking-widest text-white hover:text-accent flex items-center gap-2 group/link">
+                            View Reward Schedule <div className="w-1 h-1 bg-white rounded-full transition-all group-hover/link:w-4 group-hover/link:bg-accent" />
                         </button>
                     </div>
                 </div>

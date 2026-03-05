@@ -127,16 +127,16 @@ const AdminPanel = () => {
             {/* Header Section */}
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
                 <div className="flex items-center gap-6">
-                    <div className="w-20 h-20 bg-red-500/10 rounded-[30px] border border-red-500/20 flex items-center justify-center text-red-500 shadow-2xl">
+                    <div className="w-20 h-20 bg-accent/10 rounded-[30px] border border-accent/20 flex items-center justify-center text-accent shadow-2xl">
                         <ShieldCheck size={40} />
                     </div>
                     <div>
                         <div className="flex items-center gap-2 mb-1">
-                            <Activity className="text-red-500" size={14} />
+                            <Activity className="text-accent" size={14} />
                             <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Global Operations</span>
                         </div>
                         <h1 className="text-4xl lg:text-5xl font-black text-white italic tracking-tighter uppercase leading-none">
-                            Market <span className="logo-red">Control</span>
+                            Market <span className="logo-accent">Control</span>
                         </h1>
                         <p className="text-zinc-500 text-sm font-medium mt-2">Manage live trading markets and settle winning brackets.</p>
                     </div>
@@ -145,7 +145,7 @@ const AdminPanel = () => {
                 <div className="flex items-center gap-4 bg-zinc-900/50 p-2 rounded-[24px] border border-white/5">
                     <div className="px-6 py-3 bg-zinc-900 rounded-2xl flex flex-col items-center">
                         <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Live Markets</span>
-                        <span className="text-xl font-black text-red-500 italic">{matches.filter(m => m.status === 'Live').length}</span>
+                        <span className="text-xl font-black text-accent italic">{matches.filter(m => m.status === 'Live').length}</span>
                     </div>
                     <div className="px-6 py-3 bg-zinc-900 rounded-2xl flex flex-col items-center">
                         <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Upcoming</span>
@@ -157,14 +157,14 @@ const AdminPanel = () => {
             <div className="grid lg:grid-cols-12 gap-10">
                 {/* Creation Form */}
                 <div className="lg:col-span-4 space-y-6">
-                    <div className="bg-[#0a0a0a] border border-white/[0.05] rounded-[40px] p-10 relative overflow-hidden group">
+                    <div className="bg-surface border border-white/[0.05] rounded-[40px] p-10 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
                             <Plus size={120} />
                         </div>
 
                         <div className="relative space-y-10">
                             <div>
-                                <h3 className="text-2xl font-black italic uppercase tracking-tighter">Initialize <span className="logo-red">Market</span></h3>
+                                <h3 className="text-2xl font-black italic uppercase tracking-tighter">Initialize <span className="logo-accent">Market</span></h3>
                                 <p className="text-zinc-500 text-xs mt-1">Configure teams and initial odds</p>
                             </div>
 
@@ -176,7 +176,7 @@ const AdminPanel = () => {
                                             type="text" required
                                             value={newMatch.teamA}
                                             onChange={e => setNewMatch({ ...newMatch, teamA: e.target.value })}
-                                            className="w-full bg-zinc-900/50 border border-white/5 rounded-2xl py-4 px-6 text-sm font-bold text-white focus:outline-none focus:border-red-500/30 transition-all"
+                                            className="w-full bg-zinc-900/50 border border-white/5 rounded-2xl py-4 px-6 text-sm font-bold text-white focus:outline-none focus:border-accent/30 transition-all"
                                             placeholder="INDIA"
                                         />
                                     </div>
@@ -186,7 +186,7 @@ const AdminPanel = () => {
                                             type="text" required
                                             value={newMatch.teamB}
                                             onChange={e => setNewMatch({ ...newMatch, teamB: e.target.value })}
-                                            className="w-full bg-zinc-900/50 border border-white/5 rounded-2xl py-4 px-6 text-sm font-bold text-white focus:outline-none focus:border-red-500/30 transition-all"
+                                            className="w-full bg-zinc-900/50 border border-white/5 rounded-2xl py-4 px-6 text-sm font-bold text-white focus:outline-none focus:border-accent/30 transition-all"
                                             placeholder="AUSTRALIA"
                                         />
                                     </div>
@@ -201,7 +201,7 @@ const AdminPanel = () => {
                                                 type="number" step="0.01" required
                                                 value={newMatch.oddsTeamA}
                                                 onChange={e => setNewMatch({ ...newMatch, oddsTeamA: Number(e.target.value) })}
-                                                className="w-full bg-zinc-900/50 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-sm font-black text-white focus:outline-none focus:border-red-500/30 transition-all"
+                                                className="w-full bg-zinc-900/50 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-sm font-black text-white focus:outline-none focus:border-accent/30 transition-all"
                                             />
                                         </div>
                                     </div>
@@ -213,7 +213,7 @@ const AdminPanel = () => {
                                                 type="number" step="0.01" required
                                                 value={newMatch.oddsTeamB}
                                                 onChange={e => setNewMatch({ ...newMatch, oddsTeamB: Number(e.target.value) })}
-                                                className="w-full bg-zinc-900/50 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-sm font-black text-white focus:outline-none focus:border-red-500/30 transition-all"
+                                                className="w-full bg-zinc-900/50 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-sm font-black text-white focus:outline-none focus:border-accent/30 transition-all"
                                             />
                                         </div>
                                     </div>
@@ -227,7 +227,7 @@ const AdminPanel = () => {
                                             type="datetime-local" required
                                             value={newMatch.matchTime}
                                             onChange={e => setNewMatch({ ...newMatch, matchTime: e.target.value })}
-                                            className="w-full bg-zinc-900/50 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-sm font-bold text-white focus:outline-none focus:border-red-500/30 transition-all"
+                                            className="w-full bg-zinc-900/50 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-sm font-bold text-white focus:outline-none focus:border-accent/30 transition-all"
                                         />
                                     </div>
                                 </div>
@@ -246,13 +246,13 @@ const AdminPanel = () => {
                                             onChange={e => setNewMatch({ ...newMatch, sixInPowerplay: e.target.checked })}
                                             className="sr-only peer"
                                         />
-                                        <div className="w-11 h-6 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                                        <div className="w-11 h-6 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
                                     </div>
                                 </div>
 
                                 <button
                                     type="submit"
-                                    className="w-full py-5 bg-red-600 hover:bg-red-500 text-white rounded-[24px] font-black uppercase italic tracking-[4px] transition-all shadow-2xl shadow-red-600/20 active:scale-95"
+                                    className="w-full py-5 bg-accent hover:bg-accent-hover text-white rounded-[24px] font-black uppercase italic tracking-[4px] transition-all shadow-2xl shadow-accent/20 active:scale-95"
                                 >
                                     Initiate Market
                                 </button>
@@ -264,7 +264,7 @@ const AdminPanel = () => {
                 {/* Markets List */}
                 <div className="lg:col-span-8 space-y-8">
                     <div className="flex items-center justify-between px-4">
-                        <h3 className="text-2xl font-black italic uppercase tracking-tighter">Active <span className="logo-red">Markets</span></h3>
+                        <h3 className="text-2xl font-black italic uppercase tracking-tighter">Active <span className="logo-accent">Markets</span></h3>
                         <div className="flex items-center gap-3">
                             <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest bg-zinc-900 px-4 py-1.5 rounded-full border border-white/5">
                                 {matches.length} Total
@@ -291,18 +291,18 @@ const AdminPanel = () => {
                                         layout
                                         initial={{ opacity: 0, scale: 0.95 }}
                                         animate={{ opacity: 1, scale: 1 }}
-                                        className="bg-[#0a0a0a] border border-white/5 rounded-[40px] p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10 hover:border-white/10 transition-all shadow-2xl overflow-hidden relative"
+                                        className="bg-surface border border-white/5 rounded-[40px] p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10 hover:border-white/10 transition-all shadow-2xl overflow-hidden relative"
                                     >
                                         <div className="flex items-center gap-8 flex-1">
                                             <div className="relative">
-                                                <div className={`w-20 h-20 rounded-[30px] flex flex-col items-center justify-center shrink-0 border transition-all duration-500 ${match.status === 'Live' ? 'bg-red-500/10 text-red-500 border-red-500/30 animate-pulse' :
+                                                <div className={`w-20 h-20 rounded-[30px] flex flex-col items-center justify-center shrink-0 border transition-all duration-500 ${match.status === 'Live' ? 'bg-accent/10 text-accent border-accent/30 animate-pulse' :
                                                     match.status === 'Finished' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30' :
                                                         'bg-zinc-900 text-zinc-600 border-white/5'
                                                     }`}>
                                                     <Trophy size={24} />
                                                     <span className="text-[8px] font-black uppercase mt-1.5 tracking-widest">{match.status}</span>
                                                 </div>
-                                                {match.status === 'Live' && <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-4 border-[#0a0a0a] rounded-full" />}
+                                                {match.status === 'Live' && <div className="absolute -top-1 -right-1 w-4 h-4 bg-accent border-4 border-surface rounded-full" />}
                                             </div>
 
                                             <div className="space-y-3">
@@ -311,13 +311,13 @@ const AdminPanel = () => {
                                                 </h3>
                                                 <div className="flex flex-wrap items-center gap-4">
                                                     <div className="flex items-center gap-2 bg-zinc-900 px-3 py-1.5 rounded-xl border border-white/5">
-                                                        <Calendar size={12} className="text-red-500" />
+                                                        <Calendar size={12} className="text-accent" />
                                                         <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">
                                                             {new Date(match.matchTime).toLocaleDateString()}
                                                         </span>
                                                     </div>
                                                     <div className="flex items-center gap-2 bg-zinc-900 px-3 py-1.5 rounded-xl border border-white/5">
-                                                        <Clock size={12} className="text-red-500" />
+                                                        <Clock size={12} className="text-accent" />
                                                         <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">
                                                             {new Date(match.matchTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                         </span>
@@ -340,7 +340,7 @@ const AdminPanel = () => {
                                             {match.status === 'Upcoming' && (
                                                 <button
                                                     onClick={() => updateMatchStatus(match.id, 'Live')}
-                                                    className="px-8 py-4 bg-white/5 hover:bg-red-600 text-zinc-400 hover:text-white rounded-2xl text-[10px] font-black uppercase tracking-[2px] transition-all active:scale-95 whitespace-nowrap"
+                                                    className="px-8 py-4 bg-white/5 hover:bg-accent text-zinc-400 hover:text-white rounded-2xl text-[10px] font-black uppercase tracking-[2px] transition-all active:scale-95 whitespace-nowrap"
                                                 >
                                                     Go Live
                                                 </button>
@@ -393,7 +393,7 @@ const AdminPanel = () => {
                                                             toast.success('Market extracted');
                                                         }
                                                     }}
-                                                    className="p-4 hover:bg-red-500/10 rounded-2xl text-zinc-700 hover:text-red-500 transition-all"
+                                                    className="p-4 hover:bg-accent/10 rounded-2xl text-zinc-700 hover:text-accent transition-all"
                                                     title="Delete Market"
                                                 >
                                                     <Trash2 size={20} />

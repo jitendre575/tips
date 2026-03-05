@@ -76,7 +76,7 @@ const Withdraw = () => {
     return (
         <div className="max-w-6xl mx-auto space-y-10">
             <div>
-                <h1 className="text-4xl font-black italic tracking-tighter uppercase">Withdraw <span className="logo-red">Earnings</span></h1>
+                <h1 className="text-4xl font-black italic tracking-tighter uppercase">Withdraw <span className="logo-accent">Earnings</span></h1>
                 <p className="text-zinc-500 font-medium">Quick and secure payouts to your preferred method</p>
             </div>
 
@@ -85,7 +85,7 @@ const Withdraw = () => {
                 <div className="lg:col-span-1">
                     <div className="glass-card p-8">
                         <div className="flex items-center gap-3 mb-8">
-                            <div className="bg-red-500/10 p-3 rounded-2xl text-red-500">
+                            <div className="bg-accent/10 p-3 rounded-2xl text-accent">
                                 <Wallet size={24} />
                             </div>
                             <div>
@@ -120,8 +120,8 @@ const Withdraw = () => {
                                             type="button"
                                             onClick={() => setPaymentMethod(method)}
                                             className={`py-3 rounded-2xl font-bold transition-all border ${paymentMethod === method
-                                                    ? 'bg-red-500/10 border-red-500/50 text-red-500'
-                                                    : 'bg-zinc-900 border-white/[0.05] text-zinc-500'
+                                                ? 'bg-accent/10 border-accent/50 text-accent'
+                                                : 'bg-zinc-900 border-white/[0.05] text-zinc-500'
                                                 }`}
                                         >
                                             {method}
@@ -144,7 +144,7 @@ const Withdraw = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full btn-red py-4 text-sm"
+                                className="w-full btn-accent py-4 text-sm"
                             >
                                 {loading ? (
                                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -167,7 +167,7 @@ const Withdraw = () => {
                 {/* History */}
                 <div className="lg:col-span-2 space-y-6">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-xl font-bold uppercase italic tracking-tighter">Recent <span className="logo-red">Requests</span></h2>
+                        <h2 className="text-xl font-bold uppercase italic tracking-tighter">Recent <span className="logo-accent">Requests</span></h2>
                         <Landmark size={20} className="text-zinc-600" />
                     </div>
 
@@ -188,8 +188,8 @@ const Withdraw = () => {
                                 >
                                     <div className="flex items-center gap-5">
                                         <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${req.status === 'pending' ? 'bg-amber-500/10 text-amber-500' :
-                                                req.status === 'approved' ? 'bg-emerald-500/10 text-emerald-500' :
-                                                    'bg-red-500/10 text-red-500'
+                                            req.status === 'approved' ? 'bg-emerald-500/10 text-emerald-500' :
+                                                'bg-red-500/10 text-red-500'
                                             }`}>
                                             {req.status === 'pending' ? <Clock size={20} /> :
                                                 req.status === 'approved' ? <CheckCircle2 size={20} /> :
@@ -210,8 +210,8 @@ const Withdraw = () => {
 
                                     <div className="text-right">
                                         <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${req.status === 'pending' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500' :
-                                                req.status === 'approved' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' :
-                                                    'bg-red-500/10 border-red-500/20 text-red-500'
+                                            req.status === 'approved' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' :
+                                                'bg-red-500/10 border-red-500/20 text-red-500'
                                             }`}>
                                             {req.status}
                                         </div>

@@ -57,7 +57,7 @@ const AddBalance = () => {
     };
 
     return (
-        <div className="min-h-[calc(100vh-80px)] p-6 bg-[#050505] animate-in fade-in duration-500">
+        <div className="min-h-[calc(100vh-80px)] p-6 bg-primary animate-in fade-in duration-500">
             <div className="max-w-xl mx-auto space-y-8">
                 {/* Header */}
                 <div className="flex items-center gap-4">
@@ -68,15 +68,15 @@ const AddBalance = () => {
                         <ArrowLeft size={20} />
                     </button>
                     <div>
-                        <h1 className="text-3xl font-black text-white tracking-tight uppercase italic">Add <span className="logo-red">Balance</span></h1>
+                        <h1 className="text-3xl font-black text-white tracking-tight uppercase italic">Add <span className="logo-accent">Balance</span></h1>
                         <p className="text-sm text-zinc-500 font-medium">Select or enter the amount you want to add</p>
                     </div>
                 </div>
 
                 {/* Amount Input */}
-                <div className="bg-zinc-900 border border-white/5 rounded-[32px] p-8 relative overflow-hidden group shadow-2xl">
+                <div className="bg-surface border border-white/5 rounded-[32px] p-8 relative overflow-hidden group shadow-2xl">
                     <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
-                        <Wallet size={160} className="text-red-500" />
+                        <Wallet size={160} className="text-accent" />
                     </div>
 
                     <div className="relative space-y-8">
@@ -92,7 +92,7 @@ const AddBalance = () => {
                                         setSelectedQuickAmount(null);
                                     }}
                                     placeholder="0.00"
-                                    className="w-full bg-zinc-950 border border-white/5 rounded-[24px] py-8 pl-14 pr-8 text-4xl font-black text-white focus:outline-none focus:border-red-500/50 focus:ring-4 focus:ring-red-500/10 transition-all placeholder:text-zinc-800"
+                                    className="w-full bg-zinc-950 border border-white/5 rounded-[24px] py-8 pl-14 pr-8 text-4xl font-black text-white focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all placeholder:text-zinc-800"
                                 />
                             </div>
                         </div>
@@ -103,7 +103,7 @@ const AddBalance = () => {
                                     key={val}
                                     onClick={() => handleQuickAmountClick(val)}
                                     className={`py-4 px-4 rounded-2xl border transition-all text-sm font-black italic tracking-tight ${selectedQuickAmount === val
-                                        ? 'bg-red-500 border-red-500 text-white shadow-xl shadow-red-500/20 -translate-y-1'
+                                        ? 'bg-accent border-accent text-white shadow-xl shadow-accent/20 -translate-y-1'
                                         : 'bg-zinc-900/50 border-white/10 text-zinc-400 hover:border-white/20 hover:bg-zinc-800'
                                         }`}
                                 >
@@ -131,7 +131,7 @@ const AddBalance = () => {
                 <button
                     onClick={handleContinue}
                     disabled={!amount || parseFloat(amount) <= 0}
-                    className="w-full flex items-center justify-between p-6 bg-red-600 hover:bg-red-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-[24px] font-black uppercase tracking-widest transition-all group shadow-xl shadow-red-500/20 active:scale-[0.98]"
+                    className="w-full flex items-center justify-between p-6 bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-[24px] font-black uppercase tracking-widest transition-all group shadow-xl shadow-accent/20 active:scale-[0.98]"
                 >
                     <div className="flex items-center gap-4">
                         <div className="p-2 bg-white/10 rounded-lg">
@@ -154,7 +154,7 @@ const AddBalance = () => {
                         <div className="p-8 space-y-8">
                             <div className="flex justify-between items-start">
                                 <div>
-                                    <h3 className="text-2xl font-black italic uppercase tracking-tighter text-white">Select <span className="logo-red">Method</span></h3>
+                                    <h3 className="text-2xl font-black italic uppercase tracking-tighter text-white">Select <span className="logo-accent">Method</span></h3>
                                     <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Amount: ₹{parseFloat(amount).toLocaleString()}</p>
                                 </div>
                                 <button onClick={() => setShowPaymentModal(false)} className="p-2 bg-zinc-800 rounded-full text-zinc-500 hover:text-white transition-colors">
@@ -202,7 +202,7 @@ const AddBalance = () => {
                     <div className="relative w-full max-w-md bg-zinc-900 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col max-h-[80vh]">
                         <div className="p-8 border-b border-white/10 flex justify-between items-center bg-zinc-900/50">
                             <div>
-                                <h3 className="text-2xl font-black italic uppercase tracking-tighter text-white">Select <span className="logo-red">Coin</span></h3>
+                                <h3 className="text-2xl font-black italic uppercase tracking-tighter text-white">Select <span className="logo-accent">Coin</span></h3>
                                 <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest mt-1">Available Crypto Options</p>
                             </div>
                             <button onClick={() => setShowCryptoList(false)} className="p-3 bg-zinc-800 rounded-full text-zinc-500 hover:text-white transition-all">
@@ -215,9 +215,9 @@ const AddBalance = () => {
                                 <button
                                     key={crypto.id}
                                     onClick={() => handleCryptoSelection(crypto)}
-                                    className="p-5 bg-white/[0.02] border border-white/5 hover:border-red-500/30 hover:bg-red-500/5 rounded-3xl flex flex-col items-center gap-3 transition-all group active:scale-95"
+                                    className="p-5 bg-white/[0.02] border border-white/5 hover:border-accent/30 hover:bg-accent/5 rounded-3xl flex flex-col items-center gap-3 transition-all group active:scale-95"
                                 >
-                                    <div className="w-12 h-12 bg-zinc-950 rounded-2xl flex items-center justify-center text-red-500 font-black text-xl border border-white/5 group-hover:bg-red-500 group-hover:text-white transition-all">
+                                    <div className="w-12 h-12 bg-zinc-950 rounded-2xl flex items-center justify-center text-accent font-black text-xl border border-white/5 group-hover:bg-accent group-hover:text-white transition-all">
                                         {crypto.icon}
                                     </div>
                                     <div className="text-center">
@@ -266,7 +266,7 @@ const AddBalance = () => {
                                     setShowCryptoRestriction(false);
                                     selectINR();
                                 }}
-                                className="w-full py-6 bg-red-600 hover:bg-red-500 text-white rounded-[24px] font-black uppercase italic tracking-[4px] shadow-2xl shadow-red-500/20 transition-all active:scale-95 flex items-center justify-center gap-3"
+                                className="w-full py-6 bg-accent hover:bg-accent-hover text-white rounded-[24px] font-black uppercase italic tracking-[4px] shadow-2xl shadow-accent/20 transition-all active:scale-95 flex items-center justify-center gap-3"
                             >
                                 <Wallet size={20} /> Switch to INR
                             </button>

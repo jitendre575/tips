@@ -104,7 +104,7 @@ const AdminRecharges = () => {
     });
 
     return (
-        <div className="min-h-screen bg-[#050505] p-4 lg:p-10 pb-24">
+        <div className="min-h-screen bg-primary p-4 lg:p-10 pb-24 text-white selection:bg-accent/30">
             <div className="max-w-7xl mx-auto space-y-10">
                 {/* Header Section */}
                 <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
@@ -117,11 +117,11 @@ const AdminRecharges = () => {
                         </button>
                         <div>
                             <div className="flex items-center gap-2 mb-1">
-                                <Clock className="text-red-500" size={14} />
+                                <Clock className="text-accent" size={14} />
                                 <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Transaction Queue</span>
                             </div>
                             <h1 className="text-4xl lg:text-5xl font-black text-white italic tracking-tighter uppercase leading-none">
-                                Recharge <span className="logo-red">Requests</span>
+                                Recharge <span className="logo-accent">Requests</span>
                             </h1>
                             <p className="text-zinc-500 text-sm font-medium mt-2">Verify and approve user deposit screenshots.</p>
                         </div>
@@ -129,13 +129,13 @@ const AdminRecharges = () => {
 
                     <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
                         <div className="relative w-full sm:w-80 group">
-                            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-red-500 transition-colors" size={18} />
+                            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-accent transition-colors" size={18} />
                             <input
                                 type="text"
                                 placeholder="Search by user or amount..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-zinc-900 border border-white/5 rounded-[20px] py-4 pl-14 pr-6 text-sm text-white focus:outline-none focus:border-red-500/30 transition-all font-medium"
+                                className="w-full bg-zinc-900 border border-white/5 rounded-[20px] py-4 pl-14 pr-6 text-sm text-white focus:outline-none focus:border-accent/30 transition-all font-medium"
                             />
                         </div>
                     </div>
@@ -152,7 +152,7 @@ const AdminRecharges = () => {
                             key={f}
                             onClick={() => setFilter(f)}
                             className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all border whitespace-nowrap active:scale-95 ${filter === f
-                                ? 'bg-red-500 border-red-500 text-white shadow-lg shadow-red-500/20'
+                                ? 'bg-accent border-accent text-white shadow-lg shadow-accent/20'
                                 : 'bg-zinc-900 border-white/5 text-zinc-500 hover:border-white/20 hover:text-white'
                                 }`}
                         >
@@ -179,7 +179,7 @@ const AdminRecharges = () => {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                         {filteredRequests.map((req) => (
-                            <div key={req.id} className="group bg-[#0a0a0a] border border-white/5 rounded-[40px] overflow-hidden hover:border-white/10 transition-all duration-500 shadow-2xl flex flex-col">
+                            <div key={req.id} className="group bg-surface border border-white/5 rounded-[40px] overflow-hidden hover:border-white/10 transition-all duration-500 shadow-2xl flex flex-col">
                                 {/* Screenshot Preview */}
                                 <div className="relative aspect-[4/3] overflow-hidden bg-zinc-900">
                                     <img
@@ -228,11 +228,11 @@ const AdminRecharges = () => {
 
                                     <div className="flex items-center justify-between py-6 border-y border-white/5">
                                         <div className="flex items-center gap-2 text-zinc-500 font-bold text-xs uppercase tracking-tight">
-                                            <Calendar size={14} className="text-red-500" />
+                                            <Calendar size={14} className="text-accent" />
                                             <span>{req.createdAt?.toDate ? req.createdAt.toDate().toLocaleDateString() : 'Today'}</span>
                                         </div>
                                         <div className="flex items-center gap-2 text-zinc-500 font-bold text-xs uppercase tracking-tight">
-                                            <Clock size={14} className="text-red-500" />
+                                            <Clock size={14} className="text-accent" />
                                             <span>{req.createdAt?.toDate ? req.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
                                         </div>
                                     </div>
@@ -277,7 +277,7 @@ const AdminRecharges = () => {
                         <img src={selectedImage} alt="Payment Proof" className="max-w-full max-h-full object-contain rounded-2xl shadow-[0_0_100px_rgba(0,0,0,1)]" />
                         <button
                             onClick={() => setSelectedImage(null)}
-                            className="absolute -top-12 right-0 p-3 bg-white/10 hover:bg-red-500 rounded-full text-white transition-all shadow-2xl"
+                            className="absolute -top-12 right-0 p-3 bg-white/10 hover:bg-accent rounded-full text-white transition-all shadow-2xl"
                         >
                             <X size={24} />
                         </button>

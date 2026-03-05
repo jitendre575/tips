@@ -155,23 +155,23 @@ const AdminUsers = () => {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
-                        <div className="h-2 w-8 bg-red-500 rounded-full" />
+                        <div className="h-2 w-8 bg-accent rounded-full" />
                         <span className="text-zinc-500 text-[10px] font-black uppercase tracking-[4px]">System Overview</span>
                     </div>
                     <h1 className="text-5xl font-black italic tracking-tighter uppercase leading-none">
-                        User <span className="logo-red">Management</span>
+                        User <span className="logo-accent">Management</span>
                     </h1>
                     <p className="text-zinc-500 font-medium mt-2">Monitor {users.length} registered accounts and control their wallets.</p>
                 </div>
 
                 <div className="relative group w-full md:w-96">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-red-500 transition-colors" size={20} />
+                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-accent transition-colors" size={20} />
                     <input
                         type="text"
                         placeholder="Search by name, email, phone..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-zinc-900 border border-white/[0.05] rounded-[24px] py-4 pl-14 pr-6 outline-none focus:border-red-500/30 focus:ring-4 focus:ring-red-500/5 transition-all text-sm font-medium shadow-2xl"
+                        className="w-full bg-surface-light border border-white/[0.05] rounded-[24px] py-4 pl-14 pr-6 outline-none focus:border-accent/30 transition-all text-sm font-medium shadow-2xl"
                     />
                 </div>
             </div>
@@ -179,7 +179,7 @@ const AdminUsers = () => {
             {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                     {[1, 2, 3, 4, 5, 6].map(i => (
-                        <div key={i} className="h-[400px] glass-card animate-pulse rounded-[32px] bg-zinc-900/50" />
+                        <div key={i} className="h-[400px] glass-card animate-pulse rounded-[32px] bg-surface-light/50" />
                     ))}
                 </div>
             ) : filteredUsers.length === 0 ? (
@@ -195,9 +195,9 @@ const AdminUsers = () => {
                     {filteredUsers.map(user => {
                         const hasUnread = supportStatus[user.id]?.unreadAdmin === true;
                         return (
-                            <div key={user.id} className={`group relative bg-[#0a0a0a] border ${hasUnread ? 'border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.1)]' : 'border-white/[0.05]'} hover:border-red-500/20 rounded-[40px] p-8 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden`}>
+                            <div key={user.id} className={`group relative bg-surface border ${hasUnread ? 'border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.1)]' : 'border-white/[0.05]'} hover:border-accent/20 rounded-[40px] p-8 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden`}>
                                 {/* Gradient Background Decoration */}
-                                <div className={`absolute -top-20 -right-20 w-40 h-40 ${hasUnread ? 'bg-emerald-500/10' : 'bg-red-500/5'} blur-[80px] rounded-full group-hover:bg-red-500/10 transition-colors`} />
+                                <div className={`absolute -top-20 -right-20 w-40 h-40 ${hasUnread ? 'bg-emerald-500/10' : 'bg-accent/5'} blur-[80px] rounded-full group-hover:bg-accent/10 transition-colors`} />
 
                                 {hasUnread && (
                                     <div className="absolute top-6 right-6 flex items-center gap-2 px-3 py-1 bg-emerald-500/20 border border-emerald-500/30 rounded-full animate-pulse">
@@ -208,7 +208,7 @@ const AdminUsers = () => {
 
                                 {/* User Header */}
                                 <div className="flex items-start gap-5 mb-8 relative">
-                                    <div className={`w-16 h-16 rounded-[24px] bg-zinc-900 border border-white/5 flex items-center justify-center ${hasUnread ? 'text-emerald-500' : 'text-zinc-500'} group-hover:bg-red-500/10 group-hover:text-red-500 transition-all duration-500 border-red-500/0 group-hover:border-red-500/20 group-hover:scale-110`}>
+                                    <div className={`w-16 h-16 rounded-[24px] bg-zinc-900 border border-white/5 flex items-center justify-center ${hasUnread ? 'text-emerald-500' : 'text-zinc-500'} group-hover:bg-accent/10 group-hover:text-accent transition-all duration-500 border-accent/0 group-hover:border-accent/20 group-hover:scale-110`}>
                                         <User size={32} />
                                     </div>
                                     <div className="flex-1 min-w-0 pt-1">
@@ -220,7 +220,7 @@ const AdminUsers = () => {
                                         </div>
                                     </div>
                                     {user.isAdmin && (
-                                        <div className="absolute top-0 right-0 p-1.5 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500">
+                                        <div className="absolute top-0 right-0 p-1.5 bg-accent/10 border border-accent/20 rounded-lg text-accent">
                                             <Shield size={14} />
                                         </div>
                                     )}
@@ -228,11 +228,11 @@ const AdminUsers = () => {
 
                                 {/* Contact Info */}
                                 <div className="space-y-3 mb-8">
-                                    <div className="flex items-center gap-3 px-4 py-3 bg-zinc-950/50 rounded-2xl border border-white/[0.02]">
+                                    <div className="flex items-center gap-3 px-4 py-3 bg-surface-light/50 rounded-2xl border border-white/[0.02]">
                                         <Mail size={16} className="text-zinc-600" />
                                         <span className="text-sm font-medium text-zinc-300 truncate">{user.email}</span>
                                     </div>
-                                    <div className="flex items-center gap-3 px-4 py-3 bg-zinc-950/50 rounded-2xl border border-white/[0.02]">
+                                    <div className="flex items-center gap-3 px-4 py-3 bg-surface-light/50 rounded-2xl border border-white/[0.02]">
                                         <Phone size={16} className="text-zinc-600" />
                                         <span className="text-sm font-medium text-zinc-300">{user.phone || 'No phone added'}</span>
                                     </div>
@@ -240,7 +240,7 @@ const AdminUsers = () => {
 
                                 {/* Wallet Stats Grid */}
                                 <div className="grid grid-cols-2 gap-4 mb-8">
-                                    <div className="bg-zinc-950/50 rounded-[32px] p-5 border border-white/[0.03] group/stat hover:bg-zinc-900/50 transition-colors">
+                                    <div className="bg-surface-light/50 rounded-[32px] p-5 border border-white/[0.03] group/stat hover:bg-zinc-900/50 transition-colors">
                                         <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest block mb-1">Balance</span>
                                         <div className="flex items-center gap-2">
                                             <span className="text-2xl font-black italic tracking-tighter text-yellow-500">
@@ -248,19 +248,19 @@ const AdminUsers = () => {
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="bg-zinc-950/50 rounded-[32px] p-5 border border-white/[0.03] group/stat hover:bg-zinc-900/50 transition-colors">
+                                    <div className="bg-surface-light/50 rounded-[32px] p-5 border border-white/[0.03] group/stat hover:bg-zinc-900/50 transition-colors">
                                         <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest block mb-1">Bets</span>
-                                        <span className="text-2xl font-black italic tracking-tighter text-blue-500">
+                                        <span className="text-2xl font-black italic tracking-tighter text-accent">
                                             {user.totalBets || 0}
                                         </span>
                                     </div>
-                                    <div className="bg-zinc-950/50 rounded-[32px] p-5 border border-white/[0.03] group/stat hover:bg-zinc-900/50 transition-colors">
+                                    <div className="bg-surface-light/50 rounded-[32px] p-5 border border-white/[0.03] group/stat hover:bg-zinc-900/50 transition-colors">
                                         <span className="text-[10px] font-black text-emerald-500/50 uppercase tracking-widest block mb-1">Deposit</span>
                                         <span className="text-xl font-black italic tracking-tighter text-emerald-500">
                                             ₹{user.totalDeposit?.toLocaleString() || 0}
                                         </span>
                                     </div>
-                                    <div className="bg-zinc-950/50 rounded-[32px] p-5 border border-white/[0.03] group/stat hover:bg-zinc-900/50 transition-colors">
+                                    <div className="bg-surface-light/50 rounded-[32px] p-5 border border-white/[0.03] group/stat hover:bg-zinc-900/50 transition-colors">
                                         <span className="text-[10px] font-black text-red-500/50 uppercase tracking-widest block mb-1">Withdraw</span>
                                         <span className="text-xl font-black italic tracking-tighter text-red-500">
                                             ₹{user.totalWithdraw?.toLocaleString() || 0}
@@ -302,16 +302,16 @@ const AdminUsers = () => {
             {chattingUser && (
                 <div className="fixed inset-0 z-[600] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/90 backdrop-blur-xl" onClick={() => setChattingUser(null)} />
-                    <div className="relative w-full max-w-lg h-[600px] bg-zinc-950 border border-white/10 rounded-[40px] overflow-hidden flex flex-col shadow-[0_0_100px_rgba(16,185,129,0.1)] animate-in zoom-in-95 duration-200">
+                    <div className="relative w-full max-w-lg h-[600px] bg-primary border border-white/10 rounded-[40px] overflow-hidden flex flex-col shadow-[0_0_100px_rgba(16,185,129,0.1)] animate-in zoom-in-95 duration-200">
                         {/* Chat Header */}
                         <div className="p-6 bg-zinc-900/50 border-b border-white/5 flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-2xl bg-zinc-800 flex items-center justify-center text-emerald-500">
+                                <div className="w-12 h-12 rounded-2xl bg-zinc-900 flex items-center justify-center text-accent">
                                     <User size={24} />
                                 </div>
                                 <div>
                                     <h3 className="text-xl font-black italic uppercase tracking-tighter text-white">
-                                        Chat with <span className="logo-red">{chattingUser.name || chattingUser.email?.split('@')[0]}</span>
+                                        Chat with <span className="logo-accent">{chattingUser.name || chattingUser.email?.split('@')[0]}</span>
                                     </h3>
                                     <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{chattingUser.email}</p>
                                 </div>
@@ -331,7 +331,7 @@ const AdminUsers = () => {
                             ) : (
                                 messages.map(msg => (
                                     <div key={msg.id} className={`flex ${msg.senderId === 'admin' ? 'justify-end' : 'justify-start'}`}>
-                                        <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 space-y-1 ${msg.senderId === 'admin' ? 'bg-red-600 text-white rounded-tr-none' : 'bg-zinc-800 text-zinc-200 rounded-tl-none'}`}>
+                                        <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 space-y-1 ${msg.senderId === 'admin' ? 'bg-accent text-white rounded-tr-none' : 'bg-surface-light text-zinc-200 rounded-tl-none'}`}>
                                             <p className="text-sm leading-relaxed">{msg.text}</p>
                                             <div className="flex items-center justify-end gap-1 opacity-50">
                                                 <span className="text-[9px] font-medium">{msg.createdAt?.toDate ? msg.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
@@ -351,12 +351,12 @@ const AdminUsers = () => {
                                 value={newMessage}
                                 onChange={(e) => setNewMessage(e.target.value)}
                                 placeholder="Type your reply..."
-                                className="flex-1 bg-zinc-950 border border-white/5 rounded-2xl px-6 py-4 text-sm text-white focus:outline-none focus:border-red-500/50 transition-all font-medium"
+                                className="flex-1 bg-primary border border-white/5 rounded-2xl px-6 py-4 text-sm text-white focus:outline-none focus:border-accent/50 transition-all font-medium"
                             />
                             <button
                                 type="submit"
                                 disabled={!newMessage.trim()}
-                                className="p-4 bg-red-600 text-white rounded-2xl hover:bg-red-500 transition-all active:scale-95 disabled:opacity-50"
+                                className="p-4 bg-accent text-white rounded-2xl hover:bg-accent-hover transition-all active:scale-95 disabled:opacity-50"
                             >
                                 <Send size={20} />
                             </button>
@@ -376,11 +376,11 @@ const AdminUsers = () => {
                             <div className="flex justify-between items-start">
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
-                                        <Wallet className="text-red-500" size={20} />
+                                        <Wallet className="text-accent" size={20} />
                                         <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Wallet System</span>
                                     </div>
                                     <h3 className="text-3xl font-black italic uppercase tracking-tighter text-white">
-                                        Add / <span className="logo-red">Deduct</span>
+                                        Add / <span className="logo-accent">Deduct</span>
                                     </h3>
                                     <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-2 bg-white/5 py-1 px-3 rounded-full inline-block">
                                         User: {editingUser.name || editingUser.email?.split('@')[0]}
@@ -418,14 +418,14 @@ const AdminUsers = () => {
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-2">Amount (₹)</label>
                                     <div className="relative">
-                                        <Plus className={`absolute left-5 top-1/2 -translate-y-1/2 text-zinc-700 ${walletAction.type === 'add' ? 'text-emerald-500/50' : 'text-red-500/50 hidden'}`} size={24} />
-                                        <Minus className={`absolute left-5 top-1/2 -translate-y-1/2 text-zinc-700 ${walletAction.type === 'deduct' ? 'text-red-500/50' : 'hidden'}`} size={24} />
+                                        <Plus className={`absolute left-5 top-1/2 -translate-y-1/2 text-zinc-700 ${walletAction.type === 'add' ? 'text-emerald-500/50' : 'text-accent/50 hidden'}`} size={24} />
+                                        <Minus className={`absolute left-5 top-1/2 -translate-y-1/2 text-zinc-700 ${walletAction.type === 'deduct' ? 'text-accent/50' : 'hidden'}`} size={24} />
                                         <input
                                             type="number"
                                             placeholder="0.00"
                                             value={walletAction.amount}
                                             onChange={(e) => setWalletAction({ ...walletAction, amount: e.target.value })}
-                                            className="w-full bg-zinc-900 border border-white/5 rounded-2xl py-6 pl-14 pr-6 text-3xl font-black text-white focus:outline-none focus:border-red-500/50 transition-all placeholder:text-zinc-800"
+                                            className="w-full bg-surface border border-white/5 rounded-2xl py-6 pl-14 pr-6 text-3xl font-black text-white focus:outline-none focus:border-accent/50 transition-all placeholder:text-zinc-800"
                                         />
                                     </div>
                                 </div>
@@ -439,7 +439,7 @@ const AdminUsers = () => {
                                             value={walletAction.note}
                                             onChange={(e) => setWalletAction({ ...walletAction, note: e.target.value })}
                                             rows={2}
-                                            className="w-full bg-zinc-900 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-sm font-medium text-white focus:outline-none focus:border-red-500/50 transition-all resize-none"
+                                            className="w-full bg-surface border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-sm font-medium text-white focus:outline-none focus:border-accent/50 transition-all resize-none"
                                         />
                                     </div>
                                 </div>
@@ -455,7 +455,7 @@ const AdminUsers = () => {
 
                             <button
                                 onClick={() => handleWalletUpdate(editingUser.id)}
-                                className={`w-full py-6 rounded-[24px] font-black uppercase italic tracking-widest transition-all shadow-2xl active:scale-95 ${walletAction.type === 'add' ? 'btn-red shadow-red-500/20' : 'bg-red-600 hover:bg-red-500 text-white shadow-red-600/20'
+                                className={`w-full py-6 rounded-[24px] font-black uppercase italic tracking-widest transition-all shadow-2xl active:scale-95 ${walletAction.type === 'add' ? 'btn-accent shadow-accent/20' : 'bg-red-600 hover:bg-red-500 text-white shadow-red-600/20'
                                     }`}
                             >
                                 Confirm {walletAction.type === 'add' ? 'Addition' : 'Deduction'}

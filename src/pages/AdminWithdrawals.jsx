@@ -89,7 +89,7 @@ const AdminWithdrawals = () => {
                             <span className="text-zinc-500 text-[10px] font-black uppercase tracking-[4px]">Financial Operations</span>
                         </div>
                         <h1 className="text-4xl lg:text-5xl font-black text-white italic tracking-tighter uppercase leading-none">
-                            Payout <span className="logo-red">Terminal</span>
+                            Payout <span className="logo-accent">Terminal</span>
                         </h1>
                         <p className="text-zinc-500 text-sm font-medium mt-2">Process and audit member withdrawal requests securely.</p>
                     </div>
@@ -97,13 +97,13 @@ const AdminWithdrawals = () => {
 
                 <div className="flex flex-col sm:flex-row gap-4">
                     <div className="relative group min-w-[280px]">
-                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-red-500 transition-colors" size={18} />
+                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-accent transition-colors" size={18} />
                         <input
                             type="text"
                             placeholder="Email or Transaction ID..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-zinc-900 border border-white/[0.05] rounded-2xl py-4 pl-14 pr-6 outline-none focus:border-red-500/30 transition-all text-sm font-medium shadow-2xl"
+                            className="w-full bg-zinc-900 border border-white/[0.05] rounded-2xl py-4 pl-14 pr-6 outline-none focus:border-accent/30 transition-all text-sm font-medium shadow-2xl"
                         />
                     </div>
 
@@ -113,7 +113,7 @@ const AdminWithdrawals = () => {
                                 key={option}
                                 onClick={() => setFilter(option)}
                                 className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === option
-                                    ? 'bg-red-600 text-white shadow-lg'
+                                    ? 'bg-accent text-white shadow-lg shadow-accent/20'
                                     : 'text-zinc-600 hover:text-white hover:bg-white/5'
                                     }`}
                             >
@@ -153,7 +153,7 @@ const AdminWithdrawals = () => {
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, scale: 0.95 }}
-                                        className="group bg-[#0a0a0a] border border-white/5 rounded-[40px] p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10 hover:border-white/10 transition-all shadow-2xl relative overflow-hidden"
+                                        className="group bg-surface border border-white/5 rounded-[40px] p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10 hover:border-white/10 transition-all shadow-2xl relative overflow-hidden"
                                     >
                                         <div className="flex flex-col sm:flex-row sm:items-center gap-8 flex-1">
                                             {/* Amount Circle */}
@@ -182,15 +182,15 @@ const AdminWithdrawals = () => {
                                                     </h3>
                                                     <div className="flex flex-wrap items-center gap-4 text-[10px] font-black text-zinc-600 uppercase tracking-widest">
                                                         <div className="flex items-center gap-2 bg-zinc-900/50 px-3 py-1.5 rounded-xl border border-white/5">
-                                                            <Calendar size={12} className="text-red-500" />
+                                                            <Calendar size={12} className="text-accent" />
                                                             {req.createdAt?.toDate().toLocaleDateString()}
                                                         </div>
                                                         <div className="flex items-center gap-2 bg-zinc-900/50 px-3 py-1.5 rounded-xl border border-white/5">
-                                                            <Clock size={12} className="text-red-500" />
+                                                            <Clock size={12} className="text-accent" />
                                                             {req.createdAt?.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                         </div>
                                                         <div className="flex items-center gap-2 bg-zinc-900/50 px-3 py-1.5 rounded-xl border border-white/5">
-                                                            <CreditCard size={12} className="text-red-500" />
+                                                            <CreditCard size={12} className="text-accent" />
                                                             {req.method}
                                                         </div>
                                                     </div>

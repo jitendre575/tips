@@ -3,22 +3,24 @@
 @tailwind utilities;
 
 :root {
-  --primary: #050505;
-  --surface: #121212;
-  --surface-light: #1e1e1e;
-  --accent: #ff3333;
-  --accent-hover: #e62e2e;
-  --yellow: #facc15;
-  --text-primary: #ffffff;
-  --text-secondary: #a1a1aa;
-  --border: #27272a;
+  --primary: 5 5 5;
+  --surface: 10 10 10;
+  --surface-light: 18 18 18;
+  --accent: 59 130 246;
+  --accent-hover: 37 99 235;
+  --yellow: 250 204 21;
+  --text-primary: 255 255 255;
+  --text-secondary: 161 161 170;
+  --border: 30 30 30;
   --sidebar-width: 280px;
 }
 
 @layer base {
   body {
-    @apply bg-[#050505] text-white min-h-screen antialiased;
-    font-family: 'Outfit', 'Inter', sans-serif;
+    @apply bg-primary text-text-primary min-h-screen antialiased;
+    background-color: rgb(var(--primary));
+    color: rgb(var(--text-primary));
+    font-family: theme('fontFamily.sans');
   }
 }
 
@@ -36,11 +38,23 @@
   }
 
   .nav-link.active {
-    @apply bg-red-500/10 text-red-500 border border-red-500/20;
+    background-color: rgb(var(--accent) / 0.1);
+    color: rgb(var(--accent));
+    border: 1px solid rgb(var(--accent) / 0.2);
+  }
+
+  .btn-accent {
+    @apply px-8 py-3 text-white rounded-2xl font-black italic uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2;
+    background-color: rgb(var(--accent));
+    box-shadow: 0 20px 25px -5px rgb(var(--accent) / 0.2), 0 8px 10px -6px rgb(var(--accent) / 0.2);
+  }
+
+  .btn-accent:hover {
+    background-color: rgb(var(--accent-hover));
   }
 
   .btn-red {
-    @apply px-8 py-3 bg-[#ff3333] hover:bg-[#e62e2e] text-white rounded-2xl font-black italic uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-red-600/20 flex items-center justify-center gap-2;
+    @apply btn-accent;
   }
 
   .btn-outline {
@@ -48,15 +62,19 @@
   }
 
   .odds-badge {
-    @apply px-4 py-3 bg-zinc-900 rounded-2xl border border-white/[0.05] flex flex-col items-center gap-1 min-w-[120px] transition-all hover:border-red-500/30;
+    @apply px-4 py-3 bg-surface rounded-2xl border border-white/[0.05] flex flex-col items-center gap-1 min-w-[120px] transition-all hover:border-accent/30;
   }
 
   .cricwin-logo {
     @apply text-3xl font-black italic tracking-tighter flex items-center gap-0.5 select-none;
   }
 
+  .logo-accent {
+    @apply text-accent;
+  }
+
   .logo-red {
-    @apply text-[#ff3333];
+    @apply logo-accent;
   }
 
   .sidebar-item {
@@ -64,11 +82,17 @@
   }
 
   .sidebar-item.active {
-    @apply text-red-500 bg-red-500/10 border border-red-500/20;
+    color: rgb(var(--accent));
+    background-color: rgb(var(--accent) / 0.1);
+    border: 1px solid rgb(var(--accent) / 0.2);
   }
 
   .input-field {
-    @apply w-full bg-zinc-900 border border-white/[0.05] rounded-2xl py-4 px-5 outline-none focus:border-red-500/50 transition-all font-medium text-white placeholder:text-zinc-600;
+    @apply w-full bg-surface-light border border-white/[0.05] rounded-2xl py-4 px-5 outline-none transition-all font-medium text-white placeholder:text-zinc-600;
+  }
+
+  .input-field:focus {
+    border-color: rgb(var(--accent) / 0.5);
   }
 
   .label-sm {
@@ -100,8 +124,8 @@
 
 .mesh-gradient {
   background-image:
-    radial-gradient(at 0% 0%, rgba(255, 51, 51, 0.1) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(30, 64, 175, 0.1) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(30, 64, 185, 0.1) 0px, transparent 50%);
 }
 
 @keyframes float {

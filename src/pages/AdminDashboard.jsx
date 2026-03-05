@@ -95,10 +95,10 @@ const AdminDashboard = () => {
                 {[
                     { label: 'Platform Balance', val: `₹${stats.platformBalance.toLocaleString()}`, icon: Wallet, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
                     { label: 'Total Revenue', val: `₹${stats.totalDeposit.toLocaleString()}`, icon: TrendingUp, color: 'text-yellow-500', bg: 'bg-yellow-500/10' },
-                    { label: 'Active Capital', val: stats.totalUsers, icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-                    { label: 'Live Markets', val: stats.activeMatches, icon: Activity, color: 'text-red-500', bg: 'bg-red-500/10' },
+                    { label: 'Active Capital', val: stats.totalUsers, icon: Users, color: 'text-accent', bg: 'bg-accent/10' },
+                    { label: 'Live Markets', val: stats.activeMatches, icon: Activity, color: 'text-indigo-500', bg: 'bg-indigo-500/10' },
                 ].map((s, i) => (
-                    <div key={i} className="glass-card p-8 border-white/5 group hover:border-red-500/30 transition-all">
+                    <div key={i} className="glass-card p-8 border-white/5 group hover:border-accent/30 transition-all">
                         <div className={`w-14 h-14 rounded-2xl ${s.bg} flex items-center justify-center ${s.color} mb-6 border border-white/5`}>
                             <s.icon size={28} />
                         </div>
@@ -113,7 +113,7 @@ const AdminDashboard = () => {
                     <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
                         <Activity size={120} />
                     </div>
-                    <h3 className="text-2xl font-black italic uppercase tracking-tight mb-8">System <span className="logo-red">Health</span></h3>
+                    <h3 className="text-2xl font-black italic uppercase tracking-tight mb-8">System <span className="logo-accent">Health</span></h3>
                     <div className="grid sm:grid-cols-2 gap-10">
                         <div className="space-y-4">
                             <div className="flex justify-between text-xs font-black uppercase tracking-widest text-zinc-500">
@@ -127,17 +127,17 @@ const AdminDashboard = () => {
                         <div className="space-y-4">
                             <div className="flex justify-between text-xs font-black uppercase tracking-widest text-zinc-500">
                                 <span>Withdrawal Queue</span>
-                                <span className={stats.pendingWithdrawals > 0 ? 'text-red-500' : 'text-emerald-500'}>{stats.pendingWithdrawals} Pending</span>
+                                <span className={stats.pendingWithdrawals > 0 ? 'text-accent' : 'text-emerald-500'}>{stats.pendingWithdrawals} Pending</span>
                             </div>
                             <div className="h-3 bg-zinc-900 rounded-full overflow-hidden border border-white/5">
-                                <div className={`h-full bg-red-600 transition-all duration-1000`} style={{ width: `${Math.min(100, stats.pendingWithdrawals * 20)}%` }} />
+                                <div className={`h-full bg-accent transition-all duration-1000`} style={{ width: `${Math.min(100, stats.pendingWithdrawals * 20)}%` }} />
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="glass-card p-10 border-white/5 flex flex-col justify-center text-center space-y-4">
-                    <div className="w-16 h-16 bg-red-600/10 rounded-full flex items-center justify-center text-red-500 mx-auto shadow-2xl shadow-red-500/20">
+                    <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center text-accent mx-auto shadow-2xl shadow-accent/20">
                         <ShieldCheck size={32} />
                     </div>
                     <h4 className="text-xl font-black italic uppercase tracking-tighter">Secure Backend</h4>
@@ -150,11 +150,11 @@ const AdminDashboard = () => {
     const AdminSettings = () => (
         <div className="max-w-2xl mx-auto space-y-10">
             <div className="glass-card p-10 border-white/5">
-                <h3 className="text-2xl font-black italic uppercase tracking-tight mb-8">Admin <span className="logo-red">Profile</span></h3>
+                <h3 className="text-2xl font-black italic uppercase tracking-tight mb-8">Admin <span className="logo-accent">Profile</span></h3>
 
                 <div className="space-y-8">
                     <div className="flex items-center gap-6">
-                        <div className="w-20 h-20 bg-zinc-900 border border-white/10 rounded-[30px] flex items-center justify-center text-red-500 shadow-2xl">
+                        <div className="w-20 h-20 bg-zinc-900 border border-white/10 rounded-[30px] flex items-center justify-center text-accent shadow-2xl">
                             <UserCircle size={40} />
                         </div>
                         <div className="flex-1">
@@ -165,8 +165,8 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="p-6 bg-red-600/5 border border-red-500/10 rounded-3xl space-y-4">
-                        <div className="flex items-center gap-3 text-red-500">
+                    <div className="p-6 bg-accent/5 border border-accent/10 rounded-3xl space-y-4">
+                        <div className="flex items-center gap-3 text-accent">
                             <Info size={16} />
                             <span className="text-[10px] font-black uppercase tracking-widest">Public Control Terminal</span>
                         </div>
@@ -196,16 +196,16 @@ const AdminDashboard = () => {
     );
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white selection:bg-red-500/30">
+        <div className="min-h-screen bg-primary text-white selection:bg-accent/30">
             {/* Super Admin Top Bar */}
-            <header className="sticky top-0 z-[100] bg-red-600 border-b border-red-500 py-4 px-6 lg:px-10 flex items-center justify-between shadow-2xl">
+            <header className="sticky top-0 z-[100] bg-accent border-b border-accent-hover py-4 px-6 lg:px-10 flex items-center justify-between shadow-2xl">
                 <div className="flex items-center gap-4">
                     <div className="bg-white/10 p-2 rounded-xl border border-white/20">
                         <Zap size={20} className="text-white animate-pulse" />
                     </div>
                     <div>
-                        <h1 className="text-xl font-black italic tracking-tighter uppercase leading-none">JRT <span className="text-red-200">MASTER PANEL</span></h1>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-red-100 opacity-80">Full Authority Initialized</p>
+                        <h1 className="text-xl font-black italic tracking-tighter uppercase leading-none">JRT <span className="text-indigo-200">MASTER PANEL</span></h1>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-indigo-100 opacity-80">Full Authority Initialized</p>
                     </div>
                 </div>
 
@@ -227,14 +227,14 @@ const AdminDashboard = () => {
                                 style: {
                                     background: '#050505',
                                     color: '#fff',
-                                    border: '1px solid #ff3333',
+                                    border: '1px solid #3b82f6',
                                     fontFamily: 'Outfit, sans-serif',
                                     fontWeight: '900',
                                     textTransform: 'uppercase'
                                 }
                             });
                         }}
-                        className="flex items-center gap-2 px-4 py-3 bg-white/10 hover:bg-white text-white hover:text-red-600 rounded-xl transition-all active:scale-95 border border-white/10 group relative"
+                        className="flex items-center gap-2 px-4 py-3 bg-white/10 hover:bg-white text-white hover:text-accent rounded-xl transition-all active:scale-95 border border-white/10 group relative"
                     >
                         <Headset size={20} className="group-hover:rotate-12 transition-transform" />
                         <span className="text-[10px] font-black uppercase tracking-widest hidden md:block">CricWin Support</span>
@@ -243,7 +243,7 @@ const AdminDashboard = () => {
 
                     <button
                         onClick={handleLogout}
-                        className="p-3 bg-white/10 hover:bg-white text-white hover:text-red-600 rounded-xl transition-all active:scale-95 border border-white/10 group relative"
+                        className="p-3 bg-white/10 hover:bg-white text-white hover:text-accent rounded-xl transition-all active:scale-95 border border-white/10 group relative"
                     >
                         <LogOut size={20} />
                         <span className="absolute -top-12 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-zinc-900 border border-white/10 text-[9px] font-black uppercase rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">Logout</span>
@@ -259,7 +259,7 @@ const AdminDashboard = () => {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`flex items-center gap-3 px-8 py-4 rounded-[24px] font-black uppercase italic tracking-widest text-xs transition-all relative shrink-0 ${activeTab === tab.id
-                                ? 'bg-red-600 text-white shadow-xl shadow-red-600/20'
+                                ? 'bg-accent text-white shadow-xl shadow-accent/20'
                                 : 'text-zinc-500 hover:text-white hover:bg-white/5'
                                 }`}
                         >
@@ -270,7 +270,7 @@ const AdminDashboard = () => {
                                     tab.id === 'withdrawals' ? stats.pendingWithdrawals :
                                         stats.unreadSupport
                             ) > 0 && (
-                                    <span className={`absolute -top-1 -right-1 w-5 h-5 ${tab.id === 'recharges' ? 'bg-yellow-500' : 'bg-red-600'} text-white text-[10px] rounded-full flex items-center justify-center animate-bounce border-2 border-[#050505]`}>
+                                    <span className={`absolute -top-1 -right-1 w-5 h-5 ${tab.id === 'recharges' ? 'bg-yellow-500' : 'bg-accent'} text-white text-[10px] rounded-full flex items-center justify-center animate-bounce border-2 border-primary`}>
                                         {tab.id === 'recharges' ? stats.pendingRecharges : tab.id === 'withdrawals' ? stats.pendingWithdrawals : stats.unreadSupport}
                                     </span>
                                 )}
@@ -351,14 +351,14 @@ const AdminSupport = () => {
             {/* Chat List */}
             <div className="lg:col-span-1 glass-card overflow-hidden flex flex-col border-white/5">
                 <div className="p-6 border-b border-white/5">
-                    <h3 className="text-xl font-black italic uppercase italic tracking-tighter">Support <span className="text-red-500">Inbox</span></h3>
+                    <h3 className="text-xl font-black italic uppercase italic tracking-tighter">Support <span className="logo-accent">Inbox</span></h3>
                 </div>
                 <div className="flex-1 overflow-y-auto scrollbar-hide">
                     {chats.map(chat => (
                         <button
                             key={chat.id}
                             onClick={() => setSelectedChat(chat)}
-                            className={`w-full p-6 flex items-center gap-4 hover:bg-white/5 transition-all text-left border-b border-white/[0.02] ${selectedChat?.id === chat.id ? 'bg-red-600/10 border-l-4 border-l-red-600' : ''}`}
+                            className={`w-full p-6 flex items-center gap-4 hover:bg-white/5 transition-all text-left border-b border-white/[0.02] ${selectedChat?.id === chat.id ? 'bg-accent/10 border-l-4 border-l-accent' : ''}`}
                         >
                             <div className="w-12 h-12 rounded-2xl bg-zinc-900 flex items-center justify-center text-zinc-500 shrink-0">
                                 <UserCircle size={24} />
@@ -387,7 +387,7 @@ const AdminSupport = () => {
                     <>
                         <div className="p-6 border-b border-white/5 bg-zinc-900/50 flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-[15px] bg-red-600/20 flex items-center justify-center text-red-500">
+                                <div className="w-10 h-10 rounded-[15px] bg-accent/20 flex items-center justify-center text-accent">
                                     <MessageCircle size={20} />
                                 </div>
                                 <div>
@@ -399,7 +399,7 @@ const AdminSupport = () => {
                         <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-hide">
                             {messages.map(msg => (
                                 <div key={msg.id} className={`flex ${msg.senderId === 'admin' ? 'justify-end' : 'justify-start'}`}>
-                                    <div className={`max-w-[70%] rounded-2xl px-5 py-3 space-y-1 ${msg.senderId === 'admin' ? 'bg-red-600 text-white rounded-tr-none shadow-xl' : 'bg-zinc-800 text-zinc-200 rounded-tl-none'}`}>
+                                    <div className={`max-w-[70%] rounded-2xl px-5 py-3 space-y-1 ${msg.senderId === 'admin' ? 'bg-accent text-white rounded-tr-none shadow-xl' : 'bg-zinc-800 text-zinc-200 rounded-tl-none'}`}>
                                         <p className="text-sm leading-relaxed">{msg.text}</p>
                                         <div className="flex items-center justify-end gap-1 opacity-50">
                                             <span className="text-[9px] font-bold">{msg.createdAt?.toDate ? msg.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
@@ -415,9 +415,9 @@ const AdminSupport = () => {
                                 value={reply}
                                 onChange={e => setReply(e.target.value)}
                                 placeholder="TYPE SYSTEM RESPONSE..."
-                                className="flex-1 bg-black border border-white/10 rounded-2xl px-6 py-4 text-sm font-black italic tracking-widest text-white focus:outline-none focus:border-red-500/50 transition-all uppercase"
+                                className="flex-1 bg-black border border-white/10 rounded-2xl px-6 py-4 text-sm font-black italic tracking-widest text-white focus:outline-none focus:border-accent/50 transition-all uppercase"
                             />
-                            <button className="p-4 bg-red-600 text-white rounded-2xl shadow-xl hover:bg-red-500 active:scale-95 transition-all">
+                            <button className="p-4 bg-accent text-white rounded-2xl shadow-xl hover:bg-accent-hover active:scale-95 transition-all">
                                 <Send size={20} />
                             </button>
                         </form>

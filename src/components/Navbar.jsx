@@ -21,11 +21,11 @@ const Navbar = () => {
     if (!user) return null;
 
     return (
-        <nav className="sticky top-0 z-[100] bg-[#050505]/80 backdrop-blur-xl border-b border-white/[0.05] px-6 py-4">
+        <nav className="sticky top-0 z-[100] bg-primary/80 backdrop-blur-xl border-b border-white/[0.05] px-6 py-4">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
                 <Link to="/dashboard" className="cricwin-logo">
                     <span className="text-white">CRIC</span>
-                    <span className="logo-red">WIN</span>
+                    <span className="logo-accent">WIN</span>
                 </Link>
 
                 <div className="hidden md:flex items-center gap-8 text-sm">
@@ -66,7 +66,7 @@ const Navbar = () => {
 
                     <button
                         onClick={handleLogout}
-                        className="p-2 text-zinc-500 hover:text-red-500 transition-colors"
+                        className="p-2 text-zinc-500 hover:text-accent transition-colors"
                         title="Logout"
                     >
                         <LogOut size={20} />

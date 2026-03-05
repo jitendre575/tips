@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 const RechargeModal = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
-    const [amount, setAmount] = useState('1000');
     const [showCryptoList, setShowCryptoList] = useState(false);
     const [showCryptoRestriction, setShowCryptoRestriction] = useState(false);
 
@@ -13,7 +12,7 @@ const RechargeModal = ({ isOpen, onClose }) => {
 
     const selectINR = () => {
         onClose();
-        navigate('/payment', { state: { amount: parseFloat(amount) || 1000 } });
+        navigate('/add-balance');
     };
 
     const selectCrypto = () => {
@@ -53,7 +52,7 @@ const RechargeModal = ({ isOpen, onClose }) => {
                 initial={{ y: 100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 100, opacity: 0 }}
-                className="relative w-full max-w-md bg-[#121212] border-t sm:border border-white/10 rounded-t-[32px] sm:rounded-[32px] overflow-hidden shadow-2xl"
+                className="relative w-full max-w-md bg-surface border-t sm:border border-white/10 rounded-t-[32px] sm:rounded-[32px] overflow-hidden shadow-2xl"
             >
                 <div className="p-6 sm:p-8 space-y-6">
                     <div className="flex justify-between items-start">
@@ -61,18 +60,6 @@ const RechargeModal = ({ isOpen, onClose }) => {
                             <h3 className="text-2xl font-black italic uppercase tracking-tighter text-white">
                                 {showCryptoList ? 'SELECT COIN' : 'SELECT METHOD'}
                             </h3>
-                            <div className={`flex items-center gap-2 mt-2 ${showCryptoList ? 'opacity-0' : ''}`}>
-                                <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest leading-none">Amount:</span>
-                                <div className="flex items-center bg-white/[0.03] px-3 py-1 rounded-full border border-white/5">
-                                    <span className="text-white font-black italic text-xs tracking-tighter">₹</span>
-                                    <input
-                                        type="number"
-                                        value={amount}
-                                        onChange={(e) => setAmount(e.target.value)}
-                                        className="bg-transparent border-none outline-none text-white font-black italic text-xs tracking-tighter w-16 ml-1"
-                                    />
-                                </div>
-                            </div>
                         </div>
                         <button
                             onClick={onClose}
@@ -154,7 +141,7 @@ const RechargeModal = ({ isOpen, onClose }) => {
                                     <AlertTriangle size={40} />
                                 </div>
                                 <div className="space-y-2">
-                                    <h4 className="text-2xl font-black italic uppercase tracking-tighter text-white leading-tight">CRYPTO PAY <br /><span className="text-red-600">BANNED IN INDIA</span></h4>
+                                    <h4 className="text-2xl font-black italic uppercase tracking-tighter text-white leading-tight">CRYPTO PAY <br /><span className="text-red-500">BANNED IN INDIA</span></h4>
                                     <p className="text-zinc-500 text-[11px] font-bold uppercase tracking-tight px-4 leading-relaxed">
                                         Cryptocurrency for gaming is restricted in India. Your transaction will be declined by the bank.
                                     </p>
@@ -162,7 +149,7 @@ const RechargeModal = ({ isOpen, onClose }) => {
                                 <div className="space-y-3">
                                     <button
                                         onClick={selectINR}
-                                        className="w-full py-4 bg-red-600 text-white rounded-2xl font-black uppercase italic tracking-widest shadow-lg shadow-red-600/20 active:scale-95 transition-all flex items-center justify-center gap-3"
+                                        className="w-full py-4 bg-accent text-white rounded-2xl font-black uppercase italic tracking-widest shadow-lg shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-3"
                                     >
                                         <Wallet size={18} /> Switch to INR
                                     </button>

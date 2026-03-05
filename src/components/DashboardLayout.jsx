@@ -17,12 +17,12 @@ const DashboardLayout = ({ children }) => {
     };
 
     return (
-        <div className="min-h-screen bg-[#050505] flex">
+        <div className="min-h-screen bg-primary flex">
             <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
             <div className="flex-1 flex flex-col min-w-0">
                 {/* Header */}
-                <header className="sticky top-0 z-[100] bg-[#050505]/95 backdrop-blur-2xl border-b border-white/[0.05] h-20 px-4 lg:px-10 flex items-center">
+                <header className="sticky top-0 z-[100] bg-primary/95 backdrop-blur-2xl border-b border-white/[0.05] h-20 px-4 lg:px-10 flex items-center">
                     {/* Left: Menu */}
                     <div className="flex-1 flex justify-start items-center">
                         <button
@@ -37,7 +37,7 @@ const DashboardLayout = ({ children }) => {
                     <div className="flex-1 flex justify-center items-center">
                         <button className="lg:hidden p-3 text-zinc-500 hover:text-white transition-colors relative">
                             <Bell size={22} />
-                            <span className="absolute top-3.5 right-3.5 w-2 h-2 bg-red-500 rounded-full border-2 border-[#050505]"></span>
+                            <span className="absolute top-3.5 right-3.5 w-2 h-2 bg-accent rounded-full border-2 border-primary"></span>
                         </button>
                         <div className="hidden lg:flex flex-col items-center">
                             <h2 className="text-[10px] font-black text-zinc-600 uppercase tracking-[2px] leading-none mb-1">Welcome back,</h2>
@@ -49,7 +49,7 @@ const DashboardLayout = ({ children }) => {
 
                     {/* Right: Balance & Plus */}
                     <div className="flex-1 flex justify-end items-center gap-2">
-                        <div className="bg-[#121212] px-3 sm:px-4 py-1.5 sm:py-2.5 rounded-[18px] border border-white/[0.05] flex items-center gap-2 sm:gap-3 shadow-2xl">
+                        <div className="bg-surface-light px-3 sm:px-4 py-1.5 sm:py-2.5 rounded-[18px] border border-white/[0.05] flex items-center gap-2 sm:gap-3 shadow-2xl">
                             <div className="bg-yellow-500/10 p-1 rounded-md sm:rounded-lg">
                                 <Wallet className="w-3.5 h-3.5 text-yellow-500" />
                             </div>
@@ -70,7 +70,7 @@ const DashboardLayout = ({ children }) => {
 
                         <button className="hidden lg:flex p-3 text-zinc-500 hover:text-white transition-colors relative ml-2">
                             <Bell size={22} />
-                            <span className="absolute top-3.5 right-3.5 w-2 h-2 bg-red-500 rounded-full border-2 border-[#050505]"></span>
+                            <span className="absolute top-3.5 right-3.5 w-2 h-2 bg-accent rounded-full border-2 border-primary"></span>
                         </button>
                     </div>
                 </header>

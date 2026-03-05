@@ -49,7 +49,7 @@ const History = () => {
         <div className="max-w-5xl mx-auto space-y-10">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-4xl font-black italic tracking-tighter uppercase">Activity <span className="logo-red">History</span></h1>
+                    <h1 className="text-4xl font-black italic tracking-tighter uppercase">Activity <span className="logo-accent">History</span></h1>
                     <p className="text-zinc-500 font-medium">Track your performance and previous transactions</p>
                 </div>
 
@@ -59,7 +59,7 @@ const History = () => {
                             key={tab}
                             onClick={() => setActiveTab(tab)}
                             className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === tab
-                                ? 'bg-red-600 text-white shadow-lg'
+                                ? 'bg-accent text-white shadow-lg shadow-accent/20'
                                 : 'text-zinc-500 hover:text-white'
                                 }`}
                         >
@@ -197,7 +197,7 @@ const History = () => {
                                 {transactions.map((trans, idx) => (
                                     <div key={trans.id} className="glass-card flex items-center justify-between p-6 border-white/5">
                                         <div className="flex items-center gap-5">
-                                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${trans.type === 'deposit' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'
+                                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${trans.type === 'deposit' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-accent/10 text-accent'
                                                 }`}>
                                                 {trans.type === 'deposit' ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
                                             </div>

@@ -73,11 +73,11 @@ const BetModal = ({ match, onClose }) => {
                 <div className="overflow-y-auto flex-1 scrollbar-hide">
                     <div className="p-6 border-b border-white/[0.05] flex justify-between items-center bg-white/[0.02]">
                         <div className="flex items-center gap-3">
-                            <div className="p-2 bg-red-500/10 rounded-xl text-red-500">
+                            <div className="p-2 bg-accent/10 rounded-xl text-accent">
                                 <TrendingUp size={20} />
                             </div>
                             <div>
-                                <h2 className="text-xl font-black italic tracking-tighter uppercase">Place <span className="logo-red">Market</span></h2>
+                                <h2 className="text-xl font-black italic tracking-tighter uppercase">Place <span className="logo-accent">Market</span></h2>
                                 <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{match.teamA} VS {match.teamB}</p>
                             </div>
                         </div>
@@ -92,12 +92,12 @@ const BetModal = ({ match, onClose }) => {
                             <button
                                 onClick={() => setBetTeam('teamA')}
                                 className={`p-4 sm:p-6 rounded-[24px] border-2 transition-all flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-3 sm:gap-2 relative overflow-hidden group/btn ${betTeam === 'teamA'
-                                    ? 'border-red-600 bg-red-600/10 shadow-[0_0_20px_rgba(220,38,38,0.2)]'
-                                    : 'border-white/[0.05] bg-zinc-900/50 hover:border-white/20'
+                                    ? 'border-accent bg-accent/10 shadow-[0_0_20px_rgba(59,130,246,0.2)]'
+                                    : 'border-white/[0.05] bg-surface-light hover:border-white/20'
                                     }`}
                             >
                                 <div className="flex flex-col items-start sm:items-center min-w-0">
-                                    <span className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[2px] ${betTeam === 'teamA' ? 'text-red-500' : 'text-zinc-500'}`}>Back {match.teamA}</span>
+                                    <span className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[2px] ${betTeam === 'teamA' ? 'text-accent' : 'text-zinc-500'}`}>Back {match.teamA}</span>
                                     <span className="text-xl sm:text-4xl font-black italic tracking-tighter text-white truncate max-w-full">{match.teamA}</span>
                                 </div>
                                 <div className="bg-yellow-500 px-3 py-1 rounded-lg shrink-0">
@@ -107,12 +107,12 @@ const BetModal = ({ match, onClose }) => {
                             <button
                                 onClick={() => setBetTeam('teamB')}
                                 className={`p-4 sm:p-6 rounded-[24px] border-2 transition-all flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-3 sm:gap-2 relative overflow-hidden group/btn ${betTeam === 'teamB'
-                                    ? 'border-red-600 bg-red-600/10 shadow-[0_0_20px_rgba(220,38,38,0.2)]'
-                                    : 'border-white/[0.05] bg-zinc-900/50 hover:border-white/20'
+                                    ? 'border-accent bg-accent/10 shadow-[0_0_20px_rgba(59,130,246,0.2)]'
+                                    : 'border-white/[0.05] bg-surface-light hover:border-white/20'
                                     }`}
                             >
                                 <div className="flex flex-col items-start sm:items-center min-w-0">
-                                    <span className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[2px] ${betTeam === 'teamB' ? 'text-red-500' : 'text-zinc-500'}`}>Back {match.teamB}</span>
+                                    <span className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[2px] ${betTeam === 'teamB' ? 'text-accent' : 'text-zinc-500'}`}>Back {match.teamB}</span>
                                     <span className="text-xl sm:text-4xl font-black italic tracking-tighter text-white truncate max-w-full">{match.teamB}</span>
                                 </div>
                                 <div className="bg-yellow-500 px-3 py-1 rounded-lg shrink-0">
@@ -140,7 +140,7 @@ const BetModal = ({ match, onClose }) => {
                                         type="number"
                                         value={amount}
                                         onChange={(e) => setAmount(e.target.value)}
-                                        className="w-full bg-[#121212] border border-white/5 rounded-[24px] py-6 pl-12 pr-6 text-4xl font-black italic tracking-tighter text-white focus:border-red-500/50 focus:ring-4 focus:ring-red-500/10 outline-none transition-all"
+                                        className="w-full bg-primary border border-white/5 rounded-[24px] py-6 pl-12 pr-6 text-4xl font-black italic tracking-tighter text-white focus:border-accent/50 focus:ring-4 focus:ring-accent/10 outline-none transition-all"
                                     />
                                 </div>
 
@@ -194,7 +194,7 @@ const BetModal = ({ match, onClose }) => {
                         <button
                             disabled={loading || amount > userData.balance || amount < 100}
                             onClick={handlePlaceBet}
-                            className="w-full bg-red-600 hover:bg-red-500 text-white py-6 rounded-[28px] font-black italic uppercase tracking-[4px] text-2xl shadow-2xl shadow-red-600/40 active:scale-[0.98] transition-all flex items-center justify-center gap-4 disabled:grayscale disabled:opacity-50"
+                            className="w-full bg-accent hover:bg-accent-hover text-white py-6 rounded-[28px] font-black italic uppercase tracking-[4px] text-2xl shadow-2xl shadow-accent/40 active:scale-[0.98] transition-all flex items-center justify-center gap-4 disabled:grayscale disabled:opacity-50"
                         >
                             {loading ? (
                                 <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" />
@@ -204,7 +204,7 @@ const BetModal = ({ match, onClose }) => {
                         </button>
 
                         {amount > userData.balance && (
-                            <p className="text-center text-[10px] font-black text-red-500 uppercase tracking-widest animate-pulse">
+                            <p className="text-center text-[10px] font-black text-accent uppercase tracking-widest animate-pulse">
                                 Insufficient balance in wallet
                             </p>
                         )}

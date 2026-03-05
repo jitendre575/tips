@@ -48,7 +48,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
             <aside className={`
                 fixed inset-y-0 left-0 z-[200] w-[var(--sidebar-width)] 
-                bg-[#050505] border-r border-white/[0.05] 
+                bg-primary border-r border-white/[0.05] 
                 transform transition-transform duration-300 ease-in-out
                 lg:translate-x-0 lg:static lg:block
                 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
@@ -57,7 +57,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     <div className="flex items-center justify-between mb-10 pl-2">
                         <Link to="/dashboard" className="cricwin-logo" onClick={onClose}>
                             <span className="text-white">CRIC</span>
-                            <span className="logo-red">WIN</span>
+                            <span className="logo-accent">WIN</span>
                         </Link>
                         <button onClick={onClose} className="lg:hidden text-zinc-500">
                             <X size={24} />
@@ -103,7 +103,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     <div className="mt-auto pt-6 border-t border-white/[0.05]">
                         <button
                             onClick={handleLogout}
-                            className="sidebar-item w-full text-zinc-500 hover:text-red-500 hover:bg-red-500/5"
+                            className="sidebar-item w-full text-zinc-500 hover:text-accent hover:bg-accent/5"
                         >
                             <LogOut size={20} />
                             <span>Logout</span>

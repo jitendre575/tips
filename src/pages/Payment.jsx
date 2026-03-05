@@ -85,8 +85,8 @@ const Payment = () => {
 
     if (submitted) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-[#050505] p-6 overflow-hidden relative">
-                <div className="absolute inset-0 bg-red-500/5 blur-[120px] rounded-full translate-y-1/2 scale-150" />
+            <div className="min-h-screen flex items-center justify-center bg-primary p-6 overflow-hidden relative">
+                <div className="absolute inset-0 bg-accent/5 blur-[120px] rounded-full translate-y-1/2 scale-150" />
                 <div className="max-w-md w-full text-center space-y-10 relative animate-in zoom-in-95 duration-500">
                     <div className="relative mx-auto">
                         <div className="w-32 h-32 bg-emerald-500/10 rounded-[40px] flex items-center justify-center mx-auto border border-emerald-500/20 shadow-2xl animate-bounce">
@@ -96,7 +96,7 @@ const Payment = () => {
                     </div>
                     <div className="space-y-4">
                         <h1 className="text-4xl lg:text-5xl font-black text-white italic tracking-tighter uppercase leading-none">
-                            Request <span className="logo-red">Logged</span>
+                            Request <span className="logo-accent">Logged</span>
                         </h1>
                         <p className="text-zinc-500 font-medium">Your payment is being verified by our elite security team. Balance will update within 5-10 minutes.</p>
                     </div>
@@ -113,7 +113,7 @@ const Payment = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#050505] p-4 lg:p-10 pb-24">
+        <div className="min-h-screen bg-primary p-4 lg:p-10 pb-24">
             <div className="max-w-2xl mx-auto space-y-10">
                 {/* Header */}
                 <div className="flex items-center gap-6">
@@ -125,18 +125,18 @@ const Payment = () => {
                     </button>
                     <div>
                         <div className="flex items-center gap-2 mb-1">
-                            <ShieldCheck className="text-red-500" size={14} />
+                            <ShieldCheck className="text-accent" size={14} />
                             <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Secure Checkout</span>
                         </div>
                         <h1 className="text-4xl lg:text-5xl font-black text-white italic tracking-tighter uppercase leading-none">
-                            Complete <span className="logo-red">Payment</span>
+                            Complete <span className="logo-accent">Payment</span>
                         </h1>
                         <p className="text-zinc-500 text-sm font-medium mt-2">Send ₹{amount.toLocaleString()} to our verified wallet.</p>
                     </div>
                 </div>
 
                 {/* QR Section */}
-                <div className="group relative bg-[#0a0a0a] rounded-[40px] border border-white/5 p-8 lg:p-12 overflow-hidden hover:border-red-500/20 transition-all duration-500">
+                <div className="group relative bg-surface rounded-[40px] border border-white/5 p-8 lg:p-12 overflow-hidden hover:border-accent/20 transition-all duration-500">
                     <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
                         <QrCode size={200} />
                     </div>
@@ -170,7 +170,7 @@ const Payment = () => {
                                     <p className="text-[8px] font-black uppercase tracking-widest text-zinc-400">Merchant: Aryan General Store</p>
                                 </div>
                             </div>
-                            <div className="absolute -inset-4 bg-red-500/10 blur-3xl -z-10 group-hover:bg-red-500/20 transition-all duration-500" />
+                            <div className="absolute -inset-4 bg-accent/10 blur-3xl -z-10 group-hover:bg-accent/20 transition-all duration-500" />
                         </div>
                     </div>
                 </div>
@@ -189,7 +189,7 @@ const Payment = () => {
                                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-all duration-300 backdrop-blur-sm">
                                     <button
                                         onClick={() => { setFile(null); setPreview(null); }}
-                                        className="px-6 py-3 bg-red-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-red-500 transition-colors shadow-2xl"
+                                        className="px-6 py-3 bg-red-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-red-400 transition-colors shadow-2xl shadow-red-500/20"
                                     >
                                         Remove & Retake
                                     </button>
@@ -197,7 +197,7 @@ const Payment = () => {
                             </div>
                         ) : (
                             <div className="text-center group/upload">
-                                <div className="w-20 h-20 bg-zinc-900 rounded-[30px] flex items-center justify-center text-zinc-600 mb-6 mx-auto group-hover/upload:scale-110 group-hover/upload:text-red-500 transition-all duration-500 border border-white/5 shadow-2xl">
+                                <div className="w-20 h-20 bg-zinc-900 rounded-[30px] flex items-center justify-center text-zinc-600 mb-6 mx-auto group-hover/upload:scale-110 group-hover/upload:text-accent transition-all duration-500 border border-white/5 shadow-2xl">
                                     <Upload size={32} />
                                 </div>
                                 <div className="space-y-2">
@@ -218,7 +218,7 @@ const Payment = () => {
                 {/* Info Cards */}
                 <div className="grid sm:grid-cols-2 gap-4">
                     <div className="p-6 bg-zinc-900/50 border border-white/5 rounded-[30px] flex gap-4">
-                        <div className="p-3 bg-red-500/10 rounded-2xl text-red-500 h-fit shadow-xl shadow-red-500/5">
+                        <div className="p-3 bg-accent/10 rounded-2xl text-accent h-fit shadow-xl shadow-accent/5">
                             <Info size={18} />
                         </div>
                         <div className="space-y-1">
@@ -227,7 +227,7 @@ const Payment = () => {
                         </div>
                     </div>
                     <div className="p-6 bg-zinc-900/50 border border-white/5 rounded-[30px] flex gap-4">
-                        <div className="p-3 bg-red-500/10 rounded-2xl text-red-500 h-fit shadow-xl shadow-red-500/5">
+                        <div className="p-3 bg-accent/10 rounded-2xl text-accent h-fit shadow-xl shadow-accent/5">
                             <Smartphone size={18} />
                         </div>
                         <div className="space-y-1">
@@ -241,7 +241,7 @@ const Payment = () => {
                 <button
                     onClick={handleSubmit}
                     disabled={!file || loading}
-                    className="group relative w-full overflow-hidden p-6 bg-red-600 hover:bg-red-500 disabled:opacity-30 disabled:grayscale text-white rounded-[32px] font-black uppercase italic tracking-[4px] transition-all shadow-2xl shadow-red-600/20 active:scale-95"
+                    className="group relative w-full overflow-hidden p-6 bg-accent hover:bg-accent-hover disabled:opacity-30 disabled:grayscale text-white rounded-[32px] font-black uppercase italic tracking-[4px] transition-all shadow-2xl shadow-accent/20 active:scale-95"
                 >
                     <div className="absolute inset-0 flex items-center justify-center bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
                     <div className="relative flex items-center justify-center gap-4">

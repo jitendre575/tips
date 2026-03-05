@@ -107,15 +107,15 @@ const SupportChat = () => {
         <div className="fixed bottom-6 right-6 z-[1000] flex flex-col items-end">
             {/* Chat Window */}
             {isOpen && (
-                <div className="mb-4 w-[90vw] sm:w-[380px] h-[500px] bg-[#121212] rounded-3xl shadow-2xl border border-white/5 flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
+                <div className="mb-4 w-[90vw] sm:w-[380px] h-[500px] bg-surface-light rounded-3xl shadow-2xl border border-white/5 flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
                     {/* Header */}
-                    <div className="bg-[#1a1a1a] p-4 flex items-center justify-between border-b border-white/5">
+                    <div className="bg-zinc-900 px-4 py-5 flex items-center justify-between border-b border-white/5">
                         <div className="flex items-center gap-3">
                             <div className="relative">
-                                <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white font-black">
+                                <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white font-black">
                                     C
                                 </div>
-                                <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-[#1a1a1a] rounded-full"></div>
+                                <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-zinc-900 rounded-full"></div>
                             </div>
                             <div>
                                 <h3 className="text-sm font-black text-white">CricWin Support</h3>
@@ -146,7 +146,7 @@ const SupportChat = () => {
                             messages.map((msg) => (
                                 <div key={msg.id} className={`flex ${msg.senderId === user.uid ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 space-y-1 relative group ${msg.senderId === user.uid
-                                        ? 'bg-red-600 text-white rounded-tr-none'
+                                        ? 'bg-accent text-white rounded-tr-none'
                                         : 'bg-zinc-800 text-zinc-200 rounded-tl-none'
                                         }`}>
                                         {msg.type === 'image' ? (
@@ -168,7 +168,7 @@ const SupportChat = () => {
                     </div>
 
                     {/* Input */}
-                    <form onSubmit={handleSendMessage} className="p-4 bg-[#1a1a1a] border-t border-white/5 flex items-center gap-3">
+                    <form onSubmit={handleSendMessage} className="p-4 bg-zinc-900 border-t border-white/5 flex items-center gap-3">
                         <label className="cursor-pointer text-zinc-500 hover:text-white transition-colors">
                             {uploading ? <Loader2 size={20} className="animate-spin" /> : <ImageIcon size={20} />}
                             <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
@@ -178,12 +178,12 @@ const SupportChat = () => {
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             placeholder="Type your message..."
-                            className="flex-1 bg-zinc-900 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-red-500/50 transition-all"
+                            className="flex-1 bg-surface-light border border-white/5 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accent/50 transition-all"
                         />
                         <button
                             type="submit"
                             disabled={!newMessage.trim() && !uploading}
-                            className="p-2.5 bg-red-600 text-white rounded-xl hover:bg-red-500 transition-all disabled:opacity-50"
+                            className="p-2.5 bg-accent text-white rounded-xl hover:bg-accent-hover transition-all disabled:opacity-50"
                         >
                             <Send size={18} />
                         </button>
@@ -194,13 +194,13 @@ const SupportChat = () => {
             {/* Toggle Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all hover:scale-110 active:scale-95 ${isOpen ? 'bg-zinc-800 text-white rotate-90' : 'bg-red-600 text-white'
+                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all hover:scale-110 active:scale-95 ${isOpen ? 'bg-zinc-800 text-white rotate-90' : 'bg-accent text-white'
                     }`}
             >
                 {isOpen ? <X size={24} /> : (
                     <div className="relative">
                         <MessageCircle size={32} />
-                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 border-4 border-[#121212] rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]"></span>
+                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 border-4 border-primary rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]"></span>
                     </div>
                 )}
             </button>
