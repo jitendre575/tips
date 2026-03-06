@@ -88,9 +88,9 @@ const MinesGame = ({ onBet, onWin, onLoss }) => {
     const nextMultiplier = calculateMultiplier(revealed.length + 1);
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8 items-start">
             {/* Sidebar Controls */}
-            <div className="lg:col-span-4 bg-zinc-950/50 border border-white/5 rounded-[40px] p-8 space-y-8 order-2 lg:order-1 shadow-2xl">
+            <div className="lg:col-span-4 bg-zinc-950/50 border border-white/5 rounded-[32px] sm:rounded-[40px] p-6 sm:p-8 space-y-6 sm:space-y-8 order-2 lg:order-1 shadow-2xl">
                 {/* Bet Amount Control */}
                 <div className="space-y-4">
                     <div className="flex justify-between items-center px-1">
@@ -162,7 +162,7 @@ const MinesGame = ({ onBet, onWin, onLoss }) => {
                         </div>
                         <button
                             onClick={() => cashOut()}
-                            className="w-full py-6 bg-emerald-500 hover:bg-emerald-600 text-white rounded-[28px] font-black uppercase italic tracking-[4px] text-xl shadow-2xl shadow-emerald-500/20 active:scale-95 transition-all flex items-center justify-center gap-3"
+                            className="w-full py-4 sm:py-5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-[28px] font-black uppercase italic tracking-[4px] text-xl shadow-2xl shadow-emerald-500/20 active:scale-95 transition-all flex items-center justify-center gap-3"
                         >
                             <Wallet size={24} /> Cashout
                         </button>
@@ -170,7 +170,7 @@ const MinesGame = ({ onBet, onWin, onLoss }) => {
                 ) : (
                     <button
                         onClick={startGame}
-                        className="w-full py-6 bg-accent hover:bg-accent-hover text-white rounded-[28px] font-black uppercase italic tracking-[4px] text-xl shadow-2xl shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-3"
+                        className="w-full py-4 sm:py-5 bg-accent hover:bg-accent-hover text-white rounded-[28px] font-black uppercase italic tracking-[4px] text-xl shadow-2xl shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-3"
                     >
                         <Play size={24} className="fill-current" /> Bet
                     </button>

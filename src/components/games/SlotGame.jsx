@@ -85,8 +85,8 @@ const SlotGame = ({ gameId, onBet, onWin, onLoss }) => {
     };
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div className="lg:col-span-4 bg-zinc-950/50 border border-white/5 rounded-[40px] p-8 space-y-8 order-2 lg:order-1">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-8 items-start">
+            <div className="lg:col-span-4 bg-zinc-950/50 border border-white/5 rounded-[32px] sm:rounded-[40px] p-5 sm:p-8 space-y-6 sm:space-y-8 order-2 lg:order-1 shadow-2xl">
                 <div className="space-y-4">
                     <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[3px] italic">Wager Amount</label>
                     <div className="relative">
@@ -95,7 +95,7 @@ const SlotGame = ({ gameId, onBet, onWin, onLoss }) => {
                             type="number"
                             value={betAmount}
                             onChange={(e) => setBetAmount(Math.max(0, parseInt(e.target.value) || 0))}
-                            className="w-full bg-primary border border-white/5 rounded-[24px] py-6 pl-14 pr-8 text-2xl font-black text-white outline-none"
+                            className="w-full bg-primary border border-white/5 rounded-[22px] py-4 sm:py-6 pl-14 pr-8 text-xl sm:text-2xl font-black text-white outline-none"
                         />
                     </div>
                 </div>
@@ -109,15 +109,15 @@ const SlotGame = ({ gameId, onBet, onWin, onLoss }) => {
                     <button
                         onClick={spin}
                         disabled={isSpinning}
-                        className="w-full py-6 bg-accent hover:bg-accent-hover text-white rounded-[28px] font-black uppercase italic tracking-[4px] text-xl shadow-2xl shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                        className="w-full py-4 sm:py-5 bg-accent hover:bg-accent-hover text-white rounded-[24px] sm:rounded-[28px] font-black uppercase italic tracking-[3px] sm:tracking-[4px] text-lg sm:text-xl shadow-2xl shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                     >
-                        {isSpinning ? <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" /> : <>Spin Reels <RotateCcw size={24} /></>}
+                        {isSpinning ? <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" /> : <>Spin Reels <RotateCcw size={20} /></>}
                     </button>
                 </div>
             </div>
 
-            <div className="lg:col-span-8 bg-[#0a0a0a] border border-white/5 rounded-[40px] p-4 sm:p-12 order-1 lg:order-2 shadow-inner">
-                <div className="grid grid-cols-3 gap-2 sm:gap-6 bg-zinc-900/50 p-4 sm:p-8 rounded-[32px] border border-white/5">
+            <div className="lg:col-span-8 bg-[#0a0a0a] border border-white/5 rounded-[32px] sm:rounded-[40px] p-4 sm:p-12 order-1 lg:order-2 shadow-inner">
+                <div className="grid grid-cols-3 gap-2 sm:gap-6 bg-zinc-900/50 p-4 sm:p-8 rounded-[24px] sm:rounded-[32px] border border-white/5">
                     {reels.map((col, i) => (
                         <div key={i} className="space-y-2 sm:space-y-6">
                             {col.map((symbol, j) => (

@@ -129,7 +129,7 @@ const CasinoGame = () => {
     return (
         <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500 pb-20">
             {/* Game Header */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
                 <div className="flex items-center gap-4">
                     <button
                         onClick={() => navigate('/dashboard')}
@@ -149,7 +149,7 @@ const CasinoGame = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <div className="bg-surface-light px-6 py-4 rounded-[24px] border border-white/[0.05] flex items-center gap-4 shadow-2xl">
+                    <div className="bg-surface-light px-4 sm:px-6 py-3 sm:py-4 rounded-[20px] sm:rounded-[24px] border border-white/[0.05] flex items-center gap-3 sm:gap-4 shadow-2xl w-full sm:w-auto">
                         <div className="bg-yellow-500/10 p-2 rounded-xl">
                             <Wallet className="w-5 h-5 text-yellow-500" />
                         </div>
@@ -164,7 +164,7 @@ const CasinoGame = () => {
             </div>
 
             {/* Game Layout Wrapper */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8">
                 {/* Main Game Interface */}
                 <div className="lg:col-span-12">
                     {renderGame()}
