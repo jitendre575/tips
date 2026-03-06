@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import MinesGame from '../components/games/MinesGame';
 import DiceGame from '../components/games/DiceGame';
 import SlotGame from '../components/games/SlotGame';
+import CrashGame from '../components/games/CrashGame';
 
 const CasinoGame = () => {
     const { gameId } = useParams();
@@ -109,6 +110,8 @@ const CasinoGame = () => {
             case 'olympus':
             case 'fisherman':
                 return <SlotGame gameId={gameId} onBet={handleBet} onWin={handleWin} onLoss={handleLoss} />;
+            case 'crash':
+                return <CrashGame onBet={handleBet} onWin={handleWin} onLoss={handleLoss} />;
             default:
                 return (
                     <div className="flex flex-col items-center justify-center h-[500px] bg-zinc-900/50 rounded-[40px] border border-white/5 border-dashed">
@@ -128,40 +131,7 @@ const CasinoGame = () => {
 
     return (
         <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500 pb-20">
-            {/* Game Header */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => navigate('/dashboard')}
-                        className="p-3 bg-zinc-900 rounded-2xl border border-white/5 text-zinc-400 hover:text-white transition-all shadow-xl active:scale-95"
-                    >
-                        <ArrowLeft size={20} />
-                    </button>
-                    <div>
-                        <div className="flex items-center gap-2 mb-1">
-                            <div className={`w-2 h-2 rounded-full ${currentGame.color} animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]`} />
-                            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[3px] italic">{currentGame.provider} ORIGINAL</span>
-                        </div>
-                        <h1 className="text-4xl lg:text-5xl font-black italic tracking-tighter uppercase leading-none">
-                            {currentGame.name.split('')[0]}<span className="logo-accent text-accent">{currentGame.name.slice(1)}</span>
-                        </h1>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                    <div className="bg-surface-light px-4 sm:px-6 py-3 sm:py-4 rounded-[20px] sm:rounded-[24px] border border-white/[0.05] flex items-center gap-3 sm:gap-4 shadow-2xl w-full sm:w-auto">
-                        <div className="bg-yellow-500/10 p-2 rounded-xl">
-                            <Wallet className="w-5 h-5 text-yellow-500" />
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="text-[10px] font-black text-zinc-600 uppercase leading-none mb-1.5 tracking-widest">Available Balance</span>
-                            <span className="font-black text-white tracking-widest leading-none text-xl sm:text-2xl italic">
-                                ₹{userData?.balance?.toLocaleString() || '0'}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {/* Game Header - REMOVED FOR ALL GAMES */}
 
             {/* Game Layout Wrapper */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8">

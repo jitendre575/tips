@@ -21,7 +21,7 @@ const MatchCard = ({ match, onBet }) => {
             <div className="flex items-center justify-between mb-6 sm:mb-10 gap-2">
                 {/* Team A */}
                 <div className="flex-1 flex flex-col items-center gap-0.5 sm:gap-2 min-w-0">
-                    <h2 className="text-lg sm:text-3xl lg:text-5xl font-black italic text-white tracking-tighter uppercase leading-none w-full text-center break-words">
+                    <h2 className="text-lg sm:text-3xl lg:text-4xl font-black italic text-white tracking-tighter uppercase leading-tight w-full text-center break-words">
                         {match.teamA}
                     </h2>
                     <div className="bg-yellow-500 px-2 sm:px-4 py-1 rounded-lg sm:rounded-xl">
@@ -39,7 +39,7 @@ const MatchCard = ({ match, onBet }) => {
 
                 {/* Team B */}
                 <div className="flex-1 flex flex-col items-center gap-0.5 sm:gap-2 min-w-0">
-                    <h2 className="text-lg sm:text-3xl lg:text-5xl font-black italic text-white tracking-tighter uppercase leading-none w-full text-center break-words">
+                    <h2 className="text-lg sm:text-3xl lg:text-4xl font-black italic text-white tracking-tighter uppercase leading-tight w-full text-center break-words">
                         {match.teamB}
                     </h2>
                     <div className="bg-yellow-500 px-2 sm:px-4 py-1 rounded-lg sm:rounded-xl">

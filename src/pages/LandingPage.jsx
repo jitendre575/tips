@@ -232,12 +232,12 @@ const LandingPage = () => {
                         { icon: Trophy, title: "Hall of Fame", desc: "Climb the leaderboard and win exclusive monthly badges and special bonus rewards." },
                         { icon: Activity, title: "Advanced Stats", desc: "Detailed match analysis and history to help you make informed and winning predictions." }
                     ].map((item, i) => (
-                        <div key={i} className="glass-card p-10 group hover:bg-white/[0.02] border-white/5 bg-zinc-950/20">
-                            <div className="w-14 h-14 rounded-2xl bg-zinc-900 flex items-center justify-center text-accent mb-8 border border-white/5 group-hover:scale-110 group-hover:bg-accent/10 transition-all">
-                                <item.icon size={28} />
+                        <div key={i} className="glass-card p-6 sm:p-8 group hover:bg-white/[0.02] border-white/5 bg-zinc-950/20 text-center flex flex-col items-center">
+                            <div className="w-12 h-12 rounded-2xl bg-zinc-900 flex items-center justify-center text-accent mb-4 border border-white/5 group-hover:scale-110 group-hover:bg-accent/10 transition-all">
+                                <item.icon size={24} />
                             </div>
-                            <h4 className="text-xl font-black italic tracking-tighter uppercase mb-4 text-white group-hover:text-accent transition-colors">{item.title}</h4>
-                            <p className="text-zinc-500 text-[13px] font-medium leading-relaxed tracking-wide">{item.desc}</p>
+                            <h4 className="text-lg font-black italic tracking-tighter uppercase mb-2 text-white group-hover:text-accent transition-colors">{item.title}</h4>
+                            <p className="text-zinc-500 text-[12px] font-medium leading-relaxed tracking-wide">{item.desc}</p>
                         </div>
                     ))}
                 </div>
