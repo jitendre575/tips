@@ -113,46 +113,46 @@ const Payment = () => {
     }
 
     return (
-        <div className="min-h-screen bg-primary p-4 lg:p-10 pb-24">
-            <div className="max-w-2xl mx-auto space-y-10">
+        <div className="min-h-screen bg-primary p-4 lg:p-6 pb-20 mt-[-20px]">
+            <div className="max-w-2xl mx-auto space-y-6">
                 {/* Header */}
                 <div className="flex items-center gap-6">
                     <button
                         onClick={() => navigate(-1)}
-                        className="p-4 bg-zinc-900 rounded-[20px] border border-white/5 text-zinc-400 hover:text-white transition-all shadow-2xl active:scale-95"
+                        className="p-3 bg-zinc-900 rounded-[16px] border border-white/5 text-zinc-400 hover:text-white transition-all shadow-2xl active:scale-95"
                     >
-                        <ArrowLeft size={24} />
+                        <ArrowLeft size={20} />
                     </button>
                     <div>
                         <div className="flex items-center gap-2 mb-1">
                             <ShieldCheck className="text-accent" size={14} />
                             <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Secure Checkout</span>
                         </div>
-                        <h1 className="text-4xl lg:text-5xl font-black text-white italic tracking-tighter uppercase leading-none">
-                            Complete <span className="logo-accent">Payment</span>
+                        <h1 className="text-2xl lg:text-3xl font-[1000] text-white italic tracking-[-0.05em] uppercase leading-none">
+                            COMPLETE <span className="text-[#3b82f6]">PAYMENT</span>
                         </h1>
-                        <p className="text-zinc-500 text-sm font-medium mt-2">Send ₹{amount.toLocaleString()} to our verified wallet.</p>
+                        <p className="text-zinc-500 text-[13px] font-medium mt-1">Send ₹{amount.toLocaleString()} to our verified wallet.</p>
                     </div>
                 </div>
 
                 {/* QR Section */}
-                <div className="group relative bg-surface rounded-[40px] border border-white/5 p-8 lg:p-12 overflow-hidden hover:border-accent/20 transition-all duration-500">
+                <div className="group relative bg-surface rounded-[32px] border border-white/5 p-6 lg:p-8 overflow-hidden hover:border-accent/20 transition-all duration-500">
                     <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
                         <QrCode size={200} />
                     </div>
 
-                    <div className="flex flex-col lg:flex-row items-center gap-10 relative">
+                    <div className="flex flex-col lg:flex-row items-center gap-6 relative">
                         <div className="space-y-8 flex-1 text-center lg:text-left">
                             <div className="space-y-4">
                                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 rounded-full border border-emerald-500/20 h-fit">
                                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                                     <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Fast Verification Active</span>
                                 </div>
-                                <h2 className="text-6xl font-black italic tracking-tighter text-white leading-none">₹{amount.toLocaleString()}</h2>
-                                <p className="text-zinc-500 text-xs font-black uppercase tracking-[3px]">Total Payable Amount</p>
+                                <h2 className="text-5xl font-black italic tracking-tighter text-white leading-none">₹{amount.toLocaleString()}</h2>
+                                <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[2px]">Total Payable Amount</p>
                             </div>
 
-                            <div className="flex flex-wrap justify-center lg:justify-start gap-6 opacity-30 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                            <div className="flex flex-wrap justify-center lg:justify-start gap-4 opacity-30 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
                                 <img src="https://logolook.net/wp-content/uploads/2023/11/PhonePe-Logo.png" alt="PhonePe" className="h-8" />
                                 <img src="https://logolook.net/wp-content/uploads/2021/11/Paytm-Logo.png" alt="Paytm" className="h-6" />
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo.png" alt="UPI" className="h-6" />
@@ -160,7 +160,7 @@ const Payment = () => {
                         </div>
 
                         <div className="relative">
-                            <div className="w-64 h-64 bg-white p-6 rounded-[40px] shadow-[0_0_60px_rgba(0,0,0,0.5)] transform transition-transform group-hover:scale-105 duration-500">
+                            <div className="w-56 h-56 bg-white p-4 rounded-[32px] shadow-[0_0_60px_rgba(0,0,0,0.5)] transform transition-transform group-hover:scale-105 duration-500">
                                 <img
                                     src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=aryan.genral@upi&pn=ARYAN%20GENERAL%20STORE&am=${amount}&cu=INR`}
                                     alt="Payment QR"
@@ -182,7 +182,7 @@ const Payment = () => {
                         <span className="text-[10px] font-black uppercase tracking-widest text-red-500">Mandatory</span>
                     </div>
 
-                    <div className={`relative min-h-[300px] bg-zinc-900/30 border-2 border-dashed rounded-[40px] p-10 flex flex-col items-center justify-center gap-6 transition-all duration-500 ${preview ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-white/5 hover:border-red-500/20 hover:bg-zinc-900/50'}`}>
+                    <div className={`relative min-h-[220px] bg-zinc-900/30 border-2 border-dashed rounded-[32px] p-6 sm:p-8 flex flex-col items-center justify-center gap-4 transition-all duration-500 ${preview ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-white/5 hover:border-red-500/20 hover:bg-zinc-900/50'}`}>
                         {preview ? (
                             <div className="relative group w-full max-w-sm aspect-[4/3] rounded-[32px] overflow-hidden shadow-2xl border border-white/10">
                                 <img src={preview} alt="Screenshot Preview" className="w-full h-full object-cover" />
@@ -216,23 +216,23 @@ const Payment = () => {
                 </div>
 
                 {/* Info Cards */}
-                <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="p-6 bg-zinc-900/50 border border-white/5 rounded-[30px] flex gap-4">
-                        <div className="p-3 bg-accent/10 rounded-2xl text-accent h-fit shadow-xl shadow-accent/5">
-                            <Info size={18} />
+                <div className="grid sm:grid-cols-2 gap-3">
+                    <div className="p-4 bg-zinc-900/50 border border-white/5 rounded-[24px] flex gap-3">
+                        <div className="p-2.5 bg-accent/10 rounded-xl text-accent h-fit shadow-xl shadow-accent/5">
+                            <Info size={16} />
                         </div>
-                        <div className="space-y-1">
-                            <p className="text-[10px] font-black text-white uppercase tracking-widest">Steps to Pay</p>
-                            <p className="text-xs text-zinc-500 font-medium leading-relaxed">Scan QR → Pay exact amount → Take screenshot → Upload proof.</p>
+                        <div className="space-y-0.5">
+                            <p className="text-[9px] font-black text-white uppercase tracking-widest">Steps to Pay</p>
+                            <p className="text-[11px] text-zinc-500 font-medium leading-relaxed">Scan QR → Pay amount → Take screenshot → Upload.</p>
                         </div>
                     </div>
-                    <div className="p-6 bg-zinc-900/50 border border-white/5 rounded-[30px] flex gap-4">
-                        <div className="p-3 bg-accent/10 rounded-2xl text-accent h-fit shadow-xl shadow-accent/5">
-                            <Smartphone size={18} />
+                    <div className="p-4 bg-zinc-900/50 border border-white/5 rounded-[24px] flex gap-3">
+                        <div className="p-2.5 bg-accent/10 rounded-xl text-accent h-fit shadow-xl shadow-accent/5">
+                            <Smartphone size={16} />
                         </div>
-                        <div className="space-y-1">
-                            <p className="text-[10px] font-black text-white uppercase tracking-widest">Phone Verification</p>
-                            <p className="text-xs text-zinc-500 font-medium leading-relaxed">Ensure your phone number {userData?.phone || 'on profile'} matches payment app.</p>
+                        <div className="space-y-0.5">
+                            <p className="text-[9px] font-black text-white uppercase tracking-widest">Phone Match</p>
+                            <p className="text-[11px] text-zinc-500 font-medium leading-relaxed">Ensure number {userData?.phone || ''} matches payment app.</p>
                         </div>
                     </div>
                 </div>
@@ -241,7 +241,7 @@ const Payment = () => {
                 <button
                     onClick={handleSubmit}
                     disabled={!file || loading}
-                    className="group relative w-full overflow-hidden p-6 bg-accent hover:bg-accent-hover disabled:opacity-30 disabled:grayscale text-white rounded-[32px] font-black uppercase italic tracking-[4px] transition-all shadow-2xl shadow-accent/20 active:scale-95"
+                    className="group relative w-full overflow-hidden p-5 bg-accent hover:bg-accent-hover disabled:opacity-30 disabled:grayscale text-white rounded-[24px] font-black uppercase italic tracking-[3px] transition-all shadow-2xl shadow-accent/20 active:scale-95"
                 >
                     <div className="absolute inset-0 flex items-center justify-center bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
                     <div className="relative flex items-center justify-center gap-4">

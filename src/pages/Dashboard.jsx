@@ -53,6 +53,8 @@ const Dashboard = () => {
         { id: 'crash', name: 'Crash', image: '/casino/roulette.png', activePlayers: '1,232', provider: 'ORIGINALS' },
         { id: 'limbo', name: 'Limbo', image: '/casino/poker.png', activePlayers: '2,257', provider: 'ORIGINALS' },
         { id: 'hilo', name: 'Hilo', image: '/casino/blackjack.png', activePlayers: '502', provider: 'ORIGINALS' },
+        { id: 'color', name: 'Color Prediction', image: '/casino/roulette.png', activePlayers: '3,842', provider: 'ORIGINALS' },
+        { id: 'chicken', name: 'Chicken 2 Road', image: '/casino/blackjack.png', activePlayers: '1,120', provider: 'ORIGINALS' },
     ];
 
     const slotGames = [

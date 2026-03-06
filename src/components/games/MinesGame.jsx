@@ -1,38 +1,54 @@
 import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bomb, Gem, Coins, RotateCcw, Play, Wallet, ShieldAlert } from 'lucide-react';
+import { Bomb, Gem, Coins, RotateCcw, Play, Wallet, ShieldAlert, ChevronDown } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const MinesGame = ({ onBet, onWin, onLoss }) => {
-    const [betAmount, setBetAmount] = useState(100);
+const MinesGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
+    const [betAmount, setBetAmount] = useState(0);
     const [mineCount, setMineCount] = useState(3);
     const [gameState, setGameState] = useState('idle'); // idle, playing, over
     const [grid, setGrid] = useState(Array(25).fill(null));
     const [mines, setMines] = useState([]);
     const [revealed, setRevealed] = useState([]);
     const [payout, setPayout] = useState(0);
-    const [houseEdge] = useState(0.01); // 1%
+    const houseEdge = (settings?.houseEdge || 1) / 100;
+    const probabilityBias = (settings?.minesProbBias || 0) / 100;
+
+    const sounds = {
+        click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
+        win: 'https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3',
+        loss: 'https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3',
+        reveal: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3'
+    };
+
+    const playSound = (type) => {
+        if (isMuted) return;
+        const audio = new Audio(sounds[type]);
+        audio.volume = 0.5;
+        audio.play().catch(() => { });
+    };
 
     // Calculate multiplier based on revealed tiles and mines
     const calculateMultiplier = (revealedCount) => {
         if (revealedCount === 0) return 0;
-
         let probability = 1.0;
         for (let i = 0; i < revealedCount; i++) {
             probability *= (25 - mineCount - i) / (25 - i);
         }
-
         const multiplier = (1 / probability) * (1 - houseEdge);
         return multiplier.toFixed(2);
     };
 
     const startGame = async () => {
         if (gameState === 'playing') return;
-
+        if (betAmount <= 0) {
+            toast.error('Please enter a valid bet amount');
+            return;
+        }
         const success = await onBet(betAmount);
         if (!success) return;
 
-        // Generate random mine positions
+        playSound('click');
         const minePositions = [];
         while (minePositions.length < mineCount) {
             const pos = Math.floor(Math.random() * 25);
@@ -46,7 +62,6 @@ const MinesGame = ({ onBet, onWin, onLoss }) => {
         setRevealed([]);
         setGameState('playing');
         setPayout(0);
-        toast.success('Game Started! Good Luck.', { icon: '🚀' });
     };
 
     const revealTile = (index) => {
@@ -56,19 +71,16 @@ const MinesGame = ({ onBet, onWin, onLoss }) => {
         setRevealed(newRevealed);
 
         if (mines.includes(index)) {
-            // HIT A BOMB!
             setGameState('over');
             setPayout(0);
             onLoss(betAmount);
+            playSound('loss');
             toast.error('KABOOM! You hit a mine.', { icon: '💥' });
         } else {
-            // HIT A GEM!
+            playSound('reveal');
             const multiplier = calculateMultiplier(newRevealed.length);
             setPayout((betAmount * multiplier).toFixed(2));
-
-            // Audio effect or micro-animation would go here
             if (newRevealed.length === 25 - mineCount) {
-                // Perfect game!
                 cashOut(newRevealed);
             }
         }
@@ -76,172 +88,123 @@ const MinesGame = ({ onBet, onWin, onLoss }) => {
 
     const cashOut = async (finalRevealed = revealed) => {
         if (gameState !== 'playing' || finalRevealed.length === 0) return;
-
         const multiplier = calculateMultiplier(finalRevealed.length);
         const winAmount = Math.floor(betAmount * multiplier);
-
         setGameState('over');
         await onWin(winAmount);
+        playSound('win');
         toast.success(`Cashed out at ${multiplier}x!`);
     };
 
-    const nextMultiplier = calculateMultiplier(revealed.length + 1);
+    const currentMultiplier = calculateMultiplier(revealed.length);
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8 items-start">
+        <div className="flex flex-col lg:flex-row bg-[#0f212e] rounded-[8px] overflow-hidden shadow-2xl min-h-[600px] border border-[#2f4553]/20">
             {/* Sidebar Controls */}
-            <div className="lg:col-span-4 bg-zinc-950/50 border border-white/5 rounded-[32px] sm:rounded-[40px] p-6 sm:p-8 space-y-6 sm:space-y-8 order-2 lg:order-1 shadow-2xl">
-                {/* Bet Amount Control */}
-                <div className="space-y-4">
-                    <div className="flex justify-between items-center px-1">
-                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[3px] italic leading-none">Wager Amount</label>
-                        <span className="text-[10px] font-black text-accent uppercase tracking-widest italic">₹100 - ₹50,000</span>
+            <div className="w-full lg:w-[310px] bg-[#213743] p-4 flex flex-col gap-4 z-10 border-r border-[#0f212e]">
+                <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-[#b1bad3] text-[12px] font-bold uppercase tracking-wider px-1">
+                        <span>Bet Amount</span>
+                        <span>₹{betAmount.toLocaleString()}</span>
                     </div>
-                    <div className="relative group">
-                        <span className="absolute left-6 top-1/2 -translate-y-1/2 text-xl font-black text-zinc-700">₹</span>
+                    <div className="flex bg-[#0f212e] border-2 border-[#2f4553] rounded-[4px] overflow-hidden hover:border-[#557086] transition-all h-[44px]">
                         <input
                             type="number"
-                            value={betAmount}
-                            onChange={(e) => setBetAmount(Math.max(0, parseInt(e.target.value) || 0))}
+                            value={betAmount === 0 ? '' : betAmount}
+                            onChange={(e) => setBetAmount(Math.max(0, parseFloat(e.target.value) || 0))}
                             disabled={gameState === 'playing'}
-                            className="w-full bg-primary border border-white/5 rounded-[24px] py-6 pl-14 pr-8 text-2xl font-black italic tracking-tighter text-white focus:border-accent/50 transition-all outline-none disabled:opacity-50"
+                            placeholder="0.00"
+                            className="flex-1 bg-transparent px-3 text-white font-black outline-none text-[15px] placeholder:text-[#557086]"
                         />
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1">
-                            <button
-                                onClick={() => setBetAmount(prev => Math.floor(prev / 2))}
-                                disabled={gameState === 'playing'}
-                                className="px-3 py-2 bg-zinc-900 border border-white/5 rounded-xl text-[10px] font-black text-zinc-500 hover:text-white transition-all uppercase"
-                            >
-                                1/2
-                            </button>
-                            <button
-                                onClick={() => setBetAmount(prev => prev * 2)}
-                                disabled={gameState === 'playing'}
-                                className="px-3 py-2 bg-zinc-900 border border-white/5 rounded-xl text-[10px] font-black text-zinc-500 hover:text-white transition-all uppercase"
-                            >
-                                2x
-                            </button>
+                        <div className="flex items-center px-1">
+                            <div className="w-4 h-4 rounded-full bg-yellow-500 flex items-center justify-center text-[10px] font-black text-black">₹</div>
+                        </div>
+                        <div className="flex bg-[#2f4553] ml-2">
+                            <button onClick={() => setBetAmount(prev => parseFloat((prev / 2).toFixed(2)))} disabled={gameState === 'playing'} className="px-3 text-white font-bold hover:bg-[#3b5568] transition-colors border-r border-[#0f212e] text-xs">1/2</button>
+                            <button onClick={() => setBetAmount(prev => parseFloat((prev * 2).toFixed(2)))} disabled={gameState === 'playing'} className="px-3 text-white font-bold hover:bg-[#3b5568] transition-colors text-xs">2x</button>
                         </div>
                     </div>
                 </div>
 
-                {/* Mines Count Control */}
-                <div className="space-y-4">
-                    <div className="flex justify-between items-center px-1">
-                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[3px] italic leading-none">Mines Count</label>
-                        <span className="text-[10px] font-black text-red-500 uppercase tracking-widest italic">{mineCount} Bombs</span>
-                    </div>
-                    <div className="flex gap-2 p-1.5 bg-primary border border-white/5 rounded-[24px]">
-                        {[1, 3, 5, 24].map(num => (
-                            <button
-                                key={num}
-                                onClick={() => setMineCount(num)}
-                                disabled={gameState === 'playing'}
-                                className={`flex-1 py-4 rounded-2xl font-black italic transition-all ${mineCount === num ? 'bg-accent text-white shadow-xl shadow-accent/20' : 'text-zinc-500 hover:text-white hover:bg-white/5 disabled:opacity-50'}`}
-                            >
-                                {num}
-                            </button>
-                        ))}
-                    </div>
-                    <input
-                        type="range" min="1" max="24" step="1"
-                        value={mineCount}
-                        onChange={(e) => setMineCount(parseInt(e.target.value))}
-                        disabled={gameState === 'playing'}
-                        className="w-full accent-accent bg-zinc-900 h-2 rounded-full cursor-pointer appearance-none mt-4"
-                    />
-                </div>
-
-                {/* Main Action Button */}
-                {gameState === 'playing' ? (
-                    <div className="space-y-4 pt-4">
-                        <div className="bg-zinc-900/50 p-6 rounded-[32px] border border-white/5 border-dashed text-center">
-                            <span className="text-[10px] font-black text-zinc-600 uppercase tracking-[4px] block mb-2 leading-none">Current Returns</span>
-                            <div className="text-4xl font-black italic text-emerald-500 drop-shadow-[0_10px_20px_rgba(16,185,129,0.3)]">₹{payout}</div>
-                            <span className="text-[10px] font-black text-emerald-500/50 uppercase tracking-[2px]">{calculateMultiplier(revealed.length)}x Multiplier</span>
-                        </div>
-                        <button
-                            onClick={() => cashOut()}
-                            className="w-full py-4 sm:py-5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-[28px] font-black uppercase italic tracking-[4px] text-xl shadow-2xl shadow-emerald-500/20 active:scale-95 transition-all flex items-center justify-center gap-3"
+                <div className="space-y-1.5">
+                    <div className="text-[#b1bad3] text-[12px] font-bold uppercase tracking-wider px-1">Mines</div>
+                    <div className="relative group cursor-pointer">
+                        <select
+                            value={mineCount}
+                            onChange={(e) => setMineCount(parseInt(e.target.value))}
+                            disabled={gameState === 'playing'}
+                            className="w-full bg-[#0f212e] border-2 border-[#2f4553] rounded-[4px] py-2.5 px-3 text-white font-black outline-none appearance-none group-hover:border-[#557086] transition-all text-sm cursor-pointer pr-10"
                         >
-                            <Wallet size={24} /> Cashout
-                        </button>
+                            {[...Array(24)].map((_, i) => (<option key={i + 1} value={i + 1} className="bg-[#0f212e]">{i + 1}</option>))}
+                        </select>
+                        <ChevronDown size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#b1bad3] pointer-events-none" />
                     </div>
-                ) : (
-                    <button
-                        onClick={startGame}
-                        className="w-full py-4 sm:py-5 bg-accent hover:bg-accent-hover text-white rounded-[28px] font-black uppercase italic tracking-[4px] text-xl shadow-2xl shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-3"
-                    >
-                        <Play size={24} className="fill-current" /> Bet
-                    </button>
-                )}
+                </div>
 
-                {/* Stats / Info */}
-                <div className="pt-6 border-t border-white/5 grid grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                        <span className="text-[8px] font-black text-zinc-600 uppercase tracking-widest">Game Type</span>
-                        <div className="flex items-center gap-2 text-white font-black italic uppercase text-xs">
-                            <ShieldAlert size={14} className="text-accent" /> Randomized
-                        </div>
-                    </div>
-                    <div className="space-y-1 text-right">
-                        <span className="text-[8px] font-black text-zinc-600 uppercase tracking-widest">Next Value</span>
-                        <div className="text-emerald-500 font-black italic uppercase text-xs">
-                            {gameState === 'playing' ? `${nextMultiplier}x` : '0x'}
-                        </div>
-                    </div>
+                <div className="mt-2">
+                    {gameState === 'playing' ? (
+                        <button onClick={() => cashOut()} className="w-full py-3.5 bg-[#00e701] hover:bg-[#2fff30] text-black rounded-[4px] font-black text-[15px] shadow-[0_4px_0_rgb(0,180,1)] active:translate-y-0.5 active:shadow-none transition-all">Cashout</button>
+                    ) : (
+                        <button onClick={startGame} className="w-full py-3.5 bg-[#00e701] hover:bg-[#2fff30] text-black rounded-[4px] font-black text-[15px] shadow-[0_4px_0_rgb(0,180,1)] active:translate-y-0.5 active:shadow-none transition-all">Bet</button>
+                    )}
                 </div>
             </div>
 
-            {/* Game Grid */}
-            <div className="lg:col-span-8 bg-[#0a0a0a] border border-white/5 rounded-[40px] p-4 sm:p-12 order-1 lg:order-2 shadow-inner aspect-square flex items-center justify-center">
-                <div className="grid grid-cols-5 gap-2 sm:gap-4 w-full max-w-2xl h-full max-h-[600px]">
+            <div className="flex-1 bg-[#0f212e] p-4 sm:p-12 flex items-center justify-center relative min-h-[500px]">
+                <div className="grid grid-cols-5 gap-2.5 sm:gap-4 w-full max-w-[500px] aspect-square">
                     {grid.map((tile, i) => {
                         const isRevealed = revealed.includes(i);
                         const isMine = mines.includes(i);
                         const isOver = gameState === 'over';
-
                         return (
-                            <motion.button
+                            <button
                                 key={i}
-                                initial={false}
-                                whileHover={!isRevealed && !isOver ? { y: -5, scale: 1.05 } : {}}
-                                whileTap={!isRevealed && !isOver ? { scale: 0.95 } : {}}
                                 onClick={() => revealTile(i)}
-                                className={`relative rounded-xl sm:rounded-2xl transition-all duration-300 aspect-square flex items-center justify-center overflow-hidden
+                                disabled={isRevealed || isOver}
+                                className={`group relative rounded-[4px] sm:rounded-[6px] transition-all duration-75 aspect-square flex items-center justify-center
                                     ${isRevealed
-                                        ? isMine ? 'bg-red-500/90 shadow-[0_0_40px_rgba(239,68,68,0.5)]' : 'bg-[#1a2c38] shadow-inner border border-white/5'
-                                        : isOver && isMine ? 'bg-red-500/30' : 'bg-[#213743] hover:bg-[#2f4553] shadow-lg border-b-4 border-black/20'
+                                        ? isMine ? 'bg-[#1a2c38]' : 'bg-[#0f212e] ring-2 ring-[#102c38]'
+                                        : isOver
+                                            ? isMine ? 'bg-[#1a2c38] opacity-60' : 'bg-[#213743] opacity-30'
+                                            : 'bg-[#213743] hover:bg-[#2f4553] hover:-translate-y-0.5 shadow-[0_4px_0_rgb(13,28,39)] hover:shadow-[0_4px_0_rgb(33,55,67)] active:translate-y-0.5 active:shadow-none'
                                     }
                                 `}
                             >
                                 <AnimatePresence mode="wait">
                                     {(isRevealed || (isOver && isMine)) && (
-                                        <motion.div
-                                            initial={{ scale: 0, rotate: -45 }}
-                                            animate={{ scale: 1, rotate: 0 }}
-                                            transition={{ type: 'spring', damping: 12 }}
-                                            className="text-white"
-                                        >
+                                        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-[75%] h-[75%] flex items-center justify-center">
                                             {isMine ? (
-                                                <Bomb size={32} className={`${isRevealed ? 'text-white' : 'text-red-500/50'}`} />
-                                            ) : (
-                                                <div className="flex flex-col items-center">
-                                                    <Gem size={32} className="text-accent drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+                                                <div className={`w-[85%] h-[85%] rounded-full flex items-center justify-center ${isRevealed ? 'bg-[#ef4444] shadow-[0_0_20px_rgba(239,68,68,0.4)]' : ''}`}>
+                                                    <Bomb size={24} className={isRevealed ? 'text-black' : 'text-[#ef4444] opacity-30'} fill="currentColor" />
                                                 </div>
+                                            ) : (
+                                                <motion.div initial={{ scale: 0, rotate: -45 }} animate={{ scale: 1, rotate: 0 }} className="text-[#00e701] drop-shadow-[0_0_12px_rgba(0,231,1,0.5)]">
+                                                    <Gem size={42} fill="currentColor" />
+                                                </motion.div>
                                             )}
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
-
-                                {/* Shine Effect */}
-                                {!isRevealed && !isOver && (
-                                    <div className="absolute top-0 left-0 w-full h-1/2 bg-white/5 rounded-t-xl sm:rounded-t-2xl pointer-events-none" />
-                                )}
-                            </motion.button>
+                            </button>
                         );
                     })}
                 </div>
+
+                <AnimatePresence>
+                    {gameState === 'playing' && revealed.length > 0 && (
+                        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} className="absolute z-20 pointer-events-none">
+                            <div className="bg-[#0f212e]/95 border-[4px] border-[#00e701] rounded-[16px] w-[200px] aspect-square flex flex-col items-center justify-center shadow-[0_0_50px_rgba(0,0,0,0.5)] backdrop-blur-md">
+                                <div className="text-[#00e701] text-[34px] font-black tracking-tight leading-none mb-4">{currentMultiplier}x</div>
+                                <div className="h-[2px] bg-[#2f4553] w-[140px] mb-5" />
+                                <div className="flex items-center gap-2 text-white font-black text-2xl">
+                                    <span className="text-zinc-400">₹</span>
+                                    <span>{(betAmount * currentMultiplier).toFixed(2)}</span>
+                                    <div className="w-5 h-5 rounded-full bg-yellow-500 flex items-center justify-center text-[11px] font-black text-black">₹</div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     );

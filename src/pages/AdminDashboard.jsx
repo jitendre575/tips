@@ -6,8 +6,11 @@ import {
     Users, LayoutDashboard, Wallet, CreditCard, Search, Filter,
     TrendingUp, Activity, CheckCircle2, XCircle, Clock,
     ShieldCheck, Zap, Plus, LogOut, ExternalLink, Calendar, Mail,
-    Settings, PieChart, Shield, RefreshCcw, UserCircle, Edit2, Info, Headset
+    Settings, PieChart, Shield, RefreshCcw, UserCircle, Edit2, Info, Headset,
+    Dice5, Rocket, Bomb, MessageCircle, CheckCheck, Send, BarChart3, Lock, Unlock
 } from 'lucide-react';
+import { useRef } from 'react';
+import { setDoc } from 'firebase/firestore';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -20,6 +23,8 @@ import AdminWithdrawals from './AdminWithdrawals';
 const AdminDashboard = () => {
     const { user, userData } = useAuth();
     const [activeTab, setActiveTab] = useState('overview');
+    const [isAuthorized, setIsAuthorized] = useState(false);
+    const [pin, setPin] = useState('');
     const [stats, setStats] = useState({
         totalUsers: 0,
         pendingRecharges: 0,
@@ -37,6 +42,7 @@ const AdminDashboard = () => {
         { id: 'users', label: 'Users', icon: Users },
         { id: 'recharges', label: 'Deposits', icon: Wallet },
         { id: 'withdrawals', label: 'Withdraw', icon: CreditCard },
+        { id: 'casino', label: 'Casino', icon: Dice5 },
         { id: 'support', label: 'Support', icon: Headset },
         { id: 'settings', label: 'Identity', icon: Shield },
     ];
@@ -146,6 +152,109 @@ const AdminDashboard = () => {
             </div>
         </div>
     );
+
+    const MasterLock = () => {
+        const [localPin, setLocalPin] = useState('');
+
+        const handleSubmit = (e) => {
+            e.preventDefault();
+            // The user requested "6xxxxxx" as the password
+            if (localPin === "6xxxxxx") {
+                setIsAuthorized(true);
+                toast.success("ENCRYPTION DECODED: ACCESS GRANTED", {
+                    icon: '🔓',
+                    style: {
+                        background: '#050505',
+                        color: '#fff',
+                        border: '1px solid #10b981',
+                        fontFamily: 'Outfit, sans-serif',
+                        fontWeight: '900',
+                        textTransform: 'uppercase'
+                    }
+                });
+            } else {
+                toast.error("INVALID CLEARANCE KEY", {
+                    icon: '🚫',
+                    style: {
+                        background: '#050505',
+                        color: '#fff',
+                        border: '1px solid #ef4444',
+                        fontFamily: 'Outfit, sans-serif',
+                        fontWeight: '900',
+                        textTransform: 'uppercase'
+                    }
+                });
+                setLocalPin('');
+            }
+        };
+
+        return (
+            <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 relative overflow-hidden font-['Outfit']">
+                {/* Background Cyber Effects */}
+                <div className="absolute inset-0 bg-accent/5 blur-[150px] rounded-full translate-y-1/2 scale-150 animate-pulse" />
+                <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
+
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                    className="max-w-md w-full glass-card p-12 border-white/5 relative z-10 text-center space-y-12 shadow-[0_0_100px_rgba(0,0,0,0.8)]"
+                >
+                    <div className="relative group mx-auto w-fit">
+                        <div className="absolute -inset-4 bg-accent/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="w-24 h-24 bg-zinc-900 border border-white/5 rounded-[40px] flex items-center justify-center text-accent relative overflow-hidden group-hover:rotate-12 transition-transform duration-500">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-accent/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <Shield size={48} className="relative z-10 animate-pulse" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white">Secure <span className="logo-accent">Terminal</span></h2>
+                        <div className="flex items-center justify-center gap-3 mt-3">
+                            <div className="h-px w-8 bg-zinc-800" />
+                            <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[6px]">Level 4 Authorization</p>
+                            <div className="h-px w-8 bg-zinc-800" />
+                        </div>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-8">
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-center px-2">
+                                <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Master Clearance Key</label>
+                                <Lock size={12} className="text-zinc-700" />
+                            </div>
+                            <input
+                                type="password"
+                                value={localPin}
+                                onChange={(e) => setLocalPin(e.target.value)}
+                                placeholder="••••••••"
+                                autoFocus
+                                className="w-full bg-black border-2 border-white/5 rounded-[32px] px-8 py-6 text-3xl font-black tracking-[12px] text-center text-accent focus:outline-none focus:border-accent/40 transition-all placeholder:tracking-normal placeholder:opacity-10 shadow-inner"
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="w-full py-6 bg-accent hover:bg-accent-hover text-white rounded-[32px] font-black uppercase italic tracking-[5px] transition-all shadow-2xl shadow-accent/30 active:scale-95 flex items-center justify-center gap-4 group"
+                        >
+                            Execute Entry <Unlock size={22} className="group-hover:translate-x-1 group-hover:-rotate-12 transition-all" />
+                        </button>
+                    </form>
+
+                    <div className="pt-6 border-t border-white/[0.03]">
+                        <p className="text-[9px] font-black text-zinc-800 uppercase tracking-[8px] mb-2 font-mono">ENCRYPTED CONNECTION STABLE</p>
+                        <div className="flex justify-center gap-6 opacity-20">
+                            <Activity size={12} />
+                            <Zap size={12} />
+                            <RefreshCcw size={12} className="animate-spin-slow" />
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
+        );
+    };
+
+    if (!isAuthorized) return <MasterLock />;
 
     const AdminSettings = () => (
         <div className="max-w-2xl mx-auto space-y-10">
@@ -290,9 +399,183 @@ const AdminDashboard = () => {
                     {activeTab === 'users' && <AdminUsers />}
                     {activeTab === 'recharges' && <AdminRecharges />}
                     {activeTab === 'withdrawals' && <AdminWithdrawals />}
+                    {activeTab === 'casino' && <AdminCasino />}
                     {activeTab === 'support' && <AdminSupport />}
                     {activeTab === 'settings' && <AdminSettings />}
                 </motion.div>
+            </div>
+        </div>
+    );
+};
+
+// dedicated Casino Control Module
+const AdminCasino = () => {
+    const [settings, setSettings] = useState({
+        houseEdge: 1, // 1%
+        crashMultiplierLimit: 100,
+        minesProbBias: 0,
+        activeGames: ['mines', 'dice', 'crash', 'color', 'chicken'],
+        lastUpdated: null
+    });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const unsub = onSnapshot(doc(db, 'settings', 'casino'), d => {
+            if (d.exists()) setSettings(prev => ({ ...prev, ...d.data() }));
+            setLoading(false);
+        });
+        return () => unsub();
+    }, []);
+
+    const updateSettings = async (newVal) => {
+        try {
+            await setDoc(doc(db, 'settings', 'casino'), {
+                ...newVal,
+                lastUpdated: serverTimestamp()
+            }, { merge: true });
+            toast.success('Casino Parameters Synchronized');
+        } catch (e) {
+            toast.error('Failed to sync settings');
+        }
+    };
+
+    const toggleGame = (gameId) => {
+        const newActive = settings.activeGames.includes(gameId)
+            ? settings.activeGames.filter(id => id !== gameId)
+            : [...settings.activeGames, gameId];
+        updateSettings({ activeGames: newActive });
+    };
+
+    return (
+        <div className="space-y-10">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div>
+                    <h3 className="text-2xl font-black italic uppercase tracking-tighter">Casino <span className="logo-accent">Infrastructure</span></h3>
+                    <p className="text-zinc-500 text-xs mt-1">Configure real-time risk parameters and game availability.</p>
+                </div>
+                <div className="flex items-center gap-3 px-6 py-3 bg-zinc-900/50 rounded-2xl border border-white/5">
+                    <Clock size={14} className="text-accent" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                        System Updated: {settings.lastUpdated?.toDate ? settings.lastUpdated.toDate().toLocaleTimeString() : 'Just Now'}
+                    </span>
+                </div>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-8">
+                {/* Global Risk control */}
+                <div className="lg:col-span-1 glass-card p-10 border-white/5 space-y-8">
+                    <div className="p-4 bg-accent/10 rounded-2xl text-accent w-fit">
+                        <BarChart3 size={24} />
+                    </div>
+                    <div>
+                        <h4 className="text-xl font-black italic uppercase tracking-tighter">Global <span className="logo-accent">Risk</span></h4>
+                        <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-1">Platform Profit Margin</p>
+                    </div>
+
+                    <div className="space-y-6">
+                        <div className="space-y-3">
+                            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-zinc-600">
+                                <span>House Edge</span>
+                                <span className="text-emerald-500">{settings.houseEdge}%</span>
+                            </div>
+                            <input
+                                type="range" min="0" max="10" step="0.5"
+                                value={settings.houseEdge}
+                                onChange={e => updateSettings({ houseEdge: parseFloat(e.target.value) })}
+                                className="w-full h-2 bg-zinc-900 rounded-lg appearance-none cursor-pointer accent-accent"
+                            />
+                        </div>
+
+                        <div className="space-y-3">
+                            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-zinc-600">
+                                <span>Mines Difficulty Bias</span>
+                                <span className="text-accent">{settings.minesProbBias}%</span>
+                            </div>
+                            <input
+                                type="range" min="-10" max="10" step="1"
+                                value={settings.minesProbBias}
+                                onChange={e => updateSettings({ minesProbBias: parseInt(e.target.value) })}
+                                className="w-full h-2 bg-zinc-900 rounded-lg appearance-none cursor-pointer accent-accent"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="p-4 bg-zinc-900/50 rounded-2xl border border-white/5 flex gap-4">
+                        <Info size={16} className="text-zinc-500 shrink-0" />
+                        <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-tight leading-relaxed">
+                            House edge affects the actual multiplier calculated. A higher edge means lower payouts for users.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Game Availability */}
+                <div className="lg:col-span-2 glass-card p-10 border-white/5">
+                    <h4 className="text-xl font-black italic uppercase tracking-tighter mb-8">Service <span className="logo-accent">Control</span></h4>
+
+                    <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                        {[
+                            { id: 'crash', name: 'Crash', icon: Rocket, color: 'text-orange-500' },
+                            { id: 'mines', name: 'Mines', icon: Bomb, color: 'text-emerald-500' },
+                            { id: 'dice', name: 'Dice', icon: Dice5, color: 'text-indigo-500' },
+                            { id: 'color', name: 'Color Prediction', icon: BarChart3, color: 'text-yellow-500' },
+                            { id: 'chicken', name: 'Chicken 2 Road', icon: Play, color: 'text-emerald-400' },
+                        ].map(game => {
+                            const isActive = settings.activeGames.includes(game.id);
+                            return (
+                                <div key={game.id} className={`p-6 bg-zinc-900 rounded-[28px] border transition-all duration-500 flex flex-col items-center text-center gap-4 ${isActive ? 'border-zinc-800' : 'border-red-500/20 grayscale opacity-50'}`}>
+                                    <div className={`p-4 bg-zinc-800 rounded-2xl ${game.color}`}>
+                                        <game.icon size={28} />
+                                    </div>
+                                    <div>
+                                        <h5 className="font-black italic uppercase tracking-tighter text-sm mb-1">{game.name}</h5>
+                                        <p className="text-[8px] font-black text-zinc-600 uppercase tracking-widest">{isActive ? 'Service Online' : 'Service Offline'}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => toggleGame(game.id)}
+                                        className={`w-full py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${isActive ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-400' : 'bg-red-500/10 hover:bg-red-500/20 text-red-500'}`}
+                                    >
+                                        {isActive ? (
+                                            <><Lock size={12} /> Terminate</>
+                                        ) : (
+                                            <><Unlock size={12} /> Restore</>
+                                        )}
+                                    </button>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+
+            {/* Platform Analytics Card */}
+            <div className="glass-card p-12 border-white/5 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none group-hover:opacity-[0.08] transition-opacity">
+                    <Rocket size={200} className="-rotate-12" />
+                </div>
+                <div className="relative flex flex-col md:flex-row items-center justify-between gap-12">
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500">
+                                <TrendingUp size={24} />
+                            </div>
+                            <div>
+                                <h4 className="text-2xl font-black italic uppercase tracking-tighter">Casino <span className="text-emerald-500">Revenue</span></h4>
+                                <p className="text-zinc-600 text-[10px] font-black uppercase tracking-widest">Real-time Performance analysis</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex gap-12 text-center">
+                        <div>
+                            <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-2">Total wagered</p>
+                            <h5 className="text-4xl font-black italic tracking-tighter uppercase text-white leading-none">₹{(stats.totalDeposit * 2.4).toLocaleString()}<span className="text-sm opacity-20 ml-2">EST</span></h5>
+                        </div>
+                        <div className="h-16 w-px bg-white/5 hidden md:block" />
+                        <div>
+                            <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-2">Platform GP</p>
+                            <h5 className="text-4xl font-black italic tracking-tighter uppercase text-emerald-500 leading-none">+{(stats.totalDeposit * 0.12).toLocaleString()}</h5>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

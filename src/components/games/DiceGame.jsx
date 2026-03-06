@@ -3,16 +3,29 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Play, RotateCcw, TrendingUp, Info, Wallet, ShieldCheck, Dice5 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const DiceGame = ({ onBet, onWin, onLoss }) => {
+const DiceGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
     const [betAmount, setBetAmount] = useState(100);
     const [targetValue, setTargetValue] = useState(50);
     const [isOver, setIsOver] = useState(true);
     const [lastRoll, setLastRoll] = useState(null);
     const [isRolling, setIsRolling] = useState(false);
-    const [houseEdge] = useState(0.01); // 1%
+    const houseEdge = (settings?.houseEdge || 1) / 100;
 
     const winProbability = isOver ? (100 - targetValue) : targetValue;
-    const multiplier = winProbability > 0 ? (99 / winProbability).toFixed(4) : 0;
+    const multiplier = winProbability > 0 ? ((100 * (1 - houseEdge)) / winProbability).toFixed(4) : 0;
+
+    const sounds = {
+        roll: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
+        win: 'https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3',
+        loss: 'https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3'
+    };
+
+    const playSound = (type) => {
+        if (isMuted) return;
+        const audio = new Audio(sounds[type]);
+        audio.volume = 0.5;
+        audio.play().catch(() => { });
+    };
 
     const rollDice = async () => {
         if (isRolling) return;
@@ -20,6 +33,7 @@ const DiceGame = ({ onBet, onWin, onLoss }) => {
         const success = await onBet(betAmount);
         if (!success) return;
 
+        playSound('roll');
         setIsRolling(true);
         setLastRoll(null);
 
@@ -34,8 +48,10 @@ const DiceGame = ({ onBet, onWin, onLoss }) => {
             if (isWin) {
                 const winAmount = Math.floor(betAmount * multiplier);
                 await onWin(winAmount);
+                playSound('win');
             } else {
                 onLoss(betAmount);
+                playSound('loss');
                 toast.error(`Rolled ${result}. Better luck next time!`, {
                     style: { background: '#121212', color: '#fff', border: '1px solid #333' }
                 });

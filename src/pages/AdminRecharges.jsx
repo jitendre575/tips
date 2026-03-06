@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, query, orderBy, onSnapshot, doc, updateDoc, increment, addDoc, serverTimestamp } from 'firebase/firestore';
-import { ArrowLeft, Check, X, ExternalLink, Calendar, User, IndianRupee, Clock, Search, Filter, AlertCircle, Image as ImageIcon } from 'lucide-react';
+import { collection, query, orderBy, onSnapshot, doc, updateDoc, increment, addDoc, serverTimestamp, deleteDoc } from 'firebase/firestore';
+import { ArrowLeft, Check, X, ExternalLink, Calendar, User, IndianRupee, Clock, Search, Filter, AlertCircle, Image as ImageIcon, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -14,23 +14,37 @@ const AdminRecharges = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Remove orderBy if it's causing issues with missing fields, or ensure createdAt exists
-        const q = query(collection(db, 'rechargeRequests'), orderBy('createdAt', 'desc'));
+        // Fetch all requests and sort in memorial to avoid Firebase Index requirement errors
+        const q = query(collection(db, 'rechargeRequests'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const reqs = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
-            }));
+            })).sort((a, b) => {
+                const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date();
+                const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date();
+                return dateB - dateA;
+            });
             setRequests(reqs);
             setLoading(false);
         }, (error) => {
             console.error("Snapshot error:", error);
-            toast.error("Failed to sync requests");
+            // Fallback for basic view if complex query fails
             setLoading(false);
         });
 
         return () => unsubscribe();
     }, []);
+
+    const deleteRequest = async (id) => {
+        if (!window.confirm('Delete this record permanently?')) return;
+        try {
+            await deleteDoc(doc(db, 'rechargeRequests', id));
+            toast.success('Request scrubbed');
+        } catch (e) {
+            toast.error('Failed to delete');
+        }
+    };
 
     const handleAction = async (requestId, userId, amount, action) => {
         try {
@@ -253,13 +267,29 @@ const AdminRecharges = () => {
                                                 <Check size={18} />
                                                 <span>Approve</span>
                                             </button>
+                                            <button
+                                                onClick={() => deleteRequest(req.id)}
+                                                className="col-span-2 mt-2 flex items-center justify-center gap-2 py-3 text-[9px] font-black text-zinc-700 hover:text-red-500 uppercase tracking-widest transition-all"
+                                            >
+                                                <Trash2 size={12} />
+                                                Scrub Request from Logs
+                                            </button>
                                         </div>
                                     ) : (
-                                        <div className="flex items-center gap-3 p-4 bg-white/[0.02] border border-white/[0.05] rounded-2xl mt-auto">
-                                            <AlertCircle size={16} className="text-zinc-600" />
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-zinc-600">
-                                                Processed on {req.processedAt?.toDate ? req.processedAt.toDate().toLocaleString() : 'N/A'}
-                                            </span>
+                                        <div className="flex flex-col gap-4 mt-auto w-full">
+                                            <div className="flex items-center gap-3 p-4 bg-white/[0.02] border border-white/[0.05] rounded-2xl">
+                                                <AlertCircle size={16} className="text-zinc-600" />
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-600">
+                                                    Processed on {req.processedAt?.toDate ? req.processedAt.toDate().toLocaleString() : 'N/A'}
+                                                </span>
+                                            </div>
+                                            <button
+                                                onClick={() => deleteRequest(req.id)}
+                                                className="flex items-center justify-center gap-2 py-3 text-[9px] font-black text-zinc-700 hover:text-red-500 uppercase tracking-widest transition-all"
+                                            >
+                                                <Trash2 size={12} />
+                                                Scrub Log
+                                            </button>
                                         </div>
                                     )}
                                 </div>
