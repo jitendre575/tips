@@ -11,7 +11,8 @@ import {
     X,
     TrendingUp,
     CreditCard,
-    Zap
+    Zap,
+    Gamepad2
 } from 'lucide-react';
 import { auth } from '../firebase';
 
@@ -21,6 +22,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
     const menuItems = [
         { icon: LayoutDashboard, label: 'Markets', path: '/dashboard' },
+        { icon: Gamepad2, label: 'Casino', path: '/dashboard?view=Casino' },
         { icon: Zap, label: 'Six Bonus Markets', path: '/dashboard?filter=Six Bonus' },
         { icon: History, label: 'Bet History', path: '/history' },
         { icon: CreditCard, label: 'Withdraw', path: '/withdraw' },

@@ -127,7 +127,7 @@ const LandingPage = () => {
                     <motion.h1
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-6xl lg:text-9xl font-black italic tracking-tighter mb-8 leading-[0.9] lg:leading-[0.8]"
+                        className="text-4xl sm:text-6xl lg:text-9xl font-black italic tracking-tighter mb-6 lg:mb-8 leading-[0.9] lg:leading-[0.8]"
                     >
                         PREDICT. WIN. <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-accent to-indigo-500 drop-shadow-[0_15px_30px_rgba(59,130,246,0.3)]">DOMINATE.</span>
@@ -137,7 +137,7 @@ const LandingPage = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-zinc-500 font-medium text-lg lg:text-xl max-w-2xl mx-auto mb-12"
+                        className="text-zinc-500 font-medium text-sm sm:text-lg lg:text-xl max-w-2xl mx-auto mb-10 lg:mb-12 px-2"
                     >
                         Experience the most advanced cricket prediction platform. Real-time markets, instant payouts, and the ultimate hall of fame.
                     </motion.p>
@@ -146,66 +146,98 @@ const LandingPage = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="flex flex-col sm:flex-row items-center justify-center gap-6"
+                        className="flex flex-col sm:flex-row items-center justify-center gap-4 lg:gap-8"
                     >
                         <button
                             onClick={() => setShowAuth(true)}
-                            className="btn-accent w-full sm:w-auto px-10 py-5 text-base"
+                            className="btn-accent w-full sm:w-auto px-12 py-5 text-lg"
                         >
                             Start Predicting <ChevronRight size={20} />
                         </button>
-                        <button className="flex items-center gap-3 text-zinc-400 hover:text-white font-bold transition-all group">
-                            <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white/5 transition-all">
-                                <Play size={20} className="fill-current" />
+
+                        <button
+                            onClick={() => {
+                                toast("SYSTEM READY: DEMO MODE ENGAGED", {
+                                    icon: '🎬',
+                                    style: { background: '#121212', color: '#fff', border: '1px solid #333' }
+                                });
+                            }}
+                            className="flex items-center gap-4 px-8 py-4 text-zinc-400 hover:text-white transition-all group"
+                        >
+                            <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-accent group-hover:bg-accent/10 transition-all">
+                                <Play size={18} className="fill-current" />
                             </div>
-                            <span>Watch Demo</span>
+                            <span className="text-sm font-black uppercase tracking-[3px]">Watch Demo</span>
                         </button>
                     </motion.div>
                 </div>
 
                 {/* Match Grid Section */}
-                <div className="mb-32">
-                    <div className="flex items-center justify-between mb-12">
-                        <div className="flex items-center gap-4">
-                            <div className="w-1 h-12 bg-accent rounded-full" />
+                <div className="mb-20 lg:mb-32">
+                    <div className="flex items-center justify-between mb-8 lg:mb-12">
+                        <div className="flex items-center gap-3 lg:gap-4">
+                            <div className="w-1 h-8 lg:h-12 bg-accent rounded-full" />
                             <div>
-                                <h2 className="text-3xl font-black italic tracking-tighter uppercase">Active <span className="logo-accent">Markets</span></h2>
-                                <p className="text-zinc-600 text-[10px] font-black uppercase tracking-widest mt-1">Live from global tournaments</p>
+                                <h2 className="text-xl lg:text-3xl font-black italic tracking-tighter uppercase text-white">Sports <span className="logo-accent">Markets</span></h2>
                             </div>
                         </div>
-                        <button onClick={() => setShowAuth(true)} className="hidden sm:flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-accent transition-colors">
-                            View All Markets <ChevronRight size={14} />
-                        </button>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
                         {matches.length > 0 ? (
                             matches.slice(0, 4).map(match => (
                                 <MatchCard key={match.id} match={match} onBet={() => setShowAuth(true)} />
                             ))
                         ) : (
-                            <div className="lg:col-span-2 text-center py-32 bg-zinc-950/50 rounded-[40px] border border-white/[0.03] border-dashed">
-                                <Activity className="mx-auto text-zinc-900 mb-6" size={64} />
-                                <h3 className="text-2xl font-black italic text-zinc-800 uppercase tracking-tighter leading-none mb-2">Arena is Empty</h3>
-                                <p className="text-zinc-700 font-medium">No live markets currently available. Check back soon for IPL 2024.</p>
+                            <div className="lg:col-span-2 text-center py-20 lg:py-32 bg-zinc-950/50 rounded-[32px] lg:rounded-[40px] border border-white/[0.03] border-dashed">
+                                <Activity className="mx-auto text-zinc-900 mb-4 lg:mb-6" size={64} />
+                                <h3 className="text-xl lg:text-2xl font-black italic text-zinc-800 uppercase tracking-tighter">Arena is Empty</h3>
                             </div>
                         )}
+                    </div>
+                </div>
+
+                {/* Casino Teaser Section */}
+                <div className="mb-20 lg:mb-32">
+                    <div className="flex items-center justify-between mb-8 lg:mb-12 px-2">
+                        <div className="flex items-center gap-3 lg:gap-4">
+                            <div className="w-1 h-8 lg:h-12 bg-indigo-500 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.5)]" />
+                            <div>
+                                <h2 className="text-xl lg:text-3xl font-black italic tracking-tighter uppercase text-white">Elite <span className="text-indigo-500">Casino</span></h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2 lg:gap-8">
+                        {[
+                            { name: 'Mines', image: '/casino/mines.png', players: '2.6k' },
+                            { name: 'Dice', image: '/casino/blackjack.png', players: '2.3k' },
+                            { name: 'Plinko', image: '/casino/baccarat.png', players: '1.5k' }
+                        ].map((game, i) => (
+                            <div key={i} className="group relative aspect-[3/4] sm:aspect-[4/3] rounded-xl lg:rounded-[32px] overflow-hidden border border-white/5 cursor-pointer" onClick={() => setShowAuth(true)}>
+                                <img src={game.image} alt={game.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-100" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-2 sm:p-6 flex flex-col justify-end">
+                                    <h4 className="text-[9px] sm:text-xl font-black italic uppercase tracking-tighter text-white">{game.name}</h4>
+                                    <span className="hidden sm:block text-[10px] font-black text-zinc-400 uppercase tracking-widest">{game.players} Online</span>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
 
                 {/* Benefits Section */}
                 <div className="grid md:grid-cols-3 gap-8">
                     {[
-                        { icon: Wallet, title: "Instant Payouts", desc: "Withdraw your winnings instantly via UPI or Bank Transfer." },
-                        { icon: Trophy, title: "Hall of Fame", desc: "Climb the leaderboard and win exclusive monthly badges." },
-                        { icon: Activity, title: "Advanced Stats", desc: "Detailed match analysis and history to help you win." }
+                        { icon: Wallet, title: "Instant Payouts", desc: "Withdraw your winnings instantly via UPI or Bank Transfer. Fast, secure, and reliable." },
+                        { icon: Trophy, title: "Hall of Fame", desc: "Climb the leaderboard and win exclusive monthly badges and special bonus rewards." },
+                        { icon: Activity, title: "Advanced Stats", desc: "Detailed match analysis and history to help you make informed and winning predictions." }
                     ].map((item, i) => (
-                        <div key={i} className="glass-card p-10 group hover:bg-white/[0.02] border-white/5">
+                        <div key={i} className="glass-card p-10 group hover:bg-white/[0.02] border-white/5 bg-zinc-950/20">
                             <div className="w-14 h-14 rounded-2xl bg-zinc-900 flex items-center justify-center text-accent mb-8 border border-white/5 group-hover:scale-110 group-hover:bg-accent/10 transition-all">
                                 <item.icon size={28} />
                             </div>
-                            <h4 className="text-xl font-black italic tracking-tighter uppercase mb-3">{item.title}</h4>
-                            <p className="text-zinc-500 text-sm leading-relaxed">{item.desc}</p>
+                            <h4 className="text-xl font-black italic tracking-tighter uppercase mb-4 text-white group-hover:text-accent transition-colors">{item.title}</h4>
+                            <p className="text-zinc-500 text-[13px] font-medium leading-relaxed tracking-wide">{item.desc}</p>
                         </div>
                     ))}
                 </div>
@@ -226,38 +258,38 @@ const LandingPage = () => {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="relative w-full max-w-md bg-primary border border-white/[0.08] rounded-[40px] p-10 lg:p-12 shadow-2xl overflow-hidden"
+                            className="relative w-full max-w-md bg-primary border border-white/[0.08] rounded-[32px] sm:rounded-[40px] p-6 sm:p-12 shadow-2xl overflow-hidden"
                         >
                             <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-[60px] rounded-full -mr-16 -mt-16 pointer-events-none" />
 
                             <button
                                 onClick={() => setShowAuth(false)}
-                                className="absolute top-8 right-8 text-zinc-600 hover:text-white transition-colors"
+                                className="absolute top-6 right-6 text-zinc-600 hover:text-white transition-colors"
                             >
-                                <X size={24} />
+                                <X size={20} />
                             </button>
 
-                            <div className="mb-10 text-center">
-                                <h2 className="text-4xl font-black italic tracking-tighter mb-3 uppercase leading-none">
+                            <div className="mb-8 sm:mb-10 text-center">
+                                <h2 className="text-2xl sm:text-4xl font-black italic tracking-tighter mb-2 sm:mb-3 uppercase leading-none">
                                     {isLogin ? (
                                         <>Welcome <span className="logo-accent">Back</span></>
                                     ) : (
                                         <>Join the <span className="logo-accent">Game</span></>
                                     )}
                                 </h2>
-                                <p className="text-zinc-500 text-sm font-medium">
+                                <p className="text-zinc-500 text-[10px] sm:text-sm font-medium">
                                     {isLogin ? 'Login to continue your winning streak.' : 'Create an account and start predicting.'}
                                 </p>
                             </div>
 
-                            <form onSubmit={handleSubmit} className="space-y-6">
+                            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                                 <div className="space-y-2">
                                     <label className="label-sm">Email Address</label>
                                     <div className="relative">
-                                        <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600" size={18} />
+                                        <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600" size={16} />
                                         <input
                                             type="email" required value={email} onChange={e => setEmail(e.target.value)}
-                                            className="w-full bg-surface-light border border-white/[0.05] rounded-2xl py-5 pl-14 pr-6 outline-none focus:border-accent/50 transition-all font-medium text-white"
+                                            className="w-full bg-surface-light border border-white/[0.05] rounded-xl sm:rounded-2xl py-4 sm:py-5 pl-12 sm:pl-14 pr-6 outline-none focus:border-accent/50 transition-all font-medium text-white text-sm"
                                             placeholder="name@example.com"
                                         />
                                     </div>
@@ -266,10 +298,10 @@ const LandingPage = () => {
                                 <div className="space-y-2">
                                     <label className="label-sm">Security Password</label>
                                     <div className="relative">
-                                        <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600" size={18} />
+                                        <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600" size={16} />
                                         <input
                                             type="password" required value={password} onChange={e => setPassword(e.target.value)}
-                                            className="w-full bg-surface-light border border-white/[0.05] rounded-2xl py-5 pl-14 pr-6 outline-none focus:border-accent/50 transition-all font-medium text-white"
+                                            className="w-full bg-surface-light border border-white/[0.05] rounded-xl sm:rounded-2xl py-4 sm:py-5 pl-12 sm:pl-14 pr-6 outline-none focus:border-accent/50 transition-all font-medium text-white text-sm"
                                             placeholder="••••••••"
                                         />
                                     </div>
@@ -277,7 +309,7 @@ const LandingPage = () => {
 
                                 <button
                                     type="submit" disabled={loading}
-                                    className="w-full btn-accent py-5 mt-4 group relative overflow-hidden"
+                                    className="w-full btn-accent py-4 sm:py-5 mt-2 group relative overflow-hidden"
                                 >
                                     <span className="relative z-10 flex items-center justify-center gap-3">
                                         {loading ? (

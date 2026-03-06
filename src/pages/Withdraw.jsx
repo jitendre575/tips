@@ -18,11 +18,13 @@ const Withdraw = () => {
         if (!user) return;
         const q = query(
             collection(db, 'withdrawals'),
-            where('userId', '==', user.uid),
-            orderBy('createdAt', 'desc')
+            where('userId', '==', user.uid)
         );
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            setRequests(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            // Sort in JS to avoid index requirements
+            data.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+            setRequests(data);
         });
         return () => unsubscribe();
     }, [user]);

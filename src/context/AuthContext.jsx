@@ -27,7 +27,10 @@ export const AuthProvider = ({ children }) => {
                         // Initialize user in Firestore if not exists
                         const initialData = {
                             email: currentUser.email,
-                            balance: 1000, // Starting bonus
+                            balance: 0,
+                            totalDeposit: 0,
+                            totalWithdraw: 0,
+                            totalBets: 0,
                             isAdmin: false,
                             createdAt: new Date().toISOString()
                         };

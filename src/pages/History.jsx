@@ -18,23 +18,27 @@ const History = () => {
 
         const betsQ = query(
             collection(db, 'bets'),
-            where('userId', '==', user.uid),
-            orderBy('timestamp', 'desc')
+            where('userId', '==', user.uid)
         );
 
         const transQ = query(
             collection(db, 'history'),
-            where('userId', '==', user.uid),
-            orderBy('createdAt', 'desc')
+            where('userId', '==', user.uid)
         );
 
         const unsubBets = onSnapshot(betsQ, (snapshot) => {
-            setBets(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            const betsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            // Sort in JS to avoid index errors
+            betsData.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+            setBets(betsData);
             if (activeTab === 'bets') setLoading(false);
         });
 
         const unsubTrans = onSnapshot(transQ, (snapshot) => {
-            setTransactions(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            const transData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            // Sort in JS to avoid index errors
+            transData.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+            setTransactions(transData);
             if (activeTab === 'transactions') setLoading(false);
         });
 

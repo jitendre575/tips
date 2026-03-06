@@ -179,7 +179,7 @@ const AdminUsers = () => {
             {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                     {[1, 2, 3, 4, 5, 6].map(i => (
-                        <div key={i} className="h-[400px] glass-card animate-pulse rounded-[32px] bg-surface-light/50" />
+                        <div key={i} className="h-[400px] border border-white/5 rounded-[40px] skeleton-loading shadow-2xl" />
                     ))}
                 </div>
             ) : filteredUsers.length === 0 ? (
@@ -269,7 +269,7 @@ const AdminUsers = () => {
                                 </div>
 
                                 {/* Actions */}
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4">
                                     <button
                                         onClick={() => setChattingUser(user)}
                                         className={`flex items-center justify-center gap-3 py-4 rounded-[24px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-xl group/btn ${hasUnread ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800'}`}

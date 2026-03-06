@@ -82,12 +82,15 @@ const AdminPanel = () => {
                 finishedAt: serverTimestamp()
             });
 
-            const betsQuery = query(collection(db, 'bets'), where('matchId', '==', match.id), where('status', '==', 'pending'));
+            // Fetch all bets for this match and filter 'pending' in memory to avoid index requirement
+            const betsQuery = query(collection(db, 'bets'), where('matchId', '==', match.id));
             const betsSnapshot = await getDocs(betsQuery);
 
             let winnersCount = 0;
             betsSnapshot.forEach((betDoc) => {
                 const bet = betDoc.data();
+                if (bet.status !== 'pending') return; // Filter in JS
+
                 const betRef = doc(db, 'bets', betDoc.id);
                 const userRef = doc(db, 'users', bet.userId);
 

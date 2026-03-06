@@ -144,6 +144,36 @@
   animation: float 6s ease-in-out infinite;
 }
 
+@media (max-width: 640px) {
+
+  .btn-accent,
+  .btn-outline {
+    @apply py-4 px-6 text-[11px] rounded-xl font-black uppercase tracking-[2px];
+    height: 54px;
+    width: 100%;
+  }
+
+  h1 {
+    @apply text-5xl !leading-[0.85] tracking-tighter;
+  }
+
+  h2 {
+    @apply text-3xl !leading-[0.9];
+  }
+
+  .glass-card {
+    @apply p-6 rounded-[32px] border-white/10;
+  }
+
+  .input-field {
+    @apply py-4 text-sm rounded-xl;
+  }
+
+  .label-sm {
+    @apply text-[9px] mb-1.5;
+  }
+}
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: var(--sidebar-width) 1fr;
@@ -152,5 +182,31 @@
 @media (max-width: 1024px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Premium Animations */
+.hover-glow {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 30px rgba(var(--accent), 0.2);
+  transform: translateY(-4px);
+}
+
+.skeleton-loading {
+  background: linear-gradient(90deg, #121212 25%, #1a1a1a 50%, #121212 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
   }
 }

@@ -165,16 +165,16 @@ const AdminRecharges = () => {
                 {loading ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                         {[1, 2, 3, 4, 5, 6].map(n => (
-                            <div key={n} className="h-96 bg-zinc-900/50 rounded-[40px] animate-pulse border border-white/5 shadow-2xl"></div>
+                            <div key={n} className="h-96 rounded-[40px] skeleton-loading border border-white/5 shadow-2xl"></div>
                         ))}
                     </div>
                 ) : filteredRequests.length === 0 ? (
-                    <div className="bg-zinc-900/20 border-2 border-dashed border-white/5 rounded-[40px] p-24 text-center">
-                        <div className="w-24 h-24 bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-6 text-zinc-600">
-                            <ImageIcon size={48} />
+                    <div className="bg-zinc-900/30 border-2 border-dashed border-white/5 rounded-[40px] p-12 sm:p-24 text-center">
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-6 text-zinc-600">
+                            <ImageIcon size={40} />
                         </div>
-                        <h3 className="text-2xl font-black text-white italic uppercase tracking-tight">Empty Queue</h3>
-                        <p className="text-zinc-500 font-medium max-w-xs mx-auto mt-2">No {filter.toLowerCase()} requests found matching your criteria.</p>
+                        <h3 className="text-xl sm:text-2xl font-black text-white italic uppercase tracking-tight leading-tight">No Requests Found</h3>
+                        <p className="text-zinc-500 font-medium max-w-xs mx-auto mt-2 text-sm">No {filter.toLowerCase()} requests found matching your criteria.</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
@@ -238,7 +238,7 @@ const AdminRecharges = () => {
                                     </div>
 
                                     {req.status === 'Pending' ? (
-                                        <div className="grid grid-cols-2 gap-4 mt-auto">
+                                        <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4 mt-auto">
                                             <button
                                                 onClick={() => handleAction(req.id, req.userId, req.amount, 'Reject')}
                                                 className="flex items-center justify-center gap-2 py-4 bg-zinc-900 hover:bg-red-600/10 text-zinc-400 hover:text-red-500 rounded-2xl font-black uppercase tracking-widest transition-all border border-white/5 active:scale-95"
@@ -248,7 +248,7 @@ const AdminRecharges = () => {
                                             </button>
                                             <button
                                                 onClick={() => handleAction(req.id, req.userId, req.amount, 'Approve')}
-                                                className="flex items-center justify-center gap-2 py-4 bg-emerald-500 text-white rounded-2xl font-black uppercase tracking-widest transition-all shadow-xl shadow-emerald-500/20 active:scale-95"
+                                                className="flex items-center justify-center gap-2 py-4 bg-accent hover:bg-accent-hover text-white rounded-2xl font-black uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-accent/20"
                                             >
                                                 <Check size={18} />
                                                 <span>Approve</span>
