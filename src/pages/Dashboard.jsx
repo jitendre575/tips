@@ -48,42 +48,42 @@ const Dashboard = () => {
 
     const originalGames = [
         { id: 'mines', name: 'Mines', image: '/casino/mines.png', activePlayers: '2,683', provider: 'ORIGINALS' },
-        { id: 'dice', name: 'Dice', image: '/casino/blackjack.png', activePlayers: '2,325', provider: 'ORIGINALS' },
-        { id: 'plinko', name: 'Plinko', image: '/casino/baccarat.png', activePlayers: '1,598', provider: 'ORIGINALS' },
-        { id: 'crash', name: 'Crash', image: '/casino/roulette.png', activePlayers: '1,232', provider: 'ORIGINALS' },
-        { id: 'limbo', name: 'Limbo', image: '/casino/poker.png', activePlayers: '2,257', provider: 'ORIGINALS' },
-        { id: 'hilo', name: 'Hilo', image: '/casino/blackjack.png', activePlayers: '502', provider: 'ORIGINALS' },
+        { id: 'dice', name: 'Dice', image: '/casino/dice.png', activePlayers: '2,325', provider: 'ORIGINALS' },
+        { id: 'plinko', name: 'Plinko', image: '/casino/plinko.png', activePlayers: '1,598', provider: 'ORIGINALS' },
+        { id: 'crash', name: 'Crash', image: '/casino/crash.png', activePlayers: '1,232', provider: 'ORIGINALS' },
+        { id: 'limbo', name: 'Limbo', image: '/casino/blackjack.png', activePlayers: '2,257', provider: 'ORIGINALS' },
+        { id: 'hilo', name: 'Hilo', image: '/casino/poker.png', activePlayers: '502', provider: 'ORIGINALS' },
         { id: 'color', name: 'Color Prediction', image: '/casino/roulette.png', activePlayers: '3,842', provider: 'ORIGINALS' },
-        { id: 'chicken', name: 'Chicken 2 Road', image: '/casino/blackjack.png', activePlayers: '1,120', provider: 'ORIGINALS' },
+        { id: 'chicken', name: 'Chicken 2 Road', image: '/casino/baccarat.png', activePlayers: '1,120', provider: 'ORIGINALS' },
     ];
 
     const slotGames = [
         { id: 'bonanza', name: 'Sweet Bonanza', image: '/casino/slots.png', activePlayers: '381', provider: 'PRAGMATIC' },
-        { id: 'olympus', name: 'Gates of Olympus', image: '/casino/roulette.png', activePlayers: '391', provider: 'PRAGMATIC' },
-        { id: 'fisherman', name: 'Le Fisherman', image: '/casino/poker.png', activePlayers: '205', provider: 'HACKSAW' },
+        { id: 'olympus', name: 'Gates of Olympus', image: '/casino/slots.png', activePlayers: '391', provider: 'PRAGMATIC' },
+        { id: 'fisherman', name: 'Le Fisherman', image: '/casino/slots.png', activePlayers: '205', provider: 'HACKSAW' },
     ];
 
     return (
-        <div className="space-y-12">
+        <div className="space-y-8 sm:space-y-12">
             {/* Page Header */}
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 text-center lg:text-left pt-6">
-                <div className="flex flex-col items-center lg:items-start">
-                    <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent/10 border border-accent/20 rounded-full text-accent text-[10px] font-black uppercase tracking-[3px] mb-8 italic shadow-xl shadow-accent/5">
-                        <Activity size={16} className="animate-pulse" />
-                        {activeTab === 'Sports' ? 'Live Markets Active' : 'Casino Floor Open'}
+            <div className="flex flex-col items-center gap-6 pt-4 sm:pt-6">
+                <div className="flex flex-col items-center">
+                    <div className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 bg-accent/5 border border-accent/10 rounded-full text-accent text-[8px] sm:text-[10px] font-black uppercase tracking-[2px] sm:tracking-[3px] mb-4 sm:mb-8 italic shadow-sm">
+                        <Activity size={14} className="animate-pulse" />
+                        {activeTab === 'Sports' ? 'Market Pulse Active' : 'Casino Floor Live'}
                     </div>
-                    <h1 className="text-4xl lg:text-7xl font-black italic tracking-tighter uppercase leading-[0.85] mb-6">
+                    <h1 className="text-3xl sm:text-6xl font-black italic tracking-tighter uppercase leading-[0.85] text-center text-slate-900">
                         {activeTab === 'Sports' ? (
-                            <>Market <br className="lg:hidden" /> <span className="text-accent block lg:inline drop-shadow-[0_10px_20px_rgba(59,130,246,0.3)]">Explorer</span></>
+                            <>Market <span className="text-accent underline decoration-accent/10">Explorer</span></>
                         ) : (
-                            <>Gaming <br className="lg:hidden" /> <span className="text-indigo-500 block lg:inline drop-shadow-[0_10px_20px_rgba(99,102,241,0.3)]">Universe</span></>
+                            <>Gaming <span className="text-accent underline decoration-accent/10">Universe</span></>
                         )}
                     </h1>
                 </div>
 
-                <div className="flex flex-col gap-6 items-center lg:items-end">
+                <div className="flex flex-col gap-4 sm:gap-6 items-center w-full">
                     {/* View Switcher */}
-                    <div className="bg-[#121212] p-2 rounded-[28px] border border-white/5 flex gap-2">
+                    <div className="bg-slate-100 p-1.5 sm:p-2 rounded-[2rem] border border-black/[0.05] flex gap-1 sm:gap-2 w-full max-w-xs mx-auto shadow-inner">
                         {[
                             { id: 'Sports', icon: Trophy },
                             { id: 'Casino', icon: Gamepad2 }
@@ -91,31 +91,31 @@ const Dashboard = () => {
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`px-8 py-4 rounded-[22px] flex items-center gap-3 text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === tab.id
-                                    ? 'bg-accent text-white shadow-xl shadow-accent/20 scale-105'
-                                    : 'text-zinc-500 hover:text-white hover:bg-white/5'
+                                className={`flex-1 py-3 sm:py-4 rounded-3xl flex items-center justify-center gap-2 text-[9px] sm:text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === tab.id
+                                    ? 'btn-accent !px-0 !py-3 sm:!py-4 shadow-xl'
+                                    : 'text-slate-500 hover:text-slate-900 hover:bg-white/50'
                                     }`}
                             >
-                                <tab.icon size={16} />
+                                <tab.icon size={14} />
                                 {tab.id}
                             </button>
                         ))}
                     </div>
 
                     {activeTab === 'Sports' && (
-                        <div className="flex flex-wrap justify-center lg:justify-end gap-2">
+                        <div className="flex flex-wrap justify-center gap-2 px-2">
                             {['All', 'Live', 'Upcoming', 'Six Bonus'].map(f => (
                                 <button
                                     key={f}
                                     onClick={() => setFilter(f)}
-                                    className={`px-6 py-3.5 rounded-2xl text-[9px] font-black uppercase tracking-[2px] transition-all duration-300 flex items-center gap-2 ${filter === f
+                                    className={`px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-2xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest sm:tracking-[2px] transition-all duration-300 flex items-center gap-2 ${filter === f
                                         ? f === 'Six Bonus'
-                                            ? 'bg-gradient-to-r from-amber-600 to-amber-500 text-black shadow-lg shadow-amber-500/20'
-                                            : 'bg-[#1a1a1a] text-accent border border-accent/20'
-                                        : 'bg-[#0c0c0c] text-zinc-600 hover:text-white border border-white/5'
+                                            ? 'bg-amber-500 text-white shadow-lg'
+                                            : 'bg-white text-accent border border-accent shadow-sm'
+                                        : 'bg-slate-100 text-slate-500 hover:text-slate-900 border border-black/[0.05]'
                                         }`}
                                 >
-                                    {f === 'Six Bonus' && <Zap size={12} className={filter === f ? 'fill-black' : 'text-amber-500'} />}
+                                    {f === 'Six Bonus' && <Zap size={10} className={filter === f ? 'fill-white' : 'text-amber-500'} />}
                                     {f}
                                 </button>
                             ))}
@@ -137,19 +137,19 @@ const Dashboard = () => {
                         loading ? (
                             <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                                 {[1, 2, 3, 4].map(i => (
-                                    <div key={i} className="h-80 rounded-[32px] glass-card animate-pulse shadow-none" />
+                                    <div key={i} className="h-80 rounded-[2.5rem] bg-white border border-black/[0.05] animate-pulse shadow-sm" />
                                 ))}
                             </div>
                         ) : (
                             <>
                                 {filteredMatches.length === 0 ? (
-                                    <div className="glass-card py-32 text-center flex flex-col items-center border-dashed border-zinc-900 border-2">
-                                        <Ghost size={64} className="text-zinc-900 mb-6" />
-                                        <h3 className="text-2xl font-black italic text-zinc-800 uppercase tracking-tight">Arena is Empty</h3>
-                                        <p className="text-zinc-600 font-medium text-sm">No {filter.toLowerCase()} matches are active right now.</p>
+                                    <div className="bg-slate-50 py-32 text-center flex flex-col items-center border-dashed border-slate-200 border-2 rounded-[40px]">
+                                        <Ghost size={64} className="text-slate-300 mb-6" />
+                                        <h3 className="text-2xl font-black italic text-slate-900 uppercase tracking-tight">Arena is Empty</h3>
+                                        <p className="text-slate-500 font-medium text-sm">No {filter.toLowerCase()} matches are active right now.</p>
                                     </div>
                                 ) : (
-                                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                                    <div className="grid grid-cols-1 gap-6 sm:gap-8">
                                         {filteredMatches.map(match => (
                                             <MatchCard
                                                 key={match.id}
@@ -168,13 +168,13 @@ const Dashboard = () => {
                                 <div className="flex items-center justify-between px-2">
                                     <div className="flex items-center gap-3">
                                         <Sparkles size={18} className="text-indigo-500" />
-                                        <h2 className="text-base sm:text-xl font-black italic uppercase tracking-tighter text-white">Originals</h2>
+                                        <h2 className="text-base sm:text-xl font-black italic uppercase tracking-tighter text-slate-500">Originals</h2>
                                     </div>
                                     <div className="flex gap-2">
                                         <button className="p-1.5 sm:p-2 bg-[#1a2c38] rounded-lg text-zinc-500 hover:text-white transition-colors"><Search size={14} /></button>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-6 px-1">
+                                <div className="grid grid-cols-3 gap-2 sm:gap-4 px-1">
                                     {originalGames.map(game => (
                                         <CasinoCard key={game.id} game={game} onPlay={(g) => navigate(`/casino/${g.id}`)} />
                                     ))}
@@ -186,7 +186,7 @@ const Dashboard = () => {
                                 <div className="flex items-center justify-between px-2">
                                     <div className="flex items-center gap-2">
                                         <div className="text-sm sm:text-lg font-black text-indigo-500 italic">777</div>
-                                        <h2 className="text-base sm:text-xl font-black italic uppercase tracking-tighter text-white">Slots</h2>
+                                        <h2 className="text-base sm:text-xl font-black italic uppercase tracking-tighter text-slate-500">Slots</h2>
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-6 px-1">

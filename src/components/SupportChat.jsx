@@ -104,7 +104,7 @@ const SupportChat = () => {
     if (!user) return null;
 
     return (
-        <div className="fixed bottom-6 right-6 z-[1000] flex flex-col items-end">
+        <div className="absolute bottom-6 right-6 z-[1000] flex flex-col items-end">
             {/* Chat Window */}
             {isOpen && (
                 <div className="mb-4 w-[90vw] sm:w-[380px] h-[500px] bg-surface-light rounded-3xl shadow-2xl border border-white/5 flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">

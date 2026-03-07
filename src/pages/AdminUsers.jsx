@@ -156,22 +156,22 @@ const AdminUsers = () => {
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="h-2 w-8 bg-accent rounded-full" />
-                        <span className="text-zinc-500 text-[10px] font-black uppercase tracking-[4px]">System Overview</span>
+                        <span className="text-slate-600 text-[10px] font-black uppercase tracking-[4px]">System Overview</span>
                     </div>
-                    <h1 className="text-5xl font-black italic tracking-tighter uppercase leading-none">
+                    <h1 className="text-5xl font-black italic tracking-tighter uppercase leading-none text-slate-900">
                         User <span className="logo-accent">Management</span>
                     </h1>
-                    <p className="text-zinc-500 font-medium mt-2">Monitor {users.length} registered accounts and control their wallets.</p>
+                    <p className="text-slate-500 font-medium mt-2">Monitor {users.length} registered accounts and control their wallets.</p>
                 </div>
 
                 <div className="relative group w-full md:w-96">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-accent transition-colors" size={20} />
+                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-accent transition-colors" size={20} />
                     <input
                         type="text"
                         placeholder="Search by name, email, phone..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-surface-light border border-white/[0.05] rounded-[24px] py-4 pl-14 pr-6 outline-none focus:border-accent/30 transition-all text-sm font-medium shadow-2xl"
+                        className="w-full bg-white border border-black/[0.05] rounded-[24px] py-4 pl-14 pr-6 outline-none focus:border-accent/30 transition-all text-sm font-medium shadow-sm"
                     />
                 </div>
             </div>
@@ -183,19 +183,19 @@ const AdminUsers = () => {
                     ))}
                 </div>
             ) : filteredUsers.length === 0 ? (
-                <div className="bg-zinc-900/30 border-2 border-dashed border-white/5 rounded-[40px] p-20 text-center">
-                    <div className="w-24 h-24 bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-6 text-zinc-600">
+                <div className="bg-slate-50 border-2 border-dashed border-black/[0.05] rounded-[40px] p-20 text-center">
+                    <div className="w-24 h-24 bg-white border border-black/[0.05] rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300 shadow-sm">
                         <User size={48} />
                     </div>
-                    <h3 className="text-2xl font-black text-white italic uppercase tracking-tight">No Users Found</h3>
-                    <p className="text-zinc-500 font-medium max-w-xs mx-auto mt-2">Try searching with a different keyword or check your filters.</p>
+                    <h3 className="text-2xl font-black text-slate-900 italic uppercase tracking-tight">No Users Found</h3>
+                    <p className="text-slate-500 font-medium max-w-xs mx-auto mt-2">Try searching with a different keyword or check your filters.</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                     {filteredUsers.map(user => {
                         const hasUnread = supportStatus[user.id]?.unreadAdmin === true;
                         return (
-                            <div key={user.id} className={`group relative bg-surface border ${hasUnread ? 'border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.1)]' : 'border-white/[0.05]'} hover:border-accent/20 rounded-[40px] p-8 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden`}>
+                            <div key={user.id} className={`group relative bg-white border ${hasUnread ? 'border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.1)]' : 'border-black/[0.05]'} hover:border-accent/20 rounded-[40px] p-8 transition-all duration-500 hover:shadow-xl overflow-hidden`}>
                                 {/* Gradient Background Decoration */}
                                 <div className={`absolute -top-20 -right-20 w-40 h-40 ${hasUnread ? 'bg-emerald-500/10' : 'bg-accent/5'} blur-[80px] rounded-full group-hover:bg-accent/10 transition-colors`} />
 
@@ -208,11 +208,11 @@ const AdminUsers = () => {
 
                                 {/* User Header */}
                                 <div className="flex items-start gap-5 mb-8 relative">
-                                    <div className={`w-16 h-16 rounded-[24px] bg-zinc-900 border border-white/5 flex items-center justify-center ${hasUnread ? 'text-emerald-500' : 'text-zinc-500'} group-hover:bg-accent/10 group-hover:text-accent transition-all duration-500 border-accent/0 group-hover:border-accent/20 group-hover:scale-110`}>
+                                    <div className={`w-16 h-16 rounded-[24px] bg-slate-50 border border-black/[0.05] flex items-center justify-center ${hasUnread ? 'text-emerald-500' : 'text-slate-400'} group-hover:bg-accent/10 group-hover:text-accent transition-all duration-500 border-accent/0 group-hover:border-accent/20 group-hover:scale-110`}>
                                         <User size={32} />
                                     </div>
                                     <div className="flex-1 min-w-0 pt-1">
-                                        <h3 className="font-black text-2xl italic tracking-tighter uppercase truncate pr-16 leading-none mb-1">
+                                        <h3 className="font-black text-2xl italic tracking-tighter uppercase truncate pr-16 leading-none mb-1 text-slate-900">
                                             {user.name || user.email?.split('@')[0]}
                                         </h3>
                                         <div className="flex items-center gap-1.5 text-zinc-500 text-xs font-bold uppercase tracking-widest">
@@ -228,41 +228,41 @@ const AdminUsers = () => {
 
                                 {/* Contact Info */}
                                 <div className="space-y-3 mb-8">
-                                    <div className="flex items-center gap-3 px-4 py-3 bg-surface-light/50 rounded-2xl border border-white/[0.02]">
-                                        <Mail size={16} className="text-zinc-600" />
-                                        <span className="text-sm font-medium text-zinc-300 truncate">{user.email}</span>
+                                    <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 rounded-2xl border border-black/[0.02]">
+                                        <Mail size={16} className="text-slate-400" />
+                                        <span className="text-sm font-medium text-slate-600 truncate">{user.email}</span>
                                     </div>
-                                    <div className="flex items-center gap-3 px-4 py-3 bg-surface-light/50 rounded-2xl border border-white/[0.02]">
-                                        <Phone size={16} className="text-zinc-600" />
-                                        <span className="text-sm font-medium text-zinc-300">{user.phone || 'No phone added'}</span>
+                                    <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 rounded-2xl border border-black/[0.02]">
+                                        <Phone size={16} className="text-slate-400" />
+                                        <span className="text-sm font-medium text-slate-600">{user.phone || 'No phone added'}</span>
                                     </div>
                                 </div>
 
                                 {/* Wallet Stats Grid */}
                                 <div className="grid grid-cols-2 gap-4 mb-8">
-                                    <div className="bg-surface-light/50 rounded-[32px] p-5 border border-white/[0.03] group/stat hover:bg-zinc-900/50 transition-colors">
-                                        <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest block mb-1">Balance</span>
+                                    <div className="bg-slate-50 rounded-[32px] p-5 border border-black/[0.03] group/stat hover:bg-slate-100 transition-colors">
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Balance</span>
                                         <div className="flex items-center gap-2">
-                                            <span className="text-2xl font-black italic tracking-tighter text-yellow-500">
+                                            <span className="text-2xl font-black italic tracking-tighter text-yellow-600">
                                                 ₹{user.balance?.toLocaleString() || 0}
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="bg-surface-light/50 rounded-[32px] p-5 border border-white/[0.03] group/stat hover:bg-zinc-900/50 transition-colors">
-                                        <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest block mb-1">Bets</span>
+                                    <div className="bg-slate-50 rounded-[32px] p-5 border border-black/[0.03] group/stat hover:bg-slate-100 transition-colors">
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Bets</span>
                                         <span className="text-2xl font-black italic tracking-tighter text-accent">
                                             {user.totalBets || 0}
                                         </span>
                                     </div>
-                                    <div className="bg-surface-light/50 rounded-[32px] p-5 border border-white/[0.03] group/stat hover:bg-zinc-900/50 transition-colors">
-                                        <span className="text-[10px] font-black text-emerald-500/50 uppercase tracking-widest block mb-1">Deposit</span>
-                                        <span className="text-xl font-black italic tracking-tighter text-emerald-500">
+                                    <div className="bg-slate-50 rounded-[32px] p-5 border border-black/[0.03] group/stat hover:bg-slate-100 transition-colors">
+                                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest block mb-1">Deposit</span>
+                                        <span className="text-xl font-black italic tracking-tighter text-emerald-600">
                                             ₹{user.totalDeposit?.toLocaleString() || 0}
                                         </span>
                                     </div>
-                                    <div className="bg-surface-light/50 rounded-[32px] p-5 border border-white/[0.03] group/stat hover:bg-zinc-900/50 transition-colors">
-                                        <span className="text-[10px] font-black text-red-500/50 uppercase tracking-widest block mb-1">Withdraw</span>
-                                        <span className="text-xl font-black italic tracking-tighter text-red-500">
+                                    <div className="bg-slate-50 rounded-[32px] p-5 border border-black/[0.03] group/stat hover:bg-slate-100 transition-colors">
+                                        <span className="text-[10px] font-black text-red-500 uppercase tracking-widest block mb-1">Withdraw</span>
+                                        <span className="text-xl font-black italic tracking-tighter text-red-600">
                                             ₹{user.totalWithdraw?.toLocaleString() || 0}
                                         </span>
                                     </div>
@@ -272,14 +272,14 @@ const AdminUsers = () => {
                                 <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4">
                                     <button
                                         onClick={() => setChattingUser(user)}
-                                        className={`flex items-center justify-center gap-3 py-4 rounded-[24px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-xl group/btn ${hasUnread ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800'}`}
+                                        className={`flex items-center justify-center gap-3 py-4 rounded-[24px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-sm group/btn ${hasUnread ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200'}`}
                                     >
                                         <MessageCircle size={18} className="group-hover/btn:scale-110 transition-transform" />
                                         <span>Chat</span>
                                     </button>
                                     <button
                                         onClick={() => setEditingUser(user)}
-                                        className="flex items-center justify-center gap-3 py-4 bg-zinc-900 hover:bg-white text-zinc-400 hover:text-black rounded-[24px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-xl group/btn"
+                                        className="flex items-center justify-center gap-3 py-4 bg-slate-100 hover:bg-accent text-slate-500 hover:text-white rounded-[24px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-sm group/btn"
                                     >
                                         <Wallet size={18} className="group-hover/btn:scale-110 transition-transform" />
                                         <span>Wallet</span>

@@ -10,82 +10,72 @@ const MatchCard = ({ match, onBet }) => {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="bg-[#0c0c0c] border border-white/5 rounded-[28px] sm:rounded-[40px] p-4 sm:p-8 relative overflow-hidden group"
+            className="bg-white border border-black/[0.05] rounded-[2.5rem] p-4 sm:p-8 relative overflow-hidden group shadow-sm hover:shadow-xl transition-all duration-500"
         >
             {match.sixInPowerplay && (
-                <div className="absolute top-0 right-0 bg-amber-500 text-black px-4 sm:px-8 py-1 sm:py-2 rounded-bl-[20px] sm:rounded-bl-[32px] text-[8px] sm:text-xs font-black uppercase tracking-widest shadow-2xl flex items-center gap-1 sm:gap-2 z-10">
-                    <Zap size={10} className="sm:w-4 sm:h-4 fill-current" />
+                <div className="absolute top-0 right-0 bg-accent text-white px-4 sm:px-8 py-1 sm:py-2 rounded-bl-[20px] sm:rounded-bl-[32px] text-[8px] sm:text-xs font-black uppercase tracking-widest shadow-lg flex items-center gap-1 sm:gap-2 z-10 animate-pulse">
+                    <Zap size={10} className="sm:w-4 sm:h-4 fill-current text-white" />
                     2X BONUS
                 </div>
             )}
-            <div className="flex items-center justify-between mb-6 sm:mb-10 gap-2">
+            <div className="flex items-center justify-between mb-4 sm:mb-8 gap-2 px-1">
                 {/* Team A */}
-                <div className="flex-1 flex flex-col items-center gap-0.5 sm:gap-2 min-w-0">
-                    <h2 className="text-lg sm:text-3xl lg:text-4xl font-black italic text-white tracking-tighter uppercase leading-tight w-full text-center break-words">
+                <div className="flex-1 flex flex-col items-center gap-1 sm:gap-2 min-w-0">
+                    <h2 className="text-sm sm:text-2xl font-black italic text-slate-900 tracking-tighter uppercase leading-none w-full text-center break-words">
                         {match.teamA}
                     </h2>
-                    <div className="bg-yellow-500 px-2 sm:px-4 py-1 rounded-lg sm:rounded-xl">
-                        <span className="text-black font-black text-xs sm:text-xl italic leading-none">{match.oddsTeamA}</span>
+                    <div className="bg-amber-100 border border-amber-500/20 px-3 sm:px-5 py-1.5 rounded-lg sm:rounded-xl">
+                        <span className="text-amber-700 font-bold text-[10px] sm:text-lg italic leading-none">{match.oddsTeamA}</span>
                     </div>
                 </div>
 
                 {/* VS Center */}
-                <div className="flex flex-col items-center gap-1 sm:gap-3 px-1 sm:px-4 shrink-0">
-                    <span className="text-[8px] sm:text-[10px] font-black text-zinc-600 uppercase tracking-[2px] sm:tracking-[4px]">Prediction</span>
-                    <div className="w-10 h-10 sm:w-16 h-16 rounded-full bg-gradient-to-br from-accent to-zinc-900 border-2 sm:border-4 border-[#121212] flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.2)]">
-                        <span className="text-white font-black italic text-xs sm:text-xl">VS</span>
+                <div className="flex flex-col items-center gap-1 sm:gap-2 px-1 sm:px-2 shrink-0">
+                    <span className="text-[6px] sm:text-[8px] font-black text-slate-400 uppercase tracking-widest">Prediction</span>
+                    <div className="w-8 h-8 sm:w-14 sm:h-14 rounded-full bg-slate-50 border-2 border-slate-100 flex items-center justify-center shadow-md">
+                        <span className="text-accent font-black italic text-[10px] sm:text-lg">VS</span>
                     </div>
                 </div>
 
                 {/* Team B */}
-                <div className="flex-1 flex flex-col items-center gap-0.5 sm:gap-2 min-w-0">
-                    <h2 className="text-lg sm:text-3xl lg:text-4xl font-black italic text-white tracking-tighter uppercase leading-tight w-full text-center break-words">
+                <div className="flex-1 flex flex-col items-center gap-1 sm:gap-2 min-w-0">
+                    <h2 className="text-sm sm:text-2xl font-black italic text-slate-900 tracking-tighter uppercase leading-none w-full text-center break-words">
                         {match.teamB}
                     </h2>
-                    <div className="bg-yellow-500 px-2 sm:px-4 py-1 rounded-lg sm:rounded-xl">
-                        <span className="text-black font-black text-xs sm:text-xl italic leading-none">{match.oddsTeamB}</span>
+                    <div className="bg-amber-100 border border-amber-500/20 px-3 sm:px-5 py-1.5 rounded-lg sm:rounded-xl">
+                        <span className="text-amber-700 font-bold text-[10px] sm:text-lg italic leading-none">{match.oddsTeamB}</span>
                     </div>
                 </div>
             </div>
 
-            <div className="h-px bg-white/[0.05] w-full mb-4 sm:mb-8" />
+            <div className="h-px bg-slate-100 w-full mb-4 sm:mb-8" />
 
             {/* Match Info Buttons */}
             <div className="flex items-center justify-center gap-4 sm:gap-10 mb-5 sm:mb-8">
                 <div className="flex items-center gap-2 sm:gap-4">
-                    <div className="w-8 h-8 sm:w-12 sm:h-12 bg-zinc-900 rounded-lg sm:rounded-2xl flex items-center justify-center text-zinc-600">
+                    <div className="w-8 h-8 sm:w-12 sm:h-12 bg-slate-50 rounded-lg sm:rounded-2xl flex items-center justify-center text-slate-400 border border-slate-100">
                         <Calendar size={14} className="sm:w-5 sm:h-5" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-[7px] sm:text-[10px] font-black text-zinc-600 uppercase tracking-widest leading-none mb-0.5 sm:mb-1">Date</span>
-                        <span className="text-[10px] sm:text-sm font-black text-white">{new Date(match.matchTime).toLocaleDateString()}</span>
+                        <span className="text-[7px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-0.5 sm:mb-1">Date</span>
+                        <span className="text-[10px] sm:text-sm font-black text-slate-700">{new Date(match.matchTime).toLocaleDateString()}</span>
                     </div>
                 </div>
                 <div className="flex items-center gap-2 sm:gap-4">
-                    <div className="w-8 h-8 sm:w-12 sm:h-12 bg-zinc-900 rounded-lg sm:rounded-2xl flex items-center justify-center text-zinc-600">
+                    <div className="w-8 h-8 sm:w-12 sm:h-12 bg-slate-50 rounded-lg sm:rounded-2xl flex items-center justify-center text-slate-400 border border-slate-100">
                         <Clock size={14} className="sm:w-5 sm:h-5" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-[7px] sm:text-[10px] font-black text-zinc-600 uppercase tracking-widest leading-none mb-0.5 sm:mb-1">Time</span>
-                        <span className="text-[10px] sm:text-sm font-black text-white">{new Date(match.matchTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                        <span className="text-[7px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-0.5 sm:mb-1">Time</span>
+                        <span className="text-[10px] sm:text-sm font-black text-slate-700">{new Date(match.matchTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
                 </div>
             </div>
 
-            {/* Six Condition Info */}
-            {match.sixInPowerplay && (
-                <div className="flex items-center gap-3 bg-amber-500/5 px-3 py-2.5 rounded-2xl border border-amber-500/10 mb-4 sm:mb-8 mx-auto w-full max-w-sm">
-                    <Zap size={14} className="text-amber-500 shrink-0 animate-pulse" />
-                    <p className="text-[9px] sm:text-[11px] text-zinc-400 font-bold leading-relaxed uppercase tracking-tight text-center flex-1">
-                        <span className="text-yellow-500 font-black">2X BOOST ACTIVE:</span> If a 6 is hit in the first 4 overs, your winning will be <span className="text-white">DOUBLED</span>
-                    </p>
-                </div>
-            )}
-
             <button
                 onClick={() => onBet(match)}
                 disabled={isFinished}
-                className="w-full bg-accent hover:bg-accent-hover text-white py-3.5 sm:py-6 rounded-2xl sm:rounded-[28px] font-black italic uppercase tracking-[2px] sm:tracking-[4px] text-lg sm:text-2xl shadow-2xl shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-2 sm:gap-4 group/btn disabled:grayscale whitespace-nowrap"
+                className="w-full btn-accent py-3.5 sm:py-6 !rounded-[1.5rem] text-lg sm:text-2xl shadow-xl shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-2 sm:gap-4 group/btn disabled:grayscale whitespace-nowrap"
             >
                 {isFinished ? 'Market Closed' : 'Predict & Win'}
                 {!isFinished && <ChevronRight size={20} className="sm:w-7 sm:h-7 group-hover/btn:translate-x-2 transition-transform" />}

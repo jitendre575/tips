@@ -17,67 +17,72 @@ const DashboardLayout = ({ children }) => {
     };
 
     return (
-        <div className="min-h-screen bg-primary flex">
-            <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <div className="min-h-screen bg-[#f5f5f9] flex lg:grid lg:grid-cols-[280px_1fr]">
+            {/* Sidebar - Permanent on Desktop, Mobile Drawer on Small Screens */}
+            <div className="lg:block hidden h-screen sticky top-0 border-r border-black/[0.05] bg-white">
+                <Sidebar isOpen={true} onClose={() => { }} />
+            </div>
 
-            <div className="flex-1 flex flex-col min-w-0">
+            {/* Mobile Sidebar */}
+            <div className="lg:hidden">
+                <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+            </div>
+
+            <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
                 {/* Header */}
-                <header className="sticky top-0 z-[100] bg-primary/95 backdrop-blur-2xl border-b border-white/[0.05] h-20 px-4 lg:px-10 flex items-center">
-                    {/* Left: Menu */}
+                <header className="sticky top-0 z-[100] bg-white/90 backdrop-blur-3xl border-b border-black/[0.05] h-16 sm:h-24 px-4 sm:px-10 flex items-center shrink-0 shadow-sm">
+                    {/* Left: Mobile Menu Toggle / Desktop Label */}
                     <div className="flex-1 flex justify-start items-center">
                         <button
                             onClick={() => setIsSidebarOpen(true)}
-                            className="p-2.5 bg-white/[0.02] border border-white/5 rounded-2xl text-zinc-400 hover:text-white transition-all active:scale-95"
+                            className="lg:hidden p-2.5 bg-slate-50 border border-black/[0.05] rounded-2xl text-slate-600 hover:text-accent transition-all active:scale-95 shadow-sm"
                         >
-                            <Menu size={24} />
+                            <Menu size={20} />
                         </button>
+                        <div className="hidden lg:flex flex-col">
+                            <h2 className="text-[10px] font-black text-slate-600 uppercase tracking-[3px] mb-1">91 Winning Club</h2>
+                            <span className="text-xl font-black italic tracking-tighter uppercase text-slate-900">The Arena</span>
+                        </div>
                     </div>
 
-                    {/* Center: Bell on Mobile / Welcome on Desktop */}
-                    <div className="flex-1 flex justify-center items-center">
-                        <button className="lg:hidden p-3 text-zinc-500 hover:text-white transition-colors relative">
-                            <Bell size={22} />
-                            <span className="absolute top-3.5 right-3.5 w-2 h-2 bg-accent rounded-full border-2 border-primary"></span>
-                        </button>
-                        <div className="hidden lg:flex flex-col items-center">
-                            <h2 className="text-[10px] font-black text-zinc-600 uppercase tracking-[2px] leading-none mb-1">Welcome back,</h2>
-                            <span className="text-lg font-black italic tracking-tight uppercase text-white">
+                    {/* Center: User Profile */}
+                    <div className="flex-1 lg:flex-[2] flex justify-center items-center">
+                        <div className="flex flex-col items-center">
+                            <h2 className="text-[8px] lg:text-[10px] font-black text-slate-600 uppercase tracking-[3px] mb-1">Global Player</h2>
+                            <span className="text-xs lg:text-xl font-black italic tracking-tight uppercase text-accent truncate max-w-[150px] lg:max-w-none">
                                 {userData?.name || userData?.email?.split('@')[0]}
                             </span>
                         </div>
                     </div>
 
                     {/* Right: Balance & Plus */}
-                    <div className="flex-1 flex justify-end items-center gap-2">
-                        <div className="bg-surface-light px-3 sm:px-4 py-1.5 sm:py-2.5 rounded-[18px] border border-white/[0.05] flex items-center gap-2 sm:gap-3 shadow-2xl">
-                            <div className="bg-yellow-500/10 p-1 rounded-md sm:rounded-lg">
-                                <Wallet className="w-3.5 h-3.5 text-yellow-500" />
+                    <div className="flex-1 flex justify-end items-center gap-2 sm:gap-4">
+                        <div className="bg-slate-50 px-4 lg:px-6 py-2 lg:py-4 rounded-[1.5rem] border border-black/[0.05] flex items-center gap-3 lg:gap-5 shadow-inner hover:border-accent/30 transition-all group">
+                            <div className="bg-amber-100 p-1.5 lg:p-2.5 rounded-xl">
+                                <Wallet className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-amber-600" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-[7px] sm:text-[8px] font-black text-zinc-600 uppercase leading-none mb-1 tracking-tighter">Balance</span>
-                                <span className="font-black text-white tracking-widest leading-none text-xs sm:text-sm">
-                                    {userData?.balance?.toLocaleString() || '0'}
+                                <span className="text-[6px] lg:text-[9px] font-black text-slate-600 uppercase leading-none mb-1 tracking-widest">Balance</span>
+                                <span className="font-black text-slate-900 tracking-tighter leading-none text-sm lg:text-2xl">
+                                    ₹{(userData?.balance || 0).toLocaleString()}
                                 </span>
                             </div>
                         </div>
 
                         <button
                             onClick={handleRecharge}
-                            className="w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center bg-emerald-500/5 hover:bg-emerald-500/10 text-emerald-500 rounded-xl sm:rounded-2xl border border-emerald-500/10 transition-all active:scale-90"
+                            className="w-10 h-10 lg:w-16 lg:h-16 flex items-center justify-center bg-accent text-white rounded-2xl border border-accent/10 transition-all active:scale-90 shadow-lg shadow-accent/20 group"
                         >
-                            <PlusCircle size={20} />
-                        </button>
-
-                        <button className="hidden lg:flex p-3 text-zinc-500 hover:text-white transition-colors relative ml-2">
-                            <Bell size={22} />
-                            <span className="absolute top-3.5 right-3.5 w-2 h-2 bg-accent rounded-full border-2 border-primary"></span>
+                            <PlusCircle size={20} className="lg:w-8 lg:h-8 group-hover:rotate-90 transition-transform" />
                         </button>
                     </div>
                 </header>
 
                 {/* Main Content Area */}
-                <main className="flex-1 overflow-x-hidden p-4 sm:p-6 lg:p-10">
-                    {children}
+                <main className="flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-12 pb-24 lg:pb-12 bg-[#f5f5f9] scroll-smooth">
+                    <div className="max-w-7xl mx-auto w-full">
+                        {children}
+                    </div>
                 </main>
             </div>
             <SupportChat />

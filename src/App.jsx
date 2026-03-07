@@ -64,75 +64,88 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="min-h-screen bg-[#050505]">
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
+        <div className="min-h-screen bg-[#f5f5f9] selection:bg-accent/30 overflow-x-hidden relative font-['Outfit']">
+          {/* Global Light Theme Background */}
+          <div className="mesh-bg" />
 
-            <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
+          <div className="relative z-10 w-full min-h-screen">
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
 
-            <Route path="/history" element={
-              <ProtectedRoute>
-                <History />
-              </ProtectedRoute>
-            } />
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
 
-            <Route path="/withdraw" element={
-              <ProtectedRoute>
-                <Withdraw />
-              </ProtectedRoute>
-            } />
+              <Route path="/history" element={
+                <ProtectedRoute>
+                  <History />
+                </ProtectedRoute>
+              } />
 
-            <Route path="/leaderboard" element={
-              <ProtectedRoute>
-                <Leaderboard />
-              </ProtectedRoute>
-            } />
+              <Route path="/withdraw" element={
+                <ProtectedRoute>
+                  <Withdraw />
+                </ProtectedRoute>
+              } />
 
-            <Route path="/profile" element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            } />
+              <Route path="/leaderboard" element={
+                <ProtectedRoute>
+                  <Leaderboard />
+                </ProtectedRoute>
+              } />
 
-            {/* JRT MASTER CONTROL - NOW OPEN PUBLIC ACCESS */}
-            <Route path="/jrt" element={<AdminDashboard />} />
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } />
 
-            {/* Redirect all legacy admin routes to the master portal */}
-            <Route path="/admin/*" element={<Navigate to="/jrt" />} />
-            <Route path="/admin" element={<Navigate to="/jrt" />} />
+              <Route path="/jrt" element={
+                <div className="w-full min-h-screen bg-[#f5f5f9]">
+                  <AdminDashboard />
+                </div>
+              } />
 
-            <Route path="/add-balance" element={
-              <ProtectedRoute>
-                <AddBalance />
-              </ProtectedRoute>
-            } />
+              <Route path="/admin/*" element={<Navigate to="/jrt" />} />
+              <Route path="/admin" element={<Navigate to="/jrt" />} />
 
-            <Route path="/payment" element={
-              <ProtectedRoute>
-                <Payment />
-              </ProtectedRoute>
-            } />
+              <Route path="/add-balance" element={
+                <ProtectedRoute>
+                  <AddBalance />
+                </ProtectedRoute>
+              } />
 
-            <Route path="/casino/:gameId" element={
-              <ProtectedRoute>
-                <CasinoGame />
-              </ProtectedRoute>
-            } />
+              <Route path="/payment" element={
+                <ProtectedRoute>
+                  <Payment />
+                </ProtectedRoute>
+              } />
 
-            {/* Fallback */}
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-          <Toaster
-            position="bottom-right"
-            toastOptions={{
-              className: 'glass !bg-[#121212] !text-white !border-white/10 !rounded-2xl',
-              duration: 4000
-            }}
-          />
+              <Route path="/casino/:gameId" element={
+                <ProtectedRoute>
+                  <CasinoGame />
+                </ProtectedRoute>
+              } />
+
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                className: '!bg-white !text-slate-900 !border !border-black/[0.05] !rounded-[1.5rem] !p-6 !font-black !text-[11px] !uppercase !tracking-[0.1em] !shadow-2xl',
+                duration: 4000,
+                success: {
+                  iconTheme: { primary: '#10b981', secondary: '#fff' }
+                },
+                error: {
+                  iconTheme: { primary: '#d11b1b', secondary: '#fff' }
+                }
+              }}
+            />
+          </div>
         </div>
       </AuthProvider>
     </Router>

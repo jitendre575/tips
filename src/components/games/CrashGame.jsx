@@ -31,9 +31,19 @@ const CrashGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
     };
 
     const generateCrashPoint = () => {
+        // Check for Admin Rigging
+        if (settings?.rigNextCrash && settings?.forceCrashPoint) {
+            // One-time rig: Reset after use
+            import('../../firebase').then(({ db }) => {
+                import('firebase/firestore').then(({ doc, updateDoc }) => {
+                    updateDoc(doc(db, 'settings', 'casino'), { rigNextCrash: false });
+                });
+            });
+            return settings.forceCrashPoint;
+        }
+
         const houseEdge = (settings?.houseEdge || 1) / 100;
         const r = Math.random();
-        // The house always wins slightly more
         const crash = (1 - houseEdge) / (1 - r);
         return Math.max(1.01, crash);
     };

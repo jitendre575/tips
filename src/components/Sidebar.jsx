@@ -43,32 +43,31 @@ const Sidebar = ({ isOpen, onClose }) => {
             {/* Mobile Overlay */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[150] lg:hidden"
+                    className="absolute inset-0 bg-black/60 backdrop-blur-sm z-[150]"
                     onClick={onClose}
                 />
             )}
 
             <aside className={`
-                fixed inset-y-0 left-0 z-[200] w-[var(--sidebar-width)] 
-                bg-primary border-r border-white/[0.05] 
+                absolute inset-y-0 left-0 z-[200] w-[280px] 
+                bg-white border-r border-black/[0.05] shadow-2xl
                 transform transition-transform duration-300 ease-in-out
-                lg:translate-x-0 lg:static lg:block
-                ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+                ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0
             `}>
                 <div className="h-full flex flex-col p-6">
-                    <div className="flex items-center justify-between mb-10 pl-2">
-                        <Link to="/dashboard" className="cricwin-logo" onClick={onClose}>
-                            <span className="text-white">CRIC</span>
-                            <span className="logo-accent">WIN</span>
+                    <div className="flex items-center justify-between mb-10 pl-2 lg:mb-12">
+                        <Link to="/dashboard" className="cricwin-logo !text-accent flex items-center gap-2" onClick={onClose}>
+                            <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-white text-xs font-black not-italic">91</div>
+                            <span>WIN</span>
                         </Link>
-                        <button onClick={onClose} className="lg:hidden text-zinc-500">
+                        <button onClick={onClose} className="text-slate-600 lg:hidden hover:text-accent transition-colors">
                             <X size={24} />
                         </button>
                     </div>
 
                     <nav className="flex-1 space-y-2">
-                        <div className="text-[10px] font-black text-zinc-600 uppercase tracking-[2px] mb-4 pl-4">
-                            Menu
+                        <div className="text-[10px] font-black text-slate-600 uppercase tracking-[2px] mb-4 pl-4">
+                            Platform Navigation
                         </div>
                         {menuItems.map((item) => (
                             <Link
@@ -77,15 +76,15 @@ const Sidebar = ({ isOpen, onClose }) => {
                                 onClick={onClose}
                                 className={`sidebar-item ${location.pathname + location.search === item.path ? 'active' : ''}`}
                             >
-                                <item.icon size={20} />
+                                <item.icon size={18} className={location.pathname + location.search === item.path ? 'text-white' : 'text-slate-600'} />
                                 <span>{item.label}</span>
                             </Link>
                         ))}
 
                         {userData?.isAdmin && (
                             <>
-                                <div className="text-[10px] font-black text-zinc-600 uppercase tracking-[2px] mt-10 mb-4 pl-4">
-                                    Admin Control
+                                <div className="text-[10px] font-black text-slate-600 uppercase tracking-[2px] mt-10 mb-4 pl-4">
+                                    Admin Gateway
                                 </div>
                                 {adminItems.map((item) => (
                                     <Link
@@ -94,7 +93,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                                         onClick={onClose}
                                         className={`sidebar-item ${location.pathname === item.path ? 'active' : ''}`}
                                     >
-                                        <item.icon size={20} />
+                                        <item.icon size={18} className={location.pathname === item.path ? 'text-white' : 'text-slate-600'} />
                                         <span>{item.label}</span>
                                     </Link>
                                 ))}
@@ -102,13 +101,13 @@ const Sidebar = ({ isOpen, onClose }) => {
                         )}
                     </nav>
 
-                    <div className="mt-auto pt-6 border-t border-white/[0.05]">
+                    <div className="mt-auto pt-6 border-t border-black/[0.05]">
                         <button
                             onClick={handleLogout}
-                            className="sidebar-item w-full text-zinc-500 hover:text-accent hover:bg-accent/5"
+                            className="sidebar-item w-full text-slate-600 hover:text-accent hover:bg-accent/5"
                         >
-                            <LogOut size={20} />
-                            <span>Logout</span>
+                            <LogOut size={18} />
+                            <span>Exit Arena</span>
                         </button>
                     </div>
                 </div>

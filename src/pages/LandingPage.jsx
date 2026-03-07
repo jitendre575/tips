@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Navigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { auth, db } from '../firebase';
 import { collection, query, onSnapshot, orderBy } from 'firebase/firestore';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Mail, Lock, UserPlus, LogIn, Flame, X, Home, Wallet, User, MessageCircle, Share2, Activity, Play, ChevronRight, Zap } from 'lucide-react';
+import {
+    Trophy, Mail, Lock, UserPlus, LogIn, X, Home, Wallet, User, MessageCircle,
+    Zap, Download, Bell, ChevronLeft, ChevronRight, Gamepad2, LayoutGrid,
+    Gift, Crown, MousePointer2, Star, TrendingUp, Presentation
+} from 'lucide-react';
 import toast from 'react-hot-toast';
 import MatchCard from '../components/MatchCard';
 
@@ -16,6 +20,7 @@ const LandingPage = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [matches, setMatches] = useState([]);
+    const [activeCategory, setActiveCategory] = useState('Lobby');
     const { user, userData, loading: authLoading } = useAuth();
     const navigate = useNavigate();
 
@@ -27,19 +32,15 @@ const LandingPage = () => {
         return () => unsubscribe();
     }, []);
 
-    // Check if user is logged in and redirect accordingly
     useEffect(() => {
         if (user && userData && !authLoading) {
-            if (userData.isAdmin) {
-                navigate('/jrt');
-            } else {
-                navigate('/dashboard');
-            }
+            if (userData.isAdmin) navigate('/jrt');
+            else navigate('/dashboard');
         }
     }, [user, userData, authLoading, navigate]);
 
     if (authLoading) return (
-        <div className="flex items-center justify-center min-h-screen bg-primary">
+        <div className="flex items-center justify-center min-h-screen bg-[#f5f5f9]">
             <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin"></div>
         </div>
     );
@@ -50,258 +51,270 @@ const LandingPage = () => {
         try {
             if (isLogin) {
                 await signInWithEmailAndPassword(auth, email, password);
-                toast.success('Welcome back to the arena!');
+                toast.success('Welcome to the Gaming Arena!');
             } else {
                 await createUserWithEmailAndPassword(auth, email, password);
-                toast.success('Profile initialized! Ready to play?');
+                toast.success('Welcome to the 91 Winning Club!');
             }
-            // Redirection is handled by the useEffect above
         } catch (error) {
-            console.error("Auth Error:", error);
-            toast.error(error.code === 'auth/user-not-found' ? 'Account not found' : error.message);
+            toast.error(error.message);
         } finally {
             setLoading(false);
         }
     };
 
+    const categories = [
+        { name: 'Lobby', icon: Home },
+        { name: 'Mini Game', icon: Gamepad2 },
+        { name: 'Slots', icon: LayoutGrid },
+        { name: 'Card', icon: Presentation },
+        { name: 'Fishing', icon: TrendingUp },
+    ];
+
     return (
-        <div className="min-h-screen bg-primary selection:bg-accent/30 overflow-x-hidden">
-            {/* Mesh Background */}
-            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-accent/15 blur-[120px] rounded-full animate-float" />
-                <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[30%] bg-indigo-500/10 blur-[100px] rounded-full" />
+        <div className="min-h-screen bg-[#f5f5f9] pb-32">
+            {/* Real App Header */}
+            <div className="sticky top-0 z-[100] bg-[#d11b1b] px-4 py-4 flex items-center justify-between shadow-lg">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-inner">
+                        <span className="text-[#d11b1b] font-black text-xl italic tracking-tighter">91</span>
+                    </div>
+                    <div className="flex flex-col">
+                        <h1 className="text-white font-black italic text-xl leading-none uppercase tracking-tighter">91 CLUB</h1>
+                        <span className="text-white/60 text-[8px] font-bold tracking-[0.2em] uppercase">Professional Gaming</span>
+                    </div>
+                </div>
+                <div className="flex items-center gap-4">
+                    <button className="text-white/80 hover:text-white"><Bell size={20} /></button>
+                    <button className="text-white/80 hover:text-white"><Download size={20} /></button>
+                    <button className="text-white/80 hover:text-white" onClick={() => setShowAuth(true)}><MessageCircle size={20} /></button>
+                </div>
             </div>
 
-            {/* Navbar */}
-            <nav className="sticky top-0 z-[100] bg-[#050505]/80 backdrop-blur-xl border-b border-white/[0.05] px-6 lg:px-10 py-5">
-                <div className="max-w-7xl mx-auto flex items-center justify-between">
-                    <div className="cricwin-logo">
-                        <span className="text-white">CRIC</span>
-                        <span className="logo-accent underline underline-offset-8 decoration-4 decoration-accent/30">WIN</span>
-                    </div>
-
-                    <div className="hidden lg:flex items-center gap-10">
-                        <Link to="/" className="text-sm font-black italic uppercase tracking-widest text-white flex items-center gap-2 group">
-                            <Home size={16} className="text-accent group-hover:scale-125 transition-transform" />
-                            <span>Home</span>
-                        </Link>
-                        <button onClick={() => setShowAuth(true)} className="text-sm font-black italic uppercase tracking-widest text-zinc-500 hover:text-white transition-colors flex items-center gap-2">
-                            <Trophy size={16} />
-                            <span>Standings</span>
-                        </button>
-                        <button onClick={() => setShowAuth(true)} className="text-sm font-black italic uppercase tracking-widest text-zinc-500 hover:text-white transition-colors flex items-center gap-2">
-                            <Zap size={16} />
-                            <span>Markets</span>
-                        </button>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <button
-                            onClick={() => { setIsLogin(true); setShowAuth(true); }}
-                            className="hidden sm:block text-xs font-black uppercase tracking-widest text-zinc-400 hover:text-white transition-colors"
-                        >
-                            Sign In
-                        </button>
-                        <button
-                            onClick={() => { setIsLogin(false); setShowAuth(true); }}
-                            className="btn-accent px-6 py-2.5 !rounded-xl text-xs"
-                        >
-                            Join Now
-                        </button>
-                    </div>
+            {/* Scrolling Notice */}
+            <div className="bg-slate-50 border-b border-black/5 px-4 py-2 flex items-center gap-3 overflow-hidden">
+                <Bell size={14} className="text-slate-400 shrink-0" />
+                <div className="text-[10px] sm:text-xs font-bold text-slate-500 whitespace-nowrap animate-notice flex gap-10">
+                    <span>Welcome to the Elite 91 Winning Club. Predict and win big in real-time.</span>
+                    <span>All players registered on this platform must bind bank data for instant withdrawals.</span>
                 </div>
-            </nav>
+            </div>
 
-            <main className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-16 lg:py-24">
-                {/* Hero Section */}
-                <div className="text-center mb-20 lg:mb-32">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="inline-flex items-center gap-2 px-4 py-1.5 bg-accent/10 border border-accent/20 rounded-full text-accent text-[10px] font-black uppercase tracking-[3px] mb-8 italic"
-                    >
-                        <Activity size={12} className="animate-pulse" />
-                        The Number #1 Cricket Prediction Hub
-                    </motion.div>
-
-                    <motion.h1
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-4xl sm:text-6xl lg:text-9xl font-black italic tracking-tighter mb-6 lg:mb-8 leading-[0.9] lg:leading-[0.8]"
-                    >
-                        PREDICT. WIN. <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-accent to-indigo-500 drop-shadow-[0_15px_30px_rgba(59,130,246,0.3)]">DOMINATE.</span>
-                    </motion.h1>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="text-zinc-500 font-medium text-sm sm:text-lg lg:text-xl max-w-2xl mx-auto mb-10 lg:mb-12 px-2"
-                    >
-                        Experience the most advanced cricket prediction platform. Real-time markets, instant payouts, and the ultimate hall of fame.
-                    </motion.p>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="flex flex-col sm:flex-row items-center justify-center gap-4 lg:gap-8"
-                    >
-                        <button
-                            onClick={() => setShowAuth(true)}
-                            className="btn-accent w-full sm:w-auto px-12 py-5 text-lg"
-                        >
-                            Start Predicting <ChevronRight size={20} />
-                        </button>
-
-                        <button
-                            onClick={() => {
-                                toast("SYSTEM READY: DEMO MODE ENGAGED", {
-                                    icon: '🎬',
-                                    style: { background: '#121212', color: '#fff', border: '1px solid #333' }
-                                });
-                            }}
-                            className="flex items-center gap-4 px-8 py-4 text-zinc-400 hover:text-white transition-all group"
-                        >
-                            <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-accent group-hover:bg-accent/10 transition-all">
-                                <Play size={18} className="fill-current" />
-                            </div>
-                            <span className="text-sm font-black uppercase tracking-[3px]">Watch Demo</span>
-                        </button>
-                    </motion.div>
-                </div>
-
-                {/* Match Grid Section */}
-                <div className="mb-20 lg:mb-32">
-                    <div className="flex items-center justify-between mb-8 lg:mb-12">
-                        <div className="flex items-center gap-3 lg:gap-4">
-                            <div className="w-1 h-8 lg:h-12 bg-accent rounded-full" />
-                            <div>
-                                <h2 className="text-xl lg:text-3xl font-black italic tracking-tighter uppercase text-white">Sports <span className="logo-accent">Markets</span></h2>
-                            </div>
+            <main className="max-w-xl mx-auto">
+                {/* Hero Promotion Banner */}
+                <div className="p-4">
+                    <div className="relative aspect-[16/9] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white">
+                        <img
+                            src="/casino_banner_promo_1772871782573.png"
+                            alt="Mega Spin Event"
+                            className="w-full h-full object-cover"
+                        />
+                        <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/30 text-white text-[10px] font-black uppercase tracking-widest">
+                            Live event
                         </div>
                     </div>
+                </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
-                        {matches.length > 0 ? (
-                            matches.slice(0, 4).map(match => (
-                                <MatchCard key={match.id} match={match} onBet={() => setShowAuth(true)} />
-                            ))
-                        ) : (
-                            <div className="lg:col-span-2 text-center py-20 lg:py-32 bg-zinc-950/50 rounded-[32px] lg:rounded-[40px] border border-white/[0.03] border-dashed">
-                                <Activity className="mx-auto text-zinc-900 mb-4 lg:mb-6" size={64} />
-                                <h3 className="text-xl lg:text-2xl font-black italic text-zinc-800 uppercase tracking-tighter">Arena is Empty</h3>
+                {/* User Balance & Actions */}
+                <div className="px-4 mb-8">
+                    <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-black/5 flex items-center justify-between">
+                        <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                                <span className="bg-amber-100 text-amber-600 rounded-full p-1"><Wallet size={12} /></span>
+                                <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Wallet balance</span>
                             </div>
-                        )}
+                            <h2 className="text-3xl font-black text-slate-900 tracking-tighter flex items-center gap-2">
+                                <span className="text-slate-400 font-medium">₹</span>0.00
+                                <button className="text-slate-300 hover:text-accent"><TrendingUp size={16} /></button>
+                            </h2>
+                        </div>
+                        <div className="flex gap-2">
+                            <button onClick={() => setShowAuth(true)} className="btn-withdraw px-6 py-4 rounded-2xl flex flex-col items-center group">
+                                <TrendingUp className="group-hover:translate-y-[-2px] transition-transform" />
+                                <span className="text-[9px] font-black uppercase tracking-wider mt-1">Withdraw</span>
+                            </button>
+                            <button onClick={() => setShowAuth(true)} className="btn-deposit px-6 py-4 rounded-2xl flex flex-col items-center group">
+                                <Zap className="group-hover:scale-110 transition-transform" />
+                                <span className="text-[9px] font-black uppercase tracking-wider mt-1">Deposit</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                {/* Casino Teaser Section */}
-                <div className="mb-20 lg:mb-32">
-                    <div className="flex items-center justify-between mb-8 lg:mb-12 px-2">
-                        <div className="flex items-center gap-3 lg:gap-4">
-                            <div className="w-1 h-8 lg:h-12 bg-indigo-500 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.5)]" />
-                            <div>
-                                <h2 className="text-xl lg:text-3xl font-black italic tracking-tighter uppercase text-white">Elite <span className="text-indigo-500">Casino</span></h2>
-                            </div>
+                {/* Quick Shortcuts */}
+                <div className="grid grid-cols-2 gap-4 px-4 mb-10">
+                    <div onClick={() => setShowAuth(true)} className="bg-gradient-to-br from-orange-400 to-red-500 rounded-[2.5rem] p-6 flex items-center justify-between group cursor-pointer shadow-lg active:scale-95 transition-all">
+                        <div className="space-y-1">
+                            <h3 className="text-white font-black italic text-lg leading-tight uppercase tracking-tighter">Wheel of<br />fortune</h3>
+                        </div>
+                        <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white text-3xl group-hover:rotate-[360deg] transition-transform duration-1000">🎡</div>
+                    </div>
+                    <div onClick={() => setShowAuth(true)} className="bg-gradient-to-br from-purple-400 to-indigo-600 rounded-[2.5rem] p-6 flex items-center justify-between group cursor-pointer shadow-lg active:scale-95 transition-all">
+                        <div className="space-y-1">
+                            <h3 className="text-white font-black italic text-lg leading-tight uppercase tracking-tighter">VIP<br />Privileges</h3>
+                        </div>
+                        <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+                            <Crown size={30} fill="currentColor" />
                         </div>
                     </div>
+                </div>
 
-                    <div className="grid grid-cols-3 gap-2 lg:gap-8">
+                {/* Game Category Lobby */}
+                <div className="px-4 mb-6">
+                    <div className="flex items-center gap-6 overflow-x-auto pb-4 scrollbar-hide">
+                        {categories.map((cat) => (
+                            <button
+                                key={cat.name}
+                                onClick={() => setActiveCategory(cat.name)}
+                                className={`flex flex-col items-center gap-1.5 min-w-[60px] relative transition-all ${activeCategory === cat.name ? 'text-accent scale-110' : 'text-slate-400 hover:text-slate-600'}`}
+                            >
+                                <cat.icon size={20} />
+                                <span className="text-[10px] font-black uppercase tracking-tighter whitespace-nowrap">{cat.name}</span>
+                                {activeCategory === cat.name && (
+                                    <motion.div layoutId="cat-active" className="absolute -bottom-1 w-6 h-1 bg-accent rounded-full" />
+                                )}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Game Grid */}
+                <div className="px-4 mb-12">
+                    <div className="flex items-center gap-3 mb-6">
+                        <Star size={18} className="text-amber-500 fill-amber-500" />
+                        <h2 className="text-xl font-black italic tracking-tighter uppercase text-slate-800">Hot <span className="text-accent">Games</span></h2>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3">
                         {[
-                            { name: 'Mines', image: '/casino/mines.png', players: '2.6k' },
-                            { name: 'Dice', image: '/casino/blackjack.png', players: '2.3k' },
-                            { name: 'Plinko', image: '/casino/baccarat.png', players: '1.5k' }
+                            { name: 'Mines', img: '/mines_game_thumb_1772871801435.png', players: '2.6k' },
+                            { name: 'Rocket', img: '/crash_game_thumb_1772871825572.png', players: '5.1k' },
+                            { name: 'Slots', img: '/slots_game_thumb_1772871869952.png', players: '3.4k' },
                         ].map((game, i) => (
-                            <div key={i} className="group relative aspect-[3/4] sm:aspect-[4/3] rounded-xl lg:rounded-[32px] overflow-hidden border border-white/5 cursor-pointer" onClick={() => setShowAuth(true)}>
-                                <img src={game.image} alt={game.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-100" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-2 sm:p-6 flex flex-col justify-end">
-                                    <h4 className="text-[9px] sm:text-xl font-black italic uppercase tracking-tighter text-white">{game.name}</h4>
-                                    <span className="hidden sm:block text-[10px] font-black text-zinc-400 uppercase tracking-widest">{game.players} Online</span>
+                            <div key={i} onClick={() => setShowAuth(true)} className="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all">
+                                <img src={game.img} alt={game.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent p-3 flex flex-col justify-end">
+                                    <h4 className="text-sm font-black italic uppercase text-white tracking-tighter">{game.name}</h4>
+                                    <div className="flex items-center gap-1">
+                                        <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                                        <span className="text-[8px] font-bold text-slate-300 tracking-widest">{game.players} playing</span>
+                                    </div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* Benefits Section */}
-                <div className="grid md:grid-cols-3 gap-8">
-                    {[
-                        { icon: Wallet, title: "Instant Payouts", desc: "Withdraw your winnings instantly via UPI or Bank Transfer. Fast, secure, and reliable." },
-                        { icon: Trophy, title: "Hall of Fame", desc: "Climb the leaderboard and win exclusive monthly badges and special bonus rewards." },
-                        { icon: Activity, title: "Advanced Stats", desc: "Detailed match analysis and history to help you make informed and winning predictions." }
-                    ].map((item, i) => (
-                        <div key={i} className="glass-card p-6 sm:p-8 group hover:bg-white/[0.02] border-white/5 bg-zinc-950/20 text-center flex flex-col items-center">
-                            <div className="w-12 h-12 rounded-2xl bg-zinc-900 flex items-center justify-center text-accent mb-4 border border-white/5 group-hover:scale-110 group-hover:bg-accent/10 transition-all">
-                                <item.icon size={24} />
+                {/* Sports Predictions */}
+                <div className="px-4 mb-12">
+                    <div className="flex items-center gap-3 mb-6">
+                        <Trophy size={18} className="text-accent" />
+                        <h2 className="text-xl font-black italic tracking-tighter uppercase text-slate-800">Elite <span className="text-accent">Matches</span></h2>
+                    </div>
+                    <div className="space-y-6">
+                        {matches.length > 0 ? (
+                            matches.slice(0, 3).map(match => (
+                                <MatchCard key={match.id} match={match} onBet={() => setShowAuth(true)} />
+                            ))
+                        ) : (
+                            <div className="text-center py-20 bg-white rounded-[2rem] border-2 border-dashed border-slate-200">
+                                <Trophy size={48} className="mx-auto text-slate-200 mb-4" />
+                                <p className="text-slate-400 font-bold uppercase text-xs tracking-widest">Arena is currently inactive</p>
                             </div>
-                            <h4 className="text-lg font-black italic tracking-tighter uppercase mb-2 text-white group-hover:text-accent transition-colors">{item.title}</h4>
-                            <p className="text-zinc-500 text-[12px] font-medium leading-relaxed tracking-wide">{item.desc}</p>
-                        </div>
-                    ))}
+                        )}
+                    </div>
                 </div>
             </main>
 
-            {/* Auth Modal */}
+            {/* Sticky Bottom Nav */}
+            <div className="fixed bottom-0 left-0 right-0 z-[200] bg-white border-t border-black/5 px-6 py-4 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] rounded-t-[2.5rem]">
+                <div className="max-w-xl mx-auto flex items-center justify-between">
+                    {[
+                        { name: 'Home', icon: Home },
+                        { name: 'Activity', icon: Activity },
+                        { name: 'Promotion', icon: Gift },
+                        { name: 'Account', icon: User },
+                    ].map((nav) => (
+                        <button key={nav.name} onClick={() => setShowAuth(true)} className="flex flex-col items-center gap-1 group">
+                            <div className="p-2 rounded-2xl group-hover:bg-accent/5 group-hover:text-accent transition-all">
+                                <nav.icon size={22} className="text-slate-400 group-hover:text-accent" />
+                            </div>
+                            <span className="text-[9px] font-black uppercase text-slate-400 tracking-widest group-hover:text-accent">{nav.name}</span>
+                        </button>
+                    ))}
+                    {/* Floating Center button */}
+                    <button onClick={() => setShowAuth(true)} className="absolute left-1/2 -translate-x-1/2 -top-10 w-20 h-20 bg-accent rounded-full border-[8px] border-[#f5f5f9] flex items-center justify-center text-white shadow-xl shadow-accent/40 active:scale-90 transition-all">
+                        <div className="flex flex-col items-center">
+                            <span className="text-[8px] font-bold uppercase tracking-widest mb-1">Get</span>
+                            <span className="text-lg font-black italic tracking-tighter leading-none">₹500</span>
+                        </div>
+                    </button>
+                    <div className="w-20" /> {/* Spacer for floating button */}
+                    {/* Shift right items */}
+                </div>
+            </div>
+
+            {/* Auth Modal (Professional App Style) */}
             <AnimatePresence>
                 {showAuth && (
-                    <div className="fixed inset-0 z-[200] flex items-center justify-center p-6">
+                    <div className="fixed inset-0 z-[300] flex items-end sm:items-center justify-center p-0 sm:p-6">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setShowAuth(false)}
-                            className="absolute inset-0 bg-black/90 backdrop-blur-xl"
+                            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
                         />
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="relative w-full max-w-md bg-primary border border-white/[0.08] rounded-[32px] sm:rounded-[40px] p-6 sm:p-12 shadow-2xl overflow-hidden"
+                            initial={{ y: '100%' }}
+                            animate={{ y: 0 }}
+                            exit={{ y: '100%' }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                            className="relative w-full max-w-md bg-white rounded-t-[3rem] sm:rounded-[3rem] p-8 sm:p-12 shadow-2xl overflow-hidden"
                         >
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-[60px] rounded-full -mr-16 -mt-16 pointer-events-none" />
+                            <div className="flex justify-center mb-6 sm:hidden">
+                                <div className="w-12 h-1.5 bg-slate-200 rounded-full" />
+                            </div>
 
                             <button
                                 onClick={() => setShowAuth(false)}
-                                className="absolute top-6 right-6 text-zinc-600 hover:text-white transition-colors"
+                                className="absolute top-8 right-8 text-slate-300 hover:text-slate-600 transition-colors hidden sm:block"
                             >
-                                <X size={20} />
+                                <X size={24} />
                             </button>
 
-                            <div className="mb-8 sm:mb-10 text-center">
-                                <h2 className="text-2xl sm:text-4xl font-black italic tracking-tighter mb-2 sm:mb-3 uppercase leading-none">
-                                    {isLogin ? (
-                                        <>Welcome <span className="logo-accent">Back</span></>
-                                    ) : (
-                                        <>Join the <span className="logo-accent">Game</span></>
-                                    )}
+                            <div className="mb-10 text-center">
+                                <div className="w-16 h-16 bg-accent/10 rounded-3xl flex items-center justify-center text-accent mx-auto mb-6">
+                                    {isLogin ? <LogIn size={32} /> : <UserPlus size={32} />}
+                                </div>
+                                <h2 className="text-3xl font-black italic tracking-tighter mb-2 uppercase text-slate-900">
+                                    {isLogin ? 'Login to Win' : 'Create Account'}
                                 </h2>
-                                <p className="text-zinc-500 text-[10px] sm:text-sm font-medium">
-                                    {isLogin ? 'Login to continue your winning streak.' : 'Create an account and start predicting.'}
+                                <p className="text-slate-400 text-sm font-bold tracking-tight">
+                                    91 Winning Club: The most trusted platform.
                                 </p>
                             </div>
 
-                            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                            <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="space-y-2">
-                                    <label className="label-sm">Email Address</label>
+                                    <label className="label-sm">Mobile or Email</label>
                                     <div className="relative">
-                                        <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600" size={16} />
+                                        <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                         <input
                                             type="email" required value={email} onChange={e => setEmail(e.target.value)}
-                                            className="w-full bg-surface-light border border-white/[0.05] rounded-xl sm:rounded-2xl py-4 sm:py-5 pl-12 sm:pl-14 pr-6 outline-none focus:border-accent/50 transition-all font-medium text-white text-sm"
-                                            placeholder="name@example.com"
+                                            className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-5 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900"
+                                            placeholder="Enter your details"
                                         />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="label-sm">Security Password</label>
+                                    <label className="label-sm">Security Code</label>
                                     <div className="relative">
-                                        <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600" size={16} />
+                                        <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                         <input
                                             type="password" required value={password} onChange={e => setPassword(e.target.value)}
-                                            className="w-full bg-surface-light border border-white/[0.05] rounded-xl sm:rounded-2xl py-4 sm:py-5 pl-12 sm:pl-14 pr-6 outline-none focus:border-accent/50 transition-all font-medium text-white text-sm"
+                                            className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-5 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900"
                                             placeholder="••••••••"
                                         />
                                     </div>
@@ -309,28 +322,20 @@ const LandingPage = () => {
 
                                 <button
                                     type="submit" disabled={loading}
-                                    className="w-full btn-accent py-4 sm:py-5 mt-2 group relative overflow-hidden"
+                                    className="w-full btn-accent py-5 group relative overflow-hidden !rounded-2xl"
                                 >
-                                    <span className="relative z-10 flex items-center justify-center gap-3">
-                                        {loading ? (
-                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                        ) : (
-                                            <>
-                                                {isLogin ? <LogIn size={20} /> : <UserPlus size={20} />}
-                                                {isLogin ? 'Enter Arena' : 'Initialize Account'}
-                                            </>
-                                        )}
+                                    <span className="relative z-10 flex items-center justify-center gap-3 font-black text-lg">
+                                        {loading ? <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" /> : (isLogin ? 'Login Now' : 'Join the Club')}
                                     </span>
-                                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                                 </button>
                             </form>
 
-                            <div className="mt-10 text-center">
+                            <div className="mt-8 text-center">
                                 <button
                                     onClick={() => setIsLogin(!isLogin)}
-                                    className="text-xs font-black uppercase tracking-[2px] text-zinc-600 hover:text-accent transition-colors"
+                                    className="text-xs font-black uppercase tracking-[2px] text-slate-400 hover:text-accent transition-colors"
                                 >
-                                    {isLogin ? "New Player? Register Here" : "Existing Member? Login Here"}
+                                    {isLogin ? "No account? Register Here" : "Already a member? Login here"}
                                 </button>
                             </div>
                         </motion.div>
@@ -338,25 +343,23 @@ const LandingPage = () => {
                 )}
             </AnimatePresence>
 
-            {/* Footer */}
-            <footer className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-12 border-t border-white/[0.05] text-center lg:text-left">
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
-                    <div>
-                        <div className="cricwin-logo mb-2 justify-center lg:justify-start">
-                            <span className="text-white">CRIC</span>
-                            <span className="logo-accent">WIN</span>
-                        </div>
-                        <p className="text-zinc-600 text-[10px] font-black uppercase tracking-widest">© 2024 CRICWIN GAMING LTD. ALL RIGHTS RESERVED.</p>
-                    </div>
-                    <div className="flex gap-10">
-                        {['Privacy', 'Terms', 'Support', 'Contact'].map(item => (
-                            <button key={item} className="text-xs font-black uppercase tracking-widest text-zinc-600 hover:text-white transition-colors">
-                                {item}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            </footer>
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                @keyframes notice {
+                    0% { transform: translateX(100%); }
+                    100% { transform: translateX(-200%); }
+                }
+                .animate-notice {
+                    animation: notice 40s linear infinite;
+                }
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+                .scrollbar-hide {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+            `}} />
         </div>
     );
 };
