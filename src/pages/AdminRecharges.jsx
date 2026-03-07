@@ -109,11 +109,16 @@ const AdminRecharges = () => {
     };
 
     const filteredRequests = requests.filter(req => {
-        const matchesFilter = filter === 'All' || req.status === filter;
+        // Case-insensitive status matching
+        const matchesFilter = filter === 'All' ||
+            req.status?.toLowerCase() === filter.toLowerCase();
+
+        const search = searchTerm.toLowerCase();
         const matchesSearch =
-            req.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            req.userId?.includes(searchTerm) ||
-            req.amount?.toString().includes(searchTerm);
+            (req.userName || '').toLowerCase().includes(search) ||
+            (req.userId || '').toLowerCase().includes(search) ||
+            (req.amount || '').toString().toLowerCase().includes(search);
+
         return matchesFilter && matchesSearch;
     });
 

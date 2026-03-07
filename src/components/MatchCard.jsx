@@ -77,7 +77,7 @@ const MatchCard = ({ match, onBet }) => {
                 disabled={isFinished}
                 className="w-full btn-accent py-3.5 sm:py-6 !rounded-[1.5rem] text-lg sm:text-2xl shadow-xl shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-2 sm:gap-4 group/btn disabled:grayscale whitespace-nowrap"
             >
-                {isFinished ? 'Market Closed' : 'Predict & Win'}
+                {isFinished ? 'Market Closed' : 'PLACE BET'}
                 {!isFinished && <ChevronRight size={20} className="sm:w-7 sm:h-7 group-hover/btn:translate-x-2 transition-transform" />}
             </button>
         </motion.div>

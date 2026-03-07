@@ -33,7 +33,8 @@ const AdminDashboard = () => {
         totalDeposit: 0,
         totalWithdraw: 0,
         platformBalance: 0,
-        unreadSupport: 0
+        unreadSupport: 0,
+        adminAlerts: 0
     });
 
     const tabs = [
@@ -66,11 +67,30 @@ const AdminDashboard = () => {
         });
 
         const unsubRecharges = onSnapshot(query(collection(db, 'rechargeRequests')), s => {
-            setStats(prev => ({ ...prev, pendingRecharges: s.docs.filter(d => d.data().status === 'Pending').length }));
+            const pendingCount = s.docs.filter(d => d.data().status?.toLowerCase() === 'pending').length;
+
+            // Notify admin if a NEW pending request arrives and we already had data
+            setStats(prev => {
+                if (pendingCount > prev.pendingRecharges) {
+                    toast.success('NEW RECHARGE REQUEST RECEIVED!', {
+                        icon: '💰',
+                        duration: 6000,
+                        style: {
+                            background: '#050505',
+                            color: '#fff',
+                            border: '1px solid #10b981',
+                            fontFamily: 'Outfit, sans-serif',
+                            fontWeight: '900',
+                            textTransform: 'uppercase'
+                        }
+                    });
+                }
+                return { ...prev, pendingRecharges: pendingCount };
+            });
         });
 
         const unsubWithdrawals = onSnapshot(query(collection(db, 'withdrawals')), s => {
-            setStats(prev => ({ ...prev, pendingWithdrawals: s.docs.filter(d => d.data().status === 'pending').length }));
+            setStats(prev => ({ ...prev, pendingWithdrawals: s.docs.filter(d => d.data().status?.toLowerCase() === 'pending').length }));
         });
 
         const unsubMatches = onSnapshot(collection(db, 'matches'), s => {
@@ -81,12 +101,17 @@ const AdminDashboard = () => {
             setStats(prev => ({ ...prev, unreadSupport: s.size }));
         });
 
+        const unsubAlerts = onSnapshot(query(collection(db, 'notifications'), where('userId', '==', 'admin_global'), where('read', '==', false)), s => {
+            setStats(prev => ({ ...prev, adminAlerts: s.size }));
+        });
+
         return () => {
             unsubUsers();
             unsubRecharges();
             unsubWithdrawals();
             unsubMatches();
             unsubSupport();
+            unsubAlerts();
         };
     }, []);
 
@@ -353,11 +378,11 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="flex items-center gap-6">
-                    {(stats.pendingRecharges > 0 || stats.pendingWithdrawals > 0 || stats.unreadSupport > 0) && (
+                    {(stats.pendingRecharges > 0 || stats.pendingWithdrawals > 0 || stats.unreadSupport > 0 || stats.adminAlerts > 0) && (
                         <div className="lg:flex items-center gap-3 bg-slate-100 px-4 py-2 rounded-full border border-black/[0.05] hidden shadow-inner">
                             <RefreshCcw size={14} className="animate-spin text-accent" />
                             <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-                                {stats.pendingRecharges + stats.pendingWithdrawals + stats.unreadSupport} Action Required
+                                {stats.pendingRecharges + stats.pendingWithdrawals + stats.unreadSupport + stats.adminAlerts} Action Required
                             </span>
                         </div>
                     )}

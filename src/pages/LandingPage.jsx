@@ -8,7 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Trophy, Mail, Lock, UserPlus, LogIn, X, Home, Wallet, User, MessageCircle,
     Zap, Download, Bell, ChevronLeft, ChevronRight, Gamepad2, LayoutGrid,
-    Gift, Crown, MousePointer2, Star, TrendingUp, Presentation, Activity
+    Gift, Crown, MousePointer2, Star, TrendingUp, Presentation, Activity,
+    Rocket, Search, Flame, Sparkles
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import MatchCard from '../components/MatchCard';
@@ -72,132 +73,133 @@ const LandingPage = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-[#f5f5f9] pb-32">
-            {/* Real App Header */}
-            <div className="sticky top-0 z-[100] bg-[#d11b1b] px-4 py-4 flex items-center justify-between shadow-lg">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-inner">
-                        <span className="text-[#d11b1b] font-black text-xl italic tracking-tighter">91</span>
+        <div className="min-h-screen bg-[#f8f9fc] pb-32">
+            {/* Premium Header */}
+            <div className="sticky top-0 z-[100] bg-white/80 backdrop-blur-xl px-6 py-5 flex items-center justify-between border-b border-black/[0.03]">
+                <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-accent flex items-center justify-center shadow-lg shadow-accent/20">
+                        <Trophy className="text-white" size={24} />
                     </div>
                     <div className="flex flex-col">
-                        <h1 className="text-white font-black italic text-xl leading-none uppercase tracking-tighter">91 CLUB</h1>
-                        <span className="text-white/60 text-[8px] font-bold tracking-[0.2em] uppercase">Professional Gaming</span>
+                        <h1 className="text-slate-900 font-black italic text-2xl leading-none uppercase tracking-tighter">CRIC<span className="text-accent">WIN</span></h1>
+                        <span className="text-slate-400 text-[8px] font-black tracking-[0.3em] uppercase mt-1">Global Pro Gaming</span>
                     </div>
                 </div>
-                <div className="flex items-center gap-4">
-                    <button className="text-white/80 hover:text-white"><Bell size={20} /></button>
-                    <button className="text-white/80 hover:text-white"><Download size={20} /></button>
-                    <button className="text-white/80 hover:text-white" onClick={() => setShowAuth(true)}><MessageCircle size={20} /></button>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setShowAuth(true)}
+                        className="px-6 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all shadow-xl active:scale-95"
+                    >
+                        Login
+                    </button>
+                    <button
+                        onClick={() => { setIsLogin(false); setShowAuth(true); }}
+                        className="px-6 py-3 bg-accent text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 active:scale-95"
+                    >
+                        Join
+                    </button>
                 </div>
             </div>
 
             {/* Scrolling Notice */}
-            <div className="bg-slate-50 border-b border-black/5 px-4 py-2 flex items-center gap-3 overflow-hidden">
-                <Bell size={14} className="text-slate-400 shrink-0" />
-                <div className="text-[10px] sm:text-xs font-bold text-slate-500 whitespace-nowrap animate-notice flex gap-10">
-                    <span>Welcome to the Elite 91 Winning Club. Predict and win big in real-time.</span>
-                    <span>All players registered on this platform must bind bank data for instant withdrawals.</span>
+            <div className="bg-white border-b border-black/[0.02] px-6 py-2.5 flex items-center gap-4 overflow-hidden shadow-sm">
+                <div className="flex items-center gap-2 text-accent font-black text-[10px] uppercase tracking-widest shrink-0 border-r border-black/[0.05] pr-4">
+                    <Sparkles size={14} />
+                    Alert
+                </div>
+                <div className="text-[10px] font-bold text-slate-500 whitespace-nowrap animate-notice flex gap-12">
+                    <span>Welcome to CRICWIN Pro Arena. High-stakes predictions and instant withdrawals active.</span>
+                    <span>New users get 500 bonus coins on first deposit. Verified platform protection enabled.</span>
                 </div>
             </div>
 
             <main className="max-w-xl mx-auto">
-                {/* Hero Promotion Banner */}
-                <div className="p-4">
-                    <div className="relative aspect-[16/9] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white">
+                <div className="p-6">
+                    <div className="relative aspect-[21/9] rounded-[2.5rem] overflow-hidden shadow-2xl ring-1 ring-black/[0.05]">
                         <img
                             src="/casino_banner_promo_1772871782573.png"
-                            alt="Mega Spin Event"
+                            alt="Mega Event"
                             className="w-full h-full object-cover"
                         />
-                        <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/30 text-white text-[10px] font-black uppercase tracking-widest">
-                            Live event
-                        </div>
-                    </div>
-                </div>
-
-                {/* User Balance & Actions */}
-                <div className="px-4 mb-8">
-                    <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-black/5 flex items-center justify-between">
-                        <div className="space-y-1">
-                            <div className="flex items-center gap-2">
-                                <span className="bg-amber-100 text-amber-600 rounded-full p-1"><Wallet size={12} /></span>
-                                <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Wallet balance</span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent" />
+                        <div className="absolute bottom-6 left-8">
+                            <div className="bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20 text-white text-[9px] font-black uppercase tracking-widest mb-2 inline-block">
+                                Hot Event
                             </div>
-                            <h2 className="text-3xl font-black text-slate-900 tracking-tighter flex items-center gap-2">
-                                <span className="text-slate-400 font-medium">₹</span>0.00
-                                <button className="text-slate-300 hover:text-accent"><TrendingUp size={16} /></button>
-                            </h2>
-                        </div>
-                        <div className="flex gap-2">
-                            <button onClick={() => setShowAuth(true)} className="btn-withdraw px-6 py-4 rounded-2xl flex flex-col items-center group">
-                                <TrendingUp className="group-hover:translate-y-[-2px] transition-transform" />
-                                <span className="text-[9px] font-black uppercase tracking-wider mt-1">Withdraw</span>
-                            </button>
-                            <button onClick={() => setShowAuth(true)} className="btn-deposit px-6 py-4 rounded-2xl flex flex-col items-center group">
-                                <Zap className="group-hover:scale-110 transition-transform" />
-                                <span className="text-[9px] font-black uppercase tracking-wider mt-1">Deposit</span>
-                            </button>
+                            <h2 className="text-2xl font-black text-white italic uppercase tracking-tighter">MEGA WIN ARENA</h2>
                         </div>
                     </div>
                 </div>
 
-                {/* Quick Shortcuts */}
-                <div className="grid grid-cols-2 gap-4 px-4 mb-10">
-                    <div onClick={() => setShowAuth(true)} className="bg-gradient-to-br from-orange-400 to-red-500 rounded-[2.5rem] p-6 flex items-center justify-between group cursor-pointer shadow-lg active:scale-95 transition-all">
-                        <div className="space-y-1">
-                            <h3 className="text-white font-black italic text-lg leading-tight uppercase tracking-tighter">Wheel of<br />fortune</h3>
-                        </div>
-                        <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white text-3xl group-hover:rotate-[360deg] transition-transform duration-1000">🎡</div>
-                    </div>
-                    <div onClick={() => setShowAuth(true)} className="bg-gradient-to-br from-purple-400 to-indigo-600 rounded-[2.5rem] p-6 flex items-center justify-between group cursor-pointer shadow-lg active:scale-95 transition-all">
-                        <div className="space-y-1">
-                            <h3 className="text-white font-black italic text-lg leading-tight uppercase tracking-tighter">VIP<br />Privileges</h3>
-                        </div>
-                        <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform">
-                            <Crown size={30} fill="currentColor" />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Game Category Lobby */}
-                <div className="px-4 mb-6">
-                    <div className="flex items-center gap-6 overflow-x-auto pb-4 scrollbar-hide">
+                {/* Game Category Navigation */}
+                <div className="px-6 mb-8 overflow-x-auto scrollbar-hide">
+                    <div className="flex items-center gap-3 p-1.5 bg-white rounded-3xl border border-black/[0.05] shadow-sm w-fit mx-auto">
                         {categories.map((cat) => (
                             <button
                                 key={cat.name}
                                 onClick={() => setActiveCategory(cat.name)}
-                                className={`flex flex-col items-center gap-1.5 min-w-[60px] relative transition-all ${activeCategory === cat.name ? 'text-accent scale-110' : 'text-slate-400 hover:text-slate-600'}`}
+                                className={`flex items-center gap-2.5 px-6 py-3.5 rounded-2xl transition-all whitespace-nowrap ${activeCategory === cat.name ? 'bg-accent text-white shadow-lg shadow-accent/20' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`}
                             >
-                                <cat.icon size={20} />
-                                <span className="text-[10px] font-black uppercase tracking-tighter whitespace-nowrap">{cat.name}</span>
-                                {activeCategory === cat.name && (
-                                    <motion.div layoutId="cat-active" className="absolute -bottom-1 w-6 h-1 bg-accent rounded-full" />
-                                )}
+                                <cat.icon size={16} />
+                                <span className="text-[10px] font-black uppercase tracking-widest">{cat.name}</span>
                             </button>
                         ))}
                     </div>
                 </div>
 
-                {/* Game Grid */}
-                <div className="px-4 mb-12">
-                    <div className="flex items-center gap-3 mb-6">
-                        <Star size={18} className="text-amber-500 fill-amber-500" />
-                        <h2 className="text-xl font-black italic tracking-tighter uppercase text-slate-800">Hot <span className="text-accent">Games</span></h2>
+                {/* VIP Call to Action */}
+                <div className="px-6 mb-12">
+                    <div onClick={() => setShowAuth(true)} className="bg-slate-900 rounded-[2.5rem] p-8 flex items-center justify-between group cursor-pointer shadow-2xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-4 opacity-10">
+                            <Crown size={120} className="text-white rotate-12" />
+                        </div>
+                        <div className="relative z-10">
+                            <div className="flex items-center gap-3 text-emerald-400 mb-2 font-black text-[9px] uppercase tracking-[0.3em]">
+                                <Sparkles size={14} />
+                                New Promotion
+                            </div>
+                            <h3 className="text-white font-black italic text-2xl uppercase tracking-tighter leading-none mb-1">VIP ARENA <span className="text-accent underline">ACTIVE</span></h3>
+                            <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Get 200% Bonus on first join</p>
+                        </div>
+                        <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center text-white group-hover:scale-110 transition-transform relative z-10 border border-white/10">
+                            <ChevronRight size={32} />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="px-6 mb-16">
+                    <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2.5 bg-accent/10 rounded-xl text-accent">
+                                <Flame size={18} />
+                            </div>
+                            <h2 className="text-2xl font-black italic tracking-tighter uppercase text-slate-900">Trending <span className="text-accent underline decoration-accent/10">Games</span></h2>
+                        </div>
+                        <button className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-accent transition-colors">View All Grid</button>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 gap-4">
                         {[
-                            { name: 'Mines', img: '/mines_game_thumb_1772871801435.png', players: '2.6k' },
-                            { name: 'Rocket', img: '/crash_game_thumb_1772871825572.png', players: '5.1k' },
-                            { name: 'Slots', img: '/slots_game_thumb_1772871869952.png', players: '3.4k' },
+                            { name: 'Crash Predictor', img: '/crash_game_thumb_1772871825572.png', players: '5.1k', hot: true, icon: Rocket },
+                            { name: 'Crystal Mines', img: '/mines_game_thumb_1772871801435.png', players: '2.6k', hot: false, icon: Sparkles },
+                            { name: 'Neon Slots', img: '/slots_game_thumb_1772871869952.png', players: '3.4k', hot: true, icon: Star },
+                            { name: 'Lucky Dice', img: '/dice_game_thumb_1772872939570.png', players: '1.2k', hot: false, icon: Gift },
                         ].map((game, i) => (
-                            <div key={i} onClick={() => setShowAuth(true)} className="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all">
-                                <img src={game.img} alt={game.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent p-3 flex flex-col justify-end">
-                                    <h4 className="text-sm font-black italic uppercase text-white tracking-tighter">{game.name}</h4>
-                                    <div className="flex items-center gap-1">
-                                        <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className="text-[8px] font-bold text-slate-300 tracking-widest">{game.players} playing</span>
+                            <div key={i} onClick={() => setShowAuth(true)} className="group relative aspect-[4/5] rounded-[2.5rem] overflow-hidden cursor-pointer shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1">
+                                <img src={game.img} alt={game.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent p-6 flex flex-col justify-end">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <div className="p-1.5 bg-white/20 backdrop-blur-md rounded-lg text-white">
+                                            <game.icon size={12} />
+                                        </div>
+                                        {game.hot && (
+                                            <span className="px-2 py-0.5 bg-accent text-white text-[7px] font-black uppercase tracking-widest rounded-md">HOT</span>
+                                        )}
+                                    </div>
+                                    <h4 className="text-lg font-black italic uppercase text-white tracking-tighter leading-none mb-1">{game.name}</h4>
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                        <span className="text-[9px] font-bold text-slate-300 tracking-widest uppercase">{game.players} Online</span>
                                     </div>
                                 </div>
                             </div>
@@ -205,11 +207,14 @@ const LandingPage = () => {
                     </div>
                 </div>
 
-                {/* Sports Predictions */}
-                <div className="px-4 mb-12">
-                    <div className="flex items-center gap-3 mb-6">
-                        <Trophy size={18} className="text-accent" />
-                        <h2 className="text-xl font-black italic tracking-tighter uppercase text-slate-800">Elite <span className="text-accent">Matches</span></h2>
+                <div className="px-6 mb-12">
+                    <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2.5 bg-slate-100 rounded-xl text-slate-600">
+                                <Trophy size={18} />
+                            </div>
+                            <h2 className="text-2xl font-black italic tracking-tighter uppercase text-slate-900">Elite <span className="text-accent underline decoration-accent/10">Sports</span></h2>
+                        </div>
                     </div>
                     <div className="space-y-6">
                         {matches.length > 0 ? (
@@ -217,40 +222,47 @@ const LandingPage = () => {
                                 <MatchCard key={match.id} match={match} onBet={() => setShowAuth(true)} />
                             ))
                         ) : (
-                            <div className="text-center py-20 bg-white rounded-[2rem] border-2 border-dashed border-slate-200">
-                                <Trophy size={48} className="mx-auto text-slate-200 mb-4" />
-                                <p className="text-slate-400 font-bold uppercase text-xs tracking-widest">Arena is currently inactive</p>
+                            <div className="text-center py-24 bg-white rounded-[3rem] border-2 border-dashed border-black/[0.03]">
+                                <Trophy size={48} className="mx-auto text-slate-100 mb-4" />
+                                <p className="text-slate-400 font-black uppercase text-[10px] tracking-[0.3em]">Arena Standby</p>
                             </div>
                         )}
                     </div>
                 </div>
+
+                {/* Footer Quote */}
+                <div className="px-6 text-center opacity-40 mb-12">
+                    <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-500 italic">CRICWIN • THE ULTIMATE ARENA • EST 2026</p>
+                </div>
             </main>
 
-            {/* Sticky Bottom Nav */}
-            <div className="fixed bottom-0 left-0 right-0 z-[200] bg-white border-t border-black/5 px-6 py-4 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] rounded-t-[2.5rem]">
-                <div className="max-w-xl mx-auto flex items-center justify-between">
+            <div className="fixed bottom-0 left-0 right-0 z-[200] bg-white/90 backdrop-blur-2xl border-t border-black/[0.03] px-8 py-6 rounded-t-[3.5rem] shadow-[0_-20px_50px_rgba(0,0,0,0.05)]">
+                <div className="max-w-xl mx-auto flex items-center justify-between relative">
                     {[
-                        { name: 'Home', icon: Home },
-                        { name: 'Activity', icon: Activity },
-                        { name: 'Promotion', icon: Gift },
-                        { name: 'Account', icon: User },
-                    ].map((nav) => (
-                        <button key={nav.name} onClick={() => setShowAuth(true)} className="flex flex-col items-center gap-1 group">
-                            <div className="p-2 rounded-2xl group-hover:bg-accent/5 group-hover:text-accent transition-all">
-                                <nav.icon size={22} className="text-slate-400 group-hover:text-accent" />
-                            </div>
-                            <span className="text-[9px] font-black uppercase text-slate-400 tracking-widest group-hover:text-accent">{nav.name}</span>
-                        </button>
-                    ))}
-                    {/* Floating Center button */}
-                    <button onClick={() => setShowAuth(true)} className="absolute left-1/2 -translate-x-1/2 -top-10 w-20 h-20 bg-accent rounded-full border-[8px] border-[#f5f5f9] flex items-center justify-center text-white shadow-xl shadow-accent/40 active:scale-90 transition-all">
-                        <div className="flex flex-col items-center">
-                            <span className="text-[8px] font-bold uppercase tracking-widest mb-1">Get</span>
-                            <span className="text-lg font-black italic tracking-tighter leading-none">₹500</span>
+                        { name: 'Arena', icon: Home },
+                        { name: 'Live', icon: Activity },
+                        { name: 'Bonus', icon: Gift },
+                        { name: 'Me', icon: User },
+                    ].map((nav, index) => (
+                        <div key={nav.name} className="flex items-center">
+                            {index === 2 && <div className="w-20 sm:w-24" />}
+                            <button onClick={() => setShowAuth(true)} className="flex flex-col items-center gap-2 group">
+                                <div className="p-3 rounded-2xl group-hover:bg-accent/10 group-hover:text-accent transition-all">
+                                    <nav.icon size={22} className="text-slate-400 group-hover:text-accent group-hover:scale-110 transition-transform" />
+                                </div>
+                                <span className="text-[8px] font-black uppercase text-slate-500 tracking-widest group-hover:text-accent">{nav.name}</span>
+                            </button>
                         </div>
-                    </button>
-                    <div className="w-20" /> {/* Spacer for floating button */}
-                    {/* Shift right items */}
+                    ))}
+                    {/* Floating Center button - High Impact */}
+                    <div className="absolute left-1/2 -translate-x-1/2 -top-16">
+                        <button onClick={() => setShowAuth(true)} className="w-[84px] h-[84px] bg-accent rounded-[2rem] border-[10px] border-white flex items-center justify-center text-white shadow-2xl shadow-accent/40 hover:scale-110 active:scale-90 transition-all group">
+                            <div className="flex flex-col items-center group-hover:rotate-12 transition-transform">
+                                <span className="text-[8px] font-black uppercase tracking-widest mb-1 opacity-60">PLACE</span>
+                                <span className="text-xl font-black italic tracking-tighter leading-none">BET</span>
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -283,15 +295,15 @@ const LandingPage = () => {
                                 <X size={24} />
                             </button>
 
-                            <div className="mb-10 text-center">
-                                <div className="w-16 h-16 bg-accent/10 rounded-3xl flex items-center justify-center text-accent mx-auto mb-6">
-                                    {isLogin ? <LogIn size={32} /> : <UserPlus size={32} />}
+                            <div className="mb-12 text-center">
+                                <div className="w-20 h-20 bg-accent/5 rounded-[2.5rem] flex items-center justify-center text-accent mx-auto mb-6 border border-accent/10">
+                                    {isLogin ? <LogIn size={36} /> : <UserPlus size={36} />}
                                 </div>
-                                <h2 className="text-3xl font-black italic tracking-tighter mb-2 uppercase text-slate-900">
-                                    {isLogin ? 'Login to Win' : 'Create Account'}
+                                <h2 className="text-4xl font-black italic tracking-tighter mb-3 uppercase text-slate-900 leading-none">
+                                    {isLogin ? 'WELCOME BACK' : 'START WINNING'}
                                 </h2>
-                                <p className="text-slate-400 text-sm font-bold tracking-tight">
-                                    91 Winning Club: The most trusted platform.
+                                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">
+                                    CRICWIN Pro: Authentication Required
                                 </p>
                             </div>
 

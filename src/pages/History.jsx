@@ -10,6 +10,7 @@ const History = () => {
     const [activeTab, setActiveTab] = useState('bets'); // 'bets' or 'transactions'
     const [bets, setBets] = useState([]);
     const [transactions, setTransactions] = useState([]);
+    const [pendingRecharges, setPendingRecharges] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filterType, setFilterType] = useState('all'); // all, six_bonus
 
@@ -42,10 +43,23 @@ const History = () => {
             if (activeTab === 'transactions') setLoading(false);
         });
 
+        // Sync Pending Recharges
+        const pendingRechargeQ = query(
+            collection(db, 'rechargeRequests'),
+            where('userId', '==', user.uid),
+            where('status', '==', 'Pending')
+        );
+
+        const unsubPendingRecharges = onSnapshot(pendingRechargeQ, (snapshot) => {
+            const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), isPendingReq: true }));
+            setPendingRecharges(data);
+        });
+
         setLoading(false);
         return () => {
             unsubBets();
             unsubTrans();
+            unsubPendingRecharges();
         };
     }, [user, activeTab]);
 
@@ -190,7 +204,7 @@ const History = () => {
                             );
                         })()
                     ) : (
-                        transactions.length === 0 ? (
+                        pendingRecharges.length === 0 && transactions.length === 0 ? (
                             <div className="glass-card py-32 text-center flex flex-col items-center">
                                 <HistoryIcon size={64} className="text-zinc-800 mb-6" />
                                 <h3 className="text-2xl font-black italic text-zinc-600 uppercase">No transactions</h3>
@@ -198,6 +212,31 @@ const History = () => {
                             </div>
                         ) : (
                             <div className="space-y-3">
+                                {/* Show Pending Section if active */}
+                                {pendingRecharges.map((req) => (
+                                    <div key={req.id} className="glass-card flex items-center justify-between p-6 border-amber-500/20 bg-amber-500/[0.02]">
+                                        <div className="flex items-center gap-5">
+                                            <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-amber-500/10 text-amber-500">
+                                                <Clock size={20} className="animate-pulse" />
+                                            </div>
+                                            <div>
+                                                <p className="text-lg font-black italic uppercase tracking-tight text-white">Deposit Verification</p>
+                                                <div className="flex items-center gap-2 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+                                                    <span>{req.createdAt?.toDate ? req.createdAt.toDate().toLocaleDateString() : 'Just now'}</span>
+                                                    <span className="text-zinc-800">•</span>
+                                                    <span className="text-amber-500 animate-pulse">Awaiting Approval</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-2xl font-black italic tracking-tighter text-amber-400">
+                                                +{req.amount?.toLocaleString()}
+                                            </p>
+                                            <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Processing</span>
+                                        </div>
+                                    </div>
+                                ))}
+
                                 {transactions.map((trans, idx) => (
                                     <div key={trans.id} className="glass-card flex items-center justify-between p-6 border-white/5">
                                         <div className="flex items-center gap-5">
