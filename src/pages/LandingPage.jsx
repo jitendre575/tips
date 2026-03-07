@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Trophy, Mail, Lock, UserPlus, LogIn, X, Home, Wallet, User, MessageCircle,
     Zap, Download, Bell, ChevronLeft, ChevronRight, Gamepad2, LayoutGrid,
-    Gift, Crown, MousePointer2, Star, TrendingUp, Presentation
+    Gift, Crown, MousePointer2, Star, TrendingUp, Presentation, Activity
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import MatchCard from '../components/MatchCard';
