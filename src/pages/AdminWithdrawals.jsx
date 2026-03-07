@@ -12,12 +12,21 @@ const AdminWithdrawals = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const q = query(collection(db, 'withdrawals'), orderBy('createdAt', 'desc'));
+        // Fetch all requests and sort in JS to avoid index requirement errors
+        const q = query(collection(db, 'withdrawals'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            setRequests(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            // Sort in JS to avoid index requirements
+            data.sort((a, b) => {
+                const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
+                const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
+                return dateB - dateA;
+            });
+            setRequests(data);
             setLoading(false);
         }, (error) => {
             console.error("Snapshot error:", error);
+            toast.error("Failed to load withdrawals. Check database permissions.");
             setLoading(false);
         });
         return () => unsubscribe();
@@ -38,6 +47,17 @@ const AdminWithdrawals = () => {
                     activeWithdrawals: increment(-1),
                     totalWithdraw: increment(request.amount)
                 });
+
+                // Add to history
+                await addDoc(collection(db, 'history'), {
+                    userId: request.userId,
+                    type: 'withdrawal',
+                    amount: request.amount,
+                    status: 'success',
+                    description: 'Withdrawal Approved',
+                    createdAt: serverTimestamp()
+                });
+
                 toast.success('Withdrawal approved successfully!', { id: loadingToast });
             } else {
                 await updateDoc(reqRef, {
@@ -49,6 +69,17 @@ const AdminWithdrawals = () => {
                     balance: increment(request.amount),
                     activeWithdrawals: increment(-1)
                 });
+
+                // Add to history
+                await addDoc(collection(db, 'history'), {
+                    userId: request.userId,
+                    type: 'withdrawal',
+                    amount: request.amount,
+                    status: 'rejected',
+                    description: 'Withdrawal Rejected (Coins Returned)',
+                    createdAt: serverTimestamp()
+                });
+
                 toast.success('Withdrawal rejected. Coins returned to user.', { id: loadingToast });
             }
         } catch (error) {
@@ -58,16 +89,19 @@ const AdminWithdrawals = () => {
     };
 
     const filteredRequests = requests.filter(req => {
-        const matchesFilter = filter === 'all' || req.status === filter;
+        // Case-insensitive status matching
+        const matchesFilter = filter === 'all' ||
+            req.status?.toLowerCase() === filter.toLowerCase();
+
         const matchesSearch =
-            req.userEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (req.userEmail || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
             req.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            req.method?.toLowerCase().includes(searchTerm.toLowerCase());
+            (req.method || '').toLowerCase().includes(searchTerm.toLowerCase());
         return matchesFilter && matchesSearch;
     });
 
     const getStatusColor = (status) => {
-        switch (status) {
+        switch (status?.toLowerCase()) {
             case 'pending': return 'text-amber-500 bg-amber-500/10 border-amber-500/20';
             case 'approved': return 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20';
             case 'rejected': return 'text-red-500 bg-red-500/10 border-red-500/20';
@@ -183,11 +217,11 @@ const AdminWithdrawals = () => {
                                                     <div className="flex flex-wrap items-center gap-4 text-[10px] font-black text-slate-600 uppercase tracking-widest">
                                                         <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-black/[0.05]">
                                                             <Calendar size={12} className="text-accent" />
-                                                            {req.createdAt?.toDate().toLocaleDateString()}
+                                                            {req.createdAt?.toDate ? req.createdAt.toDate().toLocaleDateString() : 'N/A'}
                                                         </div>
                                                         <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-black/[0.05]">
                                                             <Clock size={12} className="text-accent" />
-                                                            {req.createdAt?.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                            {req.createdAt?.toDate ? req.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A'}
                                                         </div>
                                                         <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-black/[0.05]">
                                                             <CreditCard size={12} className="text-accent" />
@@ -234,7 +268,7 @@ const AdminWithdrawals = () => {
                                                             Transaction {req.status}
                                                         </span>
                                                     </div>
-                                                    {req.processedAt && (
+                                                    {req.processedAt && req.processedAt.toDate && (
                                                         <span className="text-[10px] text-slate-600 font-medium block">
                                                             {req.processedAt.toDate().toLocaleString()}
                                                         </span>

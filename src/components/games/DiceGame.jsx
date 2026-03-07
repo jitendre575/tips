@@ -75,7 +75,7 @@ const DiceGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                             type="number"
                             value={betAmount}
                             onChange={(e) => setBetAmount(Math.max(0, parseInt(e.target.value) || 0))}
-                            className="w-full bg-primary border border-white/5 rounded-[22px] py-4 sm:py-6 pl-14 pr-8 text-xl sm:text-2xl font-black italic tracking-tighter text-white focus:border-accent/50 transition-all outline-none"
+                            className="w-full bg-primary border border-white/5 rounded-[22px] py-4 sm:py-6 pl-14 pr-8 text-xl sm:text-2xl font-black italic tracking-tighter text-zinc-900 focus:border-accent/50 transition-all outline-none"
                         />
                     </div>
                 </div>
@@ -127,7 +127,7 @@ const DiceGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                 {/* Roll Slider Visual */}
                 <div className="relative">
                     {/* Background Bar */}
-                    <div className="w-full h-4 bg-zinc-900 rounded-full relative overflow-hidden">
+                    <div className="w-full h-4 bg-zinc-800 rounded-full relative overflow-hidden">
                         <div
                             className={`absolute h-full transition-all duration-500 ${isOver ? 'bg-red-500/20 left-0' : 'bg-emerald-500/20 right-0'}`}
                             style={{ width: isOver ? `${targetValue}%` : `${100 - targetValue}%` }}
@@ -182,7 +182,7 @@ const DiceGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                     />
 
                     {/* Scale Labels */}
-                    <div className="flex justify-between mt-6 text-[10px] font-black text-zinc-600 uppercase tracking-[3px]">
+                    <div className="flex justify-between mt-6 text-[10px] font-black text-zinc-400 uppercase tracking-[3px]">
                         <span>0</span>
                         <span>25</span>
                         <span>50</span>
@@ -193,7 +193,7 @@ const DiceGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
 
                 {/* Results Area */}
                 <div className="flex flex-col items-center mt-4 sm:mt-0">
-                    <div className="text-zinc-800 text-6xl sm:text-9xl font-black italic tracking-tighter select-none opacity-20 leading-none">
+                    <div className="text-white text-6xl sm:text-9xl font-black italic tracking-tighter select-none opacity-40 leading-none">
                         {isRolling ? '??' : (lastRoll || '50')}
                     </div>
                 </div>

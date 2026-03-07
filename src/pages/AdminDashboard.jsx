@@ -72,6 +72,8 @@ const AdminDashboard = () => {
             // Notify admin if a NEW pending request arrives and we already had data
             setStats(prev => {
                 if (pendingCount > prev.pendingRecharges) {
+                    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2040/2040-preview.mp3');
+                    audio.play().catch(() => { });
                     toast.success('NEW RECHARGE REQUEST RECEIVED!', {
                         icon: '💰',
                         duration: 6000,
@@ -87,10 +89,37 @@ const AdminDashboard = () => {
                 }
                 return { ...prev, pendingRecharges: pendingCount };
             });
+        }, (err) => {
+            console.error("Recharge Summary Error:", err);
+            // Non-critical toast for summary
         });
 
         const unsubWithdrawals = onSnapshot(query(collection(db, 'withdrawals')), s => {
-            setStats(prev => ({ ...prev, pendingWithdrawals: s.docs.filter(d => d.data().status?.toLowerCase() === 'pending').length }));
+            const pendingCount = s.docs.filter(d => d.data().status?.toLowerCase() === 'pending').length;
+
+            setStats(prev => {
+                // If the count increased and it's not the first load (prev.pendingWithdrawals > 0 or we want to notify even on first load)
+                // Actually, the recharge logic checks if it increased.
+                if (pendingCount > prev.pendingWithdrawals) {
+                    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2040/2040-preview.mp3');
+                    audio.play().catch(() => { });
+                    toast.success('NEW WITHDRAWAL REQUEST RECEIVED!', {
+                        icon: '💳',
+                        duration: 6000,
+                        style: {
+                            background: '#050505',
+                            color: '#fff',
+                            border: '1px solid #4f46e5', // Accent color
+                            fontFamily: 'Outfit, sans-serif',
+                            fontWeight: '900',
+                            textTransform: 'uppercase'
+                        }
+                    });
+                }
+                return { ...prev, pendingWithdrawals: pendingCount };
+            });
+        }, (err) => {
+            console.error("Withdrawal Summary Error:", err);
         });
 
         const unsubMatches = onSnapshot(collection(db, 'matches'), s => {
@@ -439,7 +468,7 @@ const AdminDashboard = () => {
                                         tab.id === 'withdrawals' ? stats.pendingWithdrawals :
                                             stats.unreadSupport
                                 ) > 0 && (
-                                        <span className={`absolute -top-1 -right-1 w-6 h-6 ${tab.id === 'recharges' ? 'bg-yellow-500' : 'bg-red-500'} text-white text-[10px] rounded-full flex items-center justify-center animate-bounce border-[3px] border-white shadow-lg`}>
+                                        <span className={`absolute -top-2 -right-2 w-7 h-7 bg-red-600 text-white text-[11px] font-black rounded-full flex items-center justify-center animate-pulse border-[3px] border-white shadow-[0_5px_15px_rgba(220,38,38,0.4)] z-[50]`}>
                                             {tab.id === 'recharges' ? stats.pendingRecharges : tab.id === 'withdrawals' ? stats.pendingWithdrawals : stats.unreadSupport}
                                         </span>
                                     )}
@@ -476,7 +505,7 @@ const AdminCasino = ({ stats }) => {
         houseEdge: 1, // 1%
         crashMultiplierLimit: 100,
         minesProbBias: 0,
-        activeGames: ['mines', 'dice', 'crash', 'color', 'chicken'],
+        activeGames: ['mines', 'dice', 'crash', 'color', 'chicken', 'plinko'],
         // Precision Controls
         forceCrashPoint: 1.5,
         rigNextCrash: false,
@@ -728,6 +757,7 @@ const AdminCasino = ({ stats }) => {
                             { id: 'dice', name: 'Dice', icon: Dice5, color: 'text-indigo-500', desc: 'High Fidelity Entropy' },
                             { id: 'color', name: 'Color Prediction', icon: BarChart3, color: 'text-yellow-500', desc: 'Spectrum Market analysis' },
                             { id: 'chicken', name: 'Chicken 2 Road', icon: Play, color: 'text-emerald-400', desc: 'Hyper-Strategic Path' },
+                            { id: 'plinko', name: 'Plinko', icon: Sparkles, color: 'text-pink-500', desc: 'Gravity Drop Game' },
                             { id: 'slots', name: 'Mega Slots', icon: Sparkles, color: 'text-pink-500', desc: 'RNG Visual Reels' },
                         ].map(game => {
                             const isActive = settings.activeGames.includes(game.id);

@@ -140,7 +140,7 @@ const BetModal = ({ match, onClose }) => {
                                         type="number"
                                         value={amount}
                                         onChange={(e) => setAmount(e.target.value)}
-                                        className="w-full bg-primary border border-white/5 rounded-[24px] py-6 pl-12 pr-6 text-4xl font-black italic tracking-tighter text-white focus:border-accent/50 focus:ring-4 focus:ring-accent/10 outline-none transition-all"
+                                        className="w-full bg-primary border border-white/5 rounded-[24px] py-6 pl-12 pr-6 text-4xl font-black italic tracking-tighter text-zinc-900 focus:border-accent/50 focus:ring-4 focus:ring-accent/10 outline-none transition-all"
                                     />
                                 </div>
 

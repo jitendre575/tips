@@ -14,6 +14,7 @@ import SlotGame from '../components/games/SlotGame';
 import CrashGame from '../components/games/CrashGame';
 import ColorGame from '../components/games/ColorGame';
 import ChickenRoadGame from '../components/games/ChickenRoadGame';
+import PlinkoGame from '../components/games/PlinkoGame';
 
 const CasinoGame = () => {
     const { gameId } = useParams();
@@ -24,7 +25,7 @@ const CasinoGame = () => {
     const [isMuted, setIsMuted] = useState(false);
     const [casinoSettings, setCasinoSettings] = useState({
         houseEdge: 1,
-        activeGames: ['mines', 'dice', 'crash', 'color', 'chicken']
+        activeGames: ['mines', 'dice', 'crash', 'color', 'chicken', 'plinko']
     });
 
     useEffect(() => {
@@ -135,6 +136,8 @@ const CasinoGame = () => {
                 return <MinesGame onBet={handleBet} onWin={handleWin} onLoss={handleLoss} isMuted={isMuted} settings={casinoSettings} />;
             case 'dice':
                 return <DiceGame onBet={handleBet} onWin={handleWin} onLoss={handleLoss} isMuted={isMuted} settings={casinoSettings} />;
+            case 'plinko':
+                return <PlinkoGame onBet={handleBet} onWin={handleWin} onLoss={handleLoss} isMuted={isMuted} settings={casinoSettings} />;
             case 'bonanza':
             case 'olympus':
             case 'fisherman':

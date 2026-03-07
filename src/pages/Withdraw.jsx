@@ -203,9 +203,9 @@ const Withdraw = () => {
                                                 <span className="text-[10px] font-black text-zinc-600 uppercase">Coins</span>
                                             </div>
                                             <div className="flex items-center gap-2 text-xs text-zinc-500 font-medium">
-                                                <span className="uppercase">{req.method}</span>
+                                                <span>{req.method}</span>
                                                 <span>•</span>
-                                                <span>{req.createdAt?.toDate().toLocaleDateString()}</span>
+                                                <span>{req.createdAt?.toDate ? req.createdAt.toDate().toLocaleDateString() : 'Pending...'}</span>
                                             </div>
                                         </div>
                                     </div>

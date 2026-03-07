@@ -42,22 +42,36 @@ const Payment = () => {
         }
 
         setLoading(true);
+        console.log("Starting payment submission...");
+
         try {
             // 1. Upload Screenshot to Firebase Storage
             const storageRef = ref(storage, `recharges/${user.uid}/${Date.now()}_${file.name}`);
-            const snapshot = await uploadBytes(storageRef, file);
-            const downloadURL = await getDownloadURL(snapshot.ref);
+            const uploadTask = await uploadBytes(storageRef, file).catch(err => {
+                console.error("Storage upload failed:", err);
+                throw new Error("Failed to upload screenshot. Please check your connection.");
+            });
+
+            const downloadURL = await getDownloadURL(uploadTask.ref);
+            console.log("File uploaded successfully:", downloadURL);
 
             // 2. Save Request to Firestore
-            await addDoc(collection(db, 'rechargeRequests'), {
+            const requestPayload = {
                 userId: user.uid,
                 userName: userData?.name || user.email.split('@')[0],
                 userPhone: userData?.phone || 'N/A',
-                amount: amount,
+                amount: Number(amount),
                 screenshot: downloadURL,
                 status: 'Pending',
                 createdAt: serverTimestamp(),
+            };
+
+            const docRef = await addDoc(collection(db, 'rechargeRequests'), requestPayload).catch(err => {
+                console.error("Firestore addDoc failed:", err);
+                throw new Error("Failed to save request. Server busy.");
             });
+
+            console.log("Request document created with ID:", docRef.id);
 
             // 3. Create Notification for Admin
             await addDoc(collection(db, 'notifications'), {
@@ -66,7 +80,7 @@ const Payment = () => {
                 message: `New recharge request from ${userData?.name || user.email} for ₹${amount}`,
                 createdAt: serverTimestamp(),
                 read: false
-            });
+            }).catch(e => console.error("Notification failed (non-critical):", e));
 
             setSubmitted(true);
             toast.success('Payment submitted successfully!');
@@ -76,8 +90,8 @@ const Payment = () => {
             }, 5000);
 
         } catch (error) {
-            console.error('Submission error:', error);
-            toast.error('Failed to submit payment. Please try again.');
+            console.error('Submission error details:', error);
+            toast.error(error.message || 'Failed to submit payment. Please try again.');
         } finally {
             setLoading(false);
         }

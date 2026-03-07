@@ -14,6 +14,7 @@ const AdminUsers = () => {
     const [walletAction, setWalletAction] = useState({ type: 'add', amount: '', note: '' });
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
+    const [pendingRequests, setPendingRequests] = useState({});
     const scrollRef = useRef();
 
     useEffect(() => {
@@ -21,8 +22,7 @@ const AdminUsers = () => {
         const qUsers = query(collection(db, 'users'));
         const unsubUsers = onSnapshot(qUsers, (snapshot) => {
             const usersData = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
+                id: doc.id, ...doc.data()
             }));
             setUsers(usersData);
             setLoading(false);
@@ -32,15 +32,26 @@ const AdminUsers = () => {
         const qSupport = query(collection(db, 'support_chats'));
         const unsubSupport = onSnapshot(qSupport, (snapshot) => {
             const statusMap = {};
-            snapshot.docs.forEach(doc => {
-                statusMap[doc.id] = doc.data();
-            });
+            snapshot.docs.forEach(doc => { statusMap[doc.id] = doc.data(); });
             setSupportStatus(statusMap);
+        });
+
+        // Sync Pending Recharges for User Badges
+        const qPending = query(collection(db, 'rechargeRequests'), where('status', '==', 'Pending'));
+        const unsubPending = onSnapshot(qPending, (snapshot) => {
+            const pendingMap = {};
+            snapshot.docs.forEach(doc => {
+                const data = doc.data();
+                if (!pendingMap[data.userId]) pendingMap[data.userId] = 0;
+                pendingMap[data.userId]++;
+            });
+            setPendingRequests(pendingMap);
         });
 
         return () => {
             unsubUsers();
             unsubSupport();
+            unsubPending();
         };
     }, []);
 
@@ -272,17 +283,27 @@ const AdminUsers = () => {
                                 <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4">
                                     <button
                                         onClick={() => setChattingUser(user)}
-                                        className={`flex items-center justify-center gap-3 py-4 rounded-[24px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-sm group/btn ${hasUnread ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200'}`}
+                                        className={`flex items-center justify-center gap-3 py-4 rounded-[24px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-sm group/btn relative ${hasUnread ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200'}`}
                                     >
                                         <MessageCircle size={18} className="group-hover/btn:scale-110 transition-transform" />
                                         <span>Chat</span>
+                                        {hasUnread && (
+                                            <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center animate-bounce border-[3px] border-white shadow-lg z-20">
+                                                !
+                                            </span>
+                                        )}
                                     </button>
                                     <button
                                         onClick={() => setEditingUser(user)}
-                                        className="flex items-center justify-center gap-3 py-4 bg-slate-100 hover:bg-accent text-slate-500 hover:text-white rounded-[24px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-sm group/btn"
+                                        className="flex items-center justify-center gap-3 py-4 bg-slate-100 hover:bg-accent text-slate-500 hover:text-white rounded-[24px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-sm group/btn relative"
                                     >
                                         <Wallet size={18} className="group-hover/btn:scale-110 transition-transform" />
                                         <span>Wallet</span>
+                                        {pendingRequests[user.id] > 0 && (
+                                            <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white text-[10px] rounded-full flex items-center justify-center animate-pulse border-[3px] border-white shadow-lg z-20">
+                                                {pendingRequests[user.id]}
+                                            </span>
+                                        )}
                                     </button>
                                 </div>
                                 <button

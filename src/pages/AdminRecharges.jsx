@@ -17,6 +17,7 @@ const AdminRecharges = () => {
         // Fetch all requests and sort in memorial to avoid Firebase Index requirement errors
         const q = query(collection(db, 'rechargeRequests'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
+            console.log(`Received ${snapshot.size} recharge requests.`);
             const reqs = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
@@ -28,8 +29,11 @@ const AdminRecharges = () => {
             setRequests(reqs);
             setLoading(false);
         }, (error) => {
-            console.error("Snapshot error:", error);
-            // Fallback for basic view if complex query fails
+            console.error("Critical Admin Snapshot Error:", error);
+            toast.error(`Permission Denied: Unable to fetch requests. Check DB Rules. (${error.code})`, {
+                duration: 6000,
+                position: 'top-center'
+            });
             setLoading(false);
         });
 
