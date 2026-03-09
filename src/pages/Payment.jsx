@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Upload, CheckCircle2, Loader2, AlertCircle, ShieldCheck, IndianRupee, QrCode, Smartphone, Info } from 'lucide-react';
 import { db, storage } from '../firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { collection, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -15,7 +15,10 @@ const Payment = () => {
 
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
+    const [utr, setUtr] = useState('');
     const [loading, setLoading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [statusText, setStatusText] = useState('');
     const [submitted, setSubmitted] = useState(false);
 
     if (amount <= 0) {
@@ -36,64 +39,117 @@ const Payment = () => {
     };
 
     const handleSubmit = async () => {
+        if (!utr || utr.length < 6) {
+            toast.error('Please enter a valid Transaction/UTR ID');
+            return;
+        }
         if (!file) {
-            toast.error('Please upload a payment screenshot');
+            toast.error('Please upload a screenshot of your payment');
             return;
         }
 
         setLoading(true);
-        console.log("Starting payment submission...");
+        setUploadProgress(10);
+        setStatusText('Securing Connection...');
+
+        let watchdogTimer;
 
         try {
-            // 1. Upload Screenshot to Firebase Storage
-            const storageRef = ref(storage, `recharges/${user.uid}/${Date.now()}_${file.name}`);
-            const uploadTask = await uploadBytes(storageRef, file).catch(err => {
-                console.error("Storage upload failed:", err);
-                throw new Error("Failed to upload screenshot. Please check your connection.");
-            });
-
-            const downloadURL = await getDownloadURL(uploadTask.ref);
-            console.log("File uploaded successfully:", downloadURL);
-
-            // 2. Save Request to Firestore
+            // STEP 1: Immediate Metalogging
             const requestPayload = {
-                userId: user.uid,
-                userName: userData?.name || user.email.split('@')[0],
-                userPhone: userData?.phone || 'N/A',
+                userId: user?.uid || 'unknown_id',
+                userName: userData?.name || (user?.email ? user.email.split('@')[0] : 'Member'),
+                userPhone: userData?.phone || user?.phoneNumber || 'N/A',
                 amount: Number(amount),
-                screenshot: downloadURL,
+                utr: utr.trim(),
+                screenshot: null,
                 status: 'Pending',
                 createdAt: serverTimestamp(),
             };
 
-            const docRef = await addDoc(collection(db, 'rechargeRequests'), requestPayload).catch(err => {
-                console.error("Firestore addDoc failed:", err);
-                throw new Error("Failed to save request. Server busy.");
-            });
+            const docRef = await addDoc(collection(db, 'rechargeRequests'), requestPayload);
+            const requestId = docRef.id;
 
-            console.log("Request document created with ID:", docRef.id);
-
-            // 3. Create Notification for Admin
+            // STEP 1.5: Immediate Admin Notification (Alert before photo finishes)
             await addDoc(collection(db, 'notifications'), {
                 userId: 'admin_global',
                 type: 'new_recharge',
-                message: `New recharge request from ${userData?.name || user.email} for ₹${amount}`,
+                message: `New ₹${amount} deposit (${utr}) from ${userData?.name || 'Member'}`,
                 createdAt: serverTimestamp(),
                 read: false
-            }).catch(e => console.error("Notification failed (non-critical):", e));
+            }).catch(() => null);
 
-            setSubmitted(true);
-            toast.success('Payment submitted successfully!');
+            setUploadProgress(30);
+            setStatusText('Syncing UTR ID...');
 
-            setTimeout(() => {
-                navigate('/history');
-            }, 5000);
+            // STEP 2: Precise Upload
+            let uploadFinished = false;
+
+            watchdogTimer = setTimeout(() => {
+                if (!uploadFinished) {
+                    setSubmitted(true);
+                    toast.success('UTR LOGGED! Photo still sending in background.', { duration: 6000 });
+                }
+            }, 35000); // 35 seconds for slow uploads
+
+            setStatusText('Uploading Proof...');
+            // Path structure: recharges/UID/TIMESTAMP_FILENAME
+            const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+            const storagePath = `recharges/${user?.uid || 'guest'}/${fileName}`;
+            const storageRef = ref(storage, storagePath);
+
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    setUploadProgress(Math.round(progress));
+                },
+                (error) => {
+                    console.error("Storage Error:", error);
+                    clearTimeout(watchdogTimer);
+                    setSubmitted(true);
+                    toast.error(`Photo Error: ${error.code || 'Upload failed'}. UTR still logged!`);
+                },
+                async () => {
+                    uploadFinished = true;
+                    clearTimeout(watchdogTimer);
+
+                    try {
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+
+                        // STEP 3: Update Firestore
+                        await updateDoc(doc(db, 'rechargeRequests', requestId), {
+                            screenshot: downloadURL
+                        });
+
+                        setUploadProgress(100);
+                        setSubmitted(true);
+                        toast.success('DEPOSIT VERIFIED & LOGGED!');
+                        setTimeout(() => navigate('/history'), 2000);
+                    } catch (err) {
+                        setSubmitted(true);
+                        toast.error("URL generation failed, but UTR is safe.");
+                    }
+                }
+            );
 
         } catch (error) {
-            console.error('Submission error details:', error);
-            toast.error(error.message || 'Failed to submit payment. Please try again.');
-        } finally {
-            setLoading(false);
+            console.error('Submission crash:', error);
+            clearTimeout(watchdogTimer);
+
+            // Explicit error reporting for Firestore write failures
+            const errorMsg = error.code === 'permission-denied'
+                ? "ACCESS FORBIDDEN: Check Firebase Rules"
+                : (error.message || "Connection failed");
+
+            if (statusText !== 'Securing Connection...') {
+                setSubmitted(true);
+                toast.error(`UTR LOG ERROR: ${errorMsg}. Photo failed too.`);
+            } else {
+                toast.error(`CRITICAL ERROR: ${errorMsg}`);
+                setLoading(false);
+            }
         }
     };
 
@@ -157,20 +213,18 @@ const Payment = () => {
 
                     <div className="flex flex-col lg:flex-row items-center gap-6 relative">
                         <div className="space-y-8 flex-1 text-center lg:text-left">
-                            <div className="space-y-4">
-                                <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 rounded-full border border-emerald-500/20 h-fit">
-                                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Fast Verification Active</span>
-                                </div>
-                                <h2 className="text-5xl font-black italic tracking-tighter text-white leading-none">₹{amount.toLocaleString()}</h2>
-                                <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[2px]">Total Payable Amount</p>
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 rounded-full border border-emerald-500/20 h-fit">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Fast Verification Active</span>
                             </div>
+                            <h2 className="text-5xl font-black italic tracking-tighter text-white leading-none">₹{amount.toLocaleString()}</h2>
+                            <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[2px]">Total Payable Amount</p>
+                        </div>
 
-                            <div className="flex flex-wrap justify-center lg:justify-start gap-4 opacity-30 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                                <img src="https://logolook.net/wp-content/uploads/2023/11/PhonePe-Logo.png" alt="PhonePe" className="h-8" />
-                                <img src="https://logolook.net/wp-content/uploads/2021/11/Paytm-Logo.png" alt="Paytm" className="h-6" />
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo.png" alt="UPI" className="h-6" />
-                            </div>
+                        <div className="flex flex-wrap justify-center lg:justify-start gap-5 opacity-30 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.svg/200px-PhonePe_Logo.svg.png" alt="PhonePe" className="h-8 object-contain" />
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/200px-Paytm_Logo_%28standalone%29.svg.png" alt="Paytm" className="h-6 object-contain" />
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo.png/200px-UPI-Logo.png" alt="UPI" className="h-6 object-contain" />
                         </div>
 
                         <div className="relative">
@@ -185,6 +239,26 @@ const Payment = () => {
                                 </div>
                             </div>
                             <div className="absolute -inset-4 bg-accent/10 blur-3xl -z-10 group-hover:bg-accent/20 transition-all duration-500" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* UTR Input Section */}
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between px-4">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Transaction Details</label>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-[#3b82f6]">12 Digit UTR / Ref ID</span>
+                    </div>
+                    <div className="relative group">
+                        <input
+                            type="text"
+                            placeholder="Enter 12-digit UTR Number"
+                            value={utr}
+                            onChange={(e) => setUtr(e.target.value)}
+                            className="w-full bg-zinc-950 border border-white/5 rounded-[24px] py-6 px-8 text-xl font-black text-white focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-zinc-800 uppercase tracking-widest"
+                        />
+                        <div className="absolute right-6 top-1/2 -translate-y-1/2 p-2 bg-blue-500/10 rounded-lg text-blue-500 pointer-events-none group-focus-within:scale-110 transition-transform">
+                            <ShieldCheck size={20} />
                         </div>
                     </div>
                 </div>
@@ -211,7 +285,7 @@ const Payment = () => {
                             </div>
                         ) : (
                             <div className="text-center group/upload">
-                                <div className="w-20 h-20 bg-zinc-900 rounded-[30px] flex items-center justify-center text-zinc-600 mb-6 mx-auto group-hover/upload:scale-110 group-hover/upload:text-accent transition-all duration-500 border border-white/5 shadow-2xl">
+                                <div className="w-20 h-20 bg-zinc-950 rounded-[30px] flex items-center justify-center text-zinc-700 mb-6 mx-auto group-hover/upload:scale-110 group-hover/upload:text-accent transition-all duration-500 border border-white/5 shadow-2xl">
                                     <Upload size={32} />
                                 </div>
                                 <div className="space-y-2">
@@ -255,14 +329,21 @@ const Payment = () => {
                 <button
                     onClick={handleSubmit}
                     disabled={!file || loading}
-                    className="group relative w-full overflow-hidden p-5 bg-accent hover:bg-accent-hover disabled:opacity-30 disabled:grayscale text-white rounded-[24px] font-black uppercase italic tracking-[3px] transition-all shadow-2xl shadow-accent/20 active:scale-95"
+                    className="group relative w-full overflow-hidden p-6 bg-accent hover:bg-accent-hover disabled:opacity-30 disabled:grayscale text-white rounded-[24px] font-black uppercase italic tracking-[3px] transition-all shadow-2xl shadow-accent/20 active:scale-95"
                 >
-                    <div className="absolute inset-0 flex items-center justify-center bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
-                    <div className="relative flex items-center justify-center gap-4">
+                    {loading && (
+                        <div
+                            className="absolute inset-y-0 left-0 bg-white/20 transition-all duration-700 ease-out"
+                            style={{ width: `${uploadProgress}%` }}
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
+                        </div>
+                    )}
+                    <div className="relative z-10 flex items-center justify-center gap-4">
                         {loading ? (
                             <>
                                 <Loader2 className="animate-spin" size={24} />
-                                <span>Verifying...</span>
+                                <span>{statusText || 'Processing...'}</span>
                             </>
                         ) : (
                             <>

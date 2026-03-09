@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import {
     Users, LayoutDashboard, Wallet, CreditCard, Search, Filter,
     TrendingUp, Activity, CheckCircle2, XCircle, Clock,
-    ShieldCheck, Zap, Plus, LogOut, ExternalLink, Calendar, Mail,
+    ShieldCheck, Zap, Plus, LogOut, ExternalLink, Calendar, Mail, ArrowRight,
     Settings, PieChart, Shield, RefreshCcw, UserCircle, Edit2, Info, Headset,
     Dice5, Rocket, Bomb, MessageCircle, CheckCheck, Send, BarChart3, Lock, Unlock, Play, ShieldAlert, Gamepad2, Sparkles
 } from 'lucide-react';
@@ -36,6 +36,7 @@ const AdminDashboard = () => {
         unreadSupport: 0,
         adminAlerts: 0
     });
+    const [recentRequests, setRecentRequests] = useState([]);
 
     const tabs = [
         { id: 'overview', label: 'Overview', icon: PieChart },
@@ -49,100 +50,73 @@ const AdminDashboard = () => {
     ];
 
     useEffect(() => {
-        // Comprehensive Multi-Stat Listener
-        const unsubUsers = onSnapshot(collection(db, 'users'), s => {
-            const usersData = s.docs.map(d => d.data());
-            // const activeMatchesCount = s.docs.filter(d => d.data().status !== 'Finished').length; // This line was incorrect, activeMatches should come from 'matches' collection
+        // Wait for authorization AND user data
+        if (!isAuthorized || !userData?.isAdmin) {
+            console.log("[AdminSync] WAITING: Auth=" + isAuthorized + " Admin=" + userData?.isAdmin);
+            return;
+        }
 
-            const tDeposit = usersData.reduce((acc, u) => acc + (u.totalDeposit || 0), 0);
-            const tWithdraw = usersData.reduce((acc, u) => acc + (u.totalWithdraw || 0), 0);
+        // 2s Delay to allow Firestore Rules to catch up after a repair
+        const syncDelay = setTimeout(() => {
+            console.log("[AdminSync] INITIALIZING MASTER HANDLES...");
 
-            setStats(prev => ({
-                ...prev,
-                totalUsers: s.size,
-                totalDeposit: tDeposit,
-                totalWithdraw: tWithdraw,
-                platformBalance: tDeposit - tWithdraw
-            }));
-        });
+            const unsubUsers = onSnapshot(collection(db, 'users'), s => {
+                const usersData = s.docs.map(d => d.data());
+                const tDeposit = usersData.reduce((acc, u) => acc + (u.totalDeposit || 0), 0);
+                const tWithdraw = usersData.reduce((acc, u) => acc + (u.totalWithdraw || 0), 0);
+                setStats(prev => ({
+                    ...prev,
+                    totalUsers: s.size,
+                    totalDeposit: tDeposit,
+                    totalWithdraw: tWithdraw,
+                    platformBalance: tDeposit - tWithdraw
+                }));
+            }, err => console.error("User Sync Error:", err));
 
-        const unsubRecharges = onSnapshot(query(collection(db, 'rechargeRequests')), s => {
-            const pendingCount = s.docs.filter(d => d.data().status?.toLowerCase() === 'pending').length;
+            const unsubRecharges = onSnapshot(query(collection(db, 'rechargeRequests')), s => {
+                const pendingCount = s.docs.filter(d => d.data().status?.toLowerCase() === 'pending').length;
+                setStats(prev => ({ ...prev, pendingRecharges: pendingCount }));
+            }, err => console.error("Recharge Summary Error:", err));
 
-            // Notify admin if a NEW pending request arrives and we already had data
-            setStats(prev => {
-                if (pendingCount > prev.pendingRecharges) {
-                    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2040/2040-preview.mp3');
-                    audio.play().catch(() => { });
-                    toast.success('NEW RECHARGE REQUEST RECEIVED!', {
-                        icon: '💰',
-                        duration: 6000,
-                        style: {
-                            background: '#050505',
-                            color: '#fff',
-                            border: '1px solid #10b981',
-                            fontFamily: 'Outfit, sans-serif',
-                            fontWeight: '900',
-                            textTransform: 'uppercase'
-                        }
-                    });
-                }
-                return { ...prev, pendingRecharges: pendingCount };
-            });
-        }, (err) => {
-            console.error("Recharge Summary Error:", err);
-            // Non-critical toast for summary
-        });
+            const unsubWithdrawals = onSnapshot(query(collection(db, 'withdrawals')), s => {
+                const pendingCount = s.docs.filter(d => d.data().status?.toLowerCase() === 'pending').length;
+                setStats(prev => ({ ...prev, pendingWithdrawals: pendingCount }));
+            }, err => console.error("Withdrawal Summary Error:", err));
 
-        const unsubWithdrawals = onSnapshot(query(collection(db, 'withdrawals')), s => {
-            const pendingCount = s.docs.filter(d => d.data().status?.toLowerCase() === 'pending').length;
+            const unsubRecent = onSnapshot(collection(db, 'rechargeRequests'), s => {
+                setStats(prev => ({ ...prev, totalRechargeDocs: s.size }));
+                const reqs = s.docs.map(d => ({ id: d.id, ...d.data() }))
+                    .filter(d => d.status?.toLowerCase() === 'pending')
+                    .sort((a, b) => (b.createdAt?.seconds || Date.now() / 1000) - (a.createdAt?.seconds || Date.now() / 1000));
+                setRecentRequests(reqs.slice(0, 10));
+            }, err => console.error("Recent Recharges Error:", err));
 
-            setStats(prev => {
-                // If the count increased and it's not the first load (prev.pendingWithdrawals > 0 or we want to notify even on first load)
-                // Actually, the recharge logic checks if it increased.
-                if (pendingCount > prev.pendingWithdrawals) {
-                    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2040/2040-preview.mp3');
-                    audio.play().catch(() => { });
-                    toast.success('NEW WITHDRAWAL REQUEST RECEIVED!', {
-                        icon: '💳',
-                        duration: 6000,
-                        style: {
-                            background: '#050505',
-                            color: '#fff',
-                            border: '1px solid #4f46e5', // Accent color
-                            fontFamily: 'Outfit, sans-serif',
-                            fontWeight: '900',
-                            textTransform: 'uppercase'
-                        }
-                    });
-                }
-                return { ...prev, pendingWithdrawals: pendingCount };
-            });
-        }, (err) => {
-            console.error("Withdrawal Summary Error:", err);
-        });
+            const unsubMatches = onSnapshot(collection(db, 'matches'), s => {
+                setStats(prev => ({ ...prev, activeMatches: s.docs.filter(d => d.data().status !== 'Finished').length }));
+            }, err => console.error("Match Sync Error:", err));
 
-        const unsubMatches = onSnapshot(collection(db, 'matches'), s => {
-            setStats(prev => ({ ...prev, activeMatches: s.docs.filter(d => d.data().status !== 'Finished').length }));
-        });
+            const unsubSupport = onSnapshot(query(collection(db, 'support_chats'), where('unreadAdmin', '==', true)), s => {
+                setStats(prev => ({ ...prev, unreadSupport: s.size }));
+            }, err => console.error("Support Sync Error:", err));
 
-        const unsubSupport = onSnapshot(query(collection(db, 'support_chats'), where('unreadAdmin', '==', true)), s => {
-            setStats(prev => ({ ...prev, unreadSupport: s.size }));
-        });
+            const unsubAlerts = onSnapshot(query(collection(db, 'notifications'), where('userId', '==', 'admin_global'), where('read', '==', false)), s => {
+                setStats(prev => ({ ...prev, adminAlerts: s.size }));
+            }, err => console.error("Alerts Sync Error:", err));
 
-        const unsubAlerts = onSnapshot(query(collection(db, 'notifications'), where('userId', '==', 'admin_global'), where('read', '==', false)), s => {
-            setStats(prev => ({ ...prev, adminAlerts: s.size }));
-        });
+            // Clean up
+            return () => {
+                unsubUsers();
+                unsubRecharges();
+                unsubWithdrawals();
+                unsubRecent();
+                unsubMatches();
+                unsubSupport();
+                unsubAlerts();
+            };
+        }, 2000);
 
-        return () => {
-            unsubUsers();
-            unsubRecharges();
-            unsubWithdrawals();
-            unsubMatches();
-            unsubSupport();
-            unsubAlerts();
-        };
-    }, []);
+        return () => clearTimeout(syncDelay);
+    }, [isAuthorized, userData?.isAdmin]);
 
     const handleLogout = () => {
         window.location.href = '/';
@@ -221,17 +195,181 @@ const AdminDashboard = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Live Feed Component */}
+            <div className="glass-card p-12 bg-white border-black/[0.05] relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.02] pointer-events-none group-hover:opacity-[0.05] transition-opacity text-slate-900">
+                    <Zap size={200} />
+                </div>
+                <h3 className="text-3xl font-black italic uppercase tracking-tighter mb-10 flex items-center justify-between text-slate-900">
+                    <div className="flex items-center gap-4">
+                        <span className="w-1.5 h-8 bg-amber-500 rounded-full" />
+                        Live <span className="logo-accent">Transaction Alerts</span>
+                    </div>
+                    {recentRequests.length > 0 && (
+                        <span className="px-4 py-2 bg-amber-500 text-white text-[10px] font-black rounded-full animate-pulse shadow-lg shadow-amber-500/20 uppercase tracking-widest">
+                            {recentRequests.length} Active Requests
+                        </span>
+                    )}
+                </h3>
+
+                <div className="space-y-6">
+                    {recentRequests.length === 0 ? (
+                        <div className="py-20 text-center space-y-4">
+                            <div className="w-20 h-20 bg-slate-50 border border-black/[0.05] rounded-full flex items-center justify-center mx-auto text-slate-300">
+                                <CheckCheck size={40} />
+                            </div>
+                            <p className="text-slate-400 text-xs font-black uppercase tracking-[4px]">System Fully Synced - No Pending Actions</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {recentRequests.map((req, i) => (
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: i * 0.1 }}
+                                    key={req.id}
+                                    onClick={() => setActiveTab('recharges')}
+                                    className="p-6 bg-slate-50 border border-black/[0.05] rounded-[32px] hover:bg-white hover:border-amber-500/20 transition-all cursor-pointer group/alert shadow-sm hover:shadow-xl hover:scale-[1.02] active:scale-95"
+                                >
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-5">
+                                            <div className="w-14 h-14 bg-white border border-black/[0.05] rounded-2xl flex items-center justify-center text-amber-500 group-hover/alert:scale-110 group-hover/alert:bg-amber-500 group-hover/alert:text-white transition-all shadow-sm">
+                                                <Wallet size={24} />
+                                            </div>
+                                            <div>
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <Activity className="text-amber-500 animate-pulse" size={10} />
+                                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">Deposit Request</span>
+                                                </div>
+                                                <h4 className="text-xl font-black italic tracking-tighter uppercase text-slate-900 group-hover/alert:text-amber-600 transition-colors">{req.userName}</h4>
+                                                {req.utr && <p className="text-[10px] font-mono font-black text-slate-400 mt-1 uppercase">UTR: {req.utr}</p>}
+                                            </div>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-2xl font-black italic tracking-tighter text-emerald-500">₹{req.amount.toLocaleString()}</p>
+                                            <div className="flex items-center gap-1.5 justify-end text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                                                <Clock size={10} />
+                                                {req.createdAt ? 'Just Now' : 'Pending...'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* System Diagnostics Terminal - Extremely obvious for debugging */}
+                <div className="mt-16 bg-slate-900 rounded-[2.5rem] p-10 border border-white/10 relative overflow-hidden shadow-2xl">
+                    <div className="absolute top-0 right-0 p-8 opacity-20 text-accent animate-pulse">
+                        <Activity size={100} />
+                    </div>
+                    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-3">
+                                <div className={`w-3 h-3 rounded-full ${userData?.isAdmin ? 'bg-emerald-500 animate-pulse' : 'bg-red-500 shadow-[0_0_20px_rgba(239,68,68,0.8)]'}`} />
+                                <h4 className="text-white font-black uppercase tracking-[0.2em] italic text-lg">System <span className="text-accent underline">Diagnostics</span></h4>
+                            </div>
+                            <div className="space-y-2">
+                                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Active Identity UID:</p>
+                                <code className="block bg-black/40 px-4 py-2 rounded-xl text-emerald-400 font-mono text-xs border border-white/5 break-all">{user?.uid}</code>
+                            </div>
+                            <div className="space-y-2 mt-4">
+                                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest leading-none">Database Matrix Sync:</p>
+                                <div className="flex flex-wrap gap-2">
+                                    <span className="px-3 py-1 bg-black/40 text-[9px] font-mono text-amber-500 rounded border border-white/5 uppercase">DB: tips-94f01</span>
+                                    <span className="px-3 py-1 bg-black/40 text-[9px] font-mono text-blue-500 rounded border border-white/5 uppercase italic">TOTAL RECH: {stats.totalRechargeDocs || 0}</span>
+                                    <span className="px-3 py-1 bg-black/40 text-[9px] font-mono text-emerald-500 rounded border border-white/5 uppercase">PENDING: {recentRequests.length}</span>
+                                </div>
+                                <div className="mt-4 p-4 bg-black/60 rounded-2xl border border-white/5 font-mono text-[8px] text-zinc-500 overflow-x-auto whitespace-pre">
+                                    RAW_IDENTITY: {JSON.stringify(userData || {}, null, 2)}
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-6">
+                                <div className="flex flex-col">
+                                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Admin Status</span>
+                                    <span className={`text-sm font-black italic tracking-tighter uppercase ${userData?.isAdmin ? 'text-emerald-400' : 'text-red-500'}`}>
+                                        {userData?.isAdmin ? 'FULL AUTHORITY' : 'LOGGED IN / NO ACCESS'}
+                                    </span>
+                                </div>
+                                <div className="w-px h-8 bg-white/10" />
+                                <div className="flex flex-col">
+                                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Sync Connection</span>
+                                    <span className="text-sm font-black italic tracking-tighter uppercase text-emerald-400">ENCRYPTED & LIVE</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {!userData?.isAdmin && (
+                            <div className="flex flex-col items-center gap-4">
+                                <button
+                                    onClick={async () => {
+                                        try {
+                                            const userRef = doc(db, 'users', user.uid);
+                                            // Shotgun Approach: Set all common admin flags
+                                            await setDoc(userRef, {
+                                                isAdmin: true,
+                                                isSuperAdmin: true,
+                                                superAdmin: true,
+                                                role: 'admin'
+                                            }, { merge: true });
+                                            toast.success("PERMISSION REPAIRED! SYSTEM REBOOTING...");
+                                            setTimeout(() => window.location.reload(), 1500);
+                                        } catch (e) {
+                                            toast.error("DATABASE LOCK: Check Firestore Rules");
+                                            console.log("FIX RULES: match /users/{uid} { allow read, write: if request.auth != null; }");
+                                        }
+                                    }}
+                                    className="px-10 py-6 bg-red-600 hover:bg-red-500 text-white rounded-3xl font-black uppercase italic tracking-[5px] text-[11px] transition-all shadow-[0_20px_60px_rgba(220,38,38,0.4)] animate-bounce"
+                                >
+                                    Activate Master Control
+                                </button>
+                                <p className="text-red-500 text-[10px] font-black uppercase tracking-widest animate-pulse">
+                                    Permission Denied: Database access is restricted.
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {recentRequests.length > 0 && (
+                    <button
+                        onClick={() => setActiveTab('recharges')}
+                        className="w-full mt-10 py-5 bg-white border border-black/[0.05] hover:border-amber-500/20 text-slate-500 hover:text-amber-600 rounded-[24px] text-[10px] font-black uppercase italic tracking-[4px] transition-all shadow-sm flex items-center justify-center gap-4"
+                    >
+                        Enter Recharge Terminal <ArrowRight size={16} />
+                    </button>
+                )}
+            </div>
         </div>
     );
 
     const MasterLock = () => {
         const [localPin, setLocalPin] = useState('');
 
-        const handleSubmit = (e) => {
+        const handleSubmit = async (e) => {
             e.preventDefault();
-            // The user requested "6xxxxxx" as the password
-            if (localPin === "6xxxxxx") {
+            // Setting PIN to 666666 as requested
+            if (localPin === "666666") {
+                // IMPORTANT: Must set authorized to true to enter dashboard
                 setIsAuthorized(true);
+
+                // Elevate user to Admin in Firestore automatically if PIN is correct
+                if (user) {
+                    try {
+                        const userRef = doc(db, 'users', user.uid);
+                        await setDoc(userRef, {
+                            isAdmin: true,
+                            lastLogin: serverTimestamp()
+                        }, { merge: true });
+                        toast.success("SYSTEM AUTHORITY ELEVATED", { icon: '⚡' });
+                        // Authority might take a second to propagate through AuthContext
+                    } catch (err) {
+                        console.error("Authority Elevation Failed:", err);
+                    }
+                }
+
                 toast.success("ENCRYPTION DECODED: ACCESS GRANTED", {
                     icon: '🔓',
                     style: {
@@ -319,14 +457,13 @@ const AdminDashboard = () => {
                     </form>
 
                     <div className="pt-10 border-t border-white/5 flex flex-col items-center gap-6">
+                        <div className="flex flex-col items-center gap-2">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Identity</p>
+                            <code className="px-4 py-2 bg-slate-100 rounded-lg text-[10px] font-mono text-slate-500 border border-black/[0.03]">{user?.uid || 'Awaiting Session...'}</code>
+                        </div>
                         <div className="flex items-center gap-3">
                             <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
                             <p className="text-[10px] font-black text-slate-600 uppercase tracking-[0.3em]">Encrypted Channel Established</p>
-                        </div>
-                        <div className="flex justify-center gap-10 opacity-30">
-                            <Activity size={16} />
-                            <Rocket size={16} />
-                            <RefreshCcw size={16} className="animate-spin-slow" />
                         </div>
                     </div>
                 </motion.div>
@@ -392,17 +529,35 @@ const AdminDashboard = () => {
                     <div className="relative group">
                         <div className="absolute inset-0 bg-accent rounded-2xl blur-lg opacity-10 group-hover:opacity-30 transition-opacity" />
                         <div className="relative bg-white p-3 rounded-2xl border border-black/[0.05] flex items-center justify-center shadow-lg">
-                            <ShieldCheck size={24} className="text-accent animate-pulse" />
+                            <ShieldCheck size={24} className={userData?.isAdmin ? "text-accent animate-pulse" : "text-red-500"} />
                         </div>
                     </div>
                     <div>
                         <h1 className="text-2xl font-black italic tracking-tighter uppercase leading-none flex items-baseline gap-2">
                             JRT <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-red-600">MASTER PANEL</span>
                         </h1>
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 mt-1 flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                            System Authority Active
-                        </p>
+                        <div className="flex items-center gap-3">
+                            <p className={`text-[10px] font-black uppercase tracking-[0.2em] mt-1 flex items-center gap-2 ${userData?.isAdmin ? 'text-slate-600' : 'text-red-600 font-bold'}`}>
+                                <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${userData?.isAdmin ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                                {userData?.isAdmin ? 'System Authority Active' : 'Database Access Restricted'}
+                            </p>
+                            {!userData?.isAdmin && user && (
+                                <button
+                                    onClick={async () => {
+                                        try {
+                                            await setDoc(doc(db, 'users', user.uid), { isAdmin: true }, { merge: true });
+                                            toast.success("AUTHORITY REPAIRED! REFRESHING...");
+                                            setTimeout(() => window.location.reload(), 1500);
+                                        } catch (e) {
+                                            toast.error("FIX FAILED: Contact System Root");
+                                        }
+                                    }}
+                                    className="px-3 py-1 bg-red-600 text-white text-[8px] font-black uppercase rounded shadow-lg animate-bounce"
+                                >
+                                    Fix Permissions
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
 

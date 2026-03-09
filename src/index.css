@@ -225,3 +225,8 @@
     background-position: -200% 0;
   }
 }
+
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
+  background-size: 200% 100%;
+}

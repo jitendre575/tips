@@ -4,8 +4,10 @@ import { collection, addDoc, query, onSnapshot, doc, updateDoc, deleteDoc, getDo
 import { Plus, Trophy, Trash2, Zap, Clock, Calendar, TrendingUp, ShieldCheck, Sword, Target, Activity, AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 
 const AdminPanel = () => {
+    const { userData } = useAuth();
     const [matches, setMatches] = useState([]);
     const [loading, setLoading] = useState(true);
     const [newMatch, setNewMatch] = useState({
@@ -19,6 +21,7 @@ const AdminPanel = () => {
     });
 
     useEffect(() => {
+        if (!userData?.isAdmin) return;
         const q = query(collection(db, 'matches'), orderBy('matchTime', 'desc'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             setMatches(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
@@ -28,7 +31,7 @@ const AdminPanel = () => {
             setLoading(false);
         });
         return () => unsubscribe();
-    }, []);
+    }, [userData?.isAdmin]);
 
     const handleAddMatch = async (e) => {
         e.preventDefault();

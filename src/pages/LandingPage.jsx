@@ -18,6 +18,7 @@ const LandingPage = () => {
     const [isLogin, setIsLogin] = useState(true);
     const [showAuth, setShowAuth] = useState(false);
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [matches, setMatches] = useState([]);
@@ -32,6 +33,24 @@ const LandingPage = () => {
         });
         return () => unsubscribe();
     }, []);
+
+    const cleanError = (error) => {
+        const code = error.code || '';
+        if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
+            return "Invalid Mobile/Email or Security Code. Please check and try again.";
+        }
+        if (code === 'auth/email-already-in-use') {
+            return "This Mobile Number or Email is already registered!";
+        }
+        if (code === 'auth/network-request-failed') {
+            return "Network Error. Please check your internet connection.";
+        }
+        if (code === 'auth/too-many-requests') {
+            return "System busy. Please wait a few moments and try again.";
+        }
+        // Generic cleanup for other errors
+        return error.message.replace(/Firebase:|auth\/|\(|\)|Error/g, '').replace(/-/g, ' ').trim();
+    };
 
     useEffect(() => {
         if (user && userData && !authLoading) {
@@ -52,13 +71,43 @@ const LandingPage = () => {
         try {
             if (isLogin) {
                 await signInWithEmailAndPassword(auth, email, password);
-                toast.success('Welcome to the Gaming Arena!');
+                toast.success('Access Granted! Entering Arena...');
+                navigate('/dashboard');
             } else {
-                await createUserWithEmailAndPassword(auth, email, password);
-                toast.success('Welcome to the 91 Winning Club!');
+                if (!phone || phone.length < 10) {
+                    toast.error("Please enter a valid 10-digit mobile number");
+                    setLoading(false);
+                    return;
+                }
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Save phone to Firestore for the new user
+                const { doc, setDoc } = await import('firebase/firestore');
+                await setDoc(doc(db, 'users', user.uid), {
+                    email: email,
+                    phone: phone,
+                    balance: 0,
+                    totalDeposit: 0,
+                    totalWithdraw: 0,
+                    totalBets: 0,
+                    isAdmin: false,
+                    createdAt: new Date().toISOString()
+                }, { merge: true });
+
+                toast.success('Account Created! Welcome to 91 Club.');
+                navigate('/dashboard');
             }
         } catch (error) {
-            toast.error(error.message);
+            console.error(error);
+            toast.error(cleanError(error), {
+                id: 'auth-err',
+                style: {
+                    background: '#121212',
+                    color: '#fff',
+                    border: '1px solid #ff4b4b'
+                }
+            });
         } finally {
             setLoading(false);
         }
@@ -315,10 +364,25 @@ const LandingPage = () => {
                                         <input
                                             type="email" required value={email} onChange={e => setEmail(e.target.value)}
                                             className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-5 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900"
-                                            placeholder="Enter your details"
+                                            placeholder="Mobile or Email"
                                         />
                                     </div>
                                 </div>
+
+                                {!isLogin && (
+                                    <div className="space-y-2 animate-in slide-in-from-left duration-500">
+                                        <label className="label-sm">Mobile Number</label>
+                                        <div className="relative">
+                                            <TrendingUp className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+                                            <input
+                                                type="tel" required value={phone} onChange={e => setPhone(e.target.value)}
+                                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-5 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900"
+                                                placeholder="10-digit number"
+                                                maxLength={10}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div className="space-y-2">
                                     <label className="label-sm">Security Code</label>

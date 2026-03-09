@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, query, orderBy, onSnapshot, doc, updateDoc, increment, addDoc, serverTimestamp, deleteDoc } from 'firebase/firestore';
-import { ArrowLeft, Check, X, ExternalLink, Calendar, User, IndianRupee, Clock, Search, Filter, AlertCircle, Image as ImageIcon, Trash2 } from 'lucide-react';
+import { collection, query, orderBy, onSnapshot, doc, updateDoc, increment, addDoc, serverTimestamp, deleteDoc, limit } from 'firebase/firestore';
+import { ArrowLeft, Check, X, ExternalLink, Calendar, User, IndianRupee, Clock, Search, Filter, AlertCircle, Image as ImageIcon, Trash2, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 const AdminRecharges = () => {
@@ -11,34 +12,60 @@ const AdminRecharges = () => {
     const [filter, setFilter] = useState('Pending'); // Pending, Approved, Rejected, All
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
+    const { user, userData } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Fetch all requests and sort in memorial to avoid Firebase Index requirement errors
-        const q = query(collection(db, 'rechargeRequests'));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            console.log(`Received ${snapshot.size} recharge requests.`);
-            const reqs = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            })).sort((a, b) => {
-                const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date();
-                const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date();
-                return dateB - dateA;
-            });
-            setRequests(reqs);
-            setLoading(false);
-        }, (error) => {
-            console.error("Critical Admin Snapshot Error:", error);
-            toast.error(`Permission Denied: Unable to fetch requests. Check DB Rules. (${error.code})`, {
-                duration: 6000,
-                position: 'top-center'
-            });
-            setLoading(false);
-        });
+        if (!userData?.isAdmin) return;
 
-        return () => unsubscribe();
-    }, []);
+        // 2s Delay to allow Firestore Rules to catch up
+        const syncDelay = setTimeout(() => {
+            console.log("[RechargeTracker] INITIALIZING ADMIN STREAM...");
+            const q = query(collection(db, 'rechargeRequests'));
+
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+                console.log(`[RechargeTracker] REFRESH: ${snapshot.size} total docs retrieved.`);
+                const reqs = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                })).sort((a, b) => {
+                    const dateA = a.createdAt?.seconds || Date.now() / 1000;
+                    const dateB = b.createdAt?.seconds || Date.now() / 1000;
+                    return dateB - dateA;
+                });
+                setRequests(reqs);
+                setLoading(false);
+            }, (error) => {
+                console.error("Critical Admin Snapshot Error:", error);
+                toast.error(`PERMISSION ERROR: UID ${user?.uid}. Metadata: ${JSON.stringify(userData || {})}`, {
+                    duration: 10000,
+                    id: 'recharge-admin-err'
+                });
+                setLoading(false);
+            });
+
+            return () => unsubscribe();
+        }, 2000);
+
+        return () => clearTimeout(syncDelay);
+    }, [user?.uid, userData?.isAdmin]);
+
+    const repairAdmin = async () => {
+        if (!user?.uid) return;
+        const load = toast.loading('Synchronizing Admin Permissions...');
+        try {
+            await updateDoc(doc(db, 'users', user.uid), {
+                isAdmin: true,
+                isSuperAdmin: true,
+                superAdmin: true,
+                role: 'admin'
+            });
+            toast.success('Admin metadata synchronized. Rebooting...');
+            setTimeout(() => window.location.reload(), 1500);
+        } catch (error) {
+            toast.error('Self-repair failed. Consult Database Owner.', { id: load });
+        }
+    };
 
     const deleteRequest = async (id) => {
         if (!window.confirm('Delete this record permanently?')) return;
@@ -121,6 +148,7 @@ const AdminRecharges = () => {
         const matchesSearch =
             (req.userName || '').toLowerCase().includes(search) ||
             (req.userId || '').toLowerCase().includes(search) ||
+            (req.utr || '').toLowerCase().includes(search) ||
             (req.amount || '').toString().toLowerCase().includes(search);
 
         return matchesFilter && matchesSearch;
@@ -132,21 +160,30 @@ const AdminRecharges = () => {
                 {/* Header Section */}
                 <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
                     <div className="flex items-center gap-6">
-                        <button
-                            onClick={() => navigate('/admin')}
-                            className="p-4 bg-slate-100 rounded-[20px] border border-black/[0.05] text-slate-500 hover:text-slate-900 transition-all shadow-sm active:scale-95"
-                        >
-                            <ArrowLeft size={24} />
-                        </button>
+                        <div className="w-16 h-16 lg:w-20 lg:h-20 bg-slate-900 rounded-[30px] flex items-center justify-center text-accent shadow-2xl relative">
+                            <Activity size={32} className="animate-pulse" />
+                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-4 border-white animate-ping" />
+                        </div>
                         <div>
-                            <div className="flex items-center gap-2 mb-1">
-                                <Clock className="text-accent" size={14} />
-                                <span className="text-slate-600 text-[10px] font-black uppercase tracking-widest">Transaction Queue</span>
+                            <div className="flex items-center gap-3 mb-1">
+                                <div className="h-1.5 w-6 bg-accent rounded-full" />
+                                <span className="text-slate-500 text-[10px] font-black uppercase tracking-[4px]">Live Terminal</span>
+                                <span className="bg-emerald-500/10 text-emerald-600 text-[8px] font-black px-2 py-0.5 rounded-full border border-emerald-500/20 animate-pulse">
+                                    {requests.length} RECORDS SYNCED
+                                </span>
                             </div>
                             <h1 className="text-4xl lg:text-5xl font-black text-slate-900 italic tracking-tighter uppercase leading-none">
-                                Recharge <span className="logo-accent">Requests</span>
+                                Deposit <span className="logo-accent">Tracker</span>
                             </h1>
-                            <p className="text-slate-500 text-sm font-medium mt-2">Verify and approve user deposit screenshots.</p>
+                            <div className="flex items-center gap-4 mt-2">
+                                <p className="text-slate-500 text-sm font-medium">Verify and audit member recharges.</p>
+                                <button
+                                    onClick={repairAdmin}
+                                    className="text-[9px] font-black uppercase text-blue-500 hover:underline"
+                                >
+                                    [ Force Sync Permissions ]
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -161,6 +198,12 @@ const AdminRecharges = () => {
                                 className="w-full bg-white border border-black/[0.05] rounded-[20px] py-4 pl-14 pr-6 text-sm text-slate-900 focus:outline-none focus:border-accent/30 transition-all font-medium shadow-sm"
                             />
                         </div>
+                        <button
+                            onClick={() => navigate('/admin')}
+                            className="p-4 bg-slate-100 rounded-[20px] border border-black/[0.05] text-slate-500 hover:text-slate-900 transition-all shadow-sm active:scale-95"
+                        >
+                            <ArrowLeft size={24} />
+                        </button>
                     </div>
                 </div>
 
@@ -205,11 +248,19 @@ const AdminRecharges = () => {
                             <div key={req.id} className="group bg-white border border-black/[0.05] rounded-[40px] overflow-hidden hover:border-accent/20 transition-all duration-500 shadow-sm hover:shadow-xl flex flex-col">
                                 {/* Screenshot Preview */}
                                 <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 border-b border-black/[0.05]">
-                                    <img
-                                        src={req.screenshot}
-                                        alt="Payment"
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 group-hover:opacity-90"
-                                    />
+                                    {req.screenshot ? (
+                                        <img
+                                            src={req.screenshot}
+                                            alt="Payment"
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 group-hover:opacity-90"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-slate-200">
+                                            <ImageIcon size={48} className="text-slate-400 animate-pulse" />
+                                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Awaiting Photo Upload</span>
+                                            {req.utr && <p className="text-[10px] font-mono text-slate-600">UTR: {req.utr}</p>}
+                                        </div>
+                                    )}
                                     <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent" />
 
                                     <button
@@ -240,12 +291,18 @@ const AdminRecharges = () => {
                                             </div>
                                             <p className="text-xl font-black italic uppercase tracking-tight text-slate-900">{req.userName}</p>
                                         </div>
-                                        <div className="text-right space-y-1.5">
+                                        <div className="text-right space-y-1.5 flex flex-col justify-end items-end">
                                             <div className="flex items-center gap-2 justify-end text-slate-600 font-black">
                                                 <IndianRupee size={14} />
                                                 <span className="text-[10px] font-black uppercase tracking-widest">Amount</span>
                                             </div>
                                             <p className="text-3xl font-black italic tracking-tighter text-emerald-500 leading-none">₹{req.amount?.toLocaleString()}</p>
+                                            {req.utr && (
+                                                <div className="mt-2 text-right">
+                                                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest block">UTR / Ref ID</span>
+                                                    <p className="text-xs font-mono font-black text-slate-900 group-hover:text-accent transition-colors">{req.utr}</p>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 

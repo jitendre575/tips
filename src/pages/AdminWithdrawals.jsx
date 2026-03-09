@@ -1,36 +1,43 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, query, onSnapshot, orderBy, doc, updateDoc, increment, serverTimestamp } from 'firebase/firestore';
-import { Wallet, Clock, CheckCircle2, XCircle, Search, Filter, Mail, CreditCard, ArrowRight, ShieldCheck, Activity, AlertCircle, TrendingDown, ExternalLink } from 'lucide-react';
+import { collection, query, onSnapshot, orderBy, doc, updateDoc, increment, serverTimestamp, addDoc } from 'firebase/firestore';
+import { Wallet, Clock, CheckCircle2, XCircle, Search, Filter, Mail, CreditCard, ArrowRight, ShieldCheck, Activity, AlertCircle, TrendingDown, ExternalLink, Calendar } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import { useAuth } from '../context/AuthContext';
+
 const AdminWithdrawals = () => {
+    const { user, userData } = useAuth();
     const [requests, setRequests] = useState([]);
     const [filter, setFilter] = useState('pending');
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Fetch all requests and sort in JS to avoid index requirement errors
-        const q = query(collection(db, 'withdrawals'));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            // Sort in JS to avoid index requirements
-            data.sort((a, b) => {
-                const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
-                const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
-                return dateB - dateA;
+        if (!userData?.isAdmin) return;
+
+        // 2s Delay to allow Firestore Rules to catch up
+        const syncDelay = setTimeout(() => {
+            const q = query(collection(db, 'withdrawals'));
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+                const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                data.sort((a, b) => {
+                    const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date();
+                    const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date();
+                    return dateB - dateA;
+                });
+                setRequests(data);
+                setLoading(false);
+            }, (error) => {
+                console.error("Snapshot error:", error);
+                setLoading(false);
             });
-            setRequests(data);
-            setLoading(false);
-        }, (error) => {
-            console.error("Snapshot error:", error);
-            toast.error("Failed to load withdrawals. Check database permissions.");
-            setLoading(false);
-        });
-        return () => unsubscribe();
-    }, []);
+            return () => unsubscribe();
+        }, 2000);
+
+        return () => clearTimeout(syncDelay);
+    }, [userData?.isAdmin]);
 
     const handleAction = async (request, action) => {
         const loadingToast = toast.loading(`Processing ${action}...`);

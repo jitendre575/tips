@@ -10,7 +10,8 @@ const History = () => {
     const [activeTab, setActiveTab] = useState('bets'); // 'bets' or 'transactions'
     const [bets, setBets] = useState([]);
     const [transactions, setTransactions] = useState([]);
-    const [pendingRequests, setPendingRequests] = useState([]);
+    const [pendingRecharges, setPendingRecharges] = useState([]);
+    const [pendingWithdrawals, setPendingWithdrawals] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filterType, setFilterType] = useState('all'); // all, six_bonus
 
@@ -29,16 +30,24 @@ const History = () => {
 
         const unsubBets = onSnapshot(betsQ, (snapshot) => {
             const betsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            // Sort in JS to avoid index errors
-            betsData.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+            // Improved sort for pending timestamps
+            betsData.sort((a, b) => {
+                const timeA = a.timestamp?.toMillis ? a.timestamp.toMillis() : Date.now();
+                const timeB = b.timestamp?.toMillis ? b.timestamp.toMillis() : Date.now();
+                return timeB - timeA;
+            });
             setBets(betsData);
             if (activeTab === 'bets') setLoading(false);
         });
 
         const unsubTrans = onSnapshot(transQ, (snapshot) => {
             const transData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            // Sort in JS to avoid index errors
-            transData.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+            // Improved sort for pending timestamps
+            transData.sort((a, b) => {
+                const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : Date.now();
+                const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : Date.now();
+                return timeB - timeA;
+            });
             setTransactions(transData);
             if (activeTab === 'transactions') setLoading(false);
         });
@@ -56,17 +65,12 @@ const History = () => {
             where('status', '==', 'pending')
         );
 
-        let recharges = [];
-        let withdrawals = [];
-
         const unsubRecharges = onSnapshot(pendingRechargeQ, (s) => {
-            recharges = s.docs.map(d => ({ id: d.id, ...d.data(), type: 'deposit', isPending: true }));
-            setPendingRequests([...recharges, ...withdrawals]);
+            setPendingRecharges(s.docs.map(d => ({ id: d.id, ...d.data(), type: 'deposit', isPending: true })));
         });
 
         const unsubWithdrawals = onSnapshot(pendingWithdrawQ, (s) => {
-            withdrawals = s.docs.map(d => ({ id: d.id, ...d.data(), type: 'withdrawal', isPending: true }));
-            setPendingRequests([...recharges, ...withdrawals]);
+            setPendingWithdrawals(s.docs.map(d => ({ id: d.id, ...d.data(), type: 'withdrawal', isPending: true })));
         });
 
         setLoading(false);
@@ -219,7 +223,7 @@ const History = () => {
                             );
                         })()
                     ) : (
-                        pendingRequests.length === 0 && transactions.length === 0 ? (
+                        (pendingRecharges.length + pendingWithdrawals.length) === 0 && transactions.length === 0 ? (
                             <div className="glass-card py-32 text-center flex flex-col items-center">
                                 <HistoryIcon size={64} className="text-zinc-800 mb-6" />
                                 <h3 className="text-2xl font-black italic text-zinc-600 uppercase">No transactions</h3>
@@ -227,32 +231,38 @@ const History = () => {
                             </div>
                         ) : (
                             <div className="space-y-3">
-                                {/* Show Pending Section */}
-                                {pendingRequests.map((req) => (
-                                    <div key={req.id} className="glass-card flex items-center justify-between p-6 border-amber-500/20 bg-amber-500/[0.02]">
-                                        <div className="flex items-center gap-5">
-                                            <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-amber-500/10 text-amber-500">
-                                                <Clock size={20} className="animate-pulse" />
-                                            </div>
-                                            <div>
-                                                <p className="text-lg font-black italic uppercase tracking-tight text-white">
-                                                    {req.type === 'deposit' ? 'Deposit' : 'Withdrawal'} Verification
-                                                </p>
-                                                <div className="flex items-center gap-2 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
-                                                    <span>{req.createdAt?.toDate ? req.createdAt.toDate().toLocaleDateString() : 'Just now'}</span>
-                                                    <span className="text-zinc-800">•</span>
-                                                    <span className="text-amber-500 animate-pulse">Awaiting Approval</span>
+                                {/* Combine and Sort Pending Section */}
+                                {[...pendingRecharges, ...pendingWithdrawals]
+                                    .sort((a, b) => {
+                                        const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : Date.now();
+                                        const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : Date.now();
+                                        return timeB - timeA;
+                                    })
+                                    .map((req) => (
+                                        <div key={req.id} className="glass-card flex items-center justify-between p-6 border-amber-500/20 bg-amber-500/[0.02]">
+                                            <div className="flex items-center gap-5">
+                                                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-amber-500/10 text-amber-500">
+                                                    <Clock size={20} className="animate-pulse" />
+                                                </div>
+                                                <div>
+                                                    <p className="text-lg font-black italic uppercase tracking-tight text-white">
+                                                        {req.type === 'deposit' ? 'Deposit' : 'Withdrawal'} Verification
+                                                    </p>
+                                                    <div className="flex items-center gap-2 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+                                                        <span>{req.createdAt?.toDate ? req.createdAt.toDate().toLocaleDateString() : 'Just now'}</span>
+                                                        <span className="text-zinc-800">•</span>
+                                                        <span className="text-amber-500 animate-pulse">Awaiting Approval</span>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div className="text-right">
+                                                <p className="text-2xl font-black italic tracking-tighter text-amber-400">
+                                                    {req.type === 'deposit' ? '+' : '-'}{req.amount?.toLocaleString()}
+                                                </p>
+                                                <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Processing</span>
+                                            </div>
                                         </div>
-                                        <div className="text-right">
-                                            <p className="text-2xl font-black italic tracking-tighter text-amber-400">
-                                                {req.type === 'deposit' ? '+' : '-'}{req.amount?.toLocaleString()}
-                                            </p>
-                                            <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Processing</span>
-                                        </div>
-                                    </div>
-                                ))}
+                                    ))}
 
                                 {transactions.map((trans, idx) => (
                                     <div key={trans.id} className="glass-card flex items-center justify-between p-6 border-white/5">

@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { db } from '../firebase';
-import { collection, query, onSnapshot, doc, updateDoc, addDoc, serverTimestamp, increment, setDoc, orderBy, deleteDoc } from 'firebase/firestore';
+import { collection, query, onSnapshot, doc, updateDoc, addDoc, serverTimestamp, increment, setDoc, orderBy, deleteDoc, where } from 'firebase/firestore';
 import { User, Mail, Wallet, TrendingUp, CreditCard, Edit2, Check, X, Search, Shield, Phone, Calendar, ArrowUpCircle, ArrowDownCircle, Plus, Minus, AlertCircle, FileText, MessageCircle, Send, CheckCheck, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 const AdminUsers = () => {
+    const { userData } = useAuth();
     const [users, setUsers] = useState([]);
     const [editingUser, setEditingUser] = useState(null);
     const [chattingUser, setChattingUser] = useState(null);
@@ -18,6 +20,7 @@ const AdminUsers = () => {
     const scrollRef = useRef();
 
     useEffect(() => {
+        if (!userData?.isAdmin) return;
         // Sync Users
         const qUsers = query(collection(db, 'users'));
         const unsubUsers = onSnapshot(qUsers, (snapshot) => {
@@ -36,24 +39,49 @@ const AdminUsers = () => {
             setSupportStatus(statusMap);
         });
 
-        // Sync Pending Recharges for User Badges
-        const qPending = query(collection(db, 'rechargeRequests'), where('status', '==', 'Pending'));
-        const unsubPending = onSnapshot(qPending, (snapshot) => {
-            const pendingMap = {};
-            snapshot.docs.forEach(doc => {
-                const data = doc.data();
-                if (!pendingMap[data.userId]) pendingMap[data.userId] = 0;
-                pendingMap[data.userId]++;
+        // Sync Pending Requests for User Badges (Recharges and Withdrawals)
+        const qRecharges = query(collection(db, 'rechargeRequests'), where('status', '==', 'Pending'));
+        const qWithdrawals = query(collection(db, 'withdrawals'), where('status', '==', 'pending'));
+
+        let pendingRecharges = {};
+        let pendingWithdrawals = {};
+
+        const updatePendingMap = () => {
+            const combined = {};
+            const allUserIds = new Set([...Object.keys(pendingRecharges), ...Object.keys(pendingWithdrawals)]);
+            allUserIds.forEach(uid => {
+                combined[uid] = (pendingRecharges[uid] || 0) + (pendingWithdrawals[uid] || 0);
             });
-            setPendingRequests(pendingMap);
+            setPendingRequests(combined);
+        };
+
+        const unsubRecharges = onSnapshot(qRecharges, (snapshot) => {
+            const map = {};
+            snapshot.docs.forEach(doc => {
+                const uid = doc.data().userId;
+                map[uid] = (map[uid] || 0) + 1;
+            });
+            pendingRecharges = map;
+            updatePendingMap();
+        });
+
+        const unsubWithdrawals = onSnapshot(qWithdrawals, (snapshot) => {
+            const map = {};
+            snapshot.docs.forEach(doc => {
+                const uid = doc.data().userId;
+                map[uid] = (map[uid] || 0) + 1;
+            });
+            pendingWithdrawals = map;
+            updatePendingMap();
         });
 
         return () => {
             unsubUsers();
             unsubSupport();
-            unsubPending();
+            unsubRecharges();
+            unsubWithdrawals();
         };
-    }, []);
+    }, [userData?.isAdmin]);
 
     // Sync Messages when chatting with a user
     useEffect(() => {
