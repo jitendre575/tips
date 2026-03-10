@@ -157,26 +157,40 @@ const Payment = () => {
         return (
             <div className="min-h-screen flex items-center justify-center bg-primary p-6 overflow-hidden relative">
                 <div className="absolute inset-0 bg-accent/5 blur-[120px] rounded-full translate-y-1/2 scale-150" />
-                <div className="max-w-md w-full text-center space-y-10 relative animate-in zoom-in-95 duration-500">
-                    <div className="relative mx-auto">
-                        <div className="w-32 h-32 bg-emerald-500/10 rounded-[40px] flex items-center justify-center mx-auto border border-emerald-500/20 shadow-2xl animate-bounce">
-                            <CheckCircle2 className="text-emerald-500 w-16 h-16" />
+                <div className="max-w-md w-full relative animate-in zoom-in-95 duration-500">
+                    <div className="bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-[40px] p-10 space-y-10 shadow-2xl relative overflow-hidden">
+                        <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500" />
+
+                        <div className="relative mx-auto">
+                            <div className="w-32 h-32 bg-emerald-500/10 rounded-[40px] flex items-center justify-center mx-auto border border-emerald-500/20 shadow-2xl animate-bounce">
+                                <CheckCircle2 className="text-emerald-500 w-16 h-16" />
+                            </div>
+                            <div className="absolute inset-0 bg-emerald-500/20 blur-3xl rounded-full -z-10" />
                         </div>
-                        <div className="absolute inset-0 bg-emerald-500/20 blur-3xl rounded-full" />
+
+                        <div className="space-y-6 text-center">
+                            <div className="space-y-2">
+                                <h1 className="text-4xl lg:text-5xl font-black italic tracking-tighter uppercase leading-none">
+                                    <span className="text-white drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)]">Request</span> <br />
+                                    <span className="logo-accent text-emerald-500">Logged</span>
+                                </h1>
+                                <div className="h-1 w-12 bg-emerald-500/50 mx-auto rounded-full" />
+                            </div>
+                            <p className="text-zinc-400 font-bold uppercase text-[11px] tracking-widest leading-relaxed px-4">
+                                Your payment is being verified by our <span className="text-emerald-400">elite security team</span>. Balance will update within 5-10 minutes.
+                            </p>
+                        </div>
+
+                        <button
+                            onClick={() => navigate('/dashboard')}
+                            className="w-full py-6 bg-white text-black rounded-[24px] font-black uppercase italic tracking-widest transition-all hover:bg-emerald-500 hover:text-white active:scale-95 shadow-xl shadow-white/5"
+                        >
+                            Return to Dashboard
+                        </button>
                     </div>
-                    <div className="space-y-4">
-                        <h1 className="text-4xl lg:text-5xl font-black text-white italic tracking-tighter uppercase leading-none">
-                            Request <span className="logo-accent">Logged</span>
-                        </h1>
-                        <p className="text-zinc-500 font-medium">Your payment is being verified by our elite security team. Balance will update within 5-10 minutes.</p>
+                    <div className="mt-8 text-center">
+                        <p className="text-[10px] font-black uppercase tracking-[4px] text-zinc-600 animate-pulse">Redirecting to history in 5s...</p>
                     </div>
-                    <button
-                        onClick={() => navigate('/dashboard')}
-                        className="w-full py-5 bg-zinc-900 hover:bg-white text-zinc-400 hover:text-black rounded-[24px] font-black uppercase italic tracking-widest transition-all border border-white/5 active:scale-95"
-                    >
-                        Return to Dashboard
-                    </button>
-                    <p className="text-[10px] font-black uppercase tracking-[4px] text-zinc-700">Redirecting to history in 5s...</p>
                 </div>
             </div>
         );
