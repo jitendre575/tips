@@ -8,7 +8,6 @@ import DashboardLayout from './components/DashboardLayout';
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import History from './pages/History';
-import Leaderboard from './pages/Leaderboard';
 import Withdraw from './pages/Withdraw';
 import Profile from './pages/Profile';
 import AddBalance from './pages/AddBalance';
@@ -87,12 +86,6 @@ function App() {
               <Route path="/withdraw" element={
                 <ProtectedRoute>
                   <Withdraw />
-                </ProtectedRoute>
-              } />
-
-              <Route path="/leaderboard" element={
-                <ProtectedRoute>
-                  <Leaderboard />
                 </ProtectedRoute>
               } />
 

@@ -169,11 +169,15 @@
   }
 
   h1 {
-    @apply text-5xl !leading-[0.85] tracking-tighter;
+    font-size: 22px !important;
+    line-height: 1.1 !important;
+    @apply tracking-tighter;
   }
 
-  h2 {
-    @apply text-3xl !leading-[0.9];
+  h2, h3, h4, h5, h6 {
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+    @apply tracking-tighter;
   }
 
   .glass-card {

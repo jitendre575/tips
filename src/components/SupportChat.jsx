@@ -14,6 +14,12 @@ const SupportChat = () => {
     const scrollRef = useRef();
 
     useEffect(() => {
+        const handleOpenChat = () => setIsOpen(open => !open);
+        window.addEventListener('openSupportChat', handleOpenChat);
+        return () => window.removeEventListener('openSupportChat', handleOpenChat);
+    }, []);
+
+    useEffect(() => {
         if (!user || !isOpen) return;
 
         const chatId = user.uid;
@@ -104,10 +110,10 @@ const SupportChat = () => {
     if (!user) return null;
 
     return (
-        <div className="absolute bottom-6 right-6 z-[1000] flex flex-col items-end">
+        <div className="absolute bottom-6 right-0 sm:right-6 z-[1000] flex flex-col items-end">
             {/* Chat Window */}
             {isOpen && (
-                <div className="mb-4 w-[90vw] sm:w-[380px] h-[500px] bg-surface-light rounded-3xl shadow-2xl border border-white/5 flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
+                <div className="mb-4 w-[100vw] sm:w-[380px] h-[500px] border-r-0 sm:border-r border-t border-b border-l border-white/5 bg-surface-light sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
                     {/* Header */}
                     <div className="bg-zinc-900 px-4 py-5 flex items-center justify-between border-b border-white/5">
                         <div className="flex items-center gap-3">
@@ -190,20 +196,6 @@ const SupportChat = () => {
                     </form>
                 </div>
             )}
-
-            {/* Toggle Button */}
-            <button
-                onClick={() => setIsOpen(!isOpen)}
-                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all hover:scale-110 active:scale-95 ${isOpen ? 'bg-zinc-800 text-white rotate-90' : 'bg-accent text-white'
-                    }`}
-            >
-                {isOpen ? <X size={24} /> : (
-                    <div className="relative">
-                        <MessageCircle size={32} />
-                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 border-4 border-primary rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]"></span>
-                    </div>
-                )}
-            </button>
         </div>
     );
 };

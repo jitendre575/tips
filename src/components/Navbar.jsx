@@ -37,10 +37,6 @@ const Navbar = () => {
                         <History size={18} />
                         <span>History</span>
                     </Link>
-                    <Link to="/leaderboard" className="nav-link">
-                        <Trophy size={18} />
-                        <span>Leaderboard</span>
-                    </Link>
                     {userData?.isAdmin && (
                         <Link to="/admin" className="nav-link text-yellow-500 hover:text-yellow-400">
                             <ShieldCheck size={18} />

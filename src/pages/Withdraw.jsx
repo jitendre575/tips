@@ -11,6 +11,7 @@ const Withdraw = () => {
     const [amount, setAmount] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('UPI');
     const [paymentDetails, setPaymentDetails] = useState('');
+    const [bankDetails, setBankDetails] = useState({ account: '', email: '', ifsc: '', name: '' });
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -44,8 +45,16 @@ const Withdraw = () => {
             return toast.error('Insufficient balance');
         }
 
-        if (!paymentDetails) {
-            return toast.error('Please provide payment details');
+        let finalDetails = paymentDetails;
+        if (paymentMethod === 'BANK') {
+            if (!bankDetails.account || !bankDetails.email || !bankDetails.ifsc || !bankDetails.name) {
+                return toast.error('Please fill all bank details');
+            }
+            finalDetails = `A/c: ${bankDetails.account} | IFSC: ${bankDetails.ifsc} | Name: ${bankDetails.name} | Email: ${bankDetails.email}`;
+        } else {
+            if (!paymentDetails) {
+                return toast.error('Please provide UPI ID');
+            }
         }
 
         setLoading(true);
@@ -56,7 +65,7 @@ const Withdraw = () => {
                 userEmail: user.email,
                 amount: withdrawAmount,
                 method: paymentMethod,
-                details: paymentDetails,
+                details: finalDetails,
                 status: 'pending',
                 createdAt: serverTimestamp()
             });
@@ -70,6 +79,7 @@ const Withdraw = () => {
             toast.success('Withdrawal request submitted!');
             setAmount('');
             setPaymentDetails('');
+            setBankDetails({ account: '', email: '', ifsc: '', name: '' });
         } catch (error) {
             console.error(error);
             toast.error('Failed to submit request');
@@ -135,16 +145,66 @@ const Withdraw = () => {
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="label-sm">{paymentMethod} Details</label>
-                                <textarea
-                                    required
-                                    value={paymentDetails}
-                                    onChange={(e) => setPaymentDetails(e.target.value)}
-                                    placeholder={paymentMethod === 'UPI' ? 'Enter VPA (e.g. name@upi)' : 'Account No, IFSC, Name'}
-                                    className="input-field min-h-[100px] resize-none py-4"
-                                />
-                            </div>
+                            {paymentMethod === 'UPI' ? (
+                                <div className="space-y-2">
+                                    <label className="label-sm">UPI ID</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={paymentDetails}
+                                        onChange={(e) => setPaymentDetails(e.target.value)}
+                                        placeholder="Enter VPA (e.g. name@upi)"
+                                        className="input-field py-4"
+                                    />
+                                </div>
+                            ) : (
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <label className="label-sm">Account Number</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={bankDetails.account}
+                                            onChange={(e) => setBankDetails({ ...bankDetails, account: e.target.value })}
+                                            placeholder="Enter Account Number"
+                                            className="input-field py-4"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="label-sm">IFSC Code</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={bankDetails.ifsc}
+                                            onChange={(e) => setBankDetails({ ...bankDetails, ifsc: e.target.value })}
+                                            placeholder="Enter IFSC Code"
+                                            className="input-field uppercase py-4"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="label-sm">Account Holder Name</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={bankDetails.name}
+                                            onChange={(e) => setBankDetails({ ...bankDetails, name: e.target.value })}
+                                            placeholder="Enter Full Name"
+                                            className="input-field py-4"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="label-sm">Email Address</label>
+                                        <input
+                                            type="email"
+                                            required
+                                            value={bankDetails.email}
+                                            onChange={(e) => setBankDetails({ ...bankDetails, email: e.target.value })}
+                                            placeholder="Enter Email Address"
+                                            className="input-field py-4"
+                                        />
+                                    </div>
+                                </div>
+                            )}
 
                             <button
                                 type="submit"

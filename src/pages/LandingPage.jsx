@@ -37,7 +37,7 @@ const LandingPage = () => {
     const cleanError = (error) => {
         const code = error.code || '';
         if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
-            return "Invalid Mobile/Email or Security Code. Please check and try again.";
+            return "Invalid Mobile/Email or Password. Please check and try again.";
         }
         if (code === 'auth/email-already-in-use') {
             return "This Mobile Number or Email is already registered!";
@@ -95,7 +95,7 @@ const LandingPage = () => {
                     createdAt: new Date().toISOString()
                 }, { merge: true });
 
-                toast.success('Account Created! Welcome to 91 Club.');
+                toast.success('Account Created! Welcome to CRICWIN.');
                 navigate('/dashboard');
             }
         } catch (error) {
@@ -385,7 +385,7 @@ const LandingPage = () => {
                                 )}
 
                                 <div className="space-y-2">
-                                    <label className="label-sm">Security Code</label>
+                                    <label className="label-sm">Password</label>
                                     <div className="relative">
                                         <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                         <input

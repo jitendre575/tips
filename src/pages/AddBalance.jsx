@@ -57,30 +57,30 @@ const AddBalance = () => {
     };
 
     return (
-        <div className="min-h-[calc(100vh-80px)] p-6 bg-primary animate-in fade-in duration-500">
-            <div className="max-w-xl mx-auto space-y-8">
+        <div className="min-h-[calc(100vh-80px)] p-3 sm:p-6 bg-primary animate-in fade-in duration-500">
+            <div className="max-w-xl mx-auto space-y-4 sm:space-y-8">
                 {/* Header */}
-                <div className="flex items-center gap-4">
+                <div className="flex items-start sm:items-center gap-3 sm:gap-4">
                     <button
                         onClick={() => navigate(-1)}
                         className="p-3 bg-white rounded-2xl border border-black/5 text-slate-500 hover:text-slate-800 transition-all shadow-xl active:scale-95"
                     >
                         <ArrowLeft size={20} />
                     </button>
-                    <div>
-                        <h1 className="text-3xl font-black text-slate-900 tracking-tight uppercase italic">Add <span className="logo-accent">Balance</span></h1>
-                        <p className="text-sm text-slate-500 font-medium">Select or enter the amount you want to add</p>
+                    <div className="flex-1">
+                        <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight uppercase italic leading-none mb-1">Add <span className="logo-accent">Balance</span></h1>
+                        <p className="text-xs sm:text-sm text-slate-500 font-medium leading-tight">Select or enter the amount you want to add</p>
                     </div>
                 </div>
 
                 {/* Amount Input */}
-                <div className="bg-white border border-black/5 rounded-[32px] p-8 relative overflow-hidden group shadow-sm">
-                    <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
+                <div className="bg-white border border-black/5 rounded-[32px] p-5 sm:p-8 relative overflow-hidden group shadow-sm">
+                    <div className="absolute top-0 right-0 p-5 sm:p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
                         <Wallet size={160} className="text-accent" />
                     </div>
 
-                    <div className="relative space-y-8">
-                        <div className="space-y-3">
+                    <div className="relative space-y-6 sm:space-y-8">
+                        <div className="space-y-2 sm:space-y-3">
                             <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Enter Amount</label>
                             <div className="relative">
                                 <span className="absolute left-6 top-1/2 -translate-y-1/2 text-4xl font-black text-slate-400 group-focus-within:text-accent transition-colors">₹</span>
@@ -92,18 +92,18 @@ const AddBalance = () => {
                                         setSelectedQuickAmount(null);
                                     }}
                                     placeholder="0.00"
-                                    className="w-full bg-slate-50 border border-black/5 rounded-[28px] py-10 pl-16 pr-8 text-5xl font-[1000] text-slate-900 focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all placeholder:text-slate-300 tracking-tight"
+                                    className="w-full bg-slate-50 border border-black/5 rounded-2xl py-4 sm:py-6 pl-14 pr-6 text-3xl sm:text-4xl font-[1000] text-slate-900 focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all placeholder:text-slate-300 tracking-tight"
                                 />
                                 <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-accent/20 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity" />
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
                             {quickAmounts.map((val) => (
                                 <button
                                     key={val}
                                     onClick={() => handleQuickAmountClick(val)}
-                                    className={`relative group/btn py-5 px-4 rounded-2xl border transition-all duration-300 text-sm font-black italic tracking-tight overflow-hidden ${selectedQuickAmount === val
+                                    className={`relative group/btn py-3 px-2 sm:py-5 sm:px-4 rounded-xl sm:rounded-2xl border transition-all duration-300 text-xs sm:text-sm font-black italic tracking-tight overflow-hidden ${selectedQuickAmount === val
                                         ? 'bg-accent border-accent text-white shadow-[0_0_30px_rgba(239,68,68,0.3)] -translate-y-1'
                                         : 'bg-slate-50 border-black/5 text-slate-600 hover:border-black/10 hover:bg-slate-100 hover:-translate-y-1'
                                         }`}
@@ -133,16 +133,16 @@ const AddBalance = () => {
                 <button
                     onClick={handleContinue}
                     disabled={!amount || parseFloat(amount) <= 0}
-                    className="w-full flex items-center justify-between p-6 bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-[24px] font-black uppercase tracking-widest transition-all group shadow-xl shadow-accent/20 active:scale-[0.98]"
+                    className="w-full flex items-center justify-between p-4 sm:p-5 bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-2xl font-black uppercase tracking-widest transition-all group shadow-xl shadow-accent/20 active:scale-[0.98]"
                 >
-                    <div className="flex items-center gap-4">
-                        <div className="p-2 bg-white/10 rounded-lg">
-                            <PlusCircle className="w-6 h-6" />
+                    <div className="flex items-center gap-3">
+                        <div className="p-1.5 bg-white/10 rounded-lg">
+                            <PlusCircle className="w-5 h-5" />
                         </div>
-                        <span className="text-lg italic">Proceed to Pay</span>
+                        <span className="text-base sm:text-lg italic tracking-tight">Proceed to Pay</span>
                     </div>
-                    <div className="p-2 bg-white/20 rounded-xl group-hover:translate-x-1 transition-transform">
-                        <ChevronRight size={24} />
+                    <div className="p-1.5 bg-white/20 rounded-lg group-hover:translate-x-1 transition-transform">
+                        <ChevronRight className="w-5 h-5" />
                     </div>
                 </button>
             </div>

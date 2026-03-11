@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
-import { Menu, Wallet, PlusCircle, Bell, CreditCard } from 'lucide-react';
+import { Menu, Wallet, PlusCircle, Bell } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import SupportChat from './SupportChat';
 import RechargeModal from './RechargeModal';
@@ -40,7 +40,7 @@ const DashboardLayout = ({ children }) => {
                             <Menu size={20} />
                         </button>
                         <div className="hidden lg:flex flex-col">
-                            <h2 className="text-[10px] font-black text-slate-600 uppercase tracking-[3px] mb-1">91 Winning Club</h2>
+                            <h2 className="text-[10px] font-black text-slate-600 uppercase tracking-[3px] mb-1">The Winning Club</h2>
                             <span className="text-xl font-black italic tracking-tighter uppercase text-slate-900">The Arena</span>
                         </div>
                     </div>
@@ -69,12 +69,6 @@ const DashboardLayout = ({ children }) => {
                             </div>
                         </div>
 
-                        <button
-                            onClick={() => navigate('/withdraw')}
-                            className="w-10 h-10 lg:w-16 lg:h-16 flex items-center justify-center bg-white hover:bg-slate-50 text-slate-600 hover:text-accent rounded-2xl border border-black/[0.05] transition-all active:scale-90 shadow-sm group"
-                        >
-                            <CreditCard size={20} className="lg:w-8 lg:h-8 group-hover:scale-110 transition-transform" />
-                        </button>
 
                         <button
                             onClick={handleRecharge}

@@ -43,16 +43,9 @@ const Payment = () => {
             toast.error('Please enter a valid Transaction/UTR ID');
             return;
         }
-        if (!file) {
-            toast.error('Please upload a screenshot of your payment');
-            return;
-        }
 
         setLoading(true);
-        setUploadProgress(10);
         setStatusText('Securing Connection...');
-
-        let watchdogTimer;
 
         try {
             // STEP 1: Immediate Metalogging
@@ -67,10 +60,9 @@ const Payment = () => {
                 createdAt: serverTimestamp(),
             };
 
-            const docRef = await addDoc(collection(db, 'rechargeRequests'), requestPayload);
-            const requestId = docRef.id;
+            await addDoc(collection(db, 'rechargeRequests'), requestPayload);
 
-            // STEP 1.5: Immediate Admin Notification (Alert before photo finishes)
+            // STEP 1.5: Immediate Admin Notification
             await addDoc(collection(db, 'notifications'), {
                 userId: 'admin_global',
                 type: 'new_recharge',
@@ -79,77 +71,19 @@ const Payment = () => {
                 read: false
             }).catch(() => null);
 
-            setUploadProgress(30);
-            setStatusText('Syncing UTR ID...');
-
-            // STEP 2: Precise Upload
-            let uploadFinished = false;
-
-            watchdogTimer = setTimeout(() => {
-                if (!uploadFinished) {
-                    setSubmitted(true);
-                    toast.success('UTR LOGGED! Photo still sending in background.', { duration: 6000 });
-                }
-            }, 35000); // 35 seconds for slow uploads
-
-            setStatusText('Uploading Proof...');
-            // Path structure: recharges/UID/TIMESTAMP_FILENAME
-            const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
-            const storagePath = `recharges/${user?.uid || 'guest'}/${fileName}`;
-            const storageRef = ref(storage, storagePath);
-
-            const uploadTask = uploadBytesResumable(storageRef, file);
-
-            uploadTask.on('state_changed',
-                (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    setUploadProgress(Math.round(progress));
-                },
-                (error) => {
-                    console.error("Storage Error:", error);
-                    clearTimeout(watchdogTimer);
-                    setSubmitted(true);
-                    toast.error(`Photo Error: ${error.code || 'Upload failed'}. UTR still logged!`);
-                },
-                async () => {
-                    uploadFinished = true;
-                    clearTimeout(watchdogTimer);
-
-                    try {
-                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-
-                        // STEP 3: Update Firestore
-                        await updateDoc(doc(db, 'rechargeRequests', requestId), {
-                            screenshot: downloadURL
-                        });
-
-                        setUploadProgress(100);
-                        setSubmitted(true);
-                        toast.success('DEPOSIT VERIFIED & LOGGED!');
-                        setTimeout(() => navigate('/history'), 2000);
-                    } catch (err) {
-                        setSubmitted(true);
-                        toast.error("URL generation failed, but UTR is safe.");
-                    }
-                }
-            );
+            setSubmitted(true);
+            toast.success('DEPOSIT VERIFIED & LOGGED!');
+            setTimeout(() => navigate('/history'), 2000);
 
         } catch (error) {
             console.error('Submission crash:', error);
-            clearTimeout(watchdogTimer);
-
-            // Explicit error reporting for Firestore write failures
+            
             const errorMsg = error.code === 'permission-denied'
                 ? "ACCESS FORBIDDEN: Check Firebase Rules"
                 : (error.message || "Connection failed");
 
-            if (statusText !== 'Securing Connection...') {
-                setSubmitted(true);
-                toast.error(`UTR LOG ERROR: ${errorMsg}. Photo failed too.`);
-            } else {
-                toast.error(`CRITICAL ERROR: ${errorMsg}`);
-                setLoading(false);
-            }
+            toast.error(`CRITICAL ERROR: ${errorMsg}`);
+            setLoading(false);
         }
     };
 
@@ -212,33 +146,33 @@ const Payment = () => {
                             <ShieldCheck className="text-accent" size={14} />
                             <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Secure Checkout</span>
                         </div>
-                        <h1 className="text-2xl lg:text-3xl font-[1000] text-white italic tracking-[-0.05em] uppercase leading-none">
+                        <h1 className="text-2xl lg:text-3xl font-[1000] text-slate-900 italic tracking-[-0.05em] uppercase leading-none">
                             COMPLETE <span className="text-[#3b82f6]">PAYMENT</span>
                         </h1>
                         <p className="text-zinc-500 text-[13px] font-medium mt-1">Send ₹{amount.toLocaleString()} to our verified wallet.</p>
                     </div>
                 </div>
 
-                {/* QR Section */}
-                <div className="group relative bg-surface rounded-[32px] border border-white/5 p-6 lg:p-8 overflow-hidden hover:border-accent/20 transition-all duration-500">
-                    <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
+            {/* QR Section */}
+                <div className="group relative bg-white rounded-3xl border border-black/5 p-6 lg:p-8 overflow-hidden hover:border-accent/20 transition-all duration-500 shadow-sm">
+                    <div className="absolute top-0 right-0 p-10 opacity-[0.03] pointer-events-none">
                         <QrCode size={200} />
                     </div>
 
                     <div className="flex flex-col lg:flex-row items-center gap-6 relative">
-                        <div className="space-y-8 flex-1 text-center lg:text-left">
+                        <div className="space-y-4 flex-1 text-center lg:text-left">
                             <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 rounded-full border border-emerald-500/20 h-fit">
                                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                                 <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Fast Verification Active</span>
                             </div>
-                            <h2 className="text-5xl font-black italic tracking-tighter text-white leading-none">₹{amount.toLocaleString()}</h2>
-                            <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[2px]">Total Payable Amount</p>
-                        </div>
+                            <h2 className="text-4xl sm:text-5xl font-black italic tracking-tighter text-slate-900 leading-none">₹{amount.toLocaleString()}</h2>
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-[2px]">Total Payable Amount</p>
 
-                        <div className="flex flex-wrap justify-center lg:justify-start gap-5 opacity-30 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.svg/200px-PhonePe_Logo.svg.png" alt="PhonePe" className="h-8 object-contain" />
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/200px-Paytm_Logo_%28standalone%29.svg.png" alt="Paytm" className="h-6 object-contain" />
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo.png/200px-UPI-Logo.png" alt="UPI" className="h-6 object-contain" />
+                            <div className="flex flex-wrap justify-center lg:justify-start gap-5 transition-all duration-500 mt-2">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.svg/200px-PhonePe_Logo.svg.png" alt="PhonePe" className="h-8 object-contain drop-shadow-sm" />
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/200px-Paytm_Logo_%28standalone%29.svg.png" alt="Paytm" className="h-6 object-contain mt-1 drop-shadow-sm" />
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo.png/200px-UPI-Logo.png" alt="UPI" className="h-6 object-contain mt-1 drop-shadow-sm" />
+                            </div>
                         </div>
 
                         <div className="relative">
@@ -269,72 +203,34 @@ const Payment = () => {
                             placeholder="Enter 12-digit UTR Number"
                             value={utr}
                             onChange={(e) => setUtr(e.target.value)}
-                            className="w-full bg-zinc-950 border border-white/5 rounded-[24px] py-6 px-8 text-xl font-black text-white focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-zinc-800 uppercase tracking-widest"
+                            className="w-full bg-white border border-black/5 rounded-2xl py-4 px-6 text-lg font-black text-slate-900 focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-400 uppercase tracking-widest shadow-sm"
                         />
-                        <div className="absolute right-6 top-1/2 -translate-y-1/2 p-2 bg-blue-500/10 rounded-lg text-blue-500 pointer-events-none group-focus-within:scale-110 transition-transform">
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 bg-blue-500/10 rounded-lg text-blue-500 pointer-events-none group-focus-within:scale-110 transition-transform">
                             <ShieldCheck size={20} />
                         </div>
                     </div>
                 </div>
 
-                {/* Upload Section */}
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between px-4">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Verification Proof</label>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-red-500">Mandatory</span>
-                    </div>
 
-                    <div className={`relative min-h-[220px] bg-zinc-900/30 border-2 border-dashed rounded-[32px] p-6 sm:p-8 flex flex-col items-center justify-center gap-4 transition-all duration-500 ${preview ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-white/5 hover:border-red-500/20 hover:bg-zinc-900/50'}`}>
-                        {preview ? (
-                            <div className="relative group w-full max-w-sm aspect-[4/3] rounded-[32px] overflow-hidden shadow-2xl border border-white/10">
-                                <img src={preview} alt="Screenshot Preview" className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-all duration-300 backdrop-blur-sm">
-                                    <button
-                                        onClick={() => { setFile(null); setPreview(null); }}
-                                        className="px-6 py-3 bg-red-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-red-400 transition-colors shadow-2xl shadow-red-500/20"
-                                    >
-                                        Remove & Retake
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="text-center group/upload">
-                                <div className="w-20 h-20 bg-zinc-950 rounded-[30px] flex items-center justify-center text-zinc-700 mb-6 mx-auto group-hover/upload:scale-110 group-hover/upload:text-accent transition-all duration-500 border border-white/5 shadow-2xl">
-                                    <Upload size={32} />
-                                </div>
-                                <div className="space-y-2">
-                                    <p className="text-white font-black italic uppercase tracking-tight text-xl">Upload Screenshot</p>
-                                    <p className="text-zinc-600 text-[10px] font-black uppercase tracking-widest">PNG, JPG, PDF (Max 5MB)</p>
-                                </div>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleFileChange}
-                                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
-                                />
-                            </div>
-                        )}
-                    </div>
-                </div>
 
                 {/* Info Cards */}
-                <div className="grid sm:grid-cols-2 gap-3">
-                    <div className="p-4 bg-zinc-900/50 border border-white/5 rounded-[24px] flex gap-3">
-                        <div className="p-2.5 bg-accent/10 rounded-xl text-accent h-fit shadow-xl shadow-accent/5">
+                <div className="grid sm:grid-cols-2 gap-3 mt-4">
+                    <div className="p-4 bg-blue-50/80 border border-blue-100 rounded-2xl flex gap-3 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="p-2.5 bg-blue-500/10 rounded-xl text-blue-600 h-fit shadow-inner">
                             <Info size={16} />
                         </div>
                         <div className="space-y-0.5">
-                            <p className="text-[9px] font-black text-white uppercase tracking-widest">Steps to Pay</p>
-                            <p className="text-[11px] text-zinc-500 font-medium leading-relaxed">Scan QR → Pay amount → Take screenshot → Upload.</p>
+                            <p className="text-[10px] font-black text-blue-900 uppercase tracking-widest">Steps to Pay</p>
+                            <p className="text-[11px] text-blue-700/80 font-medium leading-relaxed">Scan QR → Pay amount → Take screenshot → Upload.</p>
                         </div>
                     </div>
-                    <div className="p-4 bg-zinc-900/50 border border-white/5 rounded-[24px] flex gap-3">
-                        <div className="p-2.5 bg-accent/10 rounded-xl text-accent h-fit shadow-xl shadow-accent/5">
+                    <div className="p-4 bg-violet-50/80 border border-violet-100 rounded-2xl flex gap-3 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="p-2.5 bg-violet-500/10 rounded-xl text-violet-600 h-fit shadow-inner">
                             <Smartphone size={16} />
                         </div>
                         <div className="space-y-0.5">
-                            <p className="text-[9px] font-black text-white uppercase tracking-widest">Phone Match</p>
-                            <p className="text-[11px] text-zinc-500 font-medium leading-relaxed">Ensure number {userData?.phone || ''} matches payment app.</p>
+                            <p className="text-[10px] font-black text-violet-900 uppercase tracking-widest">Phone Match</p>
+                            <p className="text-[11px] text-violet-700/80 font-medium leading-relaxed">Ensure number <span className="font-bold">{userData?.phone || ''}</span> matches payment app.</p>
                         </div>
                     </div>
                 </div>
@@ -342,8 +238,8 @@ const Payment = () => {
                 {/* Action Button */}
                 <button
                     onClick={handleSubmit}
-                    disabled={!file || loading}
-                    className="group relative w-full overflow-hidden p-6 bg-accent hover:bg-accent-hover disabled:opacity-30 disabled:grayscale text-white rounded-[24px] font-black uppercase italic tracking-[3px] transition-all shadow-2xl shadow-accent/20 active:scale-95"
+                    disabled={!utr || utr.length < 6 || loading}
+                    className="group relative w-full overflow-hidden p-4 bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:grayscale text-white rounded-2xl font-black uppercase italic tracking-widest transition-all shadow-xl shadow-accent/20 active:scale-95 text-sm sm:text-base"
                 >
                     {loading && (
                         <div

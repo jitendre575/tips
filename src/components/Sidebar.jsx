@@ -12,7 +12,8 @@ import {
     TrendingUp,
     CreditCard,
     Zap,
-    Gamepad2
+    Gamepad2,
+    MessageCircle
 } from 'lucide-react';
 import { auth } from '../firebase';
 
@@ -26,8 +27,8 @@ const Sidebar = ({ isOpen, onClose }) => {
         { icon: Zap, label: 'Six Bonus Markets', path: '/dashboard?filter=Six Bonus' },
         { icon: History, label: 'Bet History', path: '/history' },
         { icon: CreditCard, label: 'Withdraw', path: '/withdraw' },
-        { icon: Trophy, label: 'Leaderboard', path: '/leaderboard' },
         { icon: User, label: 'Profile', path: '/profile' },
+        { icon: MessageCircle, label: 'Support', action: () => window.dispatchEvent(new CustomEvent('openSupportChat')) }
     ];
 
     const adminItems = [
@@ -57,7 +58,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <div className="h-full flex flex-col p-6">
                     <div className="flex items-center justify-between mb-10 pl-2 lg:mb-12">
                         <Link to="/dashboard" className="cricwin-logo !text-accent flex items-center gap-2" onClick={onClose}>
-                            <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-white text-xs font-black not-italic">91</div>
+                            <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-white text-xs font-black not-italic"><Trophy size={16}/></div>
                             <span>WIN</span>
                         </Link>
                         <button onClick={onClose} className="text-slate-600 lg:hidden hover:text-accent transition-colors">
@@ -69,16 +70,27 @@ const Sidebar = ({ isOpen, onClose }) => {
                         <div className="text-[10px] font-black text-slate-600 uppercase tracking-[2px] mb-4 pl-4">
                             Platform Navigation
                         </div>
-                        {menuItems.map((item) => (
-                            <Link
-                                key={item.path}
-                                to={item.path}
-                                onClick={onClose}
-                                className={`sidebar-item ${location.pathname + location.search === item.path ? 'active' : ''}`}
-                            >
-                                <item.icon size={18} className={location.pathname + location.search === item.path ? 'text-white' : 'text-slate-600'} />
-                                <span>{item.label}</span>
-                            </Link>
+                        {menuItems.map((item, idx) => (
+                            item.action ? (
+                                <button
+                                    key={idx}
+                                    onClick={() => { item.action(); onClose(); }}
+                                    className="sidebar-item w-full text-left"
+                                >
+                                    <item.icon size={18} className="text-slate-600" />
+                                    <span>{item.label}</span>
+                                </button>
+                            ) : (
+                                <Link
+                                    key={item.path}
+                                    to={item.path}
+                                    onClick={onClose}
+                                    className={`sidebar-item ${location.pathname + location.search === item.path ? 'active' : ''}`}
+                                >
+                                    <item.icon size={18} className={location.pathname + location.search === item.path ? 'text-white' : 'text-slate-600'} />
+                                    <span>{item.label}</span>
+                                </Link>
+                            )
                         ))}
 
                         {userData?.isAdmin && (
