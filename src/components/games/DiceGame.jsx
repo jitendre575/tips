@@ -60,9 +60,9 @@ const DiceGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
     };
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-8 items-start">
+        <div className="flex flex-col lg:flex-row bg-[#0f212e] overflow-hidden min-h-[500px]">
             {/* Sidebar Controls */}
-            <div className="lg:col-span-4 bg-zinc-950/50 border border-white/5 rounded-[32px] sm:rounded-[40px] p-5 sm:p-8 space-y-6 sm:space-y-8 order-2 lg:order-1 shadow-2xl">
+            <div className="w-full lg:w-[280px] bg-[#213743] p-4 flex flex-col gap-4 z-10 border-r border-[#0f212e] order-2 lg:order-1">
                 {/* Bet Amount Control */}
                 <div className="space-y-4">
                     <div className="flex justify-between items-center px-1">
@@ -123,7 +123,7 @@ const DiceGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
             </div>
 
             {/* Dice Visualizer */}
-            <div className="lg:col-span-8 bg-[#0a0a0a] border border-white/5 rounded-[32px] sm:rounded-[40px] p-5 sm:p-16 order-1 lg:order-2 shadow-inner min-h-[220px] sm:min-h-[400px] flex flex-col justify-center gap-8 sm:gap-16">
+            <div className="flex-1 bg-[#0f212e] p-5 sm:p-12 order-1 lg:order-2 min-h-[220px] sm:min-h-[400px] flex flex-col justify-center gap-8 sm:gap-16">
                 {/* Roll Slider Visual */}
                 <div className="relative">
                     {/* Background Bar */}

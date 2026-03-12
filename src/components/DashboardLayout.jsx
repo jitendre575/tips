@@ -80,8 +80,12 @@ const DashboardLayout = ({ children }) => {
                 </header>
 
                 {/* Main Content Area */}
-                <main className="flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-12 pb-24 lg:pb-12 bg-[#f5f5f9] scroll-smooth">
-                    <div className="max-w-7xl mx-auto w-full">
+                <main className={`flex-1 overflow-y-auto overflow-x-hidden scroll-smooth ${
+                    window.location.pathname.startsWith('/casino/') 
+                        ? 'p-0 bg-[#0f212e]' 
+                        : 'p-6 lg:p-12 pb-24 lg:pb-12 bg-[#f5f5f9]'
+                }`}>
+                    <div className={`w-full ${window.location.pathname.startsWith('/casino/') ? '' : 'max-w-7xl mx-auto'}`}>
                         {children}
                     </div>
                 </main>

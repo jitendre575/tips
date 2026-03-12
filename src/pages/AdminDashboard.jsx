@@ -664,7 +664,11 @@ const AdminCasino = ({ stats }) => {
         // Precision Controls
         forceCrashPoint: 1.5,
         rigNextCrash: false,
+        rigCrashRange2_4x: false,
+        autoMaxCrashLimit: 0,
         trapNextMine: false,
+        trapAtClick: 0,
+        autoMaxMinesMultiplier: 0,
         lastUpdated: null
     });
     const [loading, setLoading] = useState(true);
@@ -851,10 +855,51 @@ const AdminCasino = ({ stats }) => {
                                     className={`w-full py-7 rounded-[2rem] text-[12px] font-black uppercase italic tracking-[5px] transition-all relative overflow-hidden group/btn ${settings.rigNextCrash ? 'bg-red-500 text-white shadow-[0_25px_50px_rgba(239,68,68,0.4)]' : 'bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 border border-black/[0.05] shadow-sm'}`}
                                 >
                                     <div className="relative z-10 flex items-center justify-center gap-4">
-                                        {settings.rigNextCrash ? 'DEACTIVATE RIG' : 'ACTIVATE ONE-TIME RIG'}
+                                        {settings.rigNextCrash ? 'DEACTIVATE RIG' : 'ACTIVATE FIXED CRASH'}
                                         {settings.rigNextCrash && <ShieldAlert size={18} className="animate-bounce" />}
                                     </div>
                                 </button>
+
+                                {/* 2x - 4x Range Rig */}
+                                <div className="pt-4 mt-4 border-t border-black/5 space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3 text-orange-600">
+                                            <div className="p-2 bg-orange-50 rounded-xl border border-orange-100">
+                                                <Rocket size={14} />
+                                            </div>
+                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Force Range (2x-4x)</span>
+                                        </div>
+                                        <div className={`w-2.5 h-2.5 rounded-full ${settings.rigCrashRange2_4x ? 'bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.8)] animate-pulse' : 'bg-slate-200'}`} />
+                                    </div>
+
+                                    <button
+                                        onClick={() => updateSettings({ rigCrashRange2_4x: !settings.rigCrashRange2_4x })}
+                                        className={`w-full py-5 rounded-[1.5rem] text-[10px] font-black uppercase italic tracking-[4px] transition-all relative overflow-hidden group/btn flex items-center justify-center gap-3 ${settings.rigCrashRange2_4x ? 'bg-orange-500 text-white shadow-[0_15px_30px_rgba(249,115,22,0.4)]' : 'bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 border border-black/[0.05] shadow-sm'}`}
+                                    >
+                                        {settings.rigCrashRange2_4x ? 'DEACTIVATE RANGE' : 'ACTIVATE RANGE RIG'}
+                                    </button>
+                                </div>
+
+                                {/* Auto Max Limit */}
+                                <div className="pt-4 mt-4 border-t border-black/5 space-y-4">
+                                    <div className="flex items-center gap-3 text-blue-600">
+                                        <div className="p-2 bg-blue-50 rounded-xl border border-blue-100">
+                                            <Rocket size={14} />
+                                        </div>
+                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Auto Max Limit</span>
+                                    </div>
+                                    <div className="relative">
+                                        <input
+                                            type="number" step="0.01"
+                                            value={settings.autoMaxCrashLimit || ''}
+                                            onChange={e => updateSettings({ autoMaxCrashLimit: parseFloat(e.target.value) || 0 })}
+                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[2rem] px-8 py-5 text-2xl font-black text-slate-900 focus:outline-none focus:border-blue-500/30 transition-all text-center tracking-tighter shadow-sm"
+                                            placeholder="No Limit (0)"
+                                        />
+                                        <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 font-black italic text-xl">X</div>
+                                    </div>
+                                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest text-center px-4">Set to 0 to remove limit. If set, normal auto games will never exceed this multiplier.</p>
+                                </div>
                             </div>
 
                             {/* Mines Control */}
@@ -882,6 +927,51 @@ const AdminCasino = ({ stats }) => {
                                         <div className={`w-2 h-2 rounded-full ${settings.trapNextMine ? 'bg-white animate-ping' : 'bg-transparent'}`} />
                                     </div>
                                 </button>
+
+                                {/* Exact Click Trap Option */}
+                                <div className="pt-4 mt-4 border-t border-black/5 space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3 text-emerald-600">
+                                            <div className="p-2 bg-emerald-50 rounded-xl border border-emerald-100">
+                                                <Bomb size={14} />
+                                            </div>
+                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Fix Bomb at Click</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="relative">
+                                        <input
+                                            type="number" step="1"
+                                            value={settings.trapAtClick || ''}
+                                            onChange={e => updateSettings({ trapAtClick: parseInt(e.target.value) || 0 })}
+                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[2rem] px-8 py-5 text-2xl font-black text-slate-900 focus:outline-none focus:border-emerald-500/30 transition-all text-center tracking-tighter shadow-sm"
+                                            placeholder="Ex: 2 (for 2nd box)"
+                                        />
+                                        <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 font-[10px] font-black uppercase italic">Click</div>
+                                    </div>
+                                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest text-center px-4">Set to 0 to disable. If set, this exact box number will always be a bomb.</p>
+                                </div>
+
+                                {/* Auto Max Mines Multiplier Limit */}
+                                <div className="pt-4 mt-4 border-t border-black/5 space-y-4">
+                                    <div className="flex items-center gap-3 text-cyan-600">
+                                        <div className="p-2 bg-cyan-50 rounded-xl border border-cyan-100">
+                                            <Rocket size={14} />
+                                        </div>
+                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Auto Max Multiplier</span>
+                                    </div>
+                                    <div className="relative">
+                                        <input
+                                            type="number" step="0.01"
+                                            value={settings.autoMaxMinesMultiplier || ''}
+                                            onChange={e => updateSettings({ autoMaxMinesMultiplier: parseFloat(e.target.value) || 0 })}
+                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[2rem] px-8 py-5 text-2xl font-black text-slate-900 focus:outline-none focus:border-cyan-500/30 transition-all text-center tracking-tighter shadow-sm"
+                                            placeholder="No Limit (0)"
+                                        />
+                                        <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 font-black italic text-xl">X</div>
+                                    </div>
+                                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest text-center px-4">Set to 0 to remove limit. Game forces a bomb if winning exceeds this X.</p>
+                                </div>
                             </div>
                         </div>
                     </div>

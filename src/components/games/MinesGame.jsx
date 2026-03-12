@@ -96,6 +96,23 @@ const MinesGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                     updateDoc(doc(db, 'settings', 'casino'), { trapNextMine: false });
                 });
             });
+        } else if (settings?.trapAtClick > 0 && revealed.length + 1 === settings.trapAtClick) {
+            // Trap exactly on the configured click number
+            finalIsMine = true;
+            if (!mines.includes(index)) {
+                setMines(prev => [...prev, index]);
+            }
+        }
+
+        // Auto max limit check (Prevent winning more than X)
+        if (!finalIsMine && settings?.autoMaxMinesMultiplier > 0) {
+            const nextMultiplier = calculateMultiplier(revealed.length + 1);
+            if (nextMultiplier > settings.autoMaxMinesMultiplier) {
+                finalIsMine = true;
+                if (!mines.includes(index)) {
+                    setMines(prev => [...prev, index]);
+                }
+            }
         }
         // 2. Probability Bias (Passive Rigging)
         else if (settings?.minesProbBias > 0) {
@@ -143,7 +160,7 @@ const MinesGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
     const currentMultiplier = calculateMultiplier(revealed.length);
 
     return (
-        <div className="flex flex-col lg:flex-row bg-[#0f212e] rounded-[8px] overflow-hidden shadow-2xl min-h-[600px] border border-[#2f4553]/20">
+        <div className="flex flex-col lg:flex-row bg-[#0f212e] overflow-hidden min-h-[600px]">
             {/* Sidebar Controls */}
             <div className="w-full lg:w-[310px] bg-[#213743] p-4 flex flex-col gap-4 z-10 border-r border-[#0f212e]">
                 <div className="space-y-1.5">

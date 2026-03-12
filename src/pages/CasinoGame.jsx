@@ -30,7 +30,14 @@ const CasinoGame = () => {
 
     useEffect(() => {
         const unsub = onSnapshot(doc(db, 'settings', 'casino'), d => {
-            if (d.exists()) setCasinoSettings(d.data());
+            if (d.exists()) {
+                const data = d.data();
+                // Ensure plinko is always in activeGames
+                if (data.activeGames && !data.activeGames.includes('plinko')) {
+                    data.activeGames = [...data.activeGames, 'plinko'];
+                }
+                setCasinoSettings(data);
+            }
         });
         return () => unsub();
     }, []);
@@ -166,49 +173,74 @@ const CasinoGame = () => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto space-y-4 animate-in fade-in duration-500 pb-10 pt-2 px-2 sm:px-4">
-            {/* Game Header - REMOVED FOR ALL GAMES */}
-
-            {/* Game Layout Wrapper */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8">
-                {/* Main Game Interface */}
-                <div className="lg:col-span-12 relative">
-                    {/* Floating Sound Toggle */}
-                    <div className="absolute top-4 right-4 z-50">
-                        <button
-                            onClick={() => setIsMuted(!isMuted)}
-                            className="p-3 bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-xl border border-white/10 text-white transition-all active:scale-90"
-                        >
-                            {isMuted ? <VolumeX size={20} className="text-red-500" /> : <Volume2 size={20} className="text-emerald-500" />}
-                        </button>
-                    </div>
-                    {renderGame()}
+        <div className="animate-in fade-in duration-500" style={{ background: '#0f212e', minHeight: '100vh' }}>
+            {/* Game Layout - No padding, full bleed */}
+            <div className="relative">
+                {/* Floating Sound Toggle */}
+                <div className="absolute top-3 right-3 z-50">
+                    <button
+                        onClick={() => setIsMuted(!isMuted)}
+                        className="p-2.5 bg-[#2f4553]/80 hover:bg-[#2f4553] backdrop-blur-md rounded-xl border border-white/10 text-white transition-all active:scale-90"
+                    >
+                        {isMuted ? <VolumeX size={18} className="text-red-400" /> : <Volume2 size={18} className="text-emerald-400" />}
+                    </button>
                 </div>
+                {renderGame()}
             </div>
 
-            {/* Game Footer Info */}
-            <div className="grid md:grid-cols-3 gap-6">
-                <div className="bg-zinc-900/30 border border-white/5 p-8 rounded-[32px] flex flex-col items-center text-center">
-                    <div className="w-12 h-12 bg-accent/10 rounded-2xl flex items-center justify-center text-accent mb-4">
-                        <Zap size={24} />
+            {/* ====== BOTTOM ENGAGEMENT SECTION ====== */}
+            <div className="px-4 sm:px-6 pb-8 pt-6 space-y-4" style={{ background: '#0f212e' }}>
+                {/* Info Cards */}
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                    <div className="bg-[#213743] rounded-lg p-3 sm:p-4 text-center border border-[#2f4553]/30">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto rounded-lg bg-[#00e701]/10 flex items-center justify-center mb-2">
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#00e701]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <p className="text-[9px] sm:text-[11px] font-bold text-white/90 mb-0.5">Provably Fair</p>
+                        <p className="text-[8px] sm:text-[10px] text-[#557086] leading-tight">Verified random outcomes</p>
                     </div>
-                    <h4 className="text-sm font-black uppercase tracking-widest text-white mb-2">Provably Fair</h4>
-                    <p className="text-xs text-zinc-500 font-medium leading-relaxed">All game results are generated using cryptographically secure random number generators.</p>
-                </div>
-                <div className="bg-zinc-900/30 border border-white/5 p-8 rounded-[32px] flex flex-col items-center text-center">
-                    <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-500 mb-4">
-                        <Trophy size={24} />
+                    <div className="bg-[#213743] rounded-lg p-3 sm:p-4 text-center border border-[#2f4553]/30">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto rounded-lg bg-[#f59e0b]/10 flex items-center justify-center mb-2">
+                            <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-[#f59e0b]" />
+                        </div>
+                        <p className="text-[9px] sm:text-[11px] font-bold text-white/90 mb-0.5">Instant Payouts</p>
+                        <p className="text-[8px] sm:text-[10px] text-[#557086] leading-tight">Winnings credited instantly</p>
                     </div>
-                    <h4 className="text-sm font-black uppercase tracking-widest text-white mb-2">High RTP</h4>
-                    <p className="text-xs text-zinc-500 font-medium leading-relaxed">Our originals offer a 99% return-to-player rate, giving you the best odds in the arena.</p>
-                </div>
-                <div className="bg-zinc-900/30 border border-white/5 p-8 rounded-[32px] flex flex-col items-center text-center">
-                    <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500 mb-4">
-                        <History size={24} />
+                    <div className="bg-[#213743] rounded-lg p-3 sm:p-4 text-center border border-[#2f4553]/30">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto rounded-lg bg-[#3b82f6]/10 flex items-center justify-center mb-2">
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#3b82f6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </div>
+                        <p className="text-[9px] sm:text-[11px] font-bold text-white/90 mb-0.5">24/7 Support</p>
+                        <p className="text-[8px] sm:text-[10px] text-[#557086] leading-tight">Always here to help</p>
                     </div>
-                    <h4 className="text-sm font-black uppercase tracking-widest text-white mb-2">Instant Payout</h4>
-                    <p className="text-xs text-zinc-500 font-medium leading-relaxed">Winnings are credited to your virtual wallet immediately after a successful round.</p>
                 </div>
+
+                {/* VIP Banner */}
+                <div className="relative overflow-hidden rounded-xl p-5 sm:p-6 border border-[#2f4553]/30" style={{ background: 'linear-gradient(135deg, #1a3a4a 0%, #213743 50%, #1a2c38 100%)' }}>
+                    <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-[#00e701]/5 blur-3xl" />
+                    <div className="absolute bottom-0 left-0 w-24 h-24 rounded-full bg-[#3b82f6]/5 blur-3xl" />
+                    <div className="relative z-10 flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#f59e0b] to-[#ef4444] flex items-center justify-center text-white text-xl shrink-0">
+                            🏆
+                        </div>
+                        <div className="flex-1">
+                            <h4 className="text-sm sm:text-base font-black text-white mb-0.5">VIP Rewards Program</h4>
+                            <p className="text-[10px] sm:text-xs text-[#7f8fa3]">Play more to unlock exclusive bonuses, cashback offers and VIP perks!</p>
+                        </div>
+                        <button onClick={() => navigate('/dashboard')} className="px-4 py-2 bg-[#00e701] hover:bg-[#1fff20] text-[#05200a] rounded-lg text-[10px] sm:text-xs font-black transition-all active:scale-95 shrink-0">
+                            Explore
+                        </button>
+                    </div>
+                </div>
+
+                {/* Back to Lobby */}
+                <button
+                    onClick={() => navigate('/dashboard?view=Casino')}
+                    className="w-full py-3 bg-[#213743] hover:bg-[#2f4553] text-[#b1bad3] rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 border border-[#2f4553]/30"
+                >
+                    <ArrowLeft size={14} />
+                    Back to Game Lobby
+                </button>
             </div>
         </div>
     );
