@@ -1,0 +1,22 @@
+{
+  "short_name": "CricBet",
+  "name": "CricBet - Premium Cricket Betting",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0f212e",
+  "background_color": "#0f212e",
+  "description": "Predict match outcomes and win virtual coins on the most advanced cricket betting demo platform.",
+  "orientation": "portrait"
+}
