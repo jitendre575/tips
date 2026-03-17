@@ -63,7 +63,7 @@ const AddBalance = () => {
                 <div className="flex items-start sm:items-center gap-3 sm:gap-4">
                     <button
                         onClick={() => navigate(-1)}
-                        className="p-3 bg-white rounded-2xl border border-black/5 text-slate-500 hover:text-slate-800 transition-all shadow-xl active:scale-95"
+                        className="p-3 bg-white rounded-[10px] border border-black/5 text-slate-500 hover:text-slate-800 transition-all shadow-xl active:scale-95"
                     >
                         <ArrowLeft size={20} />
                     </button>
@@ -74,7 +74,7 @@ const AddBalance = () => {
                 </div>
 
                 {/* Amount Input */}
-                <div className="bg-white border border-black/5 rounded-[32px] p-5 sm:p-8 relative overflow-hidden group shadow-sm">
+                <div className="bg-white border border-black/5 rounded-[10px] p-5 sm:p-8 relative overflow-hidden group shadow-sm">
                     <div className="absolute top-0 right-0 p-5 sm:p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
                         <Wallet size={160} className="text-accent" />
                     </div>
@@ -92,7 +92,7 @@ const AddBalance = () => {
                                         setSelectedQuickAmount(null);
                                     }}
                                     placeholder="0.00"
-                                    className="w-full bg-slate-50 border border-black/5 rounded-2xl py-4 sm:py-6 pl-14 pr-6 text-3xl sm:text-4xl font-[1000] text-slate-900 focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all placeholder:text-slate-300 tracking-tight"
+                                    className="w-full bg-slate-50 border border-black/5 rounded-[10px] py-4 sm:py-6 pl-14 pr-6 text-3xl sm:text-4xl font-[1000] text-slate-900 focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all placeholder:text-slate-300 tracking-tight"
                                 />
                                 <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-accent/20 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity" />
                             </div>
@@ -103,7 +103,7 @@ const AddBalance = () => {
                                 <button
                                     key={val}
                                     onClick={() => handleQuickAmountClick(val)}
-                                    className={`relative group/btn py-3 px-2 sm:py-5 sm:px-4 rounded-xl sm:rounded-2xl border transition-all duration-300 text-xs sm:text-sm font-black italic tracking-tight overflow-hidden ${selectedQuickAmount === val
+                                    className={`relative group/btn py-3 px-2 sm:py-5 sm:px-4 rounded-[10px] sm:rounded-[10px] border transition-all duration-300 text-xs sm:text-sm font-black italic tracking-tight overflow-hidden ${selectedQuickAmount === val
                                         ? 'bg-accent border-accent text-white shadow-[0_0_30px_rgba(239,68,68,0.3)] -translate-y-1'
                                         : 'bg-slate-50 border-black/5 text-slate-600 hover:border-black/10 hover:bg-slate-100 hover:-translate-y-1'
                                         }`}
@@ -117,8 +117,8 @@ const AddBalance = () => {
                 </div>
 
                 {/* Info Card */}
-                <div className="flex items-start gap-5 p-5 bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/20 rounded-[24px]">
-                    <div className="p-3 bg-emerald-500/20 rounded-xl text-emerald-500 shadow-lg shadow-emerald-500/10">
+                <div className="flex items-start gap-5 p-5 bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/20 rounded-[10px]">
+                    <div className="p-3 bg-emerald-500/20 rounded-[10px] text-emerald-500 shadow-lg shadow-emerald-500/10">
                         <Zap size={20} />
                     </div>
                     <div className="space-y-1">
@@ -133,15 +133,15 @@ const AddBalance = () => {
                 <button
                     onClick={handleContinue}
                     disabled={!amount || parseFloat(amount) <= 0}
-                    className="w-full flex items-center justify-between p-4 sm:p-5 bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-2xl font-black uppercase tracking-widest transition-all group shadow-xl shadow-accent/20 active:scale-[0.98]"
+                    className="w-full flex items-center justify-between p-4 sm:p-5 bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-[10px] font-black uppercase tracking-widest transition-all group shadow-xl shadow-accent/20 active:scale-[0.98]"
                 >
                     <div className="flex items-center gap-3">
-                        <div className="p-1.5 bg-white/10 rounded-lg">
+                        <div className="p-1.5 bg-white/10 rounded-[10px]">
                             <PlusCircle className="w-5 h-5" />
                         </div>
                         <span className="text-base sm:text-lg italic tracking-tight">Proceed to Pay</span>
                     </div>
-                    <div className="p-1.5 bg-white/20 rounded-lg group-hover:translate-x-1 transition-transform">
+                    <div className="p-1.5 bg-white/20 rounded-[10px] group-hover:translate-x-1 transition-transform">
                         <ChevronRight className="w-5 h-5" />
                     </div>
                 </button>
@@ -152,7 +152,7 @@ const AddBalance = () => {
                 <div className="fixed inset-0 z-[300] flex items-end sm:items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowPaymentModal(false)} />
 
-                    <div className="relative w-full max-w-md bg-white border border-black/5 rounded-[32px] overflow-hidden shadow-2xl animate-in slide-in-from-bottom-10 duration-300">
+                    <div className="relative w-full max-w-md bg-white border border-black/5 rounded-[10px] overflow-hidden shadow-2xl animate-in slide-in-from-bottom-10 duration-300">
                         <div className="p-8 space-y-8">
                             <div className="flex justify-between items-start">
                                 <div>
@@ -167,10 +167,10 @@ const AddBalance = () => {
                             <div className="space-y-6">
                                 <button
                                     onClick={selectINR}
-                                    className="w-full group relative p-6 bg-slate-50 hover:bg-slate-100 border border-black/5 hover:border-blue-500/30 rounded-[32px] flex items-center gap-5 transition-all active:scale-[0.98] overflow-hidden"
+                                    className="w-full group relative p-6 bg-slate-50 hover:bg-slate-100 border border-black/5 hover:border-blue-500/30 rounded-[10px] flex items-center gap-5 transition-all active:scale-[0.98] overflow-hidden"
                                 >
                                     <div className="absolute top-0 inset-x-0 h-1.5 bg-blue-600 rounded-full scale-x-90 group-hover:scale-x-100 transition-transform" />
-                                    <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 shrink-0 border border-blue-500/20 group-hover:scale-110 transition-transform">
+                                    <div className="w-16 h-16 bg-blue-50 rounded-[10px] flex items-center justify-center text-blue-500 shrink-0 border border-blue-500/20 group-hover:scale-110 transition-transform">
                                         <Wallet size={32} />
                                     </div>
                                     <div className="text-left min-w-0">
@@ -181,10 +181,10 @@ const AddBalance = () => {
 
                                 <button
                                     onClick={selectCrypto}
-                                    className="w-full group relative p-6 bg-slate-50 hover:bg-slate-100 border border-black/5 hover:border-amber-500/30 rounded-[32px] flex items-center gap-5 transition-all active:scale-[0.98] overflow-hidden"
+                                    className="w-full group relative p-6 bg-slate-50 hover:bg-slate-100 border border-black/5 hover:border-amber-500/30 rounded-[10px] flex items-center gap-5 transition-all active:scale-[0.98] overflow-hidden"
                                 >
                                     <div className="absolute top-0 inset-x-0 h-1.5 bg-amber-600 rounded-full scale-x-90 group-hover:scale-x-100 transition-transform" />
-                                    <div className="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-500 shrink-0 border border-amber-500/20 group-hover:scale-110 transition-transform">
+                                    <div className="w-16 h-16 bg-amber-50 rounded-[10px] flex items-center justify-center text-amber-500 shrink-0 border border-amber-500/20 group-hover:scale-110 transition-transform">
                                         <Coins size={32} />
                                     </div>
                                     <div className="text-left min-w-0">
@@ -203,7 +203,7 @@ const AddBalance = () => {
                 <div className="fixed inset-0 z-[350] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowCryptoList(false)} />
 
-                    <div className="relative w-full max-w-md bg-white border border-black/5 rounded-[40px] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col max-h-[80vh]">
+                    <div className="relative w-full max-w-md bg-white border border-black/5 rounded-[10px] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col max-h-[80vh]">
                         <div className="p-8 border-b border-black/5 flex justify-between items-center bg-slate-50">
                             <div>
                                 <h3 className="text-2xl font-black italic uppercase tracking-tighter text-slate-900">Select <span className="logo-accent">Coin</span></h3>
@@ -219,9 +219,9 @@ const AddBalance = () => {
                                 <button
                                     key={crypto.id}
                                     onClick={() => handleCryptoSelection(crypto)}
-                                    className="p-5 bg-slate-50 border border-black/5 hover:border-accent/30 hover:bg-accent/5 rounded-3xl flex flex-col items-center gap-3 transition-all group active:scale-95"
+                                    className="p-5 bg-slate-50 border border-black/5 hover:border-accent/30 hover:bg-accent/5 rounded-[10px] flex flex-col items-center gap-3 transition-all group active:scale-95"
                                 >
-                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-accent font-black text-xl border border-black/5 group-hover:bg-accent group-hover:text-white transition-all shadow-sm">
+                                    <div className="w-12 h-12 bg-white rounded-[10px] flex items-center justify-center text-accent font-black text-xl border border-black/5 group-hover:bg-accent group-hover:text-white transition-all shadow-sm">
                                         {crypto.icon}
                                     </div>
                                     <div className="text-center">
@@ -244,10 +244,10 @@ const AddBalance = () => {
                 <div className="fixed inset-0 z-[400] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/60 backdrop-blur-md" onClick={() => setShowCryptoRestriction(false)} />
 
-                    <div className="relative w-full max-w-sm bg-white border border-red-500/20 rounded-[40px] p-10 text-center space-y-8 shadow-[0_0_50px_rgba(239,68,68,0.15)] animate-in zoom-in-95 duration-200">
+                    <div className="relative w-full max-w-sm bg-white border border-red-500/20 rounded-[10px] p-10 text-center space-y-8 shadow-[0_0_50px_rgba(239,68,68,0.15)] animate-in zoom-in-95 duration-200">
                         <div className="relative mx-auto w-24 h-24">
                             <div className="absolute inset-0 bg-red-500/20 blur-xl rounded-full animate-pulse" />
-                            <div className="relative w-full h-full bg-red-50 border border-red-500/20 rounded-[30px] flex items-center justify-center text-red-500 transform rotate-12">
+                            <div className="relative w-full h-full bg-red-50 border border-red-500/20 rounded-[10px] flex items-center justify-center text-red-500 transform rotate-12">
                                 <AlertTriangle size={48} />
                             </div>
                         </div>
@@ -270,7 +270,7 @@ const AddBalance = () => {
                                     setShowCryptoRestriction(false);
                                     selectINR();
                                 }}
-                                className="w-full py-6 bg-accent hover:bg-accent-hover text-white rounded-[24px] font-black uppercase italic tracking-[4px] shadow-xl shadow-accent/20 transition-all active:scale-95 flex items-center justify-center gap-3"
+                                className="w-full py-6 bg-accent hover:bg-accent-hover text-white rounded-[10px] font-black uppercase italic tracking-[4px] shadow-xl shadow-accent/20 transition-all active:scale-95 flex items-center justify-center gap-3"
                             >
                                 <Wallet size={20} /> Switch to INR
                             </button>

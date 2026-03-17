@@ -75,18 +75,18 @@ const DiceGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                             type="number"
                             value={betAmount}
                             onChange={(e) => setBetAmount(Math.max(0, parseInt(e.target.value) || 0))}
-                            className="w-full bg-primary border border-white/5 rounded-[22px] py-4 sm:py-6 pl-14 pr-8 text-xl sm:text-2xl font-black italic tracking-tighter text-zinc-900 focus:border-accent/50 transition-all outline-none"
+                            className="w-full bg-primary border border-white/5 rounded-[10px] py-4 sm:py-6 pl-14 pr-8 text-xl sm:text-2xl font-black italic tracking-tighter text-zinc-900 focus:border-accent/50 transition-all outline-none"
                         />
                     </div>
                 </div>
 
                 {/* Multiplier & Profit Info */}
                 <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                    <div className="bg-zinc-900/50 p-4 sm:p-6 rounded-[24px] border border-white/5 space-y-1">
+                    <div className="bg-zinc-900/50 p-4 sm:p-6 rounded-[10px] border border-white/5 space-y-1">
                         <span className="text-[8px] font-black text-zinc-600 uppercase tracking-widest">Multiplier</span>
                         <div className="text-lg sm:text-xl font-black italic text-white">{multiplier}x</div>
                     </div>
-                    <div className="bg-zinc-900/50 p-4 sm:p-6 rounded-[24px] border border-white/5 space-y-1">
+                    <div className="bg-zinc-900/50 p-4 sm:p-6 rounded-[10px] border border-white/5 space-y-1">
                         <span className="text-[8px] font-black text-zinc-600 uppercase tracking-widest">Win Chance</span>
                         <div className="text-lg sm:text-xl font-black italic text-emerald-500">{winProbability.toFixed(2)}%</div>
                     </div>
@@ -94,16 +94,16 @@ const DiceGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
 
                 {/* Roll Actions */}
                 <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4 p-1.5 bg-primary border border-white/5 rounded-[24px]">
+                    <div className="grid grid-cols-2 gap-4 p-1.5 bg-primary border border-white/5 rounded-[10px]">
                         <button
                             onClick={() => setIsOver(false)}
-                            className={`py-3 rounded-2xl font-black italic uppercase text-xs tracking-widest transition-all ${!isOver ? 'bg-indigo-500 text-white shadow-xl shadow-indigo-500/20' : 'text-zinc-600 hover:text-white'}`}
+                            className={`py-3 rounded-[10px] font-black italic uppercase text-xs tracking-widest transition-all ${!isOver ? 'bg-indigo-500 text-white shadow-xl shadow-indigo-500/20' : 'text-zinc-600 hover:text-white'}`}
                         >
                             Roll Under
                         </button>
                         <button
                             onClick={() => setIsOver(true)}
-                            className={`py-3 rounded-2xl font-black italic uppercase text-xs tracking-widest transition-all ${isOver ? 'bg-indigo-500 text-white shadow-xl shadow-indigo-500/20' : 'text-zinc-600 hover:text-white'}`}
+                            className={`py-3 rounded-[10px] font-black italic uppercase text-xs tracking-widest transition-all ${isOver ? 'bg-indigo-500 text-white shadow-xl shadow-indigo-500/20' : 'text-zinc-600 hover:text-white'}`}
                         >
                             Roll Over
                         </button>
@@ -111,7 +111,7 @@ const DiceGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                     <button
                         onClick={rollDice}
                         disabled={isRolling}
-                        className="w-full py-4 sm:py-5 bg-accent hover:bg-accent-hover text-white rounded-[28px] font-black uppercase italic tracking-[4px] text-xl shadow-2xl shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                        className="w-full py-4 sm:py-5 bg-accent hover:bg-accent-hover text-white rounded-[10px] font-black uppercase italic tracking-[4px] text-xl shadow-2xl shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                     >
                         {isRolling ? (
                             <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" />
@@ -146,7 +146,7 @@ const DiceGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                         animate={{ left: `${targetValue}%` }}
                         className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
                     >
-                        <div className="w-8 h-12 bg-white rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.3)] flex items-center justify-center cursor-ew-resize">
+                        <div className="w-8 h-12 bg-white rounded-[10px] shadow-[0_0_20px_rgba(255,255,255,0.3)] flex items-center justify-center cursor-ew-resize">
                             <div className="w-1 h-6 bg-zinc-200 rounded-full" />
                         </div>
                     </motion.div>
@@ -161,7 +161,7 @@ const DiceGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                                 style={{ left: `${lastRoll}%` }}
                                 className="absolute -translate-x-1/2"
                             >
-                                <div className={`px-4 py-2 rounded-xl font-black italic shadow-2xl border-2 ${isOver ? (lastRoll > targetValue ? 'bg-emerald-500 border-emerald-400' : 'bg-red-500 border-red-400')
+                                <div className={`px-4 py-2 rounded-[10px] font-black italic shadow-2xl border-2 ${isOver ? (lastRoll > targetValue ? 'bg-emerald-500 border-emerald-400' : 'bg-red-500 border-red-400')
                                     : (lastRoll < targetValue ? 'bg-emerald-500 border-emerald-400' : 'bg-red-500 border-red-400')
                                     } text-white`}>
                                     {lastRoll}

@@ -160,7 +160,7 @@ const AdminRecharges = () => {
                 {/* Header Section */}
                 <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
                     <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 lg:w-20 lg:h-20 bg-slate-900 rounded-[30px] flex items-center justify-center text-accent shadow-2xl relative">
+                        <div className="w-16 h-16 lg:w-20 lg:h-20 bg-slate-900 rounded-[10px] flex items-center justify-center text-accent shadow-2xl relative">
                             <Activity size={32} className="animate-pulse" />
                             <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-4 border-white animate-ping" />
                         </div>
@@ -195,12 +195,12 @@ const AdminRecharges = () => {
                                 placeholder="Search by user or amount..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-white border border-black/[0.05] rounded-[20px] py-4 pl-14 pr-6 text-sm text-slate-900 focus:outline-none focus:border-accent/30 transition-all font-medium shadow-sm"
+                                className="w-full bg-white border border-black/[0.05] rounded-[10px] py-4 pl-14 pr-6 text-sm text-slate-900 focus:outline-none focus:border-accent/30 transition-all font-medium shadow-sm"
                             />
                         </div>
                         <button
                             onClick={() => navigate('/admin')}
-                            className="p-4 bg-slate-100 rounded-[20px] border border-black/[0.05] text-slate-500 hover:text-slate-900 transition-all shadow-sm active:scale-95"
+                            className="p-4 bg-slate-100 rounded-[10px] border border-black/[0.05] text-slate-500 hover:text-slate-900 transition-all shadow-sm active:scale-95"
                         >
                             <ArrowLeft size={24} />
                         </button>
@@ -209,7 +209,7 @@ const AdminRecharges = () => {
 
                 {/* Filters */}
                 <div className="flex items-center gap-3 overflow-x-auto pb-2 no-scrollbar">
-                    <div className="flex items-center gap-2 px-3 py-2 bg-slate-100 rounded-xl border border-black/[0.05] text-slate-600 mr-2 shadow-sm">
+                    <div className="flex items-center gap-2 px-3 py-2 bg-slate-100 rounded-[10px] border border-black/[0.05] text-slate-600 mr-2 shadow-sm">
                         <Filter size={14} />
                         <span className="text-[10px] font-black uppercase tracking-widest">Filter</span>
                     </div>
@@ -217,7 +217,7 @@ const AdminRecharges = () => {
                         <button
                             key={f}
                             onClick={() => setFilter(f)}
-                            className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all border whitespace-nowrap active:scale-95 ${filter === f
+                            className={`px-6 py-2.5 rounded-[10px] text-xs font-black uppercase tracking-widest transition-all border whitespace-nowrap active:scale-95 ${filter === f
                                 ? 'bg-accent border-accent text-white shadow-lg'
                                 : 'bg-white border-black/[0.05] text-slate-600 hover:border-accent'
                                 }`}
@@ -231,11 +231,11 @@ const AdminRecharges = () => {
                 {loading ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                         {[1, 2, 3, 4, 5, 6].map(n => (
-                            <div key={n} className="h-96 rounded-[40px] skeleton-loading border border-white/5 shadow-2xl"></div>
+                            <div key={n} className="h-96 rounded-[10px] skeleton-loading border border-white/5 shadow-2xl"></div>
                         ))}
                     </div>
                 ) : filteredRequests.length === 0 ? (
-                    <div className="bg-white border-2 border-dashed border-black/[0.05] rounded-[40px] p-12 sm:p-24 text-center shadow-lg">
+                    <div className="bg-white border-2 border-dashed border-black/[0.05] rounded-[10px] p-12 sm:p-24 text-center shadow-lg">
                         <div className="w-20 h-20 sm:w-24 sm:h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-400 shadow-inner">
                             <ImageIcon size={40} />
                         </div>
@@ -245,7 +245,7 @@ const AdminRecharges = () => {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                         {filteredRequests.map((req) => (
-                            <div key={req.id} className="group bg-white border border-black/[0.05] rounded-[40px] overflow-hidden hover:border-accent/20 transition-all duration-500 shadow-sm hover:shadow-xl flex flex-col">
+                            <div key={req.id} className="group bg-white border border-black/[0.05] rounded-[10px] overflow-hidden hover:border-accent/20 transition-all duration-500 shadow-sm hover:shadow-xl flex flex-col">
                                 {/* Screenshot Preview */}
                                 <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 border-b border-black/[0.05]">
                                     {req.screenshot ? (
@@ -267,7 +267,7 @@ const AdminRecharges = () => {
                                         onClick={() => setSelectedImage(req.screenshot)}
                                         className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 backdrop-blur-sm"
                                     >
-                                        <div className="px-6 py-3 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                                        <div className="px-6 py-3 bg-white text-black rounded-[10px] font-black text-xs uppercase tracking-widest flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform">
                                             <ExternalLink size={16} />
                                             View Full Size
                                         </div>
@@ -321,14 +321,14 @@ const AdminRecharges = () => {
                                         <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4 mt-auto">
                                             <button
                                                 onClick={() => handleAction(req.id, req.userId, req.amount, 'Reject')}
-                                                className="flex items-center justify-center gap-2 py-4 bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-500 rounded-2xl font-black uppercase tracking-widest transition-all border border-black/[0.05] active:scale-95 shadow-sm"
+                                                className="flex items-center justify-center gap-2 py-4 bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-500 rounded-[10px] font-black uppercase tracking-widest transition-all border border-black/[0.05] active:scale-95 shadow-sm"
                                             >
                                                 <X size={18} />
                                                 <span>Reject</span>
                                             </button>
                                             <button
                                                 onClick={() => handleAction(req.id, req.userId, req.amount, 'Approve')}
-                                                className="flex items-center justify-center gap-2 py-4 bg-accent hover:bg-accent-hover text-white rounded-2xl font-black uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-accent/20"
+                                                className="flex items-center justify-center gap-2 py-4 bg-accent hover:bg-accent-hover text-white rounded-[10px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-accent/20"
                                             >
                                                 <Check size={18} />
                                                 <span>Approve</span>
@@ -343,7 +343,7 @@ const AdminRecharges = () => {
                                         </div>
                                     ) : (
                                         <div className="flex flex-col gap-4 mt-auto w-full">
-                                            <div className="flex items-center gap-3 p-4 bg-slate-50 border border-black/[0.05] rounded-2xl shadow-inner">
+                                            <div className="flex items-center gap-3 p-4 bg-slate-50 border border-black/[0.05] rounded-[10px] shadow-inner">
                                                 <AlertCircle size={16} className="text-slate-600" />
                                                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">
                                                     Processed on {req.processedAt?.toDate ? req.processedAt.toDate().toLocaleString() : 'N/A'}
@@ -371,7 +371,7 @@ const AdminRecharges = () => {
                     <div className="fixed inset-0 z-[600] flex items-center justify-center p-4">
                         <div className="absolute inset-0 bg-black/95 backdrop-blur-2xl" onClick={() => setSelectedImage(null)} />
                         <div className="relative max-w-5xl w-full h-[80vh] flex items-center justify-center animate-in zoom-in-95 duration-300">
-                            <img src={selectedImage} alt="Payment Proof" className="max-w-full max-h-full object-contain rounded-2xl shadow-[0_0_100px_rgba(0,0,0,1)]" />
+                            <img src={selectedImage} alt="Payment Proof" className="max-w-full max-h-full object-contain rounded-[10px] shadow-[0_0_100px_rgba(0,0,0,1)]" />
                             <button
                                 onClick={() => setSelectedImage(null)}
                                 className="absolute -top-12 right-0 p-3 bg-white/10 hover:bg-accent rounded-full text-white transition-all shadow-2xl"

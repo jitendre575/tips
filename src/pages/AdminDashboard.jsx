@@ -136,7 +136,7 @@ const AdminDashboard = () => {
                         <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
                             <s.icon size={60} />
                         </div>
-                        <div className={`w-16 min-h-[64px] rounded-2xl ${s.bg} flex items-center justify-center ${s.color} mb-8 border border-black/[0.05] shadow-inner`}>
+                        <div className={`w-16 min-h-[64px] rounded-[10px] ${s.bg} flex items-center justify-center ${s.color} mb-8 border border-black/[0.05] shadow-inner`}>
                             <s.icon size={32} />
                         </div>
                         <p className="text-[11px] font-black uppercase tracking-[4px] text-slate-600 mb-3">{s.label}</p>
@@ -186,7 +186,7 @@ const AdminDashboard = () => {
 
                 <div className="glass-card p-12 border-black/[0.05] bg-white flex flex-col justify-center text-center space-y-6 relative overflow-hidden group">
                     <div className="absolute inset-0 bg-gradient-to-b from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="w-20 h-20 bg-accent/10 rounded-[30px] flex items-center justify-center text-accent mx-auto shadow-sm border border-black/[0.05] group-hover:rotate-12 transition-transform duration-500">
+                    <div className="w-20 h-20 bg-accent/10 rounded-[10px] flex items-center justify-center text-accent mx-auto shadow-sm border border-black/[0.05] group-hover:rotate-12 transition-transform duration-500">
                         <ShieldCheck size={40} />
                     </div>
                     <div className="space-y-2 relative z-10">
@@ -230,11 +230,11 @@ const AdminDashboard = () => {
                                     transition={{ delay: i * 0.1 }}
                                     key={req.id}
                                     onClick={() => setActiveTab('recharges')}
-                                    className="p-6 bg-slate-50 border border-black/[0.05] rounded-[32px] hover:bg-white hover:border-amber-500/20 transition-all cursor-pointer group/alert shadow-sm hover:shadow-xl hover:scale-[1.02] active:scale-95"
+                                    className="p-6 bg-slate-50 border border-black/[0.05] rounded-[10px] hover:bg-white hover:border-amber-500/20 transition-all cursor-pointer group/alert shadow-sm hover:shadow-xl hover:scale-[1.02] active:scale-95"
                                 >
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-5">
-                                            <div className="w-14 h-14 bg-white border border-black/[0.05] rounded-2xl flex items-center justify-center text-amber-500 group-hover/alert:scale-110 group-hover/alert:bg-amber-500 group-hover/alert:text-white transition-all shadow-sm">
+                                            <div className="w-14 h-14 bg-white border border-black/[0.05] rounded-[10px] flex items-center justify-center text-amber-500 group-hover/alert:scale-110 group-hover/alert:bg-amber-500 group-hover/alert:text-white transition-all shadow-sm">
                                                 <Wallet size={24} />
                                             </div>
                                             <div>
@@ -261,7 +261,7 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* System Diagnostics Terminal - Extremely obvious for debugging */}
-                <div className="mt-16 bg-slate-900 rounded-[2.5rem] p-10 border border-white/10 relative overflow-hidden shadow-2xl">
+                <div className="mt-16 bg-slate-900 rounded-[10px] p-10 border border-white/10 relative overflow-hidden shadow-2xl">
                     <div className="absolute top-0 right-0 p-8 opacity-20 text-accent animate-pulse">
                         <Activity size={100} />
                     </div>
@@ -273,7 +273,7 @@ const AdminDashboard = () => {
                             </div>
                             <div className="space-y-2">
                                 <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Active Identity UID:</p>
-                                <code className="block bg-black/40 px-4 py-2 rounded-xl text-emerald-400 font-mono text-xs border border-white/5 break-all">{user?.uid}</code>
+                                <code className="block bg-black/40 px-4 py-2 rounded-[10px] text-emerald-400 font-mono text-xs border border-white/5 break-all">{user?.uid}</code>
                             </div>
                             <div className="space-y-2 mt-4">
                                 <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest leading-none">Database Matrix Sync:</p>
@@ -282,7 +282,7 @@ const AdminDashboard = () => {
                                     <span className="px-3 py-1 bg-black/40 text-[9px] font-mono text-blue-500 rounded border border-white/5 uppercase italic">TOTAL RECH: {stats.totalRechargeDocs || 0}</span>
                                     <span className="px-3 py-1 bg-black/40 text-[9px] font-mono text-emerald-500 rounded border border-white/5 uppercase">PENDING: {recentRequests.length}</span>
                                 </div>
-                                <div className="mt-4 p-4 bg-black/60 rounded-2xl border border-white/5 font-mono text-[8px] text-zinc-500 overflow-x-auto whitespace-pre">
+                                <div className="mt-4 p-4 bg-black/60 rounded-[10px] border border-white/5 font-mono text-[8px] text-zinc-500 overflow-x-auto whitespace-pre">
                                     RAW_IDENTITY: {JSON.stringify(userData || {}, null, 2)}
                                 </div>
                             </div>
@@ -321,7 +321,7 @@ const AdminDashboard = () => {
                                             console.log("FIX RULES: match /users/{uid} { allow read, write: if request.auth != null; }");
                                         }
                                     }}
-                                    className="px-10 py-6 bg-red-600 hover:bg-red-500 text-white rounded-3xl font-black uppercase italic tracking-[5px] text-[11px] transition-all shadow-[0_20px_60px_rgba(220,38,38,0.4)] animate-bounce"
+                                    className="px-10 py-6 bg-red-600 hover:bg-red-500 text-white rounded-[10px] font-black uppercase italic tracking-[5px] text-[11px] transition-all shadow-[0_20px_60px_rgba(220,38,38,0.4)] animate-bounce"
                                 >
                                     Activate Master Control
                                 </button>
@@ -336,7 +336,7 @@ const AdminDashboard = () => {
                 {recentRequests.length > 0 && (
                     <button
                         onClick={() => setActiveTab('recharges')}
-                        className="w-full mt-10 py-5 bg-white border border-black/[0.05] hover:border-amber-500/20 text-slate-500 hover:text-amber-600 rounded-[24px] text-[10px] font-black uppercase italic tracking-[4px] transition-all shadow-sm flex items-center justify-center gap-4"
+                        className="w-full mt-10 py-5 bg-white border border-black/[0.05] hover:border-amber-500/20 text-slate-500 hover:text-amber-600 rounded-[10px] text-[10px] font-black uppercase italic tracking-[4px] transition-all shadow-sm flex items-center justify-center gap-4"
                     >
                         Enter Recharge Terminal <ArrowRight size={16} />
                     </button>
@@ -410,8 +410,8 @@ const AdminDashboard = () => {
                     className="max-w-xl w-full glass-card p-16 border-white/5 relative z-10 text-center space-y-12 shadow-[0_50px_100px_rgba(0,0,0,0.8)]"
                 >
                     <div className="relative group mx-auto w-fit">
-                        <div className="absolute inset-0 bg-accent rounded-[3rem] blur-3xl opacity-10 group-hover:opacity-20 transition-opacity" />
-                        <div className="w-32 h-32 bg-white border border-black/[0.05] rounded-[45px] flex items-center justify-center text-accent relative overflow-hidden group-hover:-rotate-6 transition-transform duration-700 shadow-xl">
+                        <div className="absolute inset-0 bg-accent rounded-[10px] blur-3xl opacity-10 group-hover:opacity-20 transition-opacity" />
+                        <div className="w-32 h-32 bg-white border border-black/[0.05] rounded-[10px] flex items-center justify-center text-accent relative overflow-hidden group-hover:-rotate-6 transition-transform duration-700 shadow-xl">
                             <div className="absolute inset-0 bg-gradient-to-tr from-accent/10 to-transparent" />
                             <ShieldCheck size={64} className="relative z-10 animate-pulse" />
                         </div>
@@ -435,21 +435,21 @@ const AdminDashboard = () => {
                                 <Lock size={14} className="text-accent" />
                             </div>
                             <div className="relative group">
-                                <div className="absolute -inset-1 bg-accent/10 rounded-[2.5rem] blur opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className="absolute -inset-1 bg-accent/10 rounded-[10px] blur opacity-0 group-hover:opacity-100 transition-opacity" />
                                 <input
                                     type="password"
                                     value={localPin}
                                     onChange={(e) => setLocalPin(e.target.value)}
                                     placeholder="••••••••"
                                     autoFocus
-                                    className="relative w-full bg-slate-50 border border-black/[0.05] rounded-[2.5rem] px-10 py-8 text-4xl font-black tracking-[15px] text-center text-accent focus:outline-none focus:border-accent transition-all placeholder:tracking-normal placeholder:opacity-10 shadow-inner"
+                                    className="relative w-full bg-slate-50 border border-black/[0.05] rounded-[10px] px-10 py-8 text-4xl font-black tracking-[15px] text-center text-accent focus:outline-none focus:border-accent transition-all placeholder:tracking-normal placeholder:opacity-10 shadow-inner"
                                 />
                             </div>
                         </div>
 
                         <button
                             type="submit"
-                            className="w-full py-8 bg-accent hover:bg-indigo-500 text-white rounded-[2.5rem] font-black uppercase italic tracking-[0.4em] text-sm transition-all shadow-[0_20px_50px_rgba(79,70,229,0.3)] active:scale-[0.98] flex items-center justify-center gap-4 group overflow-hidden relative"
+                            className="w-full py-8 bg-accent hover:bg-indigo-500 text-white rounded-[10px] font-black uppercase italic tracking-[0.4em] text-sm transition-all shadow-[0_20px_50px_rgba(79,70,229,0.3)] active:scale-[0.98] flex items-center justify-center gap-4 group overflow-hidden relative"
                         >
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 skew-x-12" />
                             INITIALIZE SYSTEM <Zap size={20} className="group-hover:scale-125 transition-transform" />
@@ -459,7 +459,7 @@ const AdminDashboard = () => {
                     <div className="pt-10 border-t border-white/5 flex flex-col items-center gap-6">
                         <div className="flex flex-col items-center gap-2">
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Identity</p>
-                            <code className="px-4 py-2 bg-slate-100 rounded-lg text-[10px] font-mono text-slate-500 border border-black/[0.03]">{user?.uid || 'Awaiting Session...'}</code>
+                            <code className="px-4 py-2 bg-slate-100 rounded-[10px] text-[10px] font-mono text-slate-500 border border-black/[0.03]">{user?.uid || 'Awaiting Session...'}</code>
                         </div>
                         <div className="flex items-center gap-3">
                             <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
@@ -480,7 +480,7 @@ const AdminDashboard = () => {
 
                 <div className="space-y-8">
                     <div className="flex items-center gap-6">
-                        <div className="w-20 h-20 bg-zinc-900 border border-white/10 rounded-[30px] flex items-center justify-center text-accent shadow-2xl">
+                        <div className="w-20 h-20 bg-zinc-900 border border-white/10 rounded-[10px] flex items-center justify-center text-accent shadow-2xl">
                             <UserCircle size={40} />
                         </div>
                         <div className="flex-1">
@@ -491,7 +491,7 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="p-6 bg-accent/5 border border-accent/10 rounded-3xl space-y-4">
+                    <div className="p-6 bg-accent/5 border border-accent/10 rounded-[10px] space-y-4">
                         <div className="flex items-center gap-3 text-accent">
                             <Info size={16} />
                             <span className="text-[10px] font-black uppercase tracking-widest">Public Control Terminal</span>
@@ -503,7 +503,7 @@ const AdminDashboard = () => {
 
                     <button
                         onClick={handleLogout}
-                        className="w-full flex items-center justify-center gap-4 py-6 bg-slate-100 border border-black/[0.05] hover:bg-white text-slate-500 hover:text-black rounded-[32px] font-black uppercase italic tracking-[4px] transition-all group active:scale-95 shadow-sm"
+                        className="w-full flex items-center justify-center gap-4 py-6 bg-slate-100 border border-black/[0.05] hover:bg-white text-slate-500 hover:text-black rounded-[10px] font-black uppercase italic tracking-[4px] transition-all group active:scale-95 shadow-sm"
                     >
                         Exit Terminal <LogOut size={20} className="group-hover:translate-x-1 transition-transform" />
                     </button>
@@ -527,8 +527,8 @@ const AdminDashboard = () => {
             <header className="sticky top-0 z-[110] bg-white/80 backdrop-blur-2xl border-b border-black/[0.05] py-5 px-8 lg:px-12 flex items-center justify-between shadow-sm">
                 <div className="flex items-center gap-6">
                     <div className="relative group">
-                        <div className="absolute inset-0 bg-accent rounded-2xl blur-lg opacity-10 group-hover:opacity-30 transition-opacity" />
-                        <div className="relative bg-white p-3 rounded-2xl border border-black/[0.05] flex items-center justify-center shadow-lg">
+                        <div className="absolute inset-0 bg-accent rounded-[10px] blur-lg opacity-10 group-hover:opacity-30 transition-opacity" />
+                        <div className="relative bg-white p-3 rounded-[10px] border border-black/[0.05] flex items-center justify-center shadow-lg">
                             <ShieldCheck size={24} className={userData?.isAdmin ? "text-accent animate-pulse" : "text-red-500"} />
                         </div>
                     </div>
@@ -586,19 +586,19 @@ const AdminDashboard = () => {
                                 }
                             });
                         }}
-                        className="flex items-center gap-2 px-4 py-3 bg-slate-100 hover:bg-white text-slate-600 hover:text-accent rounded-xl transition-all active:scale-95 border border-black/[0.05] group relative shadow-sm"
+                        className="flex items-center gap-2 px-4 py-3 bg-slate-100 hover:bg-white text-slate-600 hover:text-accent rounded-[10px] transition-all active:scale-95 border border-black/[0.05] group relative shadow-sm"
                     >
                         <Headset size={20} className="group-hover:rotate-12 transition-transform" />
                         <span className="text-[10px] font-black uppercase tracking-widest hidden md:block">CricWin Support</span>
-                        <span className="absolute -top-12 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-slate-900 border border-white/10 text-[9px] font-black uppercase rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap text-white">Help Desk</span>
+                        <span className="absolute -top-12 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-slate-900 border border-white/10 text-[9px] font-black uppercase rounded-[10px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap text-white">Help Desk</span>
                     </button>
 
                     <button
                         onClick={handleLogout}
-                        className="p-3 bg-slate-100 hover:bg-white text-slate-600 hover:text-accent rounded-xl transition-all active:scale-95 border border-black/[0.05] group relative shadow-sm"
+                        className="p-3 bg-slate-100 hover:bg-white text-slate-600 hover:text-accent rounded-[10px] transition-all active:scale-95 border border-black/[0.05] group relative shadow-sm"
                     >
                         <LogOut size={20} />
-                        <span className="absolute -top-12 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-slate-900 border border-white/10 text-[9px] font-black uppercase rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none text-white">Logout</span>
+                        <span className="absolute -top-12 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-slate-900 border border-white/10 text-[9px] font-black uppercase rounded-[10px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none text-white">Logout</span>
                     </button>
                 </div>
             </header>
@@ -606,12 +606,12 @@ const AdminDashboard = () => {
             <div className="max-w-[1780px] mx-auto p-8 lg:p-12">
                 {/* Unified Tab Navigation - Compact High-Performance */}
                 <div className="mb-12 flex items-center justify-center">
-                    <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-[2.5rem] border border-black/[0.05] shadow-inner">
+                    <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-[10px] border border-black/[0.05] shadow-inner">
                         {tabs.map(tab => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex items-center gap-3 px-8 py-4 rounded-[2.2rem] font-black uppercase italic tracking-widest text-[10px] transition-all relative shrink-0 ${activeTab === tab.id
+                                className={`flex items-center gap-3 px-8 py-4 rounded-[10px] font-black uppercase italic tracking-widest text-[10px] transition-all relative shrink-0 ${activeTab === tab.id
                                     ? 'bg-accent text-white shadow-[0_10px_25px_rgba(79,70,229,0.3)]'
                                     : 'text-slate-600 hover:text-accent hover:bg-white/50'
                                     }`}
@@ -720,7 +720,7 @@ const AdminCasino = ({ stats }) => {
                 </div>
 
                 <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-4 px-10 py-6 bg-white rounded-[2.5rem] border border-black/5 shadow-sm">
+                    <div className="flex items-center gap-4 px-10 py-6 bg-white rounded-[10px] border border-black/5 shadow-sm">
                         <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse shadow-md" />
                         <div className="flex flex-col">
                             <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest leading-none mb-1">Grid Status</span>
@@ -759,7 +759,7 @@ const AdminCasino = ({ stats }) => {
                         <div className="absolute -top-10 -right-10 w-40 h-40 bg-accent/5 blur-[80px] rounded-full group-hover:scale-150 transition-transform duration-1000" />
 
                         <div className="flex items-center gap-6">
-                            <div className="p-5 bg-accent/5 rounded-3xl text-accent border border-accent/10 shadow-sm transition-transform duration-1000">
+                            <div className="p-5 bg-accent/5 rounded-[10px] text-accent border border-accent/10 shadow-sm transition-transform duration-1000">
                                 <BarChart3 size={32} />
                             </div>
                             <div>
@@ -772,7 +772,7 @@ const AdminCasino = ({ stats }) => {
                             <div className="space-y-5">
                                 <div className="flex justify-between items-center px-2">
                                     <span className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-600">HOUSE EDGE</span>
-                                    <span className="px-4 py-1.5 bg-emerald-50 text-emerald-600 text-[11px] font-black rounded-lg border border-emerald-100">{settings.houseEdge}%</span>
+                                    <span className="px-4 py-1.5 bg-emerald-50 text-emerald-600 text-[11px] font-black rounded-[10px] border border-emerald-100">{settings.houseEdge}%</span>
                                 </div>
                                 <div className="relative h-2 bg-slate-100 rounded-full overflow-hidden border border-black/[0.03] group/slider">
                                     <div className="absolute inset-0 bg-accent/5" />
@@ -789,7 +789,7 @@ const AdminCasino = ({ stats }) => {
                             <div className="space-y-5">
                                 <div className="flex justify-between items-center px-2">
                                     <span className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-600">DIFFICULTY BIAS</span>
-                                    <span className="px-4 py-1.5 bg-accent/5 text-accent text-[11px] font-black rounded-lg border border-accent/10">{settings.minesProbBias}%</span>
+                                    <span className="px-4 py-1.5 bg-accent/5 text-accent text-[11px] font-black rounded-[10px] border border-accent/10">{settings.minesProbBias}%</span>
                                 </div>
                                 <div className="relative h-2 bg-slate-100 rounded-full overflow-hidden border border-black/[0.03]">
                                     <div className="absolute inset-0 bg-accent/5" />
@@ -812,7 +812,7 @@ const AdminCasino = ({ stats }) => {
                         </div>
 
                         <div className="flex items-center gap-6">
-                            <div className="p-5 bg-red-500/10 rounded-3xl text-red-500 border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)] group-hover:scale-110 transition-transform">
+                            <div className="p-5 bg-red-500/10 rounded-[10px] text-red-500 border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)] group-hover:scale-110 transition-transform">
                                 <Zap size={32} />
                             </div>
                             <div>
@@ -825,10 +825,10 @@ const AdminCasino = ({ stats }) => {
 
                         <div className="space-y-8">
                             {/* Crash Control */}
-                            <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-black/[0.05] space-y-8 relative group/rig shadow-inner">
+                            <div className="p-8 bg-slate-50 rounded-[10px] border border-black/[0.05] space-y-8 relative group/rig shadow-inner">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3 text-orange-600">
-                                        <div className="p-2 bg-orange-50 rounded-xl border border-orange-100">
+                                        <div className="p-2 bg-orange-50 rounded-[10px] border border-orange-100">
                                             <Rocket size={18} />
                                         </div>
                                         <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-600">Crash rigging</span>
@@ -843,7 +843,7 @@ const AdminCasino = ({ stats }) => {
                                             type="number" step="0.01"
                                             value={settings.forceCrashPoint}
                                             onChange={e => updateSettings({ forceCrashPoint: parseFloat(e.target.value) })}
-                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[2rem] px-8 py-7 text-4xl font-black text-slate-900 focus:outline-none focus:border-red-500/30 transition-all text-center tracking-tighter shadow-sm"
+                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[10px] px-8 py-7 text-4xl font-black text-slate-900 focus:outline-none focus:border-red-500/30 transition-all text-center tracking-tighter shadow-sm"
                                             placeholder="1.50"
                                         />
                                         <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 font-black italic text-xl">X</div>
@@ -852,7 +852,7 @@ const AdminCasino = ({ stats }) => {
 
                                 <button
                                     onClick={() => updateSettings({ rigNextCrash: !settings.rigNextCrash })}
-                                    className={`w-full py-7 rounded-[2rem] text-[12px] font-black uppercase italic tracking-[5px] transition-all relative overflow-hidden group/btn ${settings.rigNextCrash ? 'bg-red-500 text-white shadow-[0_25px_50px_rgba(239,68,68,0.4)]' : 'bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 border border-black/[0.05] shadow-sm'}`}
+                                    className={`w-full py-7 rounded-[10px] text-[12px] font-black uppercase italic tracking-[5px] transition-all relative overflow-hidden group/btn ${settings.rigNextCrash ? 'bg-red-500 text-white shadow-[0_25px_50px_rgba(239,68,68,0.4)]' : 'bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 border border-black/[0.05] shadow-sm'}`}
                                 >
                                     <div className="relative z-10 flex items-center justify-center gap-4">
                                         {settings.rigNextCrash ? 'DEACTIVATE RIG' : 'ACTIVATE FIXED CRASH'}
@@ -864,7 +864,7 @@ const AdminCasino = ({ stats }) => {
                                 <div className="pt-4 mt-4 border-t border-black/5 space-y-4">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3 text-orange-600">
-                                            <div className="p-2 bg-orange-50 rounded-xl border border-orange-100">
+                                            <div className="p-2 bg-orange-50 rounded-[10px] border border-orange-100">
                                                 <Rocket size={14} />
                                             </div>
                                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Force Range (2x-4x)</span>
@@ -874,7 +874,7 @@ const AdminCasino = ({ stats }) => {
 
                                     <button
                                         onClick={() => updateSettings({ rigCrashRange2_4x: !settings.rigCrashRange2_4x })}
-                                        className={`w-full py-5 rounded-[1.5rem] text-[10px] font-black uppercase italic tracking-[4px] transition-all relative overflow-hidden group/btn flex items-center justify-center gap-3 ${settings.rigCrashRange2_4x ? 'bg-orange-500 text-white shadow-[0_15px_30px_rgba(249,115,22,0.4)]' : 'bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 border border-black/[0.05] shadow-sm'}`}
+                                        className={`w-full py-5 rounded-[10px] text-[10px] font-black uppercase italic tracking-[4px] transition-all relative overflow-hidden group/btn flex items-center justify-center gap-3 ${settings.rigCrashRange2_4x ? 'bg-orange-500 text-white shadow-[0_15px_30px_rgba(249,115,22,0.4)]' : 'bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 border border-black/[0.05] shadow-sm'}`}
                                     >
                                         {settings.rigCrashRange2_4x ? 'DEACTIVATE RANGE' : 'ACTIVATE RANGE RIG'}
                                     </button>
@@ -883,7 +883,7 @@ const AdminCasino = ({ stats }) => {
                                 {/* Auto Max Limit */}
                                 <div className="pt-4 mt-4 border-t border-black/5 space-y-4">
                                     <div className="flex items-center gap-3 text-blue-600">
-                                        <div className="p-2 bg-blue-50 rounded-xl border border-blue-100">
+                                        <div className="p-2 bg-blue-50 rounded-[10px] border border-blue-100">
                                             <Rocket size={14} />
                                         </div>
                                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Auto Max Limit</span>
@@ -893,7 +893,7 @@ const AdminCasino = ({ stats }) => {
                                             type="number" step="0.01"
                                             value={settings.autoMaxCrashLimit || ''}
                                             onChange={e => updateSettings({ autoMaxCrashLimit: parseFloat(e.target.value) || 0 })}
-                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[2rem] px-8 py-5 text-2xl font-black text-slate-900 focus:outline-none focus:border-blue-500/30 transition-all text-center tracking-tighter shadow-sm"
+                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[10px] px-8 py-5 text-2xl font-black text-slate-900 focus:outline-none focus:border-blue-500/30 transition-all text-center tracking-tighter shadow-sm"
                                             placeholder="No Limit (0)"
                                         />
                                         <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 font-black italic text-xl">X</div>
@@ -903,10 +903,10 @@ const AdminCasino = ({ stats }) => {
                             </div>
 
                             {/* Mines Control */}
-                            <div className="p-8 bg-slate-50 rounded-[3rem] border border-black/[0.1] space-y-8 group/trap hover:border-emerald-500/40 transition-colors shadow-inner">
+                            <div className="p-8 bg-slate-50 rounded-[10px] border border-black/[0.1] space-y-8 group/trap hover:border-emerald-500/40 transition-colors shadow-inner">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-4 text-emerald-600">
-                                        <div className="p-2.5 bg-emerald-50 rounded-xl border border-emerald-100">
+                                        <div className="p-2.5 bg-emerald-50 rounded-[10px] border border-emerald-100">
                                             <Bomb size={20} />
                                         </div>
                                         <span className="text-[12px] font-black uppercase tracking-[0.2em] text-slate-600">Mines trap</span>
@@ -920,7 +920,7 @@ const AdminCasino = ({ stats }) => {
 
                                 <button
                                     onClick={() => updateSettings({ trapNextMine: !settings.trapNextMine })}
-                                    className={`w-full py-7 rounded-[2rem] text-[12px] font-black uppercase italic tracking-[5px] transition-all relative overflow-hidden ${settings.trapNextMine ? 'bg-red-500 text-white shadow-[0_25px_50px_rgba(239,68,68,0.4)]' : 'bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-900 border border-black/[0.05] shadow-sm'}`}
+                                    className={`w-full py-7 rounded-[10px] text-[12px] font-black uppercase italic tracking-[5px] transition-all relative overflow-hidden ${settings.trapNextMine ? 'bg-red-500 text-white shadow-[0_25px_50px_rgba(239,68,68,0.4)]' : 'bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-900 border border-black/[0.05] shadow-sm'}`}
                                 >
                                     <div className="relative z-10 flex items-center justify-center gap-4">
                                         {settings.trapNextMine ? 'DISARM TRAP' : 'ARM NEURAL TRAP'}
@@ -932,7 +932,7 @@ const AdminCasino = ({ stats }) => {
                                 <div className="pt-4 mt-4 border-t border-black/5 space-y-4">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3 text-emerald-600">
-                                            <div className="p-2 bg-emerald-50 rounded-xl border border-emerald-100">
+                                            <div className="p-2 bg-emerald-50 rounded-[10px] border border-emerald-100">
                                                 <Bomb size={14} />
                                             </div>
                                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Fix Bomb at Click</span>
@@ -944,7 +944,7 @@ const AdminCasino = ({ stats }) => {
                                             type="number" step="1"
                                             value={settings.trapAtClick || ''}
                                             onChange={e => updateSettings({ trapAtClick: parseInt(e.target.value) || 0 })}
-                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[2rem] px-8 py-5 text-2xl font-black text-slate-900 focus:outline-none focus:border-emerald-500/30 transition-all text-center tracking-tighter shadow-sm"
+                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[10px] px-8 py-5 text-2xl font-black text-slate-900 focus:outline-none focus:border-emerald-500/30 transition-all text-center tracking-tighter shadow-sm"
                                             placeholder="Ex: 2 (for 2nd box)"
                                         />
                                         <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 font-[10px] font-black uppercase italic">Click</div>
@@ -955,7 +955,7 @@ const AdminCasino = ({ stats }) => {
                                 {/* Auto Max Mines Multiplier Limit */}
                                 <div className="pt-4 mt-4 border-t border-black/5 space-y-4">
                                     <div className="flex items-center gap-3 text-cyan-600">
-                                        <div className="p-2 bg-cyan-50 rounded-xl border border-cyan-100">
+                                        <div className="p-2 bg-cyan-50 rounded-[10px] border border-cyan-100">
                                             <Rocket size={14} />
                                         </div>
                                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Auto Max Multiplier</span>
@@ -965,7 +965,7 @@ const AdminCasino = ({ stats }) => {
                                             type="number" step="0.01"
                                             value={settings.autoMaxMinesMultiplier || ''}
                                             onChange={e => updateSettings({ autoMaxMinesMultiplier: parseFloat(e.target.value) || 0 })}
-                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[2rem] px-8 py-5 text-2xl font-black text-slate-900 focus:outline-none focus:border-cyan-500/30 transition-all text-center tracking-tighter shadow-sm"
+                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[10px] px-8 py-5 text-2xl font-black text-slate-900 focus:outline-none focus:border-cyan-500/30 transition-all text-center tracking-tighter shadow-sm"
                                             placeholder="No Limit (0)"
                                         />
                                         <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 font-black italic text-xl">X</div>
@@ -1010,9 +1010,9 @@ const AdminCasino = ({ stats }) => {
                                 <motion.div
                                     key={game.id}
                                     whileHover={{ y: -8, scale: 1.03 }}
-                                    className={`p-10 rounded-[3.5rem] border transition-all duration-700 flex flex-col items-center text-center gap-8 group/game relative overflow-hidden ${isActive ? 'bg-white border-black/[0.05] shadow-xl hover:border-accent/50' : 'bg-slate-50 border-black/[0.05] grayscale opacity-40 shadow-none'}`}
+                                    className={`p-10 rounded-[10px] border transition-all duration-700 flex flex-col items-center text-center gap-8 group/game relative overflow-hidden ${isActive ? 'bg-white border-black/[0.05] shadow-xl hover:border-accent/50' : 'bg-slate-50 border-black/[0.05] grayscale opacity-40 shadow-none'}`}
                                 >
-                                    <div className={`p-8 bg-slate-50 rounded-[2.5rem] border border-black/[0.05] relative group-hover/game:shadow-[0_0_40px_rgba(var(--accent)/0.3)] transition-all duration-500 ${game.color} shadow-inner`}>
+                                    <div className={`p-8 bg-slate-50 rounded-[10px] border border-black/[0.05] relative group-hover/game:shadow-[0_0_40px_rgba(var(--accent)/0.3)] transition-all duration-500 ${game.color} shadow-inner`}>
                                         <game.icon size={48} className="relative z-10 group-hover/game:scale-110 transition-transform duration-500" />
                                         <div className={`absolute inset-0 blur-3xl opacity-30 ${game.color} bg-current rounded-full group-hover:opacity-50 transition-opacity`} />
                                     </div>
@@ -1022,7 +1022,7 @@ const AdminCasino = ({ stats }) => {
                                     </div>
                                     <button
                                         onClick={() => toggleGame(game.id)}
-                                        className={`w-full py-5 rounded-[2rem] text-[11px] font-black uppercase italic tracking-[4px] transition-all flex items-center justify-center gap-4 ${isActive ? 'bg-slate-50 hover:bg-red-500 hover:text-white text-slate-500 border border-black/[0.05] shadow-sm' : 'bg-accent text-white shadow-lg'}`}
+                                        className={`w-full py-5 rounded-[10px] text-[11px] font-black uppercase italic tracking-[4px] transition-all flex items-center justify-center gap-4 ${isActive ? 'bg-slate-50 hover:bg-red-500 hover:text-white text-slate-500 border border-black/[0.05] shadow-sm' : 'bg-accent text-white shadow-lg'}`}
                                     >
                                         {isActive ? (
                                             <><Lock size={16} /> Disable Node</>
@@ -1043,7 +1043,7 @@ const AdminCasino = ({ stats }) => {
                 <div className="relative flex flex-col xl:flex-row items-center justify-between gap-20">
                     <div className="space-y-8 max-w-xl">
                         <div className="flex items-center gap-8">
-                            <div className="w-24 h-24 bg-emerald-500/10 rounded-[3rem] flex items-center justify-center text-emerald-500 border border-emerald-500/20 shadow-[0_0_50px_rgba(16,185,129,0.2)] relative">
+                            <div className="w-24 h-24 bg-emerald-500/10 rounded-[10px] flex items-center justify-center text-emerald-500 border border-emerald-500/20 shadow-[0_0_50px_rgba(16,185,129,0.2)] relative">
                                 <TrendingUp size={48} />
                                 <div className="absolute inset-0 bg-emerald-500/30 blur-2xl animate-pulse" />
                             </div>
@@ -1144,7 +1144,7 @@ const AdminSupport = () => {
                             className={`w-full p-8 flex items-center gap-5 hover:bg-white/[0.03] transition-all text-left border-b border-white/[0.02] relative group ${selectedChat?.id === chat.id ? 'bg-accent/10' : ''}`}
                         >
                             {selectedChat?.id === chat.id && <div className="absolute left-0 inset-y-0 w-1 bg-accent shadow-[4px_0_15px_rgba(79,70,229,0.5)]" />}
-                            <div className="w-14 h-14 rounded-2xl bg-zinc-900 flex items-center justify-center text-zinc-500 shrink-0 border border-white/5 shadow-inner group-hover:rotate-6 transition-transform">
+                            <div className="w-14 h-14 rounded-[10px] bg-zinc-900 flex items-center justify-center text-zinc-500 shrink-0 border border-white/5 shadow-inner group-hover:rotate-6 transition-transform">
                                 <UserCircle size={28} />
                             </div>
                             <div className="flex-1 min-w-0">
@@ -1173,7 +1173,7 @@ const AdminSupport = () => {
                     <>
                         <div className="p-8 border-b border-white/5 bg-[#0a0a14]/60 flex items-center justify-between">
                             <div className="flex items-center gap-6">
-                                <div className="w-14 h-14 rounded-[1.2rem] bg-accent/20 flex items-center justify-center text-accent ring-1 ring-accent/30 shadow-2xl">
+                                <div className="w-14 h-14 rounded-[10px] bg-accent/20 flex items-center justify-center text-accent ring-1 ring-accent/30 shadow-2xl">
                                     <Headset size={28} />
                                 </div>
                                 <div>
@@ -1193,7 +1193,7 @@ const AdminSupport = () => {
                         <div className="flex-1 overflow-y-auto p-12 space-y-8 no-scrollbar bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-fixed opacity-90">
                             {messages.map(msg => (
                                 <div key={msg.id} className={`flex ${msg.senderId === 'admin' ? 'justify-end' : 'justify-start'}`}>
-                                    <div className={`max-w-[65%] min-w-[120px] rounded-[2rem] px-8 py-5 space-y-2 relative group shadow-2xl ${msg.senderId === 'admin' ? 'bg-accent text-white rounded-tr-none' : 'bg-[#0a0a14] border border-white/5 text-zinc-200 rounded-tl-none'}`}>
+                                    <div className={`max-w-[65%] min-w-[120px] rounded-[10px] px-8 py-5 space-y-2 relative group shadow-2xl ${msg.senderId === 'admin' ? 'bg-accent text-white rounded-tr-none' : 'bg-[#0a0a14] border border-white/5 text-zinc-200 rounded-tl-none'}`}>
                                         <p className="text-sm leading-relaxed font-medium">{msg.text}</p>
                                         <div className="flex items-center justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
                                             <span className="text-[8px] font-black tracking-widest uppercase">{msg.createdAt?.toDate ? msg.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
@@ -1211,10 +1211,10 @@ const AdminSupport = () => {
                                     value={reply}
                                     onChange={e => setReply(e.target.value)}
                                     placeholder="TYPE COMMAND RESPONSE..."
-                                    className="relative w-full bg-black/50 border border-white/10 rounded-[2rem] px-10 py-6 text-sm font-black italic tracking-[0.1em] text-white focus:outline-none focus:border-accent transition-all uppercase placeholder:opacity-20 shadow-inner"
+                                    className="relative w-full bg-black/50 border border-white/10 rounded-[10px] px-10 py-6 text-sm font-black italic tracking-[0.1em] text-white focus:outline-none focus:border-accent transition-all uppercase placeholder:opacity-20 shadow-inner"
                                 />
                             </div>
-                            <button className="px-10 bg-accent text-white rounded-[2rem] shadow-[0_15px_30px_rgba(79,70,229,0.3)] hover:bg-indigo-500 active:scale-95 transition-all flex items-center justify-center">
+                            <button className="px-10 bg-accent text-white rounded-[10px] shadow-[0_15px_30px_rgba(79,70,229,0.3)] hover:bg-indigo-500 active:scale-95 transition-all flex items-center justify-center">
                                 <Send size={24} />
                             </button>
                         </form>
@@ -1223,7 +1223,7 @@ const AdminSupport = () => {
                     <div className="flex-1 flex flex-col items-center justify-center p-16 text-center">
                         <div className="relative mb-10">
                             <div className="absolute inset-0 bg-accent/20 blur-3xl rounded-full scale-150 animate-pulse" />
-                            <div className="w-28 h-28 bg-[#0a0a14] border border-white/10 rounded-[40px] flex items-center justify-center text-accent relative shadow-2xl">
+                            <div className="w-28 h-28 bg-[#0a0a14] border border-white/10 rounded-[10px] flex items-center justify-center text-accent relative shadow-2xl">
                                 <Headset size={54} className="opacity-40" />
                             </div>
                         </div>

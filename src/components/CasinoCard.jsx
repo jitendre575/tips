@@ -11,7 +11,7 @@ const CasinoCard = ({ game, onPlay }) => {
             onClick={() => onPlay(game)}
         >
             {/* Image/Art Container */}
-            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-white ring-1 ring-black/[0.05] transition-transform duration-300 group-hover:-translate-y-2 shadow-sm group-hover:shadow-2xl">
+            <div className="relative aspect-[3/4] rounded-[10px] overflow-hidden bg-white ring-1 ring-black/[0.05] transition-transform duration-300 group-hover:-translate-y-2 shadow-sm group-hover:shadow-2xl">
                 <img
                     src={game.image}
                     alt={game.name}

@@ -52,7 +52,7 @@ const RechargeModal = ({ isOpen, onClose }) => {
                 initial={{ y: 100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 100, opacity: 0 }}
-                className="relative w-full max-w-md bg-white border-t sm:border border-black/5 rounded-t-[32px] sm:rounded-[32px] overflow-hidden shadow-2xl"
+                className="relative w-full max-w-md bg-white border-t sm:border border-black/5 rounded-[10px] sm:rounded-[10px] overflow-hidden shadow-2xl"
             >
                 <div className="p-6 sm:p-8 space-y-6">
                     <div className="flex justify-between items-start">
@@ -73,9 +73,9 @@ const RechargeModal = ({ isOpen, onClose }) => {
                         <div className="space-y-3">
                             <button
                                 onClick={selectINR}
-                                className="w-full group p-4 bg-slate-50 hover:bg-slate-100 border border-black/10 hover:border-black/20 rounded-[24px] flex items-center gap-4 transition-all active:scale-[0.98]"
+                                className="w-full group p-4 bg-slate-50 hover:bg-slate-100 border border-black/10 hover:border-black/20 rounded-[10px] flex items-center gap-4 transition-all active:scale-[0.98]"
                             >
-                                <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 shrink-0 border border-blue-500/20">
+                                <div className="w-14 h-14 bg-blue-50 rounded-[10px] flex items-center justify-center text-blue-500 shrink-0 border border-blue-500/20">
                                     <Wallet size={28} />
                                 </div>
                                 <div className="text-left min-w-0">
@@ -86,9 +86,9 @@ const RechargeModal = ({ isOpen, onClose }) => {
 
                             <button
                                 onClick={selectCrypto}
-                                className="w-full group p-4 bg-slate-50 hover:bg-slate-100 border border-black/10 hover:border-black/20 rounded-[24px] flex items-center gap-4 transition-all active:scale-[0.98]"
+                                className="w-full group p-4 bg-slate-50 hover:bg-slate-100 border border-black/10 hover:border-black/20 rounded-[10px] flex items-center gap-4 transition-all active:scale-[0.98]"
                             >
-                                <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-500 shrink-0 border border-amber-500/20">
+                                <div className="w-14 h-14 bg-amber-50 rounded-[10px] flex items-center justify-center text-amber-500 shrink-0 border border-amber-500/20">
                                     <Coins size={28} />
                                 </div>
                                 <div className="text-left min-w-0">
@@ -103,7 +103,7 @@ const RechargeModal = ({ isOpen, onClose }) => {
                                 <button
                                     key={coin.name}
                                     onClick={() => selectCryptoCoin(coin)}
-                                    className="flex flex-col items-center p-3 rounded-2xl bg-slate-50 border border-black/5 hover:bg-slate-100 hover:border-black/10 transition-all group"
+                                    className="flex flex-col items-center p-3 rounded-[10px] bg-slate-50 border border-black/5 hover:bg-slate-100 hover:border-black/10 transition-all group"
                                 >
                                     <span className="text-2xl mb-1 group-hover:scale-110 transition-transform">{coin.icon}</span>
                                     <span className="text-[10px] font-black text-slate-900">{coin.name}</span>
@@ -134,7 +134,7 @@ const RechargeModal = ({ isOpen, onClose }) => {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.9 }}
-                            className="absolute inset-0 z-10 bg-white/95 backdrop-blur-md flex items-center justify-center p-6 text-center rounded-[32px]"
+                            className="absolute inset-0 z-10 bg-white/95 backdrop-blur-md flex items-center justify-center p-6 text-center rounded-[10px]"
                         >
                             <div className="space-y-6 w-full max-w-[280px]">
                                 <div className="w-20 h-20 bg-red-50 border border-red-500/20 rounded-full flex items-center justify-center mx-auto text-red-500 animate-pulse">
@@ -149,7 +149,7 @@ const RechargeModal = ({ isOpen, onClose }) => {
                                 <div className="space-y-3">
                                     <button
                                         onClick={selectINR}
-                                        className="w-full py-4 bg-accent text-white rounded-2xl font-black uppercase italic tracking-widest shadow-lg shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-3"
+                                        className="w-full py-4 bg-accent text-white rounded-[10px] font-black uppercase italic tracking-widest shadow-lg shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-3"
                                     >
                                         <Wallet size={18} /> Switch to INR
                                     </button>

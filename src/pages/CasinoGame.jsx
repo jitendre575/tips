@@ -127,13 +127,13 @@ const CasinoGame = () => {
     const renderGame = () => {
         if (!casinoSettings.activeGames.includes(gameId)) {
             return (
-                <div className="flex flex-col items-center justify-center h-[500px] bg-zinc-900 shadow-2xl rounded-[40px] border border-red-500/20 text-center p-10">
+                <div className="flex flex-col items-center justify-center h-[500px] bg-zinc-900 shadow-2xl rounded-[10px] border border-red-500/20 text-center p-10">
                     <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center text-red-500 mb-6 animate-pulse">
                         <ShieldAlert size={40} />
                     </div>
                     <h2 className="text-3xl font-[1000] italic uppercase tracking-tighter text-white mb-2">MAINTENANCE <span className="text-red-500">MODE</span></h2>
                     <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs max-w-sm">This game is temporarily undergoing algorithm optimization. Check back soon!</p>
-                    <button onClick={() => navigate('/dashboard')} className="mt-10 px-10 py-4 bg-zinc-800 hover:bg-white text-zinc-400 hover:text-black rounded-2xl font-black uppercase text-[10px] tracking-[4px] transition-all">LOBBY RECALL</button>
+                    <button onClick={() => navigate('/dashboard')} className="mt-10 px-10 py-4 bg-zinc-800 hover:bg-white text-zinc-400 hover:text-black rounded-[10px] font-black uppercase text-[10px] tracking-[4px] transition-all">LOBBY RECALL</button>
                 </div>
             );
         }
@@ -157,13 +157,13 @@ const CasinoGame = () => {
                 return <ChickenRoadGame onBet={handleBet} onWin={handleWin} onLoss={handleLoss} isMuted={isMuted} settings={casinoSettings} />;
             default:
                 return (
-                    <div className="flex flex-col items-center justify-center h-[500px] bg-zinc-900/50 rounded-[40px] border border-white/5 border-dashed">
+                    <div className="flex flex-col items-center justify-center h-[500px] bg-zinc-900/50 rounded-[10px] border border-white/5 border-dashed">
                         <Gamepad2 size={64} className="text-zinc-800 mb-6" />
                         <h2 className="text-2xl font-black italic uppercase text-zinc-700">{currentGame.name} Coming Soon</h2>
                         <p className="text-zinc-600 font-medium mt-2">We are fine-tuning the algorithms for maximum fairness.</p>
                         <button
                             onClick={() => navigate('/dashboard')}
-                            className="mt-8 px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black uppercase text-xs transition-all"
+                            className="mt-8 px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-[10px] font-black uppercase text-xs transition-all"
                         >
                             Back to Lobby
                         </button>
@@ -180,7 +180,7 @@ const CasinoGame = () => {
                 <div className="absolute top-3 right-3 z-50">
                     <button
                         onClick={() => setIsMuted(!isMuted)}
-                        className="p-2.5 bg-[#2f4553]/80 hover:bg-[#2f4553] backdrop-blur-md rounded-xl border border-white/10 text-white transition-all active:scale-90"
+                        className="p-2.5 bg-[#2f4553]/80 hover:bg-[#2f4553] backdrop-blur-md rounded-[10px] border border-white/10 text-white transition-all active:scale-90"
                     >
                         {isMuted ? <VolumeX size={18} className="text-red-400" /> : <Volume2 size={18} className="text-emerald-400" />}
                     </button>
@@ -192,22 +192,22 @@ const CasinoGame = () => {
             <div className="px-4 sm:px-6 pb-8 pt-6 space-y-4" style={{ background: '#0f212e' }}>
                 {/* Info Cards */}
                 <div className="grid grid-cols-3 gap-2 sm:gap-3">
-                    <div className="bg-[#213743] rounded-lg p-3 sm:p-4 text-center border border-[#2f4553]/30">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto rounded-lg bg-[#00e701]/10 flex items-center justify-center mb-2">
+                    <div className="bg-[#213743] rounded-[10px] p-3 sm:p-4 text-center border border-[#2f4553]/30">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto rounded-[10px] bg-[#00e701]/10 flex items-center justify-center mb-2">
                             <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#00e701]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                         </div>
                         <p className="text-[9px] sm:text-[11px] font-bold text-white/90 mb-0.5">Provably Fair</p>
                         <p className="text-[8px] sm:text-[10px] text-[#557086] leading-tight">Verified random outcomes</p>
                     </div>
-                    <div className="bg-[#213743] rounded-lg p-3 sm:p-4 text-center border border-[#2f4553]/30">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto rounded-lg bg-[#f59e0b]/10 flex items-center justify-center mb-2">
+                    <div className="bg-[#213743] rounded-[10px] p-3 sm:p-4 text-center border border-[#2f4553]/30">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto rounded-[10px] bg-[#f59e0b]/10 flex items-center justify-center mb-2">
                             <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-[#f59e0b]" />
                         </div>
                         <p className="text-[9px] sm:text-[11px] font-bold text-white/90 mb-0.5">Instant Payouts</p>
                         <p className="text-[8px] sm:text-[10px] text-[#557086] leading-tight">Winnings credited instantly</p>
                     </div>
-                    <div className="bg-[#213743] rounded-lg p-3 sm:p-4 text-center border border-[#2f4553]/30">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto rounded-lg bg-[#3b82f6]/10 flex items-center justify-center mb-2">
+                    <div className="bg-[#213743] rounded-[10px] p-3 sm:p-4 text-center border border-[#2f4553]/30">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto rounded-[10px] bg-[#3b82f6]/10 flex items-center justify-center mb-2">
                             <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#3b82f6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                         </div>
                         <p className="text-[9px] sm:text-[11px] font-bold text-white/90 mb-0.5">24/7 Support</p>
@@ -216,18 +216,18 @@ const CasinoGame = () => {
                 </div>
 
                 {/* VIP Banner */}
-                <div className="relative overflow-hidden rounded-xl p-5 sm:p-6 border border-[#2f4553]/30" style={{ background: 'linear-gradient(135deg, #1a3a4a 0%, #213743 50%, #1a2c38 100%)' }}>
+                <div className="relative overflow-hidden rounded-[10px] p-5 sm:p-6 border border-[#2f4553]/30" style={{ background: 'linear-gradient(135deg, #1a3a4a 0%, #213743 50%, #1a2c38 100%)' }}>
                     <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-[#00e701]/5 blur-3xl" />
                     <div className="absolute bottom-0 left-0 w-24 h-24 rounded-full bg-[#3b82f6]/5 blur-3xl" />
                     <div className="relative z-10 flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#f59e0b] to-[#ef4444] flex items-center justify-center text-white text-xl shrink-0">
+                        <div className="w-12 h-12 rounded-[10px] bg-gradient-to-br from-[#f59e0b] to-[#ef4444] flex items-center justify-center text-white text-xl shrink-0">
                             🏆
                         </div>
                         <div className="flex-1">
                             <h4 className="text-sm sm:text-base font-black text-white mb-0.5">VIP Rewards Program</h4>
                             <p className="text-[10px] sm:text-xs text-[#7f8fa3]">Play more to unlock exclusive bonuses, cashback offers and VIP perks!</p>
                         </div>
-                        <button onClick={() => navigate('/dashboard')} className="px-4 py-2 bg-[#00e701] hover:bg-[#1fff20] text-[#05200a] rounded-lg text-[10px] sm:text-xs font-black transition-all active:scale-95 shrink-0">
+                        <button onClick={() => navigate('/dashboard')} className="px-4 py-2 bg-[#00e701] hover:bg-[#1fff20] text-[#05200a] rounded-[10px] text-[10px] sm:text-xs font-black transition-all active:scale-95 shrink-0">
                             Explore
                         </button>
                     </div>
@@ -236,7 +236,7 @@ const CasinoGame = () => {
                 {/* Back to Lobby */}
                 <button
                     onClick={() => navigate('/dashboard?view=Casino')}
-                    className="w-full py-3 bg-[#213743] hover:bg-[#2f4553] text-[#b1bad3] rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 border border-[#2f4553]/30"
+                    className="w-full py-3 bg-[#213743] hover:bg-[#2f4553] text-[#b1bad3] rounded-[10px] text-xs font-bold transition-all flex items-center justify-center gap-2 border border-[#2f4553]/30"
                 >
                     <ArrowLeft size={14} />
                     Back to Game Lobby

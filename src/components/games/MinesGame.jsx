@@ -168,7 +168,7 @@ const MinesGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                         <span>Bet Amount</span>
                         <span>₹{betAmount.toLocaleString()}</span>
                     </div>
-                    <div className="flex bg-[#0f212e] border-2 border-[#2f4553] rounded-[4px] overflow-hidden hover:border-[#557086] transition-all h-[44px]">
+                    <div className="flex bg-[#0f212e] border-2 border-[#2f4553] rounded-[10px] overflow-hidden hover:border-[#557086] transition-all h-[44px]">
                         <input
                             type="number"
                             value={betAmount === 0 ? '' : betAmount}
@@ -194,7 +194,7 @@ const MinesGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                             value={mineCount}
                             onChange={(e) => setMineCount(parseInt(e.target.value))}
                             disabled={gameState === 'playing'}
-                            className="w-full bg-[#0f212e] border-2 border-[#2f4553] rounded-[4px] py-2.5 px-3 text-white font-black outline-none appearance-none group-hover:border-[#557086] transition-all text-sm cursor-pointer pr-10"
+                            className="w-full bg-[#0f212e] border-2 border-[#2f4553] rounded-[10px] py-2.5 px-3 text-white font-black outline-none appearance-none group-hover:border-[#557086] transition-all text-sm cursor-pointer pr-10"
                         >
                             {[...Array(24)].map((_, i) => (<option key={i + 1} value={i + 1} className="bg-[#0f212e]">{i + 1}</option>))}
                         </select>
@@ -204,12 +204,12 @@ const MinesGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
 
                 <div className="mt-2">
                     {gameState === 'playing' ? (
-                        <button onClick={() => cashOut()} className="w-full py-3.5 bg-[#00e701] hover:bg-[#2fff30] text-black rounded-[4px] font-black text-[15px] shadow-[0_4px_0_rgb(0,180,1)] active:translate-y-0.5 active:shadow-none transition-all flex flex-col items-center leading-none gap-0.5">
+                        <button onClick={() => cashOut()} className="w-full py-3.5 bg-[#00e701] hover:bg-[#2fff30] text-black rounded-[10px] font-black text-[15px] shadow-[0_4px_0_rgb(0,180,1)] active:translate-y-0.5 active:shadow-none transition-all flex flex-col items-center leading-none gap-0.5">
                             <span className="text-[13px]">Cashout</span>
                             {revealed.length > 0 && <span className="text-[11px] opacity-70">₹{payout}</span>}
                         </button>
                     ) : (
-                        <button onClick={startGame} className="w-full py-3.5 bg-[#00e701] hover:bg-[#2fff30] text-black rounded-[4px] font-black text-[15px] shadow-[0_4px_0_rgb(0,180,1)] active:translate-y-0.5 active:shadow-none transition-all">Bet</button>
+                        <button onClick={startGame} className="w-full py-3.5 bg-[#00e701] hover:bg-[#2fff30] text-black rounded-[10px] font-black text-[15px] shadow-[0_4px_0_rgb(0,180,1)] active:translate-y-0.5 active:shadow-none transition-all">Bet</button>
                     )}
                 </div>
             </div>
@@ -225,7 +225,7 @@ const MinesGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                                 key={i}
                                 onClick={() => revealTile(i)}
                                 disabled={isRevealed || isOver}
-                                className={`group relative rounded-[4px] sm:rounded-[6px] transition-all duration-75 aspect-square flex items-center justify-center
+                                className={`group relative rounded-[10px] sm:rounded-[10px] transition-all duration-75 aspect-square flex items-center justify-center
                                     ${isRevealed
                                         ? isMine ? 'bg-[#1a2c38]' : 'bg-[#0f212e] ring-2 ring-[#102c38]'
                                         : isOver
@@ -257,7 +257,7 @@ const MinesGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                 <AnimatePresence>
                     {gameState === 'over' && payout > 0 && (
                         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} className="absolute z-20 pointer-events-none">
-                            <div className="bg-[#0f212e]/95 border-[4px] border-[#00e701] rounded-[16px] w-[200px] aspect-square flex flex-col items-center justify-center shadow-[0_0_50px_rgba(0,0,0,0.5)] backdrop-blur-md">
+                            <div className="bg-[#0f212e]/95 border-[4px] border-[#00e701] rounded-[10px] w-[200px] aspect-square flex flex-col items-center justify-center shadow-[0_0_50px_rgba(0,0,0,0.5)] backdrop-blur-md">
                                 <div className="text-[#00e701] text-[34px] font-black tracking-tight leading-none mb-4">{currentMultiplier}x</div>
                                 <div className="h-[2px] bg-[#2f4553] w-[140px] mb-5" />
                                 <div className="flex items-center gap-2 text-white font-black text-2xl">

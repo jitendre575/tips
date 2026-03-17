@@ -35,7 +35,7 @@ const DashboardLayout = ({ children }) => {
                     <div className="flex-1 flex justify-start items-center">
                         <button
                             onClick={() => setIsSidebarOpen(true)}
-                            className="lg:hidden p-2.5 bg-slate-50 border border-black/[0.05] rounded-2xl text-slate-600 hover:text-accent transition-all active:scale-95 shadow-sm"
+                            className="lg:hidden p-2.5 bg-slate-50 border border-black/[0.05] rounded-[10px] text-slate-600 hover:text-accent transition-all active:scale-95 shadow-sm"
                         >
                             <Menu size={20} />
                         </button>
@@ -57,8 +57,8 @@ const DashboardLayout = ({ children }) => {
 
                     {/* Right: Balance & Plus */}
                     <div className="flex-1 flex justify-end items-center gap-2 sm:gap-4">
-                        <div className="bg-slate-50 px-4 lg:px-6 py-2 lg:py-4 rounded-[1.5rem] border border-black/[0.05] flex items-center gap-3 lg:gap-5 shadow-inner hover:border-accent/30 transition-all group">
-                            <div className="bg-amber-100 p-1.5 lg:p-2.5 rounded-xl">
+                        <div className="bg-slate-50 px-4 lg:px-6 py-2 lg:py-4 rounded-[10px] border border-black/[0.05] flex items-center gap-3 lg:gap-5 shadow-inner hover:border-accent/30 transition-all group">
+                            <div className="bg-amber-100 p-1.5 lg:p-2.5 rounded-[10px]">
                                 <Wallet className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-amber-600" />
                             </div>
                             <div className="flex flex-col">
@@ -72,7 +72,7 @@ const DashboardLayout = ({ children }) => {
 
                         <button
                             onClick={handleRecharge}
-                            className="w-10 h-10 lg:w-16 lg:h-16 flex items-center justify-center bg-accent text-white rounded-2xl border border-accent/10 transition-all active:scale-90 shadow-lg shadow-accent/20 group"
+                            className="w-10 h-10 lg:w-16 lg:h-16 flex items-center justify-center bg-accent text-white rounded-[10px] border border-accent/10 transition-all active:scale-90 shadow-lg shadow-accent/20 group"
                         >
                             <PlusCircle size={20} className="lg:w-8 lg:h-8 group-hover:rotate-90 transition-transform" />
                         </button>

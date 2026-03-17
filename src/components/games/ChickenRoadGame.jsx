@@ -92,7 +92,7 @@ const ChickenRoadGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
     return (
         <div className="flex flex-col gap-6 max-w-4xl mx-auto">
             {/* Game Canvas */}
-            <div className="relative bg-[#2a2a2a] rounded-[32px] overflow-hidden border-4 border-[#333] shadow-2xl aspect-[21/9] sm:aspect-[24/10]">
+            <div className="relative bg-[#2a2a2a] rounded-[10px] overflow-hidden border-4 border-[#333] shadow-2xl aspect-[21/9] sm:aspect-[24/10]">
                 {/* Sidewalks */}
                 <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-16 bg-[#555] border-r-4 border-dashed border-white/20 z-10 flex flex-col items-center justify-center">
                     <div className="text-[10px] font-black text-white/20 uppercase vertical-text tracking-widest">Sidewalk</div>
@@ -162,7 +162,7 @@ const ChickenRoadGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                     {gameState === 'idle' && (
                         <motion.div
                             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                            className="absolute inset-0 z-30 bg-black/60 backdrop-blur-sm flex items-center justify-center border-4 border-dashed border-white/10 rounded-[28px] m-4"
+                            className="absolute inset-0 z-30 bg-black/60 backdrop-blur-sm flex items-center justify-center border-4 border-dashed border-white/10 rounded-[10px] m-4"
                         >
                             <div className="text-center">
                                 <h3 className="text-white text-3xl font-black uppercase italic tracking-tighter mb-4">Chicken 2 Road</h3>
@@ -179,7 +179,7 @@ const ChickenRoadGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
             </div>
 
             {/* Controls */}
-            <div className="bg-[#1a1a1a] rounded-[24px] p-6 sm:p-8 border border-white/5 space-y-6">
+            <div className="bg-[#1a1a1a] rounded-[10px] p-6 sm:p-8 border border-white/5 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Bet Amount */}
                     <div className="space-y-4">
@@ -187,7 +187,7 @@ const ChickenRoadGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                             <span>Wager Amount</span>
                             <span>{betAmount}.00 INR</span>
                         </div>
-                        <div className="flex bg-black/40 border-2 border-white/5 rounded-2xl p-2 h-16 items-center">
+                        <div className="flex bg-black/40 border-2 border-white/5 rounded-[10px] p-2 h-16 items-center">
                             <button onClick={() => setBetAmount(Math.max(1, betAmount - 10))} className="w-12 h-12 flex items-center justify-center text-zinc-500 hover:text-white"><Minus /></button>
                             <input
                                 type="number"
@@ -198,21 +198,21 @@ const ChickenRoadGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                             <button onClick={() => setBetAmount(betAmount + 10)} className="w-12 h-12 flex items-center justify-center text-zinc-500 hover:text-white"><Plus /></button>
                         </div>
                         <div className="grid grid-cols-2 gap-2">
-                            <button onClick={() => setBetAmount(p => Math.floor(p * 0.5))} className="py-2 bg-white/5 rounded-xl text-xs font-bold text-zinc-400 hover:text-white transition-colors">x0.5</button>
-                            <button onClick={() => setBetAmount(p => p * 2)} className="py-2 bg-white/5 rounded-xl text-xs font-bold text-zinc-400 hover:text-white transition-colors">x2.0</button>
+                            <button onClick={() => setBetAmount(p => Math.floor(p * 0.5))} className="py-2 bg-white/5 rounded-[10px] text-xs font-bold text-zinc-400 hover:text-white transition-colors">x0.5</button>
+                            <button onClick={() => setBetAmount(p => p * 2)} className="py-2 bg-white/5 rounded-[10px] text-xs font-bold text-zinc-400 hover:text-white transition-colors">x2.0</button>
                         </div>
                     </div>
 
                     {/* Difficulty */}
                     <div className="space-y-4">
                         <div className="text-[10px] font-black text-zinc-500 uppercase tracking-[3px]">Set Difficulty</div>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-black/40 p-1.5 rounded-2xl h-16 border-2 border-white/5">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-black/40 p-1.5 rounded-[10px] h-16 border-2 border-white/5">
                             {Object.keys(difficultySettings).map(d => (
                                 <button
                                     key={d}
                                     onClick={() => setDifficulty(d)}
                                     disabled={gameState === 'playing'}
-                                    className={`rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${difficulty === d ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/20' : 'text-zinc-500 hover:text-white disabled:opacity-30'}`}
+                                    className={`rounded-[10px] text-[10px] font-black uppercase tracking-widest transition-all ${difficulty === d ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/20' : 'text-zinc-500 hover:text-white disabled:opacity-30'}`}
                                 >
                                     {d}
                                 </button>
@@ -227,13 +227,13 @@ const ChickenRoadGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                         <>
                             <button
                                 onClick={moveToNextLane}
-                                className="flex-1 py-5 bg-white text-black rounded-2xl font-black uppercase text-lg shadow-lg active:scale-95 transition-all flex items-center justify-center gap-3"
+                                className="flex-1 py-5 bg-white text-black rounded-[10px] font-black uppercase text-lg shadow-lg active:scale-95 transition-all flex items-center justify-center gap-3"
                             >
                                 <Play size={24} fill="currentColor" /> Move Next
                             </button>
                             <button
                                 onClick={() => handleCashOut()}
-                                className="flex-1 py-5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-2xl font-black uppercase text-lg shadow-lg active:scale-95 transition-all flex flex-col items-center justify-center leading-none"
+                                className="flex-1 py-5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-[10px] font-black uppercase text-lg shadow-lg active:scale-95 transition-all flex flex-col items-center justify-center leading-none"
                             >
                                 <span className="text-[10px] uppercase mb-1">Cash Out</span>
                                 <span>₹{(betAmount * multiplier).toFixed(2)}</span>
@@ -242,7 +242,7 @@ const ChickenRoadGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                     ) : (
                         <button
                             onClick={startGame}
-                            className="w-full py-5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-2xl font-black uppercase text-lg shadow-lg active:scale-95 transition-all"
+                            className="w-full py-5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-[10px] font-black uppercase text-lg shadow-lg active:scale-95 transition-all"
                         >
                             Play
                         </button>

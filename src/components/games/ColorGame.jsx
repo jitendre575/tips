@@ -103,7 +103,7 @@ const ColorGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
     return (
         <div className="max-w-xl mx-auto space-y-4 font-['Inter']">
             {/* Top Control Panel */}
-            <div className="bg-white rounded-[24px] shadow-sm overflow-hidden p-6 space-y-6">
+            <div className="bg-white rounded-[10px] shadow-sm overflow-hidden p-6 space-y-6">
                 {/* Color Pills */}
                 <div className="grid grid-cols-3 gap-3">
                     {Object.entries(colors).map(([id, data]) => (
@@ -119,7 +119,7 @@ const ColorGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                 </div>
 
                 {/* Number Grid */}
-                <div className="bg-zinc-50 rounded-2xl p-4">
+                <div className="bg-zinc-50 rounded-[10px] p-4">
                     <div className="grid grid-cols-5 gap-3">
                         {numbers.map(n => (
                             <button
@@ -142,12 +142,12 @@ const ColorGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
 
                 {/* Multipliers */}
                 <div className="flex flex-wrap gap-2 justify-center">
-                    <button className="px-3 py-1.5 border border-red-500 text-red-500 rounded-lg text-xs font-bold">Random</button>
+                    <button className="px-3 py-1.5 border border-red-500 text-red-500 rounded-[10px] text-xs font-bold">Random</button>
                     {[1, 5, 10, 20, 50, 100].map(x => (
                         <button
                             key={x}
                             onClick={() => setMultiplier(x)}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${multiplier === x ? 'bg-emerald-500 text-white shadow-md' : 'bg-zinc-100 text-zinc-500 hover:bg-zinc-200'}`}
+                            className={`px-3 py-1.5 rounded-[10px] text-xs font-bold transition-all ${multiplier === x ? 'bg-emerald-500 text-white shadow-md' : 'bg-zinc-100 text-zinc-500 hover:bg-zinc-200'}`}
                         >
                             X{x}
                         </button>
@@ -155,7 +155,7 @@ const ColorGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                 </div>
 
                 {/* Big / Small */}
-                <div className="grid grid-cols-2 gap-px rounded-2xl overflow-hidden shadow-sm border border-zinc-100">
+                <div className="grid grid-cols-2 gap-px rounded-[10px] overflow-hidden shadow-sm border border-zinc-100">
                     <button
                         onClick={() => setSelection({ type: 'size', value: 'Big' })}
                         className={`py-4 font-black italic text-xl transition-all ${selection.type === 'size' && selection.value === 'Big' ? 'bg-orange-400 text-white' : 'bg-[#fff5e6] text-orange-400'}`}
@@ -174,20 +174,20 @@ const ColorGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                 <button
                     onClick={startGame}
                     disabled={isSpinning}
-                    className="w-full py-4 bg-[#ff4d4d] hover:bg-[#ff3333] text-white rounded-2xl font-black uppercase text-lg shadow-lg active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+                    className="w-full py-4 bg-[#ff4d4d] hover:bg-[#ff3333] text-white rounded-[10px] font-black uppercase text-lg shadow-lg active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
                 >
                     {isSpinning ? <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" /> : <>Bet ₹{totalBet}</>}
                 </button>
             </div>
 
             {/* History Section */}
-            <div className="bg-white rounded-[24px] shadow-sm overflow-hidden">
+            <div className="bg-white rounded-[10px] shadow-sm overflow-hidden">
                 <div className="flex p-2 gap-1 border-b border-zinc-50">
                     {['Game history', 'Chart', 'Follow Strategy'].map(tab => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
-                            className={`flex-1 py-3 text-xs font-bold rounded-xl transition-all ${activeTab === tab ? 'bg-[#ff4d4d] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-600'}`}
+                            className={`flex-1 py-3 text-xs font-bold rounded-[10px] transition-all ${activeTab === tab ? 'bg-[#ff4d4d] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-600'}`}
                         >
                             {tab}
                         </button>

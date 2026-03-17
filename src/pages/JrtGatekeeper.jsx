@@ -55,7 +55,7 @@ const JrtGatekeeper = ({ onAuthorized }) => {
 
             <div className="w-full max-w-md relative z-10">
                 <div className="text-center mb-10">
-                    <div className="w-24 h-24 bg-accent/10 border border-accent/20 rounded-[32px] flex items-center justify-center mx-auto mb-8 shadow-[0_0_50px_rgba(var(--accent),0.2)]">
+                    <div className="w-24 h-24 bg-accent/10 border border-accent/20 rounded-[10px] flex items-center justify-center mx-auto mb-8 shadow-[0_0_50px_rgba(var(--accent),0.2)]">
                         <Lock className="text-accent animate-pulse" size={40} />
                     </div>
                     <h1 className="text-5xl font-black italic tracking-tighter uppercase mb-2">
@@ -73,14 +73,14 @@ const JrtGatekeeper = ({ onAuthorized }) => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             autoFocus
-                            className="w-full bg-zinc-950 border border-white/5 rounded-[24px] py-8 pl-16 pr-6 text-center text-3xl font-black tracking-[10px] text-accent outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/5 transition-all placeholder:text-zinc-900 placeholder:tracking-widest placeholder:text-sm"
+                            className="w-full bg-zinc-950 border border-white/5 rounded-[10px] py-8 pl-16 pr-6 text-center text-3xl font-black tracking-[10px] text-accent outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/5 transition-all placeholder:text-zinc-900 placeholder:tracking-widest placeholder:text-sm"
                         />
                     </div>
 
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-accent hover:bg-accent-hover text-white py-6 rounded-[24px] font-black uppercase italic tracking-[4px] transition-all flex items-center justify-center gap-4 group active:scale-95 shadow-2xl shadow-accent/20"
+                        className="w-full bg-accent hover:bg-accent-hover text-white py-6 rounded-[10px] font-black uppercase italic tracking-[4px] transition-all flex items-center justify-center gap-4 group active:scale-95 shadow-2xl shadow-accent/20"
                     >
                         {loading ? 'Decrypting...' : (
                             <>
@@ -89,7 +89,7 @@ const JrtGatekeeper = ({ onAuthorized }) => {
                         )}
                     </button>
 
-                    <div className="flex items-center gap-4 p-4 bg-zinc-900/50 rounded-2xl border border-white/5 opacity-50">
+                    <div className="flex items-center gap-4 p-4 bg-zinc-900/50 rounded-[10px] border border-white/5 opacity-50">
                         <ShieldAlert className="text-zinc-600 shrink-0" size={18} />
                         <p className="text-[10px] font-bold text-zinc-500 leading-relaxed uppercase tracking-widest text-center mx-auto">
                             Unauthorized attempts are logged and monitored.

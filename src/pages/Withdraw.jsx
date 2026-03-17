@@ -100,7 +100,7 @@ const Withdraw = () => {
                 <div className="lg:col-span-1">
                     <div className="glass-card p-8">
                         <div className="flex items-center gap-3 mb-8">
-                            <div className="bg-accent/10 p-3 rounded-2xl text-accent">
+                            <div className="bg-accent/10 p-3 rounded-[10px] text-accent">
                                 <Wallet size={24} />
                             </div>
                             <div>
@@ -134,7 +134,7 @@ const Withdraw = () => {
                                             key={method}
                                             type="button"
                                             onClick={() => setPaymentMethod(method)}
-                                            className={`py-3 rounded-2xl font-bold transition-all border ${paymentMethod === method
+                                            className={`py-3 rounded-[10px] font-bold transition-all border ${paymentMethod === method
                                                 ? 'bg-accent/10 border-accent/50 text-accent'
                                                 : 'bg-zinc-900 border-white/[0.05] text-zinc-500'
                                                 }`}
@@ -220,7 +220,7 @@ const Withdraw = () => {
                         </form>
                     </div>
 
-                    <div className="mt-6 p-6 rounded-3xl bg-amber-500/5 border border-amber-500/10 flex gap-4">
+                    <div className="mt-6 p-6 rounded-[10px] bg-amber-500/5 border border-amber-500/10 flex gap-4">
                         <AlertCircle className="text-amber-500 shrink-0" size={24} />
                         <div className="text-xs text-amber-500/80 leading-relaxed">
                             <p className="font-bold mb-1 uppercase tracking-widest">Important Note</p>
@@ -252,7 +252,7 @@ const Withdraw = () => {
                                     className="glass-card group hover:bg-white/[0.02] flex items-center justify-between gap-6"
                                 >
                                     <div className="flex items-center gap-5">
-                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${req.status === 'pending' ? 'bg-amber-500/10 text-amber-500' :
+                                        <div className={`w-12 h-12 rounded-[10px] flex items-center justify-center ${req.status === 'pending' ? 'bg-amber-500/10 text-amber-500' :
                                             req.status === 'approved' ? 'bg-emerald-500/10 text-emerald-500' :
                                                 'bg-red-500/10 text-red-500'
                                             }`}>

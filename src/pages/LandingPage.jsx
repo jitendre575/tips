@@ -126,7 +126,7 @@ const LandingPage = () => {
             {/* Premium Header */}
             <div className="sticky top-0 z-[100] bg-white/80 backdrop-blur-xl px-6 py-5 flex items-center justify-between border-b border-black/[0.03]">
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-accent flex items-center justify-center shadow-lg shadow-accent/20">
+                    <div className="w-12 h-12 rounded-[10px] bg-accent flex items-center justify-center shadow-lg shadow-accent/20">
                         <Trophy className="text-white" size={24} />
                     </div>
                     <div className="flex flex-col">
@@ -137,13 +137,13 @@ const LandingPage = () => {
                 <div className="flex items-center gap-2">
                     <button
                         onClick={() => setShowAuth(true)}
-                        className="px-6 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all shadow-xl active:scale-95"
+                        className="px-6 py-3 bg-slate-900 text-white rounded-[10px] text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all shadow-xl active:scale-95"
                     >
                         Login
                     </button>
                     <button
                         onClick={() => { setIsLogin(false); setShowAuth(true); }}
-                        className="px-6 py-3 bg-accent text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 active:scale-95"
+                        className="px-6 py-3 bg-accent text-white rounded-[10px] text-[10px] font-black uppercase tracking-widest hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 active:scale-95"
                     >
                         Join
                     </button>
@@ -164,7 +164,7 @@ const LandingPage = () => {
 
             <main className="max-w-xl mx-auto">
                 <div className="p-6">
-                    <div className="relative aspect-[21/9] rounded-[2.5rem] overflow-hidden shadow-2xl ring-1 ring-black/[0.05]">
+                    <div className="relative aspect-[21/9] rounded-[10px] overflow-hidden shadow-2xl ring-1 ring-black/[0.05]">
                         <img
                             src="/casino_banner_promo_1772871782573.png"
                             alt="Mega Event"
@@ -182,12 +182,12 @@ const LandingPage = () => {
 
                 {/* Game Category Navigation */}
                 <div className="px-6 mb-8 overflow-x-auto scrollbar-hide">
-                    <div className="flex items-center gap-3 p-1.5 bg-white rounded-3xl border border-black/[0.05] shadow-sm w-fit mx-auto">
+                    <div className="flex items-center gap-3 p-1.5 bg-white rounded-[10px] border border-black/[0.05] shadow-sm w-fit mx-auto">
                         {categories.map((cat) => (
                             <button
                                 key={cat.name}
                                 onClick={() => setActiveCategory(cat.name)}
-                                className={`flex items-center gap-2.5 px-6 py-3.5 rounded-2xl transition-all whitespace-nowrap ${activeCategory === cat.name ? 'bg-accent text-white shadow-lg shadow-accent/20' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`}
+                                className={`flex items-center gap-2.5 px-6 py-3.5 rounded-[10px] transition-all whitespace-nowrap ${activeCategory === cat.name ? 'bg-accent text-white shadow-lg shadow-accent/20' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`}
                             >
                                 <cat.icon size={16} />
                                 <span className="text-[10px] font-black uppercase tracking-widest">{cat.name}</span>
@@ -198,7 +198,7 @@ const LandingPage = () => {
 
                 {/* VIP Call to Action */}
                 <div className="px-6 mb-12">
-                    <div onClick={() => setShowAuth(true)} className="bg-slate-900 rounded-[2.5rem] p-8 flex items-center justify-between group cursor-pointer shadow-2xl relative overflow-hidden">
+                    <div onClick={() => setShowAuth(true)} className="bg-slate-900 rounded-[10px] p-8 flex items-center justify-between group cursor-pointer shadow-2xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-4 opacity-10">
                             <Crown size={120} className="text-white rotate-12" />
                         </div>
@@ -210,7 +210,7 @@ const LandingPage = () => {
                             <h3 className="text-white font-black italic text-2xl uppercase tracking-tighter leading-none mb-1">VIP ARENA <span className="text-accent underline">ACTIVE</span></h3>
                             <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Get 200% Bonus on first join</p>
                         </div>
-                        <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center text-white group-hover:scale-110 transition-transform relative z-10 border border-white/10">
+                        <div className="w-16 h-16 bg-white/10 rounded-[10px] flex items-center justify-center text-white group-hover:scale-110 transition-transform relative z-10 border border-white/10">
                             <ChevronRight size={32} />
                         </div>
                     </div>
@@ -219,7 +219,7 @@ const LandingPage = () => {
                 <div className="px-6 mb-16">
                     <div className="flex items-center justify-between mb-8">
                         <div className="flex items-center gap-3">
-                            <div className="p-2.5 bg-accent/10 rounded-xl text-accent">
+                            <div className="p-2.5 bg-accent/10 rounded-[10px] text-accent">
                                 <Flame size={18} />
                             </div>
                             <h2 className="text-2xl font-black italic tracking-tighter uppercase text-slate-900">Trending <span className="text-accent underline decoration-accent/10">Games</span></h2>
@@ -234,15 +234,15 @@ const LandingPage = () => {
                             { name: 'Neon Slots', img: '/slots_game_thumb_1772871869952.png', players: '3.4k', hot: true, icon: Star },
                             { name: 'Lucky Dice', img: '/dice_game_thumb_1772872939570.png', players: '1.2k', hot: false, icon: Gift },
                         ].map((game, i) => (
-                            <div key={i} onClick={() => setShowAuth(true)} className="group relative aspect-[4/5] rounded-[2.5rem] overflow-hidden cursor-pointer shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1">
+                            <div key={i} onClick={() => setShowAuth(true)} className="group relative aspect-[4/5] rounded-[10px] overflow-hidden cursor-pointer shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1">
                                 <img src={game.img} alt={game.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent p-6 flex flex-col justify-end">
                                     <div className="flex items-center gap-2 mb-2">
-                                        <div className="p-1.5 bg-white/20 backdrop-blur-md rounded-lg text-white">
+                                        <div className="p-1.5 bg-white/20 backdrop-blur-md rounded-[10px] text-white">
                                             <game.icon size={12} />
                                         </div>
                                         {game.hot && (
-                                            <span className="px-2 py-0.5 bg-accent text-white text-[7px] font-black uppercase tracking-widest rounded-md">HOT</span>
+                                            <span className="px-2 py-0.5 bg-accent text-white text-[7px] font-black uppercase tracking-widest rounded-[10px]">HOT</span>
                                         )}
                                     </div>
                                     <h4 className="text-lg font-black italic uppercase text-white tracking-tighter leading-none mb-1">{game.name}</h4>
@@ -259,7 +259,7 @@ const LandingPage = () => {
                 <div className="px-6 mb-12">
                     <div className="flex items-center justify-between mb-8">
                         <div className="flex items-center gap-3">
-                            <div className="p-2.5 bg-slate-100 rounded-xl text-slate-600">
+                            <div className="p-2.5 bg-slate-100 rounded-[10px] text-slate-600">
                                 <Trophy size={18} />
                             </div>
                             <h2 className="text-2xl font-black italic tracking-tighter uppercase text-slate-900">Elite <span className="text-accent underline decoration-accent/10">Sports</span></h2>
@@ -271,7 +271,7 @@ const LandingPage = () => {
                                 <MatchCard key={match.id} match={match} onBet={() => setShowAuth(true)} />
                             ))
                         ) : (
-                            <div className="text-center py-24 bg-white rounded-[3rem] border-2 border-dashed border-black/[0.03]">
+                            <div className="text-center py-24 bg-white rounded-[10px] border-2 border-dashed border-black/[0.03]">
                                 <Trophy size={48} className="mx-auto text-slate-100 mb-4" />
                                 <p className="text-slate-400 font-black uppercase text-[10px] tracking-[0.3em]">Arena Standby</p>
                             </div>
@@ -285,7 +285,7 @@ const LandingPage = () => {
                 </div>
             </main>
 
-            <div className="fixed bottom-0 left-0 right-0 z-[200] bg-white/90 backdrop-blur-2xl border-t border-black/[0.03] px-8 py-6 rounded-t-[3.5rem] shadow-[0_-20px_50px_rgba(0,0,0,0.05)]">
+            <div className="fixed bottom-0 left-0 right-0 z-[200] bg-white/90 backdrop-blur-2xl border-t border-black/[0.03] px-8 py-6 rounded-[10px] shadow-[0_-20px_50px_rgba(0,0,0,0.05)]">
                 <div className="max-w-xl mx-auto flex items-center justify-between relative">
                     {[
                         { name: 'Arena', icon: Home },
@@ -296,7 +296,7 @@ const LandingPage = () => {
                         <div key={nav.name} className="flex items-center">
                             {index === 2 && <div className="w-20 sm:w-24" />}
                             <button onClick={() => setShowAuth(true)} className="flex flex-col items-center gap-2 group">
-                                <div className="p-3 rounded-2xl group-hover:bg-accent/10 group-hover:text-accent transition-all">
+                                <div className="p-3 rounded-[10px] group-hover:bg-accent/10 group-hover:text-accent transition-all">
                                     <nav.icon size={22} className="text-slate-400 group-hover:text-accent group-hover:scale-110 transition-transform" />
                                 </div>
                                 <span className="text-[8px] font-black uppercase text-slate-500 tracking-widest group-hover:text-accent">{nav.name}</span>
@@ -305,7 +305,7 @@ const LandingPage = () => {
                     ))}
                     {/* Floating Center button - High Impact */}
                     <div className="absolute left-1/2 -translate-x-1/2 -top-16">
-                        <button onClick={() => setShowAuth(true)} className="w-[84px] h-[84px] bg-accent rounded-[2rem] border-[10px] border-white flex items-center justify-center text-white shadow-2xl shadow-accent/40 hover:scale-110 active:scale-90 transition-all group">
+                        <button onClick={() => setShowAuth(true)} className="w-[84px] h-[84px] bg-accent rounded-[10px] border-[10px] border-white flex items-center justify-center text-white shadow-2xl shadow-accent/40 hover:scale-110 active:scale-90 transition-all group">
                             <div className="flex flex-col items-center group-hover:rotate-12 transition-transform">
                                 <span className="text-[8px] font-black uppercase tracking-widest mb-1 opacity-60">PLACE</span>
                                 <span className="text-xl font-black italic tracking-tighter leading-none">BET</span>
@@ -331,7 +331,7 @@ const LandingPage = () => {
                             animate={{ y: 0 }}
                             exit={{ y: '100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="relative w-full max-w-md bg-white rounded-t-[3rem] sm:rounded-[3rem] p-8 sm:p-12 shadow-2xl overflow-hidden"
+                            className="relative w-full max-w-md bg-white rounded-[10px] sm:rounded-[10px] p-8 sm:p-12 shadow-2xl overflow-hidden"
                         >
                             <div className="flex justify-center mb-6 sm:hidden">
                                 <div className="w-12 h-1.5 bg-slate-200 rounded-full" />
@@ -345,7 +345,7 @@ const LandingPage = () => {
                             </button>
 
                             <div className="mb-12 text-center">
-                                <div className="w-20 h-20 bg-accent/5 rounded-[2.5rem] flex items-center justify-center text-accent mx-auto mb-6 border border-accent/10">
+                                <div className="w-20 h-20 bg-accent/5 rounded-[10px] flex items-center justify-center text-accent mx-auto mb-6 border border-accent/10">
                                     {isLogin ? <LogIn size={36} /> : <UserPlus size={36} />}
                                 </div>
                                 <h2 className="text-4xl font-black italic tracking-tighter mb-3 uppercase text-slate-900 leading-none">
@@ -363,7 +363,7 @@ const LandingPage = () => {
                                         <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                         <input
                                             type="email" required value={email} onChange={e => setEmail(e.target.value)}
-                                            className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-5 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900"
+                                            className="w-full bg-slate-50 border-2 border-slate-100 rounded-[10px] py-5 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900"
                                             placeholder="Mobile or Email"
                                         />
                                     </div>
@@ -376,7 +376,7 @@ const LandingPage = () => {
                                             <TrendingUp className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                             <input
                                                 type="tel" required value={phone} onChange={e => setPhone(e.target.value)}
-                                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-5 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900"
+                                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-[10px] py-5 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900"
                                                 placeholder="10-digit number"
                                                 maxLength={10}
                                             />
@@ -390,7 +390,7 @@ const LandingPage = () => {
                                         <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                         <input
                                             type="password" required value={password} onChange={e => setPassword(e.target.value)}
-                                            className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-5 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900"
+                                            className="w-full bg-slate-50 border-2 border-slate-100 rounded-[10px] py-5 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900"
                                             placeholder="••••••••"
                                         />
                                     </div>
@@ -398,7 +398,7 @@ const LandingPage = () => {
 
                                 <button
                                     type="submit" disabled={loading}
-                                    className="w-full btn-accent py-5 group relative overflow-hidden !rounded-2xl"
+                                    className="w-full btn-accent py-5 group relative overflow-hidden !rounded-[10px]"
                                 >
                                     <span className="relative z-10 flex items-center justify-center gap-3 font-black text-lg">
                                         {loading ? <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" /> : (isLogin ? 'Login Now' : 'Join the Club')}

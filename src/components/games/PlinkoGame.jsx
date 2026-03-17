@@ -278,7 +278,7 @@ const PlinkoGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                                     key={i}
                                     animate={isHit ? { scale: [1, 1.2, 1] } : {}}
                                     transition={{ duration: 0.3 }}
-                                    className="rounded-sm text-center font-black leading-none transition-all relative overflow-hidden"
+                                    className="rounded-[10px] text-center font-black leading-none transition-all relative overflow-hidden"
                                     style={{
                                         background: colors.bg,
                                         color: colors.text,
@@ -303,7 +303,7 @@ const PlinkoGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                             initial={{ scale: 0, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0, opacity: 0 }}
-                            className="absolute z-30 bg-[#0f212e]/90 backdrop-blur-md border-2 border-[#00e701]/40 rounded-2xl px-8 py-5 text-center shadow-[0_0_50px_rgba(0,231,1,0.2)]"
+                            className="absolute z-30 bg-[#0f212e]/90 backdrop-blur-md border-2 border-[#00e701]/40 rounded-[10px] px-8 py-5 text-center shadow-[0_0_50px_rgba(0,231,1,0.2)]"
                         >
                             <p className="text-[#00e701] text-3xl font-black">{lastWin.multiplier}x</p>
                             <p className="text-white/60 text-xs font-bold mt-1">+₹{lastWin.amount}</p>

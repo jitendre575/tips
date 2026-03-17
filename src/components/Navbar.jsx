@@ -48,13 +48,13 @@ const Navbar = () => {
                 <div className="flex items-center gap-4">
                     <button
                         onClick={handleRecharge}
-                        className="hidden sm:flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 rounded-lg border border-emerald-500/20 text-[10px] font-black uppercase tracking-widest transition-all"
+                        className="hidden sm:flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 rounded-[10px] border border-emerald-500/20 text-[10px] font-black uppercase tracking-widest transition-all"
                     >
                         <PlusCircle size={14} />
                         <span>Refill</span>
                     </button>
 
-                    <div className="bg-zinc-900 px-4 py-2 rounded-xl border border-white/[0.05] flex items-center gap-2">
+                    <div className="bg-zinc-900 px-4 py-2 rounded-[10px] border border-white/[0.05] flex items-center gap-2">
                         <Wallet className="w-4 h-4 text-yellow-500" />
                         <span className="font-black text-yellow-500 tracking-tight">{userData?.balance?.toLocaleString()}</span>
                         <span className="text-[10px] font-black text-zinc-500 uppercase">Coins</span>

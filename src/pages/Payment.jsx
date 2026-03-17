@@ -92,11 +92,11 @@ const Payment = () => {
             <div className="min-h-screen flex items-center justify-center bg-primary p-6 overflow-hidden relative">
                 <div className="absolute inset-0 bg-accent/5 blur-[120px] rounded-full translate-y-1/2 scale-150" />
                 <div className="max-w-md w-full relative animate-in zoom-in-95 duration-500">
-                    <div className="bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-[40px] p-10 space-y-10 shadow-2xl relative overflow-hidden">
+                    <div className="bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-[10px] p-10 space-y-10 shadow-2xl relative overflow-hidden">
                         <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500" />
 
                         <div className="relative mx-auto">
-                            <div className="w-32 h-32 bg-emerald-500/10 rounded-[40px] flex items-center justify-center mx-auto border border-emerald-500/20 shadow-2xl animate-bounce">
+                            <div className="w-32 h-32 bg-emerald-500/10 rounded-[10px] flex items-center justify-center mx-auto border border-emerald-500/20 shadow-2xl animate-bounce">
                                 <CheckCircle2 className="text-emerald-500 w-16 h-16" />
                             </div>
                             <div className="absolute inset-0 bg-emerald-500/20 blur-3xl rounded-full -z-10" />
@@ -117,7 +117,7 @@ const Payment = () => {
 
                         <button
                             onClick={() => navigate('/dashboard')}
-                            className="w-full py-6 bg-white text-black rounded-[24px] font-black uppercase italic tracking-widest transition-all hover:bg-emerald-500 hover:text-white active:scale-95 shadow-xl shadow-white/5"
+                            className="w-full py-6 bg-white text-black rounded-[10px] font-black uppercase italic tracking-widest transition-all hover:bg-emerald-500 hover:text-white active:scale-95 shadow-xl shadow-white/5"
                         >
                             Return to Dashboard
                         </button>
@@ -137,7 +137,7 @@ const Payment = () => {
                 <div className="flex items-center gap-6">
                     <button
                         onClick={() => navigate(-1)}
-                        className="p-3 bg-zinc-900 rounded-[16px] border border-white/5 text-zinc-400 hover:text-white transition-all shadow-2xl active:scale-95"
+                        className="p-3 bg-zinc-900 rounded-[10px] border border-white/5 text-zinc-400 hover:text-white transition-all shadow-2xl active:scale-95"
                     >
                         <ArrowLeft size={20} />
                     </button>
@@ -154,7 +154,7 @@ const Payment = () => {
                 </div>
 
             {/* QR Section */}
-                <div className="group relative bg-white rounded-3xl border border-black/5 p-6 lg:p-8 overflow-hidden hover:border-accent/20 transition-all duration-500 shadow-sm">
+                <div className="group relative bg-white rounded-[10px] border border-black/5 p-6 lg:p-8 overflow-hidden hover:border-accent/20 transition-all duration-500 shadow-sm">
                     <div className="absolute top-0 right-0 p-10 opacity-[0.03] pointer-events-none">
                         <QrCode size={200} />
                     </div>
@@ -176,7 +176,7 @@ const Payment = () => {
                         </div>
 
                         <div className="relative">
-                            <div className="w-56 h-56 bg-white p-4 rounded-[32px] shadow-[0_0_60px_rgba(0,0,0,0.5)] transform transition-transform group-hover:scale-105 duration-500">
+                            <div className="w-56 h-56 bg-white p-4 rounded-[10px] shadow-[0_0_60px_rgba(0,0,0,0.5)] transform transition-transform group-hover:scale-105 duration-500">
                                 <img
                                     src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=aryan.genral@upi&pn=ARYAN%20GENERAL%20STORE&am=${amount}&cu=INR`}
                                     alt="Payment QR"
@@ -203,9 +203,9 @@ const Payment = () => {
                             placeholder="Enter 12-digit UTR Number"
                             value={utr}
                             onChange={(e) => setUtr(e.target.value)}
-                            className="w-full bg-white border border-black/5 rounded-2xl py-4 px-6 text-lg font-black text-slate-900 focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-400 uppercase tracking-widest shadow-sm"
+                            className="w-full bg-white border border-black/5 rounded-[10px] py-4 px-6 text-lg font-black text-slate-900 focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-400 uppercase tracking-widest shadow-sm"
                         />
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 bg-blue-500/10 rounded-lg text-blue-500 pointer-events-none group-focus-within:scale-110 transition-transform">
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 bg-blue-500/10 rounded-[10px] text-blue-500 pointer-events-none group-focus-within:scale-110 transition-transform">
                             <ShieldCheck size={20} />
                         </div>
                     </div>
@@ -215,8 +215,8 @@ const Payment = () => {
 
                 {/* Info Cards */}
                 <div className="grid sm:grid-cols-2 gap-3 mt-4">
-                    <div className="p-4 bg-blue-50/80 border border-blue-100 rounded-2xl flex gap-3 shadow-sm hover:shadow-md transition-shadow">
-                        <div className="p-2.5 bg-blue-500/10 rounded-xl text-blue-600 h-fit shadow-inner">
+                    <div className="p-4 bg-blue-50/80 border border-blue-100 rounded-[10px] flex gap-3 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="p-2.5 bg-blue-500/10 rounded-[10px] text-blue-600 h-fit shadow-inner">
                             <Info size={16} />
                         </div>
                         <div className="space-y-0.5">
@@ -224,8 +224,8 @@ const Payment = () => {
                             <p className="text-[11px] text-blue-700/80 font-medium leading-relaxed">Scan QR → Pay amount → Take screenshot → Upload.</p>
                         </div>
                     </div>
-                    <div className="p-4 bg-violet-50/80 border border-violet-100 rounded-2xl flex gap-3 shadow-sm hover:shadow-md transition-shadow">
-                        <div className="p-2.5 bg-violet-500/10 rounded-xl text-violet-600 h-fit shadow-inner">
+                    <div className="p-4 bg-violet-50/80 border border-violet-100 rounded-[10px] flex gap-3 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="p-2.5 bg-violet-500/10 rounded-[10px] text-violet-600 h-fit shadow-inner">
                             <Smartphone size={16} />
                         </div>
                         <div className="space-y-0.5">
@@ -239,7 +239,7 @@ const Payment = () => {
                 <button
                     onClick={handleSubmit}
                     disabled={!utr || utr.length < 6 || loading}
-                    className="group relative w-full overflow-hidden p-4 bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:grayscale text-white rounded-2xl font-black uppercase italic tracking-widest transition-all shadow-xl shadow-accent/20 active:scale-95 text-sm sm:text-base"
+                    className="group relative w-full overflow-hidden p-4 bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:grayscale text-white rounded-[10px] font-black uppercase italic tracking-widest transition-all shadow-xl shadow-accent/20 active:scale-95 text-sm sm:text-base"
                 >
                     {loading && (
                         <div

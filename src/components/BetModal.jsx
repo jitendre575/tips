@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Wallet, AlertCircle, Zap, TrendingUp } from 'lucide-react';
+import { X, Wallet, AlertCircle, Zap, TrendingUp, ChevronRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
 import { collection, addDoc, doc, updateDoc, increment, serverTimestamp } from 'firebase/firestore';
@@ -63,93 +63,110 @@ const BetModal = ({ match, onClose }) => {
     const potentialReturn = (amount * (betTeam === 'teamA' ? match.oddsTeamA : match.oddsTeamB) * multiplier).toFixed(0);
 
     return (
-        <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/80 backdrop-blur-md">
+        <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/80 backdrop-blur-xl">
             <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 100 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 100 }}
-                className="glass w-full max-w-lg rounded-t-[32px] sm:rounded-[32px] overflow-hidden shadow-2xl border-t sm:border border-white/10 max-h-[90vh] flex flex-col"
+                className="w-full max-w-lg rounded-[10px] sm:rounded-[10px] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-t border-white/10 max-h-[90vh] flex flex-col relative bg-[#111827]"
             >
-                <div className="overflow-y-auto flex-1 scrollbar-hide">
-                    <div className="p-6 border-b border-white/[0.05] flex justify-between items-center bg-white/[0.02]">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-accent/10 rounded-xl text-accent">
-                                <TrendingUp size={20} />
+                {/* Decorative Background Elements */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-accent/20 rounded-full blur-[80px] -mr-32 -mt-32 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-600/20 rounded-full blur-[80px] -ml-32 -mb-32 pointer-events-none" />
+                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 mix-blend-overlay pointer-events-none" />
+
+                <div className="overflow-y-auto flex-1 scrollbar-hide relative z-10">
+                    <div className="p-6 border-b border-white/[0.08] flex justify-between items-center bg-white/[0.02] backdrop-blur-md">
+                        <div className="flex items-center gap-4">
+                            <div className="p-3 mb-1 bg-gradient-to-br from-accent to-blue-600 rounded-[10px] text-white shadow-lg shadow-accent/20 border border-white/10">
+                                <TrendingUp size={24} />
                             </div>
                             <div>
-                                <h2 className="text-xl font-black italic tracking-tighter uppercase">Place <span className="logo-accent">Market</span></h2>
-                                <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{match.teamA} VS {match.teamB}</p>
+                                <h2 className="text-2xl font-black italic tracking-tighter uppercase text-white drop-shadow-md">
+                                    Place <span className="text-accent underline decoration-accent/30 decoration-4">Market</span>
+                                </h2>
+                                <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{match.teamA} VS {match.teamB}</p>
                             </div>
                         </div>
-                        <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-colors text-zinc-500">
-                            <X size={24} />
+                        <button onClick={onClose} className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all text-slate-400 hover:text-white active:scale-95 shadow-lg">
+                            <X size={20} />
                         </button>
                     </div>
 
-                    <div className="p-6 sm:p-8 space-y-6 sm:space-y-8">
+                    <div className="p-6 sm:p-8 space-y-6 sm:space-y-8 backdrop-blur-sm">
+                        
                         {/* Team Selection */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                            <button
-                                onClick={() => setBetTeam('teamA')}
-                                className={`p-4 sm:p-6 rounded-[24px] border-2 transition-all flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-3 sm:gap-2 relative overflow-hidden group/btn ${betTeam === 'teamA'
-                                    ? 'border-accent bg-accent/10 shadow-[0_0_20px_rgba(59,130,246,0.2)]'
-                                    : 'border-white/[0.05] bg-surface-light hover:border-white/20'
-                                    }`}
-                            >
-                                <div className="flex flex-col items-start sm:items-center min-w-0">
-                                    <span className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[2px] ${betTeam === 'teamA' ? 'text-accent' : 'text-zinc-500'}`}>Back {match.teamA}</span>
-                                    <span className="text-xl sm:text-4xl font-black italic tracking-tighter text-white truncate max-w-full">{match.teamA}</span>
-                                </div>
-                                <div className="bg-yellow-500 px-3 py-1 rounded-lg shrink-0">
-                                    <span className="text-black font-black text-xs sm:text-lg italic leading-none">{match.oddsTeamA}</span>
-                                </div>
-                            </button>
-                            <button
-                                onClick={() => setBetTeam('teamB')}
-                                className={`p-4 sm:p-6 rounded-[24px] border-2 transition-all flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-3 sm:gap-2 relative overflow-hidden group/btn ${betTeam === 'teamB'
-                                    ? 'border-accent bg-accent/10 shadow-[0_0_20px_rgba(59,130,246,0.2)]'
-                                    : 'border-white/[0.05] bg-surface-light hover:border-white/20'
-                                    }`}
-                            >
-                                <div className="flex flex-col items-start sm:items-center min-w-0">
-                                    <span className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[2px] ${betTeam === 'teamB' ? 'text-accent' : 'text-zinc-500'}`}>Back {match.teamB}</span>
-                                    <span className="text-xl sm:text-4xl font-black italic tracking-tighter text-white truncate max-w-full">{match.teamB}</span>
-                                </div>
-                                <div className="bg-yellow-500 px-3 py-1 rounded-lg shrink-0">
-                                    <span className="text-black font-black text-xs sm:text-lg italic leading-none">{match.oddsTeamB}</span>
-                                </div>
-                            </button>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {[
+                                { id: 'teamA', name: match.teamA, odds: match.oddsTeamA, color: 'from-indigo-500/10 to-blue-500/10', border: 'hover:border-blue-500/50', activeColor: 'from-blue-600 to-indigo-600', shadow: 'shadow-blue-500/25' },
+                                { id: 'teamB', name: match.teamB, odds: match.oddsTeamB, color: 'from-rose-500/10 to-red-500/10', border: 'hover:border-red-500/50', activeColor: 'from-red-600 to-rose-600', shadow: 'shadow-red-500/25' }
+                            ].map((team) => (
+                                <button
+                                    key={team.id}
+                                    onClick={() => setBetTeam(team.id)}
+                                    className={`p-5 sm:p-6 rounded-[10px] border-2 transition-all duration-300 flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-3 relative overflow-hidden group/btn 
+                                        ${betTeam === team.id
+                                            ? `border-transparent bg-gradient-to-br ${team.activeColor} shadow-xl ${team.shadow} scale-[1.02]`
+                                            : `border-white/10 bg-gradient-to-br ${team.color} ${team.border}`
+                                        }`}
+                                >
+                                    <div className="flex flex-col items-start sm:items-center min-w-0 z-10">
+                                        <span className={`text-[9px] sm:text-[11px] font-black uppercase tracking-[3px] mb-1 ${betTeam === team.id ? 'text-white/80' : 'text-slate-400'}`}>
+                                            Predict Winner
+                                        </span>
+                                        <span className={`text-xl sm:text-3xl font-black italic tracking-tighter truncate max-w-full drop-shadow-lg ${betTeam === team.id ? 'text-white' : 'text-slate-200'}`}>
+                                            {team.name}
+                                        </span>
+                                    </div>
+                                    <div className={`px-4 py-2 rounded-[10px] shrink-0 border ${betTeam === team.id ? 'bg-black/20 border-black/10' : 'bg-white/5 border-white/10 group-hover/btn:bg-white/10'}`}>
+                                        <span className={`font-black text-sm sm:text-xl italic leading-none ${betTeam === team.id ? 'text-white' : 'text-slate-300'}`}>
+                                            {team.odds}
+                                        </span>
+                                    </div>
+                                    
+                                    {/* Active Glow */}
+                                    {betTeam === team.id && (
+                                        <div className="absolute inset-0 bg-white/20 blur-xl opacity-50 mix-blend-overlay pointer-events-none" />
+                                    )}
+                                </button>
+                            ))}
                         </div>
 
                         {/* Amount Input */}
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-end px-2">
+                        <div className="bg-white/[0.03] border border-white/[0.08] p-5 sm:p-6 rounded-[10px] shadow-inner space-y-5 relative overflow-hidden group">
+                            <div className="flex justify-between items-end px-1 relative z-10">
                                 <div>
-                                    <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest leading-none">Wager Amount</label>
+                                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-[2px] leading-none mb-1 block">Wager Amount</label>
+                                    <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400/80">
+                                        <TrendingUp size={12} /> Minimum 100
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-900 rounded-full border border-white/5 shadow-xl">
-                                    <Wallet size={12} className="text-yellow-500" />
-                                    <span className="text-[10px] font-black text-white italic tracking-tighter">COINS {userData.balance?.toLocaleString()}</span>
+                                <div className="flex items-center gap-2 px-4 py-2 bg-black/40 rounded-full border border-white/10 shadow-xl backdrop-blur-md">
+                                    <Wallet size={14} className="text-yellow-500" />
+                                    <span className="text-[11px] font-black text-white italic tracking-[1px]">BAL: {(userData.balance || 0).toLocaleString()}</span>
                                 </div>
                             </div>
 
-                            <div className="space-y-3">
-                                <div className="relative group">
-                                    <span className="absolute left-6 top-1/2 -translate-y-1/2 text-xl font-black text-zinc-700">₹</span>
+                            <div className="space-y-4 relative z-10">
+                                <div className="relative">
+                                    <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                                        <span className="text-3xl font-black text-slate-500 italic">₹</span>
+                                    </div>
                                     <input
                                         type="number"
                                         value={amount}
                                         onChange={(e) => setAmount(e.target.value)}
-                                        className="w-full bg-primary border border-white/5 rounded-[24px] py-6 pl-12 pr-6 text-4xl font-black italic tracking-tighter text-zinc-900 focus:border-accent/50 focus:ring-4 focus:ring-accent/10 outline-none transition-all"
+                                        className="w-full bg-black/40 border-2 border-white/10 rounded-[10px] py-5 pl-14 pr-6 text-3xl font-black italic tracking-tighter text-white focus:border-accent focus:bg-white/5 focus:ring-4 focus:ring-accent/20 outline-none transition-all shadow-inner"
+                                        placeholder="0"
                                     />
                                 </div>
 
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 sm:gap-3">
                                     {[100, 500, 1000, 5000].map(val => (
                                         <button
                                             key={val}
-                                            onClick={() => setAmount(Number(amount) + val)}
-                                            className="flex-1 py-3 bg-zinc-900/50 hover:bg-zinc-800 border border-white/5 hover:border-white/20 rounded-xl text-[10px] font-black tracking-widest uppercase transition-all active:scale-95"
+                                            onClick={() => setAmount(Number(amount || 0) + val)}
+                                            className="flex-1 py-3 sm:py-3.5 bg-white/5 hover:bg-white/10 active:bg-white/20 border border-white/10 hover:border-white/20 rounded-[10px] text-[10px] sm:text-[11px] font-black tracking-widest uppercase text-slate-300 hover:text-white transition-all shadow-sm"
                                         >
                                             +{val}
                                         </button>
@@ -159,55 +176,77 @@ const BetModal = ({ match, onClose }) => {
                         </div>
 
                         {/* Payout Summary */}
-                        <div className="bg-gradient-to-br from-zinc-900 to-black rounded-[32px] p-6 border border-white/5 relative overflow-hidden">
+                        <div className="bg-gradient-to-br from-zinc-900 to-black rounded-[10px] p-6 border border-white/10 relative overflow-hidden shadow-2xl">
+                            {/* Glow behind summary */}
+                            <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-emerald-500/10 blur-[60px] rounded-full pointer-events-none" />
+                            
                             <div className="relative z-10 flex justify-between items-end mb-6">
                                 <div>
-                                    <span className="text-[10px] text-zinc-500 font-black uppercase tracking-[3px] leading-none">Potential return</span>
-                                    <div className="flex items-baseline gap-2 mt-2">
-                                        <span className="text-4xl sm:text-5xl font-black italic text-emerald-500 tracking-tighter leading-none">
-                                            {potentialReturn}
+                                    <span className="text-[10px] text-slate-400 font-black uppercase tracking-[3px] leading-none mb-2 block">Potential Return</span>
+                                    <div className="flex items-baseline gap-2">
+                                        <span className="text-4xl sm:text-5xl font-black italic text-emerald-400 tracking-tighter leading-none drop-shadow-md">
+                                            ₹ {potentialReturn}
                                         </span>
-                                        <span className="text-[10px] font-black text-emerald-500/50 uppercase tracking-widest">Coins</span>
                                     </div>
                                 </div>
-                                <div className="text-right">
-                                    <span className="text-[10px] text-zinc-500 font-black uppercase tracking-[3px] leading-none">Multiplier</span>
-                                    <div className="text-2xl font-black italic text-white mt-2 leading-none">x{(betTeam === 'teamA' ? match.oddsTeamA : match.oddsTeamB)}</div>
+                                <div className="text-right bg-white/5 px-4 py-2 rounded-[10px] border border-white/10 backdrop-blur-md">
+                                    <span className="text-[9px] text-slate-400 font-black uppercase tracking-[2px] leading-none mb-1 block">Multiplier</span>
+                                    <div className="text-xl font-black italic text-white leading-none text-center">x{(betTeam === 'teamA' ? match.oddsTeamA : match.oddsTeamB)}</div>
                                 </div>
                             </div>
 
-                            <div className="flex items-start gap-4 bg-amber-500/5 p-4 rounded-2xl border border-amber-500/10">
-                                <Zap size={18} className="text-amber-500 shrink-0 mt-0.5 animate-pulse" />
-                                <div className="space-y-1">
-                                    <p className="text-[11px] text-zinc-400 font-bold leading-relaxed uppercase tracking-tight">
-                                        <span className="text-yellow-500 font-black">BOOST CONDITION:</span> If a six is hit in the first 4 overs, winnings are <span className="text-white">DOUBLED (2X)</span>.
-                                    </p>
-                                    {match.sixInPowerplay && (
-                                        <div className="inline-flex items-center gap-2 px-2 py-0.5 bg-amber-500 text-black text-[9px] font-black rounded uppercase tracking-widest animate-bounce">
-                                            Condition Met: 2X Active
+                            {match.sixInPowerplay && (
+                                <div className="flex items-start gap-3 sm:gap-4 bg-gradient-to-r from-amber-500/10 to-orange-500/10 p-5 rounded-[10px] border border-amber-500/20 shadow-inner mt-2">
+                                    <div className="bg-amber-500 p-2 rounded-[10px] text-black shrink-0 shadow-lg shadow-amber-500/30 animate-pulse">
+                                        <Zap size={20} className="fill-current" />
+                                    </div>
+                                    <div className="space-y-1 mt-0.5">
+                                        <div className="text-[11px] uppercase tracking-widest font-black text-amber-500 flex items-center gap-2">
+                                            <span>Active Offer</span>
+                                            <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse blur-[1px]"></span>
                                         </div>
-                                    )}
+                                        <p className="text-[12px] sm:text-sm text-slate-300 font-bold leading-relaxed">
+                                            First 3 Overs 6 hit = <span className="text-white bg-amber-500/20 px-2 py-0.5 rounded italic">DOUBLE (2X)</span> Winnings
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
 
-                        <button
-                            disabled={loading || amount > userData.balance || amount < 100}
-                            onClick={handlePlaceBet}
-                            className="w-full bg-accent hover:bg-accent-hover text-white py-6 rounded-[28px] font-black italic uppercase tracking-[4px] text-2xl shadow-2xl shadow-accent/40 active:scale-[0.98] transition-all flex items-center justify-center gap-4 disabled:grayscale disabled:opacity-50"
-                        >
-                            {loading ? (
-                                <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" />
-                            ) : (
-                                <>Confirm <TrendingUp size={24} className="group-hover:translate-x-1 transition-transform" /></>
-                            )}
-                        </button>
-
-                        {amount > userData.balance && (
-                            <p className="text-center text-[10px] font-black text-accent uppercase tracking-widest animate-pulse">
-                                Insufficient balance in wallet
-                            </p>
-                        )}
+                        {/* Submit CTA */}
+                        <div className="pt-2">
+                            <button
+                                disabled={loading || amount > (userData.balance || 0) || amount < 100}
+                                onClick={handlePlaceBet}
+                                className="w-full bg-gradient-to-r from-accent via-blue-600 to-indigo-600 hover:from-accent-hover hover:via-blue-700 hover:to-indigo-700 text-white py-6 sm:py-7 rounded-[10px] font-black italic uppercase tracking-[4px] text-xl sm:text-2xl shadow-2xl shadow-accent/40 active:scale-[0.98] transition-all flex items-center justify-center gap-3 relative overflow-hidden group disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed"
+                            >
+                                {/* Button glare effect */}
+                                <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 rounded-[10px] pointer-events-none" />
+                                
+                                {loading ? (
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+                                        <span>Processing</span>
+                                    </div>
+                                ) : (
+                                    <>
+                                        Confirm Stake 
+                                        <ChevronRight size={24} className="group-hover:translate-x-2 transition-transform drop-shadow-md" />
+                                    </>
+                                )}
+                            </button>
+                            
+                            {/* Validation Messages */}
+                            {amount > (userData.balance || 0) ? (
+                                <p className="text-center mt-4 text-[11px] font-black text-rose-500 uppercase tracking-[2px] animate-pulse flex items-center justify-center gap-2 bg-rose-500/10 py-2 rounded-[10px] border border-rose-500/20">
+                                    <AlertCircle size={14} /> Insufficient Balance. Please Recharge.
+                                </p>
+                            ) : amount > 0 && amount < 100 ? (
+                                <p className="text-center mt-4 text-[11px] font-black text-amber-500 uppercase tracking-[2px] flex items-center justify-center gap-2 bg-amber-500/10 py-2 rounded-[10px] border border-amber-500/20">
+                                    Minimum Wager is 100 Coins
+                                </p>
+                            ) : null}
+                        </div>
                     </div>
                 </div>
             </motion.div>

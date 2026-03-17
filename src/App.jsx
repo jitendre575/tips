@@ -128,7 +128,7 @@ function App() {
             <Toaster
               position="top-center"
               toastOptions={{
-                className: '!bg-white !text-slate-900 !border !border-black/[0.05] !rounded-[1.5rem] !p-6 !font-black !text-[11px] !uppercase !tracking-[0.1em] !shadow-2xl',
+                className: '!bg-white !text-slate-900 !border !border-black/[0.05] !rounded-[10px] !p-6 !font-black !text-[11px] !uppercase !tracking-[0.1em] !shadow-2xl',
                 duration: 4000,
                 success: {
                   iconTheme: { primary: '#10b981', secondary: '#fff' }
