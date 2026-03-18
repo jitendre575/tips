@@ -172,6 +172,26 @@ const CasinoGame = () => {
         }
     };
 
+    useEffect(() => {
+        if (!user) return;
+        const userRef = doc(db, 'users', user.uid);
+        
+        // Mark as active in this game
+        updateDoc(userRef, {
+            lastActiveAt: serverTimestamp(),
+            currentLocation: currentGame.name,
+            isOnline: true
+        }).catch(err => console.error("Tracking Error:", err));
+
+        // Cleanup on unmount
+        return () => {
+            updateDoc(userRef, {
+                currentLocation: 'Casino Lobby',
+                lastActiveAt: serverTimestamp()
+            }).catch(err => console.error("Tracking Cleanup Error:", err));
+        };
+    }, [gameId, user, currentGame.name]);
+
     return (
         <div className="animate-in fade-in duration-500" style={{ background: '#0f212e', minHeight: '100vh' }}>
             {/* Game Layout - No padding, full bleed */}

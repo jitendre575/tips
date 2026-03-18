@@ -1,59 +1,86 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Wallet, ChevronRight, Zap, Coins, Calculator, AlertTriangle, X, PlusCircle } from 'lucide-react';
+import { ArrowLeft, Wallet, ChevronRight, Zap, Coins, AlertTriangle, PlusCircle, Loader2, CheckCircle2 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 
 const AddBalance = () => {
     const navigate = useNavigate();
     const [amount, setAmount] = useState('');
     const [selectedQuickAmount, setSelectedQuickAmount] = useState(null);
-    const [showPaymentModal, setShowPaymentModal] = useState(false);
-    const [showCryptoList, setShowCryptoList] = useState(false);
-    const [showCryptoRestriction, setShowCryptoRestriction] = useState(false);
-    const [selectedCrypto, setSelectedCrypto] = useState(null);
+    const [showUSDTDetails, setShowUSDTDetails] = useState(false);
+    const [usdtHash, setUsdtHash] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [currency, setCurrency] = useState(null); // null means hasn't selected method yet
+    const [showAmountInput, setShowAmountInput] = useState(false); // New state to control flow
 
     const quickAmounts = [500, 1000, 2000, 5000, 10000, 20000];
-
-    const cryptoCurrencies = [
-        { id: 'usdt', name: 'USDT', symbol: 'Tether', icon: '₮' },
-        { id: 'btc', name: 'BTC', symbol: 'Bitcoin', icon: '₿' },
-        { id: 'eth', name: 'ETH', symbol: 'Ethereum', icon: 'Ξ' },
-        { id: 'trx', name: 'TRX', symbol: 'TRON', icon: 'TRX' },
-        { id: 'sol', name: 'SOL', symbol: 'Solana', icon: 'S' },
-        { id: 'doge', name: 'DOGE', symbol: 'Dogecoin', icon: 'Ð' },
-        { id: 'matic', name: 'MATIC', symbol: 'Polygon', icon: 'M' },
-        { id: 'ltc', name: 'LTC', symbol: 'Litecoin', icon: 'Ł' },
-        { id: 'xrp', name: 'XRP', symbol: 'Ripple', icon: 'X' },
-        { id: 'bnb', name: 'BNB', symbol: 'Binance', icon: 'B' },
-        { id: 'shib', name: 'SHIB', symbol: 'Shiba Inu', icon: 'SH' },
-        { id: 'ada', name: 'ADA', symbol: 'Cardano', icon: 'A' },
-    ];
 
     const handleQuickAmountClick = (val) => {
         setSelectedQuickAmount(val);
         setAmount(val.toString());
     };
 
-    const handleContinue = () => {
-        if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
-            return;
-        }
-        setShowPaymentModal(true);
-    };
-
     const selectINR = () => {
-        setShowPaymentModal(false);
-        navigate('/payment', { state: { amount: parseFloat(amount) } });
+        setCurrency('INR');
+        setShowAmountInput(true);
     };
 
     const selectCrypto = () => {
-        setShowPaymentModal(false);
-        setShowCryptoList(true);
+        setCurrency('USDT');
+        setShowAmountInput(true);
+        setShowUSDTDetails(true);
     };
 
-    const handleCryptoSelection = (crypto) => {
-        setSelectedCrypto(crypto);
-        setShowCryptoList(false);
-        setShowCryptoRestriction(true);
+    const handleContinue = () => {
+        if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+            toast.error('Please enter a valid amount');
+            return;
+        }
+
+        if (currency === 'INR') {
+            navigate('/payment', { state: { amount: parseFloat(amount) } });
+        } else {
+            // For crypto, we show the USDT details on the same page
+            setShowUSDTDetails(true);
+        }
+    };
+
+    const { user, userData } = useAuth();
+
+    const submitUSDT = async () => {
+        if (!usdtHash || usdtHash.length < 10) {
+            toast.error('Please enter a valid Transaction Hash');
+            return;
+        }
+
+        if (!user) {
+            toast.error('Please login to continue');
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const { db } = await import('../firebase');
+            const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
+
+            await addDoc(collection(db, 'rechargeRequests'), {
+                userId: user.uid,
+                userName: userData?.name || user.email.split('@')[0],
+                amount: parseFloat(amount),
+                currency: 'USDT',
+                hash: usdtHash.trim(),
+                status: 'Pending',
+                createdAt: serverTimestamp()
+            });
+
+            toast.success('USDT DEPOSIT RECORDED!');
+            navigate('/history');
+        } catch (error) {
+            toast.error('Submission failed');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -73,222 +100,202 @@ const AddBalance = () => {
                     </div>
                 </div>
 
-                {/* Amount Input */}
-                <div className="bg-white border border-black/5 rounded-[10px] p-5 sm:p-8 relative overflow-hidden group shadow-sm">
-                    <div className="absolute top-0 right-0 p-5 sm:p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
-                        <Wallet size={160} className="text-accent" />
-                    </div>
-
-                    <div className="relative space-y-6 sm:space-y-8">
-                        <div className="space-y-2 sm:space-y-3">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Enter Amount</label>
-                            <div className="relative">
-                                <span className="absolute left-6 top-1/2 -translate-y-1/2 text-4xl font-black text-slate-400 group-focus-within:text-accent transition-colors">₹</span>
-                                <input
-                                    type="number"
-                                    value={amount}
-                                    onChange={(e) => {
-                                        setAmount(e.target.value);
-                                        setSelectedQuickAmount(null);
-                                    }}
-                                    placeholder="0.00"
-                                    className="w-full bg-slate-50 border border-black/5 rounded-[10px] py-4 sm:py-6 pl-14 pr-6 text-3xl sm:text-4xl font-[1000] text-slate-900 focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all placeholder:text-slate-300 tracking-tight"
-                                />
-                                <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-accent/20 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity" />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
-                            {quickAmounts.map((val) => (
-                                <button
-                                    key={val}
-                                    onClick={() => handleQuickAmountClick(val)}
-                                    className={`relative group/btn py-3 px-2 sm:py-5 sm:px-4 rounded-[10px] sm:rounded-[10px] border transition-all duration-300 text-xs sm:text-sm font-black italic tracking-tight overflow-hidden ${selectedQuickAmount === val
-                                        ? 'bg-accent border-accent text-white shadow-[0_0_30px_rgba(239,68,68,0.3)] -translate-y-1'
-                                        : 'bg-slate-50 border-black/5 text-slate-600 hover:border-black/10 hover:bg-slate-100 hover:-translate-y-1'
-                                        }`}
-                                >
-                                    <div className={`absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity ${selectedQuickAmount === val ? 'opacity-100' : ''}`} />
-                                    <span className="relative z-10">₹{val.toLocaleString()}</span>
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Info Card */}
-                <div className="flex items-start gap-5 p-5 bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/20 rounded-[10px]">
-                    <div className="p-3 bg-emerald-500/20 rounded-[10px] text-emerald-500 shadow-lg shadow-emerald-500/10">
-                        <Zap size={20} />
-                    </div>
-                    <div className="space-y-1">
-                        <p className="text-sm font-black text-emerald-400 uppercase tracking-wide">Instant Processing</p>
-                        <p className="text-xs text-emerald-500/60 leading-relaxed font-medium">
-                            Your balance will be updated instantly after admin verification of your payment screenshot.
-                        </p>
-                    </div>
-                </div>
-
-                {/* Continue Button */}
-                <button
-                    onClick={handleContinue}
-                    disabled={!amount || parseFloat(amount) <= 0}
-                    className="w-full flex items-center justify-between p-4 sm:p-5 bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-[10px] font-black uppercase tracking-widest transition-all group shadow-xl shadow-accent/20 active:scale-[0.98]"
-                >
-                    <div className="flex items-center gap-3">
-                        <div className="p-1.5 bg-white/10 rounded-[10px]">
-                            <PlusCircle className="w-5 h-5" />
-                        </div>
-                        <span className="text-base sm:text-lg italic tracking-tight">Proceed to Pay</span>
-                    </div>
-                    <div className="p-1.5 bg-white/20 rounded-[10px] group-hover:translate-x-1 transition-transform">
-                        <ChevronRight className="w-5 h-5" />
-                    </div>
-                </button>
-            </div>
-
-            {/* Payment Method Modal */}
-            {showPaymentModal && (
-                <div className="fixed inset-0 z-[300] flex items-end sm:items-center justify-center p-4">
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowPaymentModal(false)} />
-
-                    <div className="relative w-full max-w-md bg-white border border-black/5 rounded-[10px] overflow-hidden shadow-2xl animate-in slide-in-from-bottom-10 duration-300">
-                        <div className="p-8 space-y-8">
-                            <div className="flex justify-between items-start">
-                                <div>
-                                    <h3 className="text-2xl font-black italic uppercase tracking-tighter text-slate-900">Select <span className="logo-accent">Method</span></h3>
-                                    <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Amount: ₹{parseFloat(amount).toLocaleString()}</p>
+                {!showAmountInput ? (
+                    <div className="space-y-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <button
+                                onClick={selectINR}
+                                className="group relative p-8 bg-white hover:bg-slate-50 border border-black/10 hover:border-blue-500/30 rounded-[10px] transition-all active:scale-[0.98] text-left overflow-hidden shadow-sm"
+                            >
+                                <div className="absolute top-0 right-0 p-8 opacity-[0.05] group-hover:opacity-[0.1] transition-opacity">
+                                    <Wallet size={120} className="text-blue-500" />
                                 </div>
-                                <button onClick={() => setShowPaymentModal(false)} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-900 transition-colors">
-                                    <X size={20} />
-                                </button>
-                            </div>
-
-                            <div className="space-y-6">
-                                <button
-                                    onClick={selectINR}
-                                    className="w-full group relative p-6 bg-slate-50 hover:bg-slate-100 border border-black/5 hover:border-blue-500/30 rounded-[10px] flex items-center gap-5 transition-all active:scale-[0.98] overflow-hidden"
-                                >
-                                    <div className="absolute top-0 inset-x-0 h-1.5 bg-blue-600 rounded-full scale-x-90 group-hover:scale-x-100 transition-transform" />
-                                    <div className="w-16 h-16 bg-blue-50 rounded-[10px] flex items-center justify-center text-blue-500 shrink-0 border border-blue-500/20 group-hover:scale-110 transition-transform">
+                                <div className="relative space-y-4">
+                                    <div className="w-16 h-16 bg-blue-50 rounded-[10px] flex items-center justify-center text-blue-500 border border-blue-500/20">
                                         <Wallet size={32} />
                                     </div>
-                                    <div className="text-left min-w-0">
-                                        <p className="font-black text-xl italic uppercase tracking-tighter text-slate-900 mb-1 group-hover:text-blue-500 transition-colors">INR Payment</p>
-                                        <p className="text-slate-500 text-[11px] font-black uppercase tracking-[2px] leading-tight">PhonePe, Paytm, GooglePay (UPI)</p>
+                                    <div>
+                                        <h3 className="text-2xl font-[1000] italic uppercase tracking-tighter text-slate-900 leading-none mb-2">INR Payment</h3>
+                                        <p className="text-slate-500 text-[11px] font-black uppercase tracking-widest leading-relaxed">UPI, PhonePe, Paytm, GooglePay</p>
                                     </div>
-                                </button>
+                                </div>
+                            </button>
 
-                                <button
-                                    onClick={selectCrypto}
-                                    className="w-full group relative p-6 bg-slate-50 hover:bg-slate-100 border border-black/5 hover:border-amber-500/30 rounded-[10px] flex items-center gap-5 transition-all active:scale-[0.98] overflow-hidden"
-                                >
-                                    <div className="absolute top-0 inset-x-0 h-1.5 bg-amber-600 rounded-full scale-x-90 group-hover:scale-x-100 transition-transform" />
-                                    <div className="w-16 h-16 bg-amber-50 rounded-[10px] flex items-center justify-center text-amber-500 shrink-0 border border-amber-500/20 group-hover:scale-110 transition-transform">
+                            <button
+                                onClick={selectCrypto}
+                                className="group relative p-8 bg-white hover:bg-slate-50 border border-black/10 hover:border-amber-500/30 rounded-[10px] transition-all active:scale-[0.98] text-left overflow-hidden shadow-sm"
+                            >
+                                <div className="absolute top-0 right-0 p-8 opacity-[0.05] group-hover:opacity-[0.1] transition-opacity">
+                                    <Coins size={120} className="text-amber-500" />
+                                </div>
+                                <div className="relative space-y-4">
+                                    <div className="w-16 h-16 bg-amber-50 rounded-[10px] flex items-center justify-center text-amber-500 border border-amber-500/20">
                                         <Coins size={32} />
                                     </div>
-                                    <div className="text-left min-w-0">
-                                        <p className="font-black text-xl italic uppercase tracking-tighter text-slate-900 mb-1 group-hover:text-amber-500 transition-colors">Crypto Pay</p>
-                                        <p className="text-slate-500 text-[11px] font-black uppercase tracking-[2px] leading-tight">USDT, BTC, ETH, TRX</p>
+                                    <div>
+                                        <h3 className="text-2xl font-[1000] italic uppercase tracking-tighter text-slate-900 leading-none mb-2">USDT Pay</h3>
+                                        <p className="text-slate-500 text-[11px] font-black uppercase tracking-widest leading-relaxed">Fast Global Crypto Transfer (TRC-20)</p>
                                     </div>
-                                </button>
-                            </div>
+                                </div>
+                            </button>
                         </div>
                     </div>
-                </div>
-            )}
-
-            {/* Crypto Currency List Modal */}
-            {showCryptoList && (
-                <div className="fixed inset-0 z-[350] flex items-center justify-center p-4">
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowCryptoList(false)} />
-
-                    <div className="relative w-full max-w-md bg-white border border-black/5 rounded-[10px] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col max-h-[80vh]">
-                        <div className="p-8 border-b border-black/5 flex justify-between items-center bg-slate-50">
-                            <div>
-                                <h3 className="text-2xl font-black italic uppercase tracking-tighter text-slate-900">Select <span className="logo-accent">Coin</span></h3>
-                                <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mt-1">Available Crypto Options</p>
+                ) : !showUSDTDetails ? (
+                    <>
+                        {/* Amount Input */}
+                        <div className="bg-white border border-black/5 rounded-[10px] p-5 sm:p-8 relative overflow-hidden group shadow-sm">
+                            <div className="absolute top-0 right-0 p-5 sm:p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
+                                {currency === 'INR' ? <Wallet size={160} className="text-blue-500" /> : <Coins size={160} className="text-amber-500" />}
                             </div>
-                            <button onClick={() => setShowCryptoList(false)} className="p-3 bg-slate-100 rounded-full text-slate-500 hover:text-slate-900 transition-all">
-                                <X size={20} />
+
+                            <div className="relative space-y-6 sm:space-y-8">
+                                <div className="flex justify-between items-center mb-[-10px]">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Enter Amount ({currency})</label>
+                                    <button onClick={() => setShowAmountInput(false)} className="text-[10px] font-black text-slate-400 hover:text-accent uppercase tracking-widest">Change Method</button>
+                                </div>
+                                <div className="relative">
+                                    <span className={`absolute left-6 top-1/2 -translate-y-1/2 text-4xl font-black text-slate-400 transition-colors ${currency === 'INR' ? 'group-focus-within:text-blue-500' : 'group-focus-within:text-amber-500'}`}>{currency === 'USDT' ? '₮' : '₹'}</span>
+                                    <input
+                                        type="number"
+                                        value={amount}
+                                        onChange={(e) => {
+                                            setAmount(e.target.value);
+                                            setSelectedQuickAmount(null);
+                                        }}
+                                        placeholder="0.00"
+                                        className={`w-full bg-slate-50 border border-black/5 rounded-[10px] py-4 sm:py-6 pl-14 pr-6 text-3xl sm:text-4xl font-[1000] text-slate-900 focus:outline-none transition-all placeholder:text-slate-300 tracking-tight ${currency === 'INR' ? 'focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10' : 'focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10'}`}
+                                    />
+                                    <div className={`absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent opacity-0 group-focus-within:opacity-100 transition-opacity ${currency === 'INR' ? 'via-blue-500/20' : 'via-amber-500/20'}`} />
+                                </div>
+
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
+                                    {quickAmounts.map((val) => (
+                                        <button
+                                            key={val}
+                                            onClick={() => handleQuickAmountClick(val)}
+                                            className={`relative group/btn py-3 px-2 sm:py-5 sm:px-4 rounded-[10px] sm:rounded-[10px] border transition-all duration-300 text-xs sm:text-sm font-black italic tracking-tight overflow-hidden ${selectedQuickAmount === val
+                                                ? (currency === 'INR' ? 'bg-blue-600 border-blue-600' : 'bg-amber-500 border-amber-500') + ' text-white shadow-xl -translate-y-1'
+                                                : 'bg-slate-50 border-black/5 text-slate-600 hover:border-black/10 hover:bg-slate-100 hover:-translate-y-1'
+                                                }`}
+                                        >
+                                            <div className={`absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity ${selectedQuickAmount === val ? 'opacity-100' : ''}`} />
+                                            <span className="relative z-10">{currency === 'USDT' ? '₮' : '₹'}{val.toLocaleString()}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Info Card */}
+                        <div className={`flex items-start gap-5 p-5 border rounded-[10px] ${currency === 'INR' ? 'bg-blue-500/5 border-blue-500/20' : 'bg-emerald-500/5 border-emerald-500/20'}`}>
+                            <div className={`p-3 rounded-[10px] shadow-lg ${currency === 'INR' ? 'bg-blue-500/20 text-blue-500 shadow-blue-500/10' : 'bg-emerald-500/20 text-emerald-500 shadow-emerald-500/10'}`}>
+                                <Zap size={20} />
+                            </div>
+                            <div className="space-y-1">
+                                <p className={`text-sm font-black uppercase tracking-wide ${currency === 'INR' ? 'text-blue-400' : 'text-emerald-400'}`}>Instant Processing</p>
+                                <p className={`text-xs leading-relaxed font-medium ${currency === 'INR' ? 'text-blue-500/60' : 'text-emerald-500/60'}`}>
+                                    Your balance will be updated instantly after admin verification of your payment.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Continue Button */}
+                        <button
+                            onClick={handleContinue}
+                            disabled={!amount || parseFloat(amount) <= 0}
+                            className={`w-full flex items-center justify-between p-4 sm:p-5 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-[10px] font-black uppercase tracking-widest transition-all group shadow-xl active:scale-[0.98] ${currency === 'INR' ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/20' : 'bg-accent hover:bg-accent-hover shadow-accent/20'}`}
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="p-1.5 bg-white/10 rounded-[10px]">
+                                    <PlusCircle className="w-5 h-5" />
+                                </div>
+                                <span className="text-base sm:text-lg italic tracking-tight">Proceed to {currency === 'INR' ? 'Pay' : 'Submit'}</span>
+                            </div>
+                            <div className="p-1.5 bg-white/20 rounded-[10px] group-hover:translate-x-1 transition-transform">
+                                <ChevronRight className="w-5 h-5" />
+                            </div>
+                        </button>
+                    </>
+                ) : (
+                    <div className="bg-white border border-black/5 rounded-[10px] p-8 space-y-8 shadow-2xl animate-in zoom-in-95 duration-200 overflow-hidden relative">
+                        <div className="absolute top-0 inset-x-0 h-1.5 bg-amber-500" />
+                        
+                        <div className="flex justify-between items-start">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 bg-amber-50 rounded-[10px] flex items-center justify-center text-amber-500 font-bold border border-amber-500/20 text-xl">₮</div>
+                                <div>
+                                    <h3 className="text-2xl font-black italic uppercase tracking-tighter text-slate-900 leading-none">USDT <span className="logo-accent text-amber-500">DEPOSIT</span></h3>
+                                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mt-1">
+                                        {amount ? `Send ₮${parseFloat(amount).toLocaleString()} TRC-20` : 'Send USDT TRC-20'}
+                                    </p>
+                                </div>
+                            </div>
+                            <button 
+                                onClick={() => {
+                                    setShowUSDTDetails(false);
+                                    setShowAmountInput(false);
+                                }} 
+                                className="p-3 bg-slate-100 rounded-[10px] text-slate-500 hover:text-slate-900 transition-all"
+                            >
+                                <ArrowLeft size={20} />
                             </button>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto p-6 grid grid-cols-2 gap-4 scrollbar-hide">
-                            {cryptoCurrencies.map((crypto) => (
-                                <button
-                                    key={crypto.id}
-                                    onClick={() => handleCryptoSelection(crypto)}
-                                    className="p-5 bg-slate-50 border border-black/5 hover:border-accent/30 hover:bg-accent/5 rounded-[10px] flex flex-col items-center gap-3 transition-all group active:scale-95"
-                                >
-                                    <div className="w-12 h-12 bg-white rounded-[10px] flex items-center justify-center text-accent font-black text-xl border border-black/5 group-hover:bg-accent group-hover:text-white transition-all shadow-sm">
-                                        {crypto.icon}
+                        <div className="space-y-6">
+                            <div className="p-5 bg-slate-900 rounded-[10px] border border-white/10 space-y-4">
+                                <div>
+                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2">Admin USDT Wallet</p>
+                                    <div className="flex items-center gap-3">
+                                        <code className="flex-1 bg-black/40 p-3 rounded-[10px] text-amber-500 font-mono text-xs break-all border border-white/5 uppercase">
+                                            TH6T9x8qZp9W1V7rX6y5Q2mN8K3L4vA1B2
+                                        </code>
+                                        <button 
+                                            onClick={() => {
+                                                navigator.clipboard.writeText('TH6T9x8qZp9W1V7rX6y5Q2mN8K3L4vA1B2');
+                                                toast.success('Wallet Address Copied');
+                                            }}
+                                            className="p-3 px-4 bg-amber-500 text-white rounded-[10px] hover:bg-amber-600 transition-all font-black text-xs uppercase"
+                                        >
+                                            COPY
+                                        </button>
                                     </div>
-                                    <div className="text-center">
-                                        <p className="font-black text-sm uppercase italic tracking-tighter text-slate-900">{crypto.name}</p>
-                                        <p className="text-[9px] text-slate-500 font-black uppercase tracking-widest">{crypto.symbol}</p>
-                                    </div>
-                                </button>
-                            ))}
-                        </div>
-
-                        <div className="p-6 bg-slate-50 border-t border-black/5 text-center">
-                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Global Crypto Protocol V2.1</p>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Crypto Restriction Popup */}
-            {showCryptoRestriction && (
-                <div className="fixed inset-0 z-[400] flex items-center justify-center p-4">
-                    <div className="absolute inset-0 bg-black/60 backdrop-blur-md" onClick={() => setShowCryptoRestriction(false)} />
-
-                    <div className="relative w-full max-w-sm bg-white border border-red-500/20 rounded-[10px] p-10 text-center space-y-8 shadow-[0_0_50px_rgba(239,68,68,0.15)] animate-in zoom-in-95 duration-200">
-                        <div className="relative mx-auto w-24 h-24">
-                            <div className="absolute inset-0 bg-red-500/20 blur-xl rounded-full animate-pulse" />
-                            <div className="relative w-full h-full bg-red-50 border border-red-500/20 rounded-[10px] flex items-center justify-center text-red-500 transform rotate-12">
-                                <AlertTriangle size={48} />
+                                </div>
+                                <div className="flex items-center gap-2 text-amber-500/80">
+                                    <AlertTriangle size={14} />
+                                    <p className="text-[9px] font-black uppercase tracking-widest">SEND ONLY USDT TRC-20 TO THIS ADDRESS</p>
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="space-y-4">
-                            <h3 className="text-3xl font-black italic uppercase tracking-tighter text-slate-900 leading-none">
-                                {selectedCrypto?.name} <span className="logo-accent">BANNED</span>
-                            </h3>
-                            <div className="flex items-center justify-center gap-2 py-1.5 px-3 bg-red-500/10 border border-red-500/20 rounded-full w-fit mx-auto">
-                                <span className="text-[10px] font-black text-red-600 uppercase tracking-[3px]">REGULATORY ALERT</span>
+                            <div className="space-y-3">
+                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Transaction Hash (TXID)</label>
+                                <input
+                                    type="text"
+                                    value={usdtHash}
+                                    onChange={(e) => setUsdtHash(e.target.value)}
+                                    placeholder="Enter your TXID hash here..."
+                                    className="w-full bg-slate-50 border border-black/5 rounded-[10px] py-4 px-6 text-sm font-bold text-slate-900 focus:outline-none focus:border-amber-500/30 transition-all"
+                                />
+                                <p className="text-[9px] text-slate-400 font-medium ml-1">Verify your transaction on TronScan before submitting.</p>
                             </div>
-                            <p className="text-slate-600 text-sm leading-relaxed font-bold uppercase tracking-tight">
-                                Cryptocurrency transactions for gaming are <span className="text-red-500">statically banned in India</span> by government authorities.
+
+                            <button
+                                onClick={submitUSDT}
+                                disabled={!usdtHash || isSubmitting}
+                                className="w-full py-5 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white rounded-[10px] font-black uppercase italic tracking-widest transition-all shadow-xl shadow-amber-500/20 active:scale-95 flex items-center justify-center gap-3"
+                            >
+                                {isSubmitting ? <Loader2 className="animate-spin" size={20} /> : <CheckCircle2 size={20} />}
+                                <span>{isSubmitting ? 'Verifying...' : 'Submit Deposit'}</span>
+                            </button>
+
+                            <p className="text-[10px] text-center text-slate-400 font-bold uppercase tracking-widest leading-relaxed">
+                                Funds will be credited after <span className="text-amber-600">3 Network Confirmations</span>.
                             </p>
                         </div>
-
-                        <div className="space-y-4 pt-4">
-                            <button
-                                onClick={() => {
-                                    setShowCryptoRestriction(false);
-                                    selectINR();
-                                }}
-                                className="w-full py-6 bg-accent hover:bg-accent-hover text-white rounded-[10px] font-black uppercase italic tracking-[4px] shadow-xl shadow-accent/20 transition-all active:scale-95 flex items-center justify-center gap-3"
-                            >
-                                <Wallet size={20} /> Switch to INR
-                            </button>
-
-                            <button
-                                onClick={() => setShowCryptoRestriction(false)}
-                                className="w-full py-4 text-slate-500 hover:text-slate-900 text-[10px] font-black uppercase tracking-[5px] transition-colors"
-                            >
-                                Dismiss Warning
-                            </button>
-                        </div>
                     </div>
-                </div>
-            )}
-
+                )}
+            </div>
         </div>
     );
 };
 
 export default AddBalance;
-

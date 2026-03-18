@@ -20,22 +20,12 @@ const RechargeModal = ({ isOpen, onClose }) => {
     };
 
     const selectCryptoCoin = (coin) => {
-        setShowCryptoRestriction(true);
+        onClose();
+        navigate('/add-balance');
     };
 
     const cryptoCoins = [
-        { name: 'USDT', full: 'Tether', icon: '💎' },
-        { name: 'BTC', full: 'Bitcoin', icon: '₿' },
-        { name: 'ETH', full: 'Ethereum', icon: 'Ξ' },
-        { name: 'BNB', full: 'Binance', icon: '🔶' },
-        { name: 'SOL', full: 'Solana', icon: '☀️' },
-        { name: 'XRP', full: 'Ripple', icon: '💧' },
-        { name: 'ADA', full: 'Cardano', icon: '₳' },
-        { name: 'TRX', full: 'Tron', icon: '🔴' },
-        { name: 'DOGE', full: 'Dogecoin', icon: '🐕' },
-        { name: 'MATIC', full: 'Polygon', icon: '💜' },
-        { name: 'LTC', full: 'Litecoin', icon: 'Ł' },
-        { name: 'DOT', full: 'Polkadot', icon: '🔘' }
+        { name: 'USDT', full: 'Tether (TRC-20)', icon: '₮' }
     ];
 
     return (
@@ -92,8 +82,8 @@ const RechargeModal = ({ isOpen, onClose }) => {
                                     <Coins size={28} />
                                 </div>
                                 <div className="text-left min-w-0">
-                                    <p className="font-black text-lg italic uppercase tracking-tight text-slate-900 leading-none mb-1">Crypto Pay</p>
-                                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest truncate">USDT, BTC, ETH, TRX</p>
+                                    <p className="font-black text-lg italic uppercase tracking-tight text-slate-900 leading-none mb-1">USDT Pay</p>
+                                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest truncate">Global Tether Transfer (TRC-20)</p>
                                 </div>
                             </button>
                         </div>
@@ -141,9 +131,9 @@ const RechargeModal = ({ isOpen, onClose }) => {
                                     <AlertTriangle size={40} />
                                 </div>
                                 <div className="space-y-2">
-                                    <h4 className="text-2xl font-black italic uppercase tracking-tighter text-slate-900 leading-tight">CRYPTO PAY <br /><span className="text-red-500">BANNED IN INDIA</span></h4>
+                                    <h4 className="text-2xl font-black italic uppercase tracking-tighter text-slate-900 leading-tight">USDT PAY <br /><span className="text-red-500">BANNED IN INDIA</span></h4>
                                     <p className="text-slate-500 text-[11px] font-bold uppercase tracking-tight leading-relaxed">
-                                        Cryptocurrency for gaming is restricted in India. Your transaction will be declined by the bank.
+                                        Offshore USDT transactions for gaming are restricted for Indian residents under FEMA regulations.
                                     </p>
                                 </div>
                                 <div className="space-y-3">

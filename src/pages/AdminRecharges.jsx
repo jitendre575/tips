@@ -293,14 +293,20 @@ const AdminRecharges = () => {
                                         </div>
                                         <div className="text-right space-y-1.5 flex flex-col justify-end items-end">
                                             <div className="flex items-center gap-2 justify-end text-slate-600 font-black">
-                                                <IndianRupee size={14} />
+                                                {req.currency === 'USDT' ? <Coins size={14} /> : <IndianRupee size={14} />}
                                                 <span className="text-[10px] font-black uppercase tracking-widest">Amount</span>
                                             </div>
-                                            <p className="text-3xl font-black italic tracking-tighter text-emerald-500 leading-none">₹{req.amount?.toLocaleString()}</p>
-                                            {req.utr && (
+                                            <p className="text-3xl font-black italic tracking-tighter text-emerald-500 leading-none">
+                                                {req.currency === 'USDT' ? '₮' : '₹'}{req.amount?.toLocaleString()}
+                                            </p>
+                                            {(req.utr || req.hash) && (
                                                 <div className="mt-2 text-right">
-                                                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest block">UTR / Ref ID</span>
-                                                    <p className="text-xs font-mono font-black text-slate-900 group-hover:text-accent transition-colors">{req.utr}</p>
+                                                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest block">
+                                                        {req.currency === 'USDT' ? 'TXID / HASH' : 'UTR / REF ID'}
+                                                    </span>
+                                                    <p className="text-xs font-mono font-black text-slate-900 group-hover:text-accent transition-colors">
+                                                        {req.hash || req.utr}
+                                                    </p>
                                                 </div>
                                             )}
                                         </div>

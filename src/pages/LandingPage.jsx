@@ -122,18 +122,19 @@ const LandingPage = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-[#f8f9fc] pb-32">
-            {/* Premium Header */}
-            <div className="sticky top-0 z-[100] bg-white/80 backdrop-blur-xl px-6 py-5 flex items-center justify-between border-b border-black/[0.03]">
-                <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-[10px] bg-accent flex items-center justify-center shadow-lg shadow-accent/20">
-                        <Trophy className="text-white" size={24} />
+        <div className="min-h-screen bg-[#0f212e] md:py-8 flex justify-center">
+            <div className="w-full max-w-[480px] bg-[#f8f9fc] min-h-screen relative shadow-2xl overflow-x-hidden md:rounded-[30px] md:border-[8px] md:border-black pb-32">
+                {/* Premium Header */}
+                <div className="sticky top-0 z-[100] bg-white/80 backdrop-blur-xl px-4 py-3 flex items-center justify-between border-b border-black/[0.03]">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-[10px] bg-accent flex items-center justify-center shadow-lg shadow-accent/20">
+                            <Trophy className="text-white" size={20} />
+                        </div>
+                        <div className="flex flex-col">
+                            <h1 className="text-slate-900 font-black italic text-xl leading-none uppercase tracking-tighter">CRIC<span className="text-accent">WIN</span></h1>
+                            <span className="text-slate-400 text-[7px] font-black tracking-[0.3em] uppercase mt-1">Global Pro Gaming</span>
+                        </div>
                     </div>
-                    <div className="flex flex-col">
-                        <h1 className="text-slate-900 font-black italic text-2xl leading-none uppercase tracking-tighter">CRIC<span className="text-accent">WIN</span></h1>
-                        <span className="text-slate-400 text-[8px] font-black tracking-[0.3em] uppercase mt-1">Global Pro Gaming</span>
-                    </div>
-                </div>
                 <div className="flex items-center gap-2">
                     <button
                         onClick={() => setShowAuth(true)}
@@ -151,19 +152,19 @@ const LandingPage = () => {
             </div>
 
             {/* Scrolling Notice */}
-            <div className="bg-white border-b border-black/[0.02] px-6 py-2.5 flex items-center gap-4 overflow-hidden shadow-sm">
-                <div className="flex items-center gap-2 text-accent font-black text-[10px] uppercase tracking-widest shrink-0 border-r border-black/[0.05] pr-4">
-                    <Sparkles size={14} />
+            <div className="bg-white border-b border-black/[0.02] px-4 py-2 flex items-center gap-3 overflow-hidden shadow-sm">
+                <div className="flex items-center gap-1.5 text-accent font-black text-[9px] uppercase tracking-widest shrink-0 border-r border-black/[0.05] pr-3">
+                    <Sparkles size={12} />
                     Alert
                 </div>
-                <div className="text-[10px] font-bold text-slate-500 whitespace-nowrap animate-notice flex gap-12">
+                <div className="text-[9px] font-bold text-slate-500 whitespace-nowrap animate-notice flex gap-10">
                     <span>Welcome to CRICWIN Pro Arena. High-stakes predictions and instant withdrawals active.</span>
                     <span>New users get 500 bonus coins on first deposit. Verified platform protection enabled.</span>
                 </div>
             </div>
 
-            <main className="max-w-xl mx-auto">
-                <div className="p-6">
+            <main className="w-full">
+                <div className="p-4">
                     <div className="relative aspect-[21/9] rounded-[10px] overflow-hidden shadow-2xl ring-1 ring-black/[0.05]">
                         <img
                             src="/casino_banner_promo_1772871782573.png"
@@ -285,8 +286,8 @@ const LandingPage = () => {
                 </div>
             </main>
 
-            <div className="fixed bottom-0 left-0 right-0 z-[200] bg-white/90 backdrop-blur-2xl border-t border-black/[0.03] px-8 py-6 rounded-[10px] shadow-[0_-20px_50px_rgba(0,0,0,0.05)]">
-                <div className="max-w-xl mx-auto flex items-center justify-between relative">
+            <div className="fixed bottom-0 left-0 right-0 mx-auto max-w-[480px] md:bottom-8 z-[200] bg-white/90 backdrop-blur-2xl border-t border-black/[0.03] px-6 py-4 rounded-t-[20px] md:rounded-b-[20px] shadow-[0_-20px_50px_rgba(0,0,0,0.05)]">
+                <div className="w-full flex items-center justify-between relative">
                     {[
                         { name: 'Arena', icon: Home },
                         { name: 'Live', icon: Activity },
@@ -362,7 +363,7 @@ const LandingPage = () => {
                                     <div className="relative">
                                         <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                         <input
-                                            type="email" required value={email} onChange={e => setEmail(e.target.value)}
+                                            type="text" required value={email} onChange={e => setEmail(e.target.value)}
                                             className="w-full bg-slate-50 border-2 border-slate-100 rounded-[10px] py-5 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900"
                                             placeholder="Mobile or Email"
                                         />
@@ -436,6 +437,7 @@ const LandingPage = () => {
                     scrollbar-width: none;
                 }
             `}} />
+            </div>
         </div>
     );
 };

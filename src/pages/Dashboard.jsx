@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, query, onSnapshot, orderBy } from 'firebase/firestore';
+import { collection, query, onSnapshot, orderBy, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import MatchCard from '../components/MatchCard';
 import BetModal from '../components/BetModal';
 import CasinoCard from '../components/CasinoCard';
@@ -9,6 +10,7 @@ import { Activity, LayoutDashboard, Search, Calendar, Ghost, Zap, Trophy, Gamepa
 import { AnimatePresence, motion } from 'framer-motion';
 
 const Dashboard = () => {
+    const { user, userData } = useAuth();
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const [matches, setMatches] = useState([]);
@@ -30,6 +32,17 @@ const Dashboard = () => {
     const setFilter = (f) => {
         setSearchParams({ filter: f });
     };
+
+    useEffect(() => {
+        if (!user || !user.uid) return;
+        const userRef = doc(db, 'users', user.uid);
+        
+        updateDoc(userRef, {
+            lastActiveAt: serverTimestamp(),
+            currentLocation: activeTab === 'Sports' ? 'Sports Market' : 'Casino Lobby',
+            isOnline: true
+        }).catch(err => console.error("Tracking Error:", err));
+    }, [activeTab, user]);
 
     useEffect(() => {
         const q = query(collection(db, 'matches'), orderBy('matchTime', 'asc'));

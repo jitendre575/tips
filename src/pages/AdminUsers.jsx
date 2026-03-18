@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { db } from '../firebase';
 import { collection, query, onSnapshot, doc, updateDoc, addDoc, serverTimestamp, increment, setDoc, orderBy, deleteDoc, where } from 'firebase/firestore';
-import { User, Mail, Wallet, TrendingUp, CreditCard, Edit2, Check, X, Search, Shield, Phone, Calendar, ArrowUpCircle, ArrowDownCircle, Plus, Minus, AlertCircle, FileText, MessageCircle, Send, CheckCheck, Trash2 } from 'lucide-react';
+import { User, Mail, Wallet, TrendingUp, CreditCard, Edit2, Check, X, Search, Shield, Phone, Calendar, ArrowUpCircle, ArrowDownCircle, Plus, Minus, AlertCircle, FileText, MessageCircle, Send, CheckCheck, Trash2, Gamepad2, Coins } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 
@@ -275,6 +275,10 @@ const AdminUsers = () => {
                                         <Phone size={16} className="text-slate-400" />
                                         <span className="text-sm font-medium text-slate-600">{user.phone || 'No phone added'}</span>
                                     </div>
+                                    <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 rounded-[10px] border border-black/[0.02]">
+                                        <Coins size={16} className="text-slate-400" />
+                                        <span className="text-sm font-medium text-slate-600 truncate">{user.usdtAddress || 'No USDT wallet linked'}</span>
+                                    </div>
                                 </div>
 
                                 {/* Wallet Stats Grid */}
@@ -333,7 +337,60 @@ const AdminUsers = () => {
                                             </span>
                                         )}
                                     </button>
+                                    <button
+                                        onClick={async () => {
+                                            const addr = window.prompt("Enter USDT (TRC-20) Address for this user:", user.usdtAddress || '');
+                                            if (addr !== null) {
+                                                try {
+                                                    await updateDoc(doc(db, 'users', user.id), { usdtAddress: addr });
+                                                    toast.success("USDT Address updated");
+                                                } catch (e) {
+                                                    toast.error("Failed to update address");
+                                                }
+                                            }
+                                        }}
+                                        className="col-span-2 flex items-center justify-center gap-3 py-4 bg-amber-500/10 hover:bg-amber-500 text-amber-600 hover:text-white rounded-[10px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-sm group/usdt"
+                                    >
+                                        <Coins size={18} className="group-hover/usdt:rotate-12 transition-transform" />
+                                        <span>Update USDT Address</span>
+                                    </button>
                                 </div>
+                                
+                                {/* Activity Tracking */}
+                                <div className="mt-4 p-4 bg-slate-900 rounded-[10px] border border-white/5 space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <div className={`w-2 h-2 rounded-full ${user.isOnline ? 'bg-emerald-500 animate-pulse' : 'bg-slate-500'}`} />
+                                            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">Activity Status</span>
+                                        </div>
+                                        <span className={`text-[9px] font-black uppercase italic tracking-widest ${user.isOnline ? 'text-emerald-400' : 'text-slate-500'}`}>
+                                            {user.isOnline ? 'Active Now' : 'Offline'}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 bg-white/5 rounded-[10px] text-accent">
+                                            <Gamepad2 size={14} />
+                                        </div>
+                                        <div>
+                                            <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Current Location</p>
+                                            <p className="text-xs font-black italic tracking-tighter uppercase text-white">
+                                                {user.currentLocation || 'Unknown'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3 pt-1">
+                                        <div className="p-2 bg-white/5 rounded-[10px] text-slate-400">
+                                            <Clock size={14} />
+                                        </div>
+                                        <div>
+                                            <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Last Sync</p>
+                                            <p className="text-[10px] font-bold text-slate-300 uppercase">
+                                                {user.lastActiveAt?.toDate ? user.lastActiveAt.toDate().toLocaleString() : 'Never'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <button
                                     onClick={() => handleDeleteUser(user)}
                                     className="w-full mt-4 flex items-center justify-center gap-3 py-4 bg-red-600/10 hover:bg-red-600/20 text-red-500 rounded-[10px] font-black uppercase italic tracking-widest transition-all duration-300 group/delete hover:scale-[1.02]"

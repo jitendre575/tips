@@ -123,124 +123,142 @@ const AdminDashboard = () => {
     };
 
     // Sub-modules built inside for clean state
-    const AdminOverview = () => (
-        <div className="space-y-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10">
+        const AdminOverview = () => (
+        <div className="space-y-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
                 {[
-                    { label: 'Platform Balance', val: `₹${stats.platformBalance.toLocaleString()}`, icon: Wallet, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-                    { label: 'Total Revenue', val: `₹${stats.totalDeposit.toLocaleString()}`, icon: TrendingUp, color: 'text-yellow-500', bg: 'bg-yellow-500/10' },
-                    { label: 'Active Capital', val: stats.totalUsers, icon: Users, color: 'text-accent', bg: 'bg-accent/10' },
-                    { label: 'Live Markets', val: stats.activeMatches, icon: Activity, color: 'text-indigo-500', bg: 'bg-indigo-500/10' },
+                    { label: 'Platform Balance', val: `₹${stats.platformBalance.toLocaleString()}`, icon: Wallet, color: 'text-emerald-500', bg: 'bg-emerald-500/10', border: 'border-emerald-500/10' },
+                    { label: 'Total Revenue', val: `₹${stats.totalDeposit.toLocaleString()}`, icon: TrendingUp, color: 'text-amber-500', bg: 'bg-amber-500/10', border: 'border-amber-500/10' },
+                    { label: 'Active Capital', val: stats.totalUsers, icon: Users, color: 'text-accent', bg: 'bg-accent/10', border: 'border-accent/10' },
+                    { label: 'Live Markets', val: stats.activeMatches, icon: Activity, color: 'text-indigo-500', bg: 'bg-indigo-500/10', border: 'border-indigo-500/10' },
                 ].map((s, i) => (
-                    <div key={i} className="glass-card p-10 border-black/[0.05] group hover:border-accent/40 transition-all relative overflow-hidden bg-white">
-                        <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
-                            <s.icon size={60} />
+                    <motion.div 
+                        key={i} 
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className={`p-10 rounded-[24px] border border-black/[0.03] group hover:border-black/[0.08] transition-all relative overflow-hidden bg-white shadow-[0_10px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] cursor-default`}
+                    >
+                        <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.1] transition-all group-hover:scale-125 group-hover:-rotate-12 duration-700">
+                            <s.icon size={120} />
                         </div>
-                        <div className={`w-16 min-h-[64px] rounded-[10px] ${s.bg} flex items-center justify-center ${s.color} mb-8 border border-black/[0.05] shadow-inner`}>
+                        <div className={`w-16 h-16 rounded-[16px] ${s.bg} flex items-center justify-center ${s.color} mb-8 border ${s.border} shadow-sm group-hover:scale-110 transition-transform duration-500`}>
                             <s.icon size={32} />
                         </div>
-                        <p className="text-[11px] font-black uppercase tracking-[4px] text-slate-600 mb-3">{s.label}</p>
-                        <h4 className="text-4xl font-black italic tracking-tighter uppercase tabular-nums text-slate-900 group-hover:text-accent transition-colors">{s.val}</h4>
-                    </div>
+                        <p className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400 mb-2 group-hover:text-slate-600 transition-colors">{s.label}</p>
+                        <h4 className="text-4xl font-black italic tracking-tighter uppercase tabular-nums text-slate-900 group-hover:text-accent transition-colors duration-500">{s.val}</h4>
+                    </motion.div>
                 ))}
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-10">
-                <div className="lg:col-span-2 glass-card p-12 border-black/[0.05] bg-white relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-12 opacity-[0.02] pointer-events-none group-hover:opacity-[0.05] transition-opacity text-slate-900">
+                        <div className="grid lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2 p-12 border border-black/[0.03] bg-white rounded-[24px] relative overflow-hidden group shadow-sm">
+                    <div className="absolute top-0 right-0 p-12 opacity-[0.02] pointer-events-none group-hover:opacity-[0.05] transition-opacity text-slate-900 group-hover:scale-110 duration-700">
                         <Activity size={200} />
                     </div>
-                    <h3 className="text-3xl font-black italic uppercase tracking-tighter mb-10 flex items-center gap-4 text-slate-900">
-                        <span className="w-1.5 h-8 bg-accent rounded-full" />
-                        System <span className="logo-accent">Health</span>
+                    <h3 className="text-3xl font-black italic uppercase tracking-tighter mb-12 flex items-center gap-4 text-slate-900">
+                        <span className="w-2 h-8 bg-accent rounded-full" />
+                        Network <span className="logo-accent">Pulse</span>
                     </h3>
                     <div className="grid sm:grid-cols-2 gap-12">
                         <div className="space-y-6">
-                            <div className="flex justify-between text-[10px] font-black uppercase tracking-[3px] text-slate-600">
-                                <span>Recharge Queue</span>
-                                <span className={stats.pendingRecharges > 0 ? 'text-yellow-600' : 'text-emerald-600'}>{stats.pendingRecharges} Pending</span>
+                            <div className="flex justify-between text-[11px] font-black uppercase tracking-[3px] text-slate-400">
+                                <span>Deposit Queue</span>
+                                <span className={stats.pendingRecharges > 0 ? 'text-amber-600' : 'text-emerald-500'}>{stats.pendingRecharges} Pending</span>
                             </div>
-                            <div className="h-4 bg-slate-50 rounded-full overflow-hidden border border-black/[0.05] p-1 shadow-inner">
+                            <div className="h-5 bg-slate-50 rounded-full overflow-hidden border border-black/[0.03] p-1.5 shadow-inner relative">
                                 <motion.div
                                     initial={{ width: 0 }}
                                     animate={{ width: `${Math.min(100, stats.pendingRecharges * 20)}%` }}
-                                    className={`h-full rounded-full ${stats.pendingRecharges > 5 ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]' : 'bg-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.5)]'} transition-all duration-1000`}
+                                    className={`h-full rounded-full ${stats.pendingRecharges > 5 ? 'bg-red-500' : 'bg-amber-500'} transition-all duration-1000 relative shadow-lg`}
                                 />
                             </div>
                         </div>
                         <div className="space-y-6">
-                            <div className="flex justify-between text-[10px] font-black uppercase tracking-[3px] text-slate-700">
-                                <span>Withdrawal Queue</span>
+                            <div className="flex justify-between text-[11px] font-black uppercase tracking-[3px] text-slate-400">
+                                <span>Payout Queue</span>
                                 <span className={stats.pendingWithdrawals > 0 ? 'text-accent' : 'text-emerald-500'}>{stats.pendingWithdrawals} Pending</span>
                             </div>
-                            <div className="h-4 bg-slate-100 rounded-full overflow-hidden border border-black/[0.05] p-1 shadow-inner">
+                            <div className="h-5 bg-slate-50 rounded-full overflow-hidden border border-black/[0.03] p-1.5 shadow-inner relative">
                                 <motion.div
                                     initial={{ width: 0 }}
                                     animate={{ width: `${Math.min(100, stats.pendingWithdrawals * 20)}%` }}
-                                    className="h-full bg-accent rounded-full shadow-[0_0_15px_rgba(79,70,229,0.5)] transition-all duration-1000"
+                                    className="h-full bg-accent rounded-full transition-all duration-1000 shadow-lg"
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="glass-card p-12 border-black/[0.05] bg-white flex flex-col justify-center text-center space-y-6 relative overflow-hidden group">
-                    <div className="absolute inset-0 bg-gradient-to-b from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="w-20 h-20 bg-accent/10 rounded-[10px] flex items-center justify-center text-accent mx-auto shadow-sm border border-black/[0.05] group-hover:rotate-12 transition-transform duration-500">
-                        <ShieldCheck size={40} />
+                <div className="p-12 border border-black/[0.03] bg-white rounded-[24px] flex flex-col justify-center text-center space-y-8 relative overflow-hidden group shadow-sm">
+                    <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="w-24 h-24 bg-accent/[0.05] rounded-[24px] flex items-center justify-center text-accent mx-auto border border-accent/10 group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 shadow-sm relative">
+                        <ShieldCheck size={48} className="relative z-10" />
+                        <motion.div 
+                            animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+                            transition={{ repeat: Infinity, duration: 4 }}
+                            className="absolute inset-0 bg-accent rounded-full blur-2xl" 
+                        />
                     </div>
-                    <div className="space-y-2 relative z-10">
-                        <h4 className="text-2xl font-black italic uppercase tracking-tighter text-slate-900">Secure <span className="text-accent underline decoration-accent/10">Infrastructure</span></h4>
-                        <p className="text-slate-600 text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed">Level 4 E2E Encrypted Firestore Terminal</p>
+                    <div className="space-y-3 relative z-10">
+                        <h4 className="text-2xl font-black italic uppercase tracking-tighter text-slate-900">Quantum <span className="text-accent">Encryption</span></h4>
+                        <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed max-w-[200px] mx-auto">Active Level 7 E2E Encrypted Terminal Link</p>
                     </div>
                 </div>
             </div>
 
-            {/* Live Feed Component */}
-            <div className="glass-card p-12 bg-white border-black/[0.05] relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-12 opacity-[0.02] pointer-events-none group-hover:opacity-[0.05] transition-opacity text-slate-900">
+                        {/* Live Feed Component */}
+            <div className="p-12 bg-white border border-black/[0.03] rounded-[24px] relative overflow-hidden group shadow-sm">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.02] pointer-events-none group-hover:opacity-[0.05] transition-opacity text-slate-900 group-hover:scale-110 duration-700">
                     <Zap size={200} />
                 </div>
-                <h3 className="text-3xl font-black italic uppercase tracking-tighter mb-10 flex items-center justify-between text-slate-900">
+                <h3 className="text-3xl font-black italic uppercase tracking-tighter mb-12 flex items-center justify-between text-slate-900">
                     <div className="flex items-center gap-4">
-                        <span className="w-1.5 h-8 bg-amber-500 rounded-full" />
-                        Live <span className="logo-accent">Transaction Alerts</span>
+                        <span className="w-2 h-8 bg-amber-500 rounded-full" />
+                        Live <span className="logo-accent">Alerts</span>
                     </div>
                     {recentRequests.length > 0 && (
-                        <span className="px-4 py-2 bg-amber-500 text-white text-[10px] font-black rounded-full animate-pulse shadow-lg shadow-amber-500/20 uppercase tracking-widest">
-                            {recentRequests.length} Active Requests
-                        </span>
+                        <div className="flex items-center gap-3 px-6 py-2 bg-amber-500/10 border border-amber-500/20 rounded-full">
+                            <span className="w-2 h-2 bg-amber-500 rounded-full animate-ping" />
+                            <span className="text-amber-600 text-[10px] font-black uppercase tracking-widest">
+                                {recentRequests.length} Active Nodes
+                            </span>
+                        </div>
                     )}
                 </h3>
 
                 <div className="space-y-6">
                     {recentRequests.length === 0 ? (
-                        <div className="py-20 text-center space-y-4">
-                            <div className="w-20 h-20 bg-slate-50 border border-black/[0.05] rounded-full flex items-center justify-center mx-auto text-slate-300">
-                                <CheckCheck size={40} />
+                        <div className="py-24 text-center space-y-6">
+                            <div className="w-24 h-24 bg-slate-50 border border-black/[0.03] rounded-[32px] flex items-center justify-center mx-auto text-slate-200 group-hover:text-emerald-500/20 transition-colors duration-500 shadow-inner">
+                                <CheckCheck size={48} />
                             </div>
-                            <p className="text-slate-400 text-xs font-black uppercase tracking-[4px]">System Fully Synced - No Pending Actions</p>
+                            <div className="space-y-2">
+                                <p className="text-slate-900 text-sm font-black uppercase tracking-[0.2em]">Signal Clear</p>
+                                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Master Panel Fully Synchronized</p>
+                            </div>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             {recentRequests.map((req, i) => (
                                 <motion.div
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: i * 0.1 }}
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: i * 0.05 }}
                                     key={req.id}
                                     onClick={() => setActiveTab('recharges')}
-                                    className="p-6 bg-slate-50 border border-black/[0.05] rounded-[10px] hover:bg-white hover:border-amber-500/20 transition-all cursor-pointer group/alert shadow-sm hover:shadow-xl hover:scale-[1.02] active:scale-95"
+                                    className="p-8 bg-slate-50/50 border border-black/[0.03] rounded-[20px] hover:bg-white hover:border-amber-500/20 transition-all cursor-pointer group/alert shadow-sm hover:shadow-2xl hover:-translate-y-1 active:scale-95 duration-300"
                                 >
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-5">
-                                            <div className="w-14 h-14 bg-white border border-black/[0.05] rounded-[10px] flex items-center justify-center text-amber-500 group-hover/alert:scale-110 group-hover/alert:bg-amber-500 group-hover/alert:text-white transition-all shadow-sm">
-                                                <Wallet size={24} />
+                                        <div className="flex items-center gap-6">
+                                            <div className="w-16 h-16 bg-white border border-black/[0.05] rounded-[20px] flex items-center justify-center text-amber-500 group-hover/alert:bg-amber-500 group-hover/alert:text-white transition-all duration-500 rotate-3 group-hover/alert:rotate-0 shadow-sm relative overflow-hidden">
+                                                <Wallet size={28} className="relative z-10" />
+                                                <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover/alert:opacity-100 transition-opacity" />
                                             </div>
                                             <div>
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <Activity className="text-amber-500 animate-pulse" size={10} />
-                                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">Deposit Request</span>
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse" />
+                                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover/alert:text-slate-900 transition-colors">Deposit Signal</span>
                                                 </div>
                                                 <h4 className="text-xl font-black italic tracking-tighter uppercase text-slate-900 group-hover/alert:text-amber-600 transition-colors">{req.userName}</h4>
                                                 {req.utr && <p className="text-[10px] font-mono font-black text-slate-400 mt-1 uppercase">UTR: {req.utr}</p>}
@@ -524,121 +542,108 @@ const AdminDashboard = () => {
     return (
         <div className="min-h-screen bg-transparent text-slate-900 selection:bg-accent/30 font-['Outfit']">
             {/* Super Admin Top Bar - Platinum Edition */}
-            <header className="sticky top-0 z-[110] bg-white/80 backdrop-blur-2xl border-b border-black/[0.05] py-5 px-8 lg:px-12 flex items-center justify-between shadow-sm">
+                        <header className="sticky top-0 z-[110] bg-white/40 backdrop-blur-xl border-b border-black/[0.03] py-4 px-8 lg:px-12 flex items-center justify-between shadow-sm">
                 <div className="flex items-center gap-6">
                     <div className="relative group">
-                        <div className="absolute inset-0 bg-accent rounded-[10px] blur-lg opacity-10 group-hover:opacity-30 transition-opacity" />
-                        <div className="relative bg-white p-3 rounded-[10px] border border-black/[0.05] flex items-center justify-center shadow-lg">
+                        <motion.div 
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="absolute inset-0 bg-accent rounded-[12px] blur-xl opacity-20 group-hover:opacity-40 transition-opacity" 
+                        />
+                        <div className="relative bg-white/80 p-3 rounded-[12px] border border-black/[0.05] flex items-center justify-center shadow-xl backdrop-blur-md">
                             <ShieldCheck size={24} className={userData?.isAdmin ? "text-accent animate-pulse" : "text-red-500"} />
                         </div>
                     </div>
                     <div>
                         <h1 className="text-2xl font-black italic tracking-tighter uppercase leading-none flex items-baseline gap-2">
-                            JRT <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-red-600">MASTER PANEL</span>
+                            <span className="text-slate-900">JRT</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-indigo-500 to-red-600 bg-[length:200%_auto] animate-gradient-x">MASTER PANEL</span>
                         </h1>
                         <div className="flex items-center gap-3">
-                            <p className={`text-[10px] font-black uppercase tracking-[0.2em] mt-1 flex items-center gap-2 ${userData?.isAdmin ? 'text-slate-600' : 'text-red-600 font-bold'}`}>
-                                <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${userData?.isAdmin ? 'bg-emerald-500' : 'bg-red-500'}`} />
-                                {userData?.isAdmin ? 'System Authority Active' : 'Database Access Restricted'}
-                            </p>
-                            {!userData?.isAdmin && user && (
-                                <button
-                                    onClick={async () => {
-                                        try {
-                                            await setDoc(doc(db, 'users', user.uid), { isAdmin: true }, { merge: true });
-                                            toast.success("AUTHORITY REPAIRED! REFRESHING...");
-                                            setTimeout(() => window.location.reload(), 1500);
-                                        } catch (e) {
-                                            toast.error("FIX FAILED: Contact System Root");
-                                        }
-                                    }}
-                                    className="px-3 py-1 bg-red-600 text-white text-[8px] font-black uppercase rounded shadow-lg animate-bounce"
-                                >
-                                    Fix Permissions
-                                </button>
-                            )}
+                            <div className="flex items-center gap-2 px-2 py-0.5 bg-slate-100 rounded-full border border-black/[0.03]">
+                                <span className={`w-1.5 h-1.5 rounded-full animate-ping ${userData?.isAdmin ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                                <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${userData?.isAdmin ? 'text-slate-500' : 'text-red-500'}`}>
+                                    {userData?.isAdmin ? 'Authority Verified' : 'Access Restricted'}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-6">
-                    {(stats.pendingRecharges > 0 || stats.pendingWithdrawals > 0 || stats.unreadSupport > 0 || stats.adminAlerts > 0) && (
-                        <div className="lg:flex items-center gap-3 bg-slate-100 px-4 py-2 rounded-full border border-black/[0.05] hidden shadow-inner">
-                            <RefreshCcw size={14} className="animate-spin text-accent" />
-                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-                                {stats.pendingRecharges + stats.pendingWithdrawals + stats.unreadSupport + stats.adminAlerts} Action Required
-                            </span>
-                        </div>
-                    )}
-
-                    {/* CricWin Support Button */}
-                    <button
-                        onClick={() => {
-                            toast.success("CONNECTING TO CRICWIN SUPPORT...", {
-                                icon: '🎧',
-                                style: {
-                                    background: '#050505',
-                                    color: '#fff',
-                                    border: '1px solid #3b82f6',
-                                    fontFamily: 'Outfit, sans-serif',
-                                    fontWeight: '900',
-                                    textTransform: 'uppercase'
-                                }
-                            });
-                        }}
-                        className="flex items-center gap-2 px-4 py-3 bg-slate-100 hover:bg-white text-slate-600 hover:text-accent rounded-[10px] transition-all active:scale-95 border border-black/[0.05] group relative shadow-sm"
-                    >
-                        <Headset size={20} className="group-hover:rotate-12 transition-transform" />
-                        <span className="text-[10px] font-black uppercase tracking-widest hidden md:block">CricWin Support</span>
-                        <span className="absolute -top-12 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-slate-900 border border-white/10 text-[9px] font-black uppercase rounded-[10px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap text-white">Help Desk</span>
-                    </button>
+                <div className="flex items-center gap-4">
+                    <div className="hidden lg:flex items-center gap-2 bg-slate-900/5 px-4 py-2 rounded-xl border border-black/[0.02]">
+                        <Clock size={12} className="text-slate-400" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 tabular-nums">
+                            {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                        </span>
+                    </div>
 
                     <button
                         onClick={handleLogout}
-                        className="p-3 bg-slate-100 hover:bg-white text-slate-600 hover:text-accent rounded-[10px] transition-all active:scale-95 border border-black/[0.05] group relative shadow-sm"
+                        className="p-3 bg-white hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-xl transition-all active:scale-90 border border-black/[0.05] group relative shadow-sm"
                     >
-                        <LogOut size={20} />
-                        <span className="absolute -top-12 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-slate-900 border border-white/10 text-[9px] font-black uppercase rounded-[10px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none text-white">Logout</span>
+                        <LogOut size={20} className="group-hover:-translate-x-0.5 transition-transform" />
+                        <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-slate-900 text-[9px] font-black uppercase rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none text-white whitespace-nowrap">Terminate Session</span>
                     </button>
                 </div>
             </header>
 
-            <div className="max-w-[1780px] mx-auto p-8 lg:p-12">
-                {/* Unified Tab Navigation - Compact High-Performance */}
-                <div className="mb-12 flex items-center justify-center">
-                    <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-[10px] border border-black/[0.05] shadow-inner">
-                        {tabs.map(tab => (
-                            <button
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
-                                className={`flex items-center gap-3 px-8 py-4 rounded-[10px] font-black uppercase italic tracking-widest text-[10px] transition-all relative shrink-0 ${activeTab === tab.id
-                                    ? 'bg-accent text-white shadow-[0_10px_25px_rgba(79,70,229,0.3)]'
-                                    : 'text-slate-600 hover:text-accent hover:bg-white/50'
+                        <div className="max-w-[1780px] mx-auto p-8 lg:p-12 relative">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-b from-accent/5 to-transparent pointer-events-none -z-10 blur-3xl opacity-50" />
+
+                {/* Navigation System */}
+                <div className="mb-16 flex items-center justify-center">
+                    <nav className="flex items-center gap-1.5 bg-white/50 backdrop-blur-md p-1.5 rounded-[18px] border border-black/[0.05] shadow-2xl overflow-x-auto no-scrollbar max-w-full">
+                        {tabs.map((tab) => {
+                            const isActive = activeTab === tab.id;
+                            const hasBadge = (tab.id === 'recharges' && stats.pendingRecharges > 0) || 
+                                           (tab.id === 'withdrawals' && stats.pendingWithdrawals > 0) || 
+                                           (tab.id === 'support' && stats.unreadSupport > 0);
+                            const badgeValue = tab.id === 'recharges' ? stats.pendingRecharges : 
+                                             tab.id === 'withdrawals' ? stats.pendingWithdrawals : 
+                                             stats.unreadSupport;
+
+                            return (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`flex items-center gap-3 px-8 py-4 rounded-[14px] font-black uppercase italic tracking-widest text-[10px] transition-all relative shrink-0 group ${
+                                        isActive 
+                                        ? 'bg-slate-900 text-white shadow-xl translate-y-[-2px]' 
+                                        : 'text-slate-500 hover:text-slate-900 hover:bg-black/[0.03]'
                                     }`}
-                            >
-                                <tab.icon size={16} />
-                                <span>{tab.label}</span>
-                                {(tab.id === 'recharges' || tab.id === 'withdrawals' || tab.id === 'support') && (
-                                    tab.id === 'recharges' ? stats.pendingRecharges :
-                                        tab.id === 'withdrawals' ? stats.pendingWithdrawals :
-                                            stats.unreadSupport
-                                ) > 0 && (
-                                        <span className={`absolute -top-2 -right-2 w-7 h-7 bg-red-600 text-white text-[11px] font-black rounded-full flex items-center justify-center animate-pulse border-[3px] border-white shadow-[0_5px_15px_rgba(220,38,38,0.4)] z-[50]`}>
-                                            {tab.id === 'recharges' ? stats.pendingRecharges : tab.id === 'withdrawals' ? stats.pendingWithdrawals : stats.unreadSupport}
-                                        </span>
+                                >
+                                    {isActive && (
+                                        <motion.div 
+                                            layoutId="activeTabGlow"
+                                            className="absolute inset-0 bg-accent rounded-[14px] blur-md opacity-20 -z-10"
+                                        />
                                     )}
-                            </button>
-                        ))}
-                    </div>
+                                    <tab.icon size={16} className={`${isActive ? 'text-accent' : 'group-hover:rotate-12 transition-transform'}`} />
+                                    <span>{tab.label}</span>
+                                    
+                                    {hasBadge && (
+                                        <motion.span 
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1 }}
+                                            className="absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] px-1.5 bg-red-600 text-white text-[9px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-lg z-10 animate-bounce"
+                                        >
+                                            {badgeValue}
+                                        </motion.span>
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </nav>
                 </div>
 
                 {/* Main Content Area - Render sub-pages based on tab */}
-                <motion.div
+                                <motion.div
                     key={activeTab}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, ease: "circOut" }}
-                    className="min-h-[600px]"
+                    initial={{ opacity: 0, x: 20, filter: 'blur(15px)' }}
+                    animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    className="min-h-[700px] relative z-20"
                 >
                     {activeTab === 'overview' && <AdminOverview />}
                     {activeTab === 'markets' && <AdminPanel />}
@@ -1125,43 +1130,48 @@ const AdminSupport = () => {
         }, { merge: true });
     };
 
-    return (
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 h-[calc(100vh-320px)] min-h-[600px]">
+        return (
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 h-[calc(100vh-350px)] min-h-[700px]">
             {/* Chat List */}
-            <div className="lg:col-span-1 glass-card overflow-hidden flex flex-col border-white/5 bg-[#050510]/40">
-                <div className="p-8 border-b border-white/5 bg-gradient-to-r from-accent/5 to-transparent">
-                    <h3 className="text-2xl font-black italic uppercase tracking-tighter flex items-center gap-3">
-                        <MessageCircle size={24} className="text-accent" />
-                        Inbox
+            <div className="lg:col-span-1 border border-black/[0.03] rounded-[24px] overflow-hidden flex flex-col bg-white shadow-sm">
+                <div className="p-8 border-b border-black/[0.03] bg-gradient-to-br from-slate-50 to-transparent">
+                    <h3 className="text-2xl font-black italic uppercase tracking-tighter flex items-center gap-3 text-slate-900">
+                        <MessageCircle size={24} className="text-accent group-hover:rotate-12 transition-transform" />
+                        Live <span className="text-accent underline decoration-accent/10">Inbound</span>
                     </h3>
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Direct Communications</p>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Direct Secure Terminals</p>
                 </div>
                 <div className="flex-1 overflow-y-auto no-scrollbar">
                     {chats.map(chat => (
                         <button
                             key={chat.id}
                             onClick={() => setSelectedChat(chat)}
-                            className={`w-full p-8 flex items-center gap-5 hover:bg-white/[0.03] transition-all text-left border-b border-white/[0.02] relative group ${selectedChat?.id === chat.id ? 'bg-accent/10' : ''}`}
+                            className={`w-full p-8 flex items-center gap-6 hover:bg-slate-50 transition-all text-left border-b border-black/[0.02] relative group ${selectedChat?.id === chat.id ? 'bg-slate-50' : ''}`}
                         >
-                            {selectedChat?.id === chat.id && <div className="absolute left-0 inset-y-0 w-1 bg-accent shadow-[4px_0_15px_rgba(79,70,229,0.5)]" />}
-                            <div className="w-14 h-14 rounded-[10px] bg-zinc-900 flex items-center justify-center text-zinc-500 shrink-0 border border-white/5 shadow-inner group-hover:rotate-6 transition-transform">
-                                <UserCircle size={28} />
+                            {selectedChat?.id === chat.id && (
+                                <motion.div layoutId="activeChatBar" className="absolute left-0 inset-y-0 w-1.5 bg-accent rounded-r-full shadow-lg" />
+                            )}
+                            <div className="w-16 h-16 rounded-[20px] bg-slate-100 flex items-center justify-center text-slate-400 shrink-0 border border-black/[0.05] shadow-inner group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 overflow-hidden relative">
+                                <UserCircle size={32} className="relative z-10" />
+                                <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center justify-between mb-1.5">
-                                    <h4 className="font-black text-sm truncate pr-2 uppercase italic tracking-tighter text-white">{chat.userName || 'Unknown Operator'}</h4>
-                                    {chat.unreadAdmin && <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]" />}
+                                    <h4 className="font-black text-sm truncate pr-2 uppercase italic tracking-tighter text-slate-900 group-hover:text-accent transition-colors">{chat.userName || 'Root Node'}</h4>
+                                    {chat.unreadAdmin && (
+                                        <span className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse shadow-lg shadow-red-500/20" />
+                                    )}
                                 </div>
-                                <p className="text-[10px] text-slate-500 truncate font-black uppercase tracking-[0.15em]">{chat.lastMessage}</p>
+                                <p className="text-[10px] text-slate-500 truncate font-black uppercase tracking-widest">{chat.lastMessage}</p>
                             </div>
                         </button>
                     ))}
                     {chats.length === 0 && (
-                        <div className="p-12 text-center opacity-20">
-                            <div className="w-20 h-20 bg-zinc-900 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <MessageCircle size={40} />
+                        <div className="p-20 text-center space-y-6">
+                            <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto border border-black/[0.03] shadow-inner text-slate-200">
+                                <MessageCircle size={32} />
                             </div>
-                            <p className="text-[11px] font-black uppercase tracking-[0.3em]">No Transmission</p>
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">No Active Data Stream</p>
                         </div>
                     )}
                 </div>
