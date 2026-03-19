@@ -101,9 +101,6 @@ function App() {
                 </div>
               } />
 
-              <Route path="/admin/*" element={<Navigate to="/jrt" />} />
-              <Route path="/admin" element={<Navigate to="/jrt" />} />
-
               <Route path="/add-balance" element={
                 <ProtectedRoute>
                   <AddBalance />

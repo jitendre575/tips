@@ -54,8 +54,7 @@ const LandingPage = () => {
 
     useEffect(() => {
         if (user && userData && !authLoading) {
-            if (userData.isAdmin) navigate('/jrt');
-            else navigate('/dashboard');
+            navigate('/dashboard');
         }
     }, [user, userData, authLoading, navigate]);
 

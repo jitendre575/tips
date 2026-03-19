@@ -31,9 +31,6 @@ const Sidebar = ({ isOpen, onClose }) => {
         { icon: MessageCircle, label: 'Support', action: () => window.dispatchEvent(new CustomEvent('openSupportChat')) }
     ];
 
-    const adminItems = [
-        { icon: ShieldCheck, label: 'Master Control', path: '/jrt' },
-    ];
 
     const handleLogout = () => {
         auth.signOut();
@@ -93,24 +90,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                             )
                         ))}
 
-                        {userData?.isAdmin && (
-                            <>
-                                <div className="text-[10px] font-black text-slate-600 uppercase tracking-[2px] mt-10 mb-4 pl-4">
-                                    Admin Gateway
-                                </div>
-                                {adminItems.map((item) => (
-                                    <Link
-                                        key={item.path}
-                                        to={item.path}
-                                        onClick={onClose}
-                                        className={`sidebar-item ${location.pathname === item.path ? 'active' : ''}`}
-                                    >
-                                        <item.icon size={18} className={location.pathname === item.path ? 'text-white' : 'text-slate-600'} />
-                                        <span>{item.label}</span>
-                                    </Link>
-                                ))}
-                            </>
-                        )}
+                        {/* Admin gateway removed as per request - only accessible via manual /jrt entry */}
                     </nav>
 
                     <div className="mt-auto pt-6 border-t border-black/[0.05]">
