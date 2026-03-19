@@ -368,12 +368,8 @@ const AdminDashboard = () => {
 
         const handleSubmit = async (e) => {
             e.preventDefault();
-            // Setting PIN to 666666 as requested
             if (localPin === "666666") {
-                // IMPORTANT: Must set authorized to true to enter dashboard
                 setIsAuthorized(true);
-
-                // Elevate user to Admin in Firestore automatically if PIN is correct
                 if (user) {
                     try {
                         const userRef = doc(db, 'users', user.uid);
@@ -382,33 +378,37 @@ const AdminDashboard = () => {
                             lastLogin: serverTimestamp()
                         }, { merge: true });
                         toast.success("SYSTEM AUTHORITY ELEVATED", { icon: '⚡' });
-                        // Authority might take a second to propagate through AuthContext
                     } catch (err) {
                         console.error("Authority Elevation Failed:", err);
                     }
                 }
-
-                toast.success("ENCRYPTION DECODED: ACCESS GRANTED", {
+                toast.success("ACCESS GRANTED: WELCOME MASTER", {
                     icon: '🔓',
                     style: {
-                        background: '#050505',
+                        background: '#101111',
                         color: '#fff',
                         border: '1px solid #10b981',
+                        borderRadius: '16px',
+                        padding: '16px 24px',
                         fontFamily: 'Outfit, sans-serif',
                         fontWeight: '900',
-                        textTransform: 'uppercase'
+                        textTransform: 'uppercase',
+                        letterSpacing: '1px'
                     }
                 });
             } else {
                 toast.error("INVALID CLEARANCE KEY", {
                     icon: '🚫',
                     style: {
-                        background: '#050505',
+                        background: '#101111',
                         color: '#fff',
                         border: '1px solid #ef4444',
+                        borderRadius: '16px',
+                        padding: '16px 24px',
                         fontFamily: 'Outfit, sans-serif',
                         fontWeight: '900',
-                        textTransform: 'uppercase'
+                        textTransform: 'uppercase',
+                        letterSpacing: '1px'
                     }
                 });
                 setLocalPin('');
@@ -416,73 +416,111 @@ const AdminDashboard = () => {
         };
 
         return (
-            <div className="min-h-screen bg-[#f5f5f9] flex items-center justify-center p-6 relative overflow-hidden font-['Outfit']">
-                {/* Background Suble Effects */}
-                <div className="absolute inset-0 bg-accent/5 blur-[180px] rounded-full translate-y-1/2 scale-150" />
-                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-500/5 blur-[150px] rounded-full -translate-y-1/2 translate-x-1/2" />
+            <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 relative overflow-hidden font-['Outfit']">
+                {/* Advanced Background Effects */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.05)_0%,transparent_50%)]" />
+                <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none" />
+                
+                <motion.div 
+                    animate={{ 
+                        backgroundPosition: ['0% 0%', '100% 100%'],
+                        opacity: [0.1, 0.2, 0.1]
+                    }}
+                    transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                    className="absolute inset-0 bg-[linear-gradient(45deg,rgba(16,185,129,0.05)_25%,transparent_25%,transparent_50%,rgba(16,185,129,0.05)_50%,rgba(16,185,129,0.05)_75%,transparent_75%,transparent_100%)] bg-[length:100px_100px]"
+                />
 
                 <motion.div
-                    initial={{ opacity: 0, y: 40, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                    className="max-w-xl w-full glass-card p-16 border-white/5 relative z-10 text-center space-y-12 shadow-[0_50px_100px_rgba(0,0,0,0.8)]"
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    className="max-w-2xl w-full relative z-10"
                 >
-                    <div className="relative group mx-auto w-fit">
-                        <div className="absolute inset-0 bg-accent rounded-[10px] blur-3xl opacity-10 group-hover:opacity-20 transition-opacity" />
-                        <div className="w-32 h-32 bg-white border border-black/[0.05] rounded-[10px] flex items-center justify-center text-accent relative overflow-hidden group-hover:-rotate-6 transition-transform duration-700 shadow-xl">
-                            <div className="absolute inset-0 bg-gradient-to-tr from-accent/10 to-transparent" />
-                            <ShieldCheck size={64} className="relative z-10 animate-pulse" />
+                    <div className="bg-white/[0.03] backdrop-blur-3xl border border-white/[0.08] rounded-[40px] p-2 sm:p-4 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)]">
+                        <div className="bg-[#0a0a0a] rounded-[32px] p-12 sm:p-20 border border-white/[0.05] relative overflow-hidden">
+                            {/* Inner Glow */}
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
+                            
+                            <div className="relative z-10 space-y-16">
+                                <div className="space-y-8 text-center">
+                                    <motion.div
+                                        initial={{ rotateY: 90 }}
+                                        animate={{ rotateY: 0 }}
+                                        transition={{ delay: 0.3, duration: 1 }}
+                                        className="w-24 h-24 bg-gradient-to-br from-accent to-emerald-600 rounded-3xl mx-auto flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.3)] relative group"
+                                    >
+                                        <div className="absolute inset-0 bg-white/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <ShieldCheck size={48} className="text-white drop-shadow-lg" />
+                                    </motion.div>
+                                    
+                                    <div className="space-y-3">
+                                        <h2 className="text-5xl sm:text-6xl font-black italic tracking-tighter text-white uppercase leading-none">
+                                            MASTER <span className="text-accent underline decoration-accent/20">CONTROL</span>
+                                        </h2>
+                                        <div className="flex items-center justify-center gap-4 text-emerald-500/40">
+                                            <div className="h-px w-8 bg-emerald-500/20" />
+                                            <span className="text-[10px] font-black uppercase tracking-[0.8em] animate-pulse">Neural Encryption Active</span>
+                                            <div className="h-px w-8 bg-emerald-500/20" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <form onSubmit={handleSubmit} className="space-y-12">
+                                    <div className="space-y-6">
+                                        <div className="flex justify-between items-center px-2">
+                                            <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Secret Clearance Code</label>
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-1.5 h-1.5 bg-accent rounded-full animate-ping" />
+                                                <span className="text-[9px] font-black text-accent uppercase tracking-widest">Live Link</span>
+                                            </div>
+                                        </div>
+                                        <div className="relative group">
+                                            <div className="absolute -inset-0.5 bg-gradient-to-r from-accent/50 to-emerald-500/50 rounded-2xl blur opacity-20 group-focus-within:opacity-100 transition duration-1000 group-focus-within:duration-200" />
+                                            <div className="relative flex items-center">
+                                                <Lock className="absolute left-8 text-white/20 group-focus-within:text-accent transition-colors" size={24} />
+                                                <input
+                                                    type="password"
+                                                    value={localPin}
+                                                    onChange={(e) => setLocalPin(e.target.value)}
+                                                    placeholder="ENTER CLEARANCE KEY"
+                                                    autoFocus
+                                                    className="w-full bg-black/40 border border-white/10 rounded-2xl py-10 pl-20 pr-8 text-4xl font-black tracking-[12px] text-center text-accent focus:outline-none focus:border-accent/50 transition-all placeholder:tracking-normal placeholder:text-white/5 uppercase shadow-2xl"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        className="w-full py-10 bg-accent hover:bg-emerald-400 text-white rounded-2xl font-black uppercase italic tracking-[0.5em] text-lg transition-all shadow-[0_0_40px_rgba(16,185,129,0.2)] active:scale-[0.98] group relative overflow-hidden"
+                                    >
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 skew-x-12" />
+                                        <span className="relative z-10 flex items-center justify-center gap-4">
+                                            Initialize Core <Zap size={24} className="group-hover:scale-125 transition-transform" />
+                                        </span>
+                                    </button>
+                                </form>
+
+                                <div className="pt-10 border-t border-white/[0.05] flex flex-col items-center gap-8">
+                                    <div className="flex items-center gap-10">
+                                        <div className="text-center space-y-1">
+                                            <p className="text-[8px] font-black text-white/20 uppercase tracking-widest leading-none">Authority</p>
+                                            <p className="text-[11px] font-black text-white/60 uppercase italic tracking-tighter leading-none">Master Admin</p>
+                                        </div>
+                                        <div className="w-px h-8 bg-white/5" />
+                                        <div className="text-center space-y-1">
+                                            <p className="text-[8px] font-black text-white/20 uppercase tracking-widest leading-none">Security</p>
+                                            <p className="text-[11px] font-black text-emerald-500 uppercase italic tracking-tighter leading-none font-mono">Bypassing...</p>
+                                        </div>
+                                    </div>
+                                    <code className="px-6 py-2 bg-white/[0.02] rounded-full text-[9px] font-mono text-white/20 border border-white/[0.05]">{user?.uid || 'AWAITING_MASTER_SIGNAL'}</code>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <div className="space-y-4">
-                        <h2 className="text-5xl font-black italic uppercase tracking-tighter text-slate-900">
-                            ACCESS <span className="text-accent underline decoration-accent/10">GATEWAY</span>
-                        </h2>
-                        <div className="flex items-center justify-center gap-4">
-                            <div className="h-px w-12 bg-black/5" />
-                            <p className="text-slate-600 text-[11px] font-black uppercase tracking-[0.6em]">Secure Protocol v4.0</p>
-                            <div className="h-px w-12 bg-black/5" />
-                        </div>
-                    </div>
-
-                    <form onSubmit={handleSubmit} className="space-y-10">
-                        <div className="space-y-6">
-                            <div className="flex justify-between items-center px-4">
-                                <label className="text-[11px] font-black text-slate-600 uppercase tracking-[0.3em]"> clearance key</label>
-                                <Lock size={14} className="text-accent" />
-                            </div>
-                            <div className="relative group">
-                                <div className="absolute -inset-1 bg-accent/10 rounded-[10px] blur opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <input
-                                    type="password"
-                                    value={localPin}
-                                    onChange={(e) => setLocalPin(e.target.value)}
-                                    placeholder="••••••••"
-                                    autoFocus
-                                    className="relative w-full bg-slate-50 border border-black/[0.05] rounded-[10px] px-10 py-8 text-4xl font-black tracking-[15px] text-center text-accent focus:outline-none focus:border-accent transition-all placeholder:tracking-normal placeholder:opacity-10 shadow-inner"
-                                />
-                            </div>
-                        </div>
-
-                        <button
-                            type="submit"
-                            className="w-full py-8 bg-accent hover:bg-indigo-500 text-white rounded-[10px] font-black uppercase italic tracking-[0.4em] text-sm transition-all shadow-[0_20px_50px_rgba(79,70,229,0.3)] active:scale-[0.98] flex items-center justify-center gap-4 group overflow-hidden relative"
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 skew-x-12" />
-                            INITIALIZE SYSTEM <Zap size={20} className="group-hover:scale-125 transition-transform" />
-                        </button>
-                    </form>
-
-                    <div className="pt-10 border-t border-white/5 flex flex-col items-center gap-6">
-                        <div className="flex flex-col items-center gap-2">
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Identity</p>
-                            <code className="px-4 py-2 bg-slate-100 rounded-[10px] text-[10px] font-mono text-slate-500 border border-black/[0.03]">{user?.uid || 'Awaiting Session...'}</code>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                            <p className="text-[10px] font-black text-slate-600 uppercase tracking-[0.3em]">Encrypted Channel Established</p>
-                        </div>
+                    
+                    <div className="mt-12 text-center">
+                        <p className="text-[9px] font-black text-white/10 uppercase tracking-[1em]">Antigravity Intelligence Systems • v4.0.2</p>
                     </div>
                 </motion.div>
             </div>

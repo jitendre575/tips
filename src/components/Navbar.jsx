@@ -37,12 +37,6 @@ const Navbar = () => {
                         <History size={18} />
                         <span>History</span>
                     </Link>
-                    {userData?.isAdmin && (
-                        <Link to="/admin" className="nav-link text-yellow-500 hover:text-yellow-400">
-                            <ShieldCheck size={18} />
-                            <span>Admin</span>
-                        </Link>
-                    )}
                 </div>
 
                 <div className="flex items-center gap-4">

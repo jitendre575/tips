@@ -285,7 +285,7 @@ const LandingPage = () => {
                 </div>
             </main>
 
-            <div className="fixed bottom-0 left-0 right-0 mx-auto max-w-[480px] md:bottom-8 z-[200] bg-white/90 backdrop-blur-2xl border-t border-black/[0.03] px-6 py-4 rounded-t-[20px] md:rounded-b-[20px] shadow-[0_-20px_50px_rgba(0,0,0,0.05)]">
+            <div className="fixed bottom-0 left-0 right-0 mx-auto max-w-[480px] z-[200] bg-white/95 backdrop-blur-2xl border-t border-black/[0.05] px-6 py-4 rounded-t-[30px] shadow-[0_-20px_50px_rgba(0,0,0,0.1)] pb-safe">
                 <div className="w-full flex items-center justify-between relative">
                     {[
                         { name: 'Arena', icon: Home },
