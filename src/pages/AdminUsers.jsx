@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { db } from '../firebase';
 import { collection, query, onSnapshot, doc, updateDoc, addDoc, serverTimestamp, increment, setDoc, orderBy, deleteDoc, where } from 'firebase/firestore';
-import { User, Mail, Wallet, TrendingUp, CreditCard, Edit2, Check, X, Search, Shield, Phone, Calendar, ArrowUpCircle, ArrowDownCircle, Plus, Minus, AlertCircle, FileText, MessageCircle, Send, CheckCheck, Trash2, Gamepad2, Coins } from 'lucide-react';
+import { User, Mail, Wallet, TrendingUp, CreditCard, Edit2, Check, X, Search, Shield, Phone, Calendar, ArrowUpCircle, ArrowDownCircle, Plus, Minus, AlertCircle, FileText, MessageCircle, Send, CheckCheck, Trash2, Gamepad2, Coins, Clock } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 
@@ -194,7 +194,7 @@ const AdminUsers = () => {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
-                        <div className="h-2 w-8 bg-accent rounded-full" />
+                        <div className="h-2 w-8 bg-accent rounded-[6px]" />
                         <span className="text-slate-600 text-[10px] font-black uppercase tracking-[4px]">System Overview</span>
                     </div>
                     <h1 className="text-5xl font-black italic tracking-tighter uppercase leading-none text-slate-900">
@@ -210,7 +210,7 @@ const AdminUsers = () => {
                         placeholder="Search by name, email, phone..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-white border border-black/[0.05] rounded-[10px] py-4 pl-14 pr-6 outline-none focus:border-accent/30 transition-all text-sm font-medium shadow-sm"
+                        className="w-full bg-slate-100/50 border border-black/[0.1] rounded-[6px] py-4 pl-14 pr-6 outline-none focus:border-accent/30 focus:bg-white transition-all text-sm font-bold shadow-sm"
                     />
                 </div>
             </div>
@@ -218,12 +218,12 @@ const AdminUsers = () => {
             {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                     {[1, 2, 3, 4, 5, 6].map(i => (
-                        <div key={i} className="h-[400px] border border-white/5 rounded-[10px] skeleton-loading shadow-2xl" />
+                        <div key={i} className="h-[400px] border border-white/5 rounded-[6px] skeleton-loading shadow-2xl" />
                     ))}
                 </div>
             ) : filteredUsers.length === 0 ? (
-                <div className="bg-slate-50 border-2 border-dashed border-black/[0.05] rounded-[10px] p-20 text-center">
-                    <div className="w-24 h-24 bg-white border border-black/[0.05] rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300 shadow-sm">
+                <div className="bg-slate-50 border-2 border-dashed border-black/[0.05] rounded-[6px] p-20 text-center">
+                    <div className="w-24 h-24 bg-white border border-black/[0.05] rounded-[6px] flex items-center justify-center mx-auto mb-6 text-slate-300 shadow-sm">
                         <User size={48} />
                     </div>
                     <h3 className="text-2xl font-black text-slate-900 italic uppercase tracking-tight">No Users Found</h3>
@@ -234,24 +234,24 @@ const AdminUsers = () => {
                     {filteredUsers.map(user => {
                         const hasUnread = supportStatus[user.id]?.unreadAdmin === true;
                         return (
-                            <div key={user.id} className={`group relative bg-white border ${hasUnread ? 'border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.1)]' : 'border-black/[0.05]'} hover:border-accent/20 rounded-[10px] p-8 transition-all duration-500 hover:shadow-xl overflow-hidden`}>
+                            <div key={user.id} className={`group relative bg-slate-900 border ${hasUnread ? 'border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.1)]' : 'border-white/5'} hover:border-accent/20 rounded-[6px] p-8 transition-all duration-500 hover:shadow-2xl overflow-hidden`}>
                                 {/* Gradient Background Decoration */}
-                                <div className={`absolute -top-20 -right-20 w-40 h-40 ${hasUnread ? 'bg-emerald-500/10' : 'bg-accent/5'} blur-[80px] rounded-full group-hover:bg-accent/10 transition-colors`} />
+                                <div className={`absolute -top-20 -right-20 w-40 h-40 ${hasUnread ? 'bg-emerald-500/10' : 'bg-accent/5'} blur-[80px] rounded-[6px] group-hover:bg-accent/10 transition-colors`} />
 
                                 {hasUnread && (
-                                    <div className="absolute top-6 right-6 flex items-center gap-2 px-3 py-1 bg-emerald-500/20 border border-emerald-500/30 rounded-full animate-pulse">
-                                        <div className="w-2 h-2 bg-emerald-500 rounded-full" />
+                                    <div className="absolute top-6 right-6 flex items-center gap-2 px-3 py-1 bg-emerald-500/20 border border-emerald-500/30 rounded-[6px] animate-pulse">
+                                        <div className="w-2 h-2 bg-emerald-500 rounded-[6px]" />
                                         <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest leading-none">New Message</span>
                                     </div>
                                 )}
 
                                 {/* User Header */}
                                 <div className="flex items-start gap-5 mb-8 relative">
-                                    <div className={`w-16 h-16 rounded-[10px] bg-slate-50 border border-black/[0.05] flex items-center justify-center ${hasUnread ? 'text-emerald-500' : 'text-slate-400'} group-hover:bg-accent/10 group-hover:text-accent transition-all duration-500 border-accent/0 group-hover:border-accent/20 group-hover:scale-110`}>
+                                    <div className={`w-16 h-16 rounded-[6px] bg-black/40 border border-white/5 flex items-center justify-center ${hasUnread ? 'text-emerald-500' : 'text-slate-500'} group-hover:bg-accent/20 group-hover:text-accent transition-all duration-500 border-accent/0 group-hover:border-accent/20 group-hover:scale-110`}>
                                         <User size={32} />
                                     </div>
                                     <div className="flex-1 min-w-0 pt-1">
-                                        <h3 className="font-black text-2xl italic tracking-tighter uppercase truncate pr-16 leading-none mb-1 text-slate-900">
+                                        <h3 className="font-black text-2xl italic tracking-tighter uppercase truncate pr-16 leading-none mb-1 text-white">
                                             {user.name || user.email?.split('@')[0]}
                                         </h3>
                                         <div className="flex items-center gap-1.5 text-zinc-500 text-xs font-bold uppercase tracking-widest">
@@ -259,7 +259,7 @@ const AdminUsers = () => {
                                         </div>
                                     </div>
                                     {user.isAdmin && (
-                                        <div className="absolute top-0 right-0 p-1.5 bg-accent/10 border border-accent/20 rounded-[10px] text-accent">
+                                        <div className="absolute top-0 right-0 p-1.5 bg-accent/10 border border-accent/20 rounded-[6px] text-accent">
                                             <Shield size={14} />
                                         </div>
                                     )}
@@ -267,45 +267,45 @@ const AdminUsers = () => {
 
                                 {/* Contact Info */}
                                 <div className="space-y-3 mb-8">
-                                    <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 rounded-[10px] border border-black/[0.02]">
-                                        <Mail size={16} className="text-slate-400" />
-                                        <span className="text-sm font-medium text-slate-600 truncate">{user.email}</span>
+                                    <div className="flex items-center gap-3 px-4 py-3 bg-black/20 rounded-[6px] border border-white/5">
+                                        <Mail size={16} className="text-slate-500" />
+                                        <span className="text-sm font-bold text-zinc-400 truncate">{user.email}</span>
                                     </div>
-                                    <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 rounded-[10px] border border-black/[0.02]">
-                                        <Phone size={16} className="text-slate-400" />
-                                        <span className="text-sm font-medium text-slate-600">{user.phone || 'No phone added'}</span>
+                                    <div className="flex items-center gap-3 px-4 py-3 bg-black/20 rounded-[6px] border border-white/5">
+                                        <Phone size={16} className="text-slate-500" />
+                                        <span className="text-sm font-bold text-zinc-400">{user.phone || 'No phone added'}</span>
                                     </div>
-                                    <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 rounded-[10px] border border-black/[0.02]">
-                                        <Coins size={16} className="text-slate-400" />
-                                        <span className="text-sm font-medium text-slate-600 truncate">{user.usdtAddress || 'No USDT wallet linked'}</span>
+                                    <div className="flex items-center gap-3 px-4 py-3 bg-black/20 rounded-[6px] border border-white/5">
+                                        <Coins size={16} className="text-slate-500" />
+                                        <span className="text-sm font-bold text-zinc-400 truncate">{user.usdtAddress || 'No USDT wallet linked'}</span>
                                     </div>
                                 </div>
 
                                 {/* Wallet Stats Grid */}
                                 <div className="grid grid-cols-2 gap-4 mb-8">
-                                    <div className="bg-slate-50 rounded-[10px] p-5 border border-black/[0.03] group/stat hover:bg-slate-100 transition-colors">
-                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Balance</span>
+                                    <div className="bg-black/30 rounded-[6px] p-5 border border-white/5 group/stat hover:bg-black/50 transition-colors">
+                                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Balance</span>
                                         <div className="flex items-center gap-2">
-                                            <span className="text-2xl font-black italic tracking-tighter text-yellow-600">
+                                            <span className="text-2xl font-black italic tracking-tighter text-yellow-500/90">
                                                 ₹{user.balance?.toLocaleString() || 0}
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="bg-slate-50 rounded-[10px] p-5 border border-black/[0.03] group/stat hover:bg-slate-100 transition-colors">
-                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Bets</span>
-                                        <span className="text-2xl font-black italic tracking-tighter text-accent">
+                                    <div className="bg-black/30 rounded-[6px] p-5 border border-white/5 group/stat hover:bg-black/50 transition-colors">
+                                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Bets</span>
+                                        <span className="text-2xl font-black italic tracking-tighter text-accent/90">
                                             {user.totalBets || 0}
                                         </span>
                                     </div>
-                                    <div className="bg-slate-50 rounded-[10px] p-5 border border-black/[0.03] group/stat hover:bg-slate-100 transition-colors">
+                                    <div className="bg-black/30 rounded-[6px] p-5 border border-white/5 group/stat hover:bg-black/50 transition-colors">
                                         <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest block mb-1">Deposit</span>
-                                        <span className="text-xl font-black italic tracking-tighter text-emerald-600">
+                                        <span className="text-xl font-black italic tracking-tighter text-emerald-500/90">
                                             ₹{user.totalDeposit?.toLocaleString() || 0}
                                         </span>
                                     </div>
-                                    <div className="bg-slate-50 rounded-[10px] p-5 border border-black/[0.03] group/stat hover:bg-slate-100 transition-colors">
+                                    <div className="bg-black/30 rounded-[6px] p-5 border border-white/5 group/stat hover:bg-black/50 transition-colors">
                                         <span className="text-[10px] font-black text-red-500 uppercase tracking-widest block mb-1">Withdraw</span>
-                                        <span className="text-xl font-black italic tracking-tighter text-red-600">
+                                        <span className="text-xl font-black italic tracking-tighter text-red-500/90">
                                             ₹{user.totalWithdraw?.toLocaleString() || 0}
                                         </span>
                                     </div>
@@ -315,24 +315,24 @@ const AdminUsers = () => {
                                 <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4">
                                     <button
                                         onClick={() => setChattingUser(user)}
-                                        className={`flex items-center justify-center gap-3 py-4 rounded-[10px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-sm group/btn relative ${hasUnread ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200'}`}
+                                        className={`flex items-center justify-center gap-3 py-4 rounded-[6px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-sm group/btn relative ${hasUnread ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200'}`}
                                     >
                                         <MessageCircle size={18} className="group-hover/btn:scale-110 transition-transform" />
                                         <span>Chat</span>
                                         {hasUnread && (
-                                            <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center animate-bounce border-[3px] border-white shadow-lg z-20">
+                                            <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-[10px] rounded-[6px] flex items-center justify-center animate-bounce border-[3px] border-white shadow-lg z-20">
                                                 !
                                             </span>
                                         )}
                                     </button>
                                     <button
                                         onClick={() => setEditingUser(user)}
-                                        className="flex items-center justify-center gap-3 py-4 bg-slate-100 hover:bg-accent text-slate-500 hover:text-white rounded-[10px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-sm group/btn relative"
+                                        className="flex items-center justify-center gap-3 py-4 bg-slate-100 hover:bg-accent text-slate-500 hover:text-white rounded-[6px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-sm group/btn relative"
                                     >
                                         <Wallet size={18} className="group-hover/btn:scale-110 transition-transform" />
                                         <span>Wallet</span>
                                         {pendingRequests[user.id] > 0 && (
-                                            <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white text-[10px] rounded-full flex items-center justify-center animate-pulse border-[3px] border-white shadow-lg z-20">
+                                            <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white text-[10px] rounded-[6px] flex items-center justify-center animate-pulse border-[3px] border-white shadow-lg z-20">
                                                 {pendingRequests[user.id]}
                                             </span>
                                         )}
@@ -349,7 +349,7 @@ const AdminUsers = () => {
                                                 }
                                             }
                                         }}
-                                        className="col-span-2 flex items-center justify-center gap-3 py-4 bg-amber-500/10 hover:bg-amber-500 text-amber-600 hover:text-white rounded-[10px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-sm group/usdt"
+                                        className="col-span-2 flex items-center justify-center gap-3 py-4 bg-amber-500/10 hover:bg-amber-500 text-amber-600 hover:text-white rounded-[6px] font-black uppercase italic tracking-widest transition-all duration-300 shadow-sm group/usdt"
                                     >
                                         <Coins size={18} className="group-hover/usdt:rotate-12 transition-transform" />
                                         <span>Update USDT Address</span>
@@ -357,10 +357,10 @@ const AdminUsers = () => {
                                 </div>
                                 
                                 {/* Activity Tracking */}
-                                <div className="mt-4 p-4 bg-slate-900 rounded-[10px] border border-white/5 space-y-3">
+                                <div className="mt-4 p-4 bg-slate-900 rounded-[6px] border border-white/5 space-y-3">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2">
-                                            <div className={`w-2 h-2 rounded-full ${user.isOnline ? 'bg-emerald-500 animate-pulse' : 'bg-slate-500'}`} />
+                                            <div className={`w-2 h-2 rounded-[6px] ${user.isOnline ? 'bg-emerald-500 animate-pulse' : 'bg-slate-500'}`} />
                                             <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">Activity Status</span>
                                         </div>
                                         <span className={`text-[9px] font-black uppercase italic tracking-widest ${user.isOnline ? 'text-emerald-400' : 'text-slate-500'}`}>
@@ -368,7 +368,7 @@ const AdminUsers = () => {
                                         </span>
                                     </div>
                                     <div className="flex items-center gap-3">
-                                        <div className="p-2 bg-white/5 rounded-[10px] text-accent">
+                                        <div className="p-2 bg-white/5 rounded-[6px] text-accent">
                                             <Gamepad2 size={14} />
                                         </div>
                                         <div>
@@ -379,7 +379,7 @@ const AdminUsers = () => {
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-3 pt-1">
-                                        <div className="p-2 bg-white/5 rounded-[10px] text-slate-400">
+                                        <div className="p-2 bg-white/5 rounded-[6px] text-slate-400">
                                             <Clock size={14} />
                                         </div>
                                         <div>
@@ -393,7 +393,7 @@ const AdminUsers = () => {
 
                                 <button
                                     onClick={() => handleDeleteUser(user)}
-                                    className="w-full mt-4 flex items-center justify-center gap-3 py-4 bg-red-600/10 hover:bg-red-600/20 text-red-500 rounded-[10px] font-black uppercase italic tracking-widest transition-all duration-300 group/delete hover:scale-[1.02]"
+                                    className="w-full mt-4 flex items-center justify-center gap-3 py-4 bg-red-600/10 hover:bg-red-600/20 text-red-500 rounded-[6px] font-black uppercase italic tracking-widest transition-all duration-300 group/delete hover:scale-[1.02]"
                                 >
                                     <Trash2 size={18} className="group-hover/delete:animate-bounce" />
                                     <span>Delete User</span>
@@ -408,11 +408,11 @@ const AdminUsers = () => {
             {chattingUser && (
                 <div className="fixed inset-0 z-[600] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/90 backdrop-blur-xl" onClick={() => setChattingUser(null)} />
-                    <div className="relative w-full max-w-lg h-[600px] bg-primary border border-white/10 rounded-[10px] overflow-hidden flex flex-col shadow-[0_0_100px_rgba(16,185,129,0.1)] animate-in zoom-in-95 duration-200">
+                    <div className="relative w-full max-w-lg h-[600px] bg-slate-900 border border-white/10 rounded-[6px] overflow-hidden flex flex-col shadow-[0_0_100px_rgba(16,185,129,0.1)] animate-in zoom-in-95 duration-200">
                         {/* Chat Header */}
                         <div className="p-6 bg-zinc-900/50 border-b border-white/5 flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-[10px] bg-zinc-900 flex items-center justify-center text-accent">
+                                <div className="w-12 h-12 rounded-[6px] bg-zinc-900 flex items-center justify-center text-accent">
                                     <User size={24} />
                                 </div>
                                 <div>
@@ -422,7 +422,7 @@ const AdminUsers = () => {
                                     <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{chattingUser.email}</p>
                                 </div>
                             </div>
-                            <button onClick={() => setChattingUser(null)} className="p-3 bg-zinc-800 rounded-full text-zinc-500 hover:text-white transition-all hover:rotate-90">
+                            <button onClick={() => setChattingUser(null)} className="p-3 bg-zinc-800 rounded-[6px] text-zinc-500 hover:text-white transition-all hover:rotate-90">
                                 <X size={20} />
                             </button>
                         </div>
@@ -437,7 +437,7 @@ const AdminUsers = () => {
                             ) : (
                                 messages.map(msg => (
                                     <div key={msg.id} className={`flex ${msg.senderId === 'admin' ? 'justify-end' : 'justify-start'}`}>
-                                        <div className={`max-w-[80%] rounded-[10px] px-4 py-2.5 space-y-1 ${msg.senderId === 'admin' ? 'bg-accent text-white rounded-tr-none' : 'bg-surface-light text-zinc-200 rounded-tl-none'}`}>
+                                        <div className={`max-w-[80%] rounded-[6px] px-4 py-2.5 space-y-1 ${msg.senderId === 'admin' ? 'bg-accent text-white rounded-tr-none' : 'bg-surface-light text-zinc-200 rounded-tl-none'}`}>
                                             <p className="text-sm leading-relaxed">{msg.text}</p>
                                             <div className="flex items-center justify-end gap-1 opacity-50">
                                                 <span className="text-[9px] font-medium">{msg.createdAt?.toDate ? msg.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
@@ -457,12 +457,12 @@ const AdminUsers = () => {
                                 value={newMessage}
                                 onChange={(e) => setNewMessage(e.target.value)}
                                 placeholder="Type your reply..."
-                                className="flex-1 bg-primary border border-white/5 rounded-[10px] px-6 py-4 text-sm text-white focus:outline-none focus:border-accent/50 transition-all font-medium"
+                                className="flex-1 bg-primary border border-white/5 rounded-[6px] px-6 py-4 text-sm text-white focus:outline-none focus:border-accent/50 transition-all font-medium"
                             />
                             <button
                                 type="submit"
                                 disabled={!newMessage.trim()}
-                                className="p-4 bg-accent text-white rounded-[10px] hover:bg-accent-hover transition-all active:scale-95 disabled:opacity-50"
+                                className="p-4 bg-accent text-white rounded-[6px] hover:bg-accent-hover transition-all active:scale-95 disabled:opacity-50"
                             >
                                 <Send size={20} />
                             </button>
@@ -476,7 +476,7 @@ const AdminUsers = () => {
                 <div className="fixed inset-0 z-[500] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/90 backdrop-blur-xl" onClick={() => setEditingUser(null)} />
 
-                    <div className="relative w-full max-w-md bg-zinc-950 border border-white/10 rounded-[10px] overflow-hidden shadow-[0_0_100px_rgba(239,68,68,0.15)] animate-in zoom-in-95 duration-200">
+                    <div className="relative w-full max-w-md bg-zinc-950 border border-white/10 rounded-[6px] overflow-hidden shadow-[0_0_100px_rgba(239,68,68,0.15)] animate-in zoom-in-95 duration-200">
                         <div className="p-10 space-y-8">
                             {/* Modal Header */}
                             <div className="flex justify-between items-start">
@@ -488,20 +488,20 @@ const AdminUsers = () => {
                                     <h3 className="text-3xl font-black italic uppercase tracking-tighter text-white">
                                         Add / <span className="logo-accent">Deduct</span>
                                     </h3>
-                                    <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-2 bg-white/5 py-1 px-3 rounded-full inline-block">
+                                    <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-2 bg-white/5 py-1 px-3 rounded-[6px] inline-block">
                                         User: {editingUser.name || editingUser.email?.split('@')[0]}
                                     </p>
                                 </div>
-                                <button onClick={() => setEditingUser(null)} className="p-3 bg-zinc-900 rounded-full text-zinc-500 hover:text-white transition-all hover:rotate-90">
+                                <button onClick={() => setEditingUser(null)} className="p-3 bg-zinc-900 rounded-[6px] text-zinc-500 hover:text-white transition-all hover:rotate-90">
                                     <X size={24} />
                                 </button>
                             </div>
 
                             {/* Action Type Toggle */}
-                            <div className="grid grid-cols-2 gap-4 p-1.5 bg-zinc-900 rounded-[10px]">
+                            <div className="grid grid-cols-2 gap-4 p-1.5 bg-zinc-900 rounded-[6px]">
                                 <button
                                     onClick={() => setWalletAction({ ...walletAction, type: 'add' })}
-                                    className={`flex items-center justify-center gap-2 py-4 rounded-[10px] font-black uppercase italic tracking-widest transition-all ${walletAction.type === 'add'
+                                    className={`flex items-center justify-center gap-2 py-4 rounded-[6px] font-black uppercase italic tracking-widest transition-all ${walletAction.type === 'add'
                                         ? 'bg-emerald-500 text-white shadow-xl shadow-emerald-500/20'
                                         : 'text-zinc-500 hover:text-white'
                                         }`}
@@ -510,7 +510,7 @@ const AdminUsers = () => {
                                 </button>
                                 <button
                                     onClick={() => setWalletAction({ ...walletAction, type: 'deduct' })}
-                                    className={`flex items-center justify-center gap-2 py-4 rounded-[10px] font-black uppercase italic tracking-widest transition-all ${walletAction.type === 'deduct'
+                                    className={`flex items-center justify-center gap-2 py-4 rounded-[6px] font-black uppercase italic tracking-widest transition-all ${walletAction.type === 'deduct'
                                         ? 'bg-red-600 text-white shadow-xl shadow-red-600/20'
                                         : 'text-zinc-500 hover:text-white'
                                         }`}
@@ -531,7 +531,7 @@ const AdminUsers = () => {
                                             placeholder="0.00"
                                             value={walletAction.amount}
                                             onChange={(e) => setWalletAction({ ...walletAction, amount: e.target.value })}
-                                            className="w-full bg-surface border border-white/5 rounded-[10px] py-6 pl-14 pr-6 text-3xl font-black text-white focus:outline-none focus:border-accent/50 transition-all placeholder:text-zinc-800"
+                                            className="w-full bg-surface border border-white/5 rounded-[6px] py-6 pl-14 pr-6 text-3xl font-black text-white focus:outline-none focus:border-accent/50 transition-all placeholder:text-zinc-800"
                                         />
                                     </div>
                                 </div>
@@ -545,14 +545,14 @@ const AdminUsers = () => {
                                             value={walletAction.note}
                                             onChange={(e) => setWalletAction({ ...walletAction, note: e.target.value })}
                                             rows={2}
-                                            className="w-full bg-surface border border-white/5 rounded-[10px] py-4 pl-14 pr-6 text-sm font-medium text-white focus:outline-none focus:border-accent/50 transition-all resize-none"
+                                            className="w-full bg-surface border border-white/5 rounded-[6px] py-4 pl-14 pr-6 text-sm font-medium text-white focus:outline-none focus:border-accent/50 transition-all resize-none"
                                         />
                                     </div>
                                 </div>
                             </div>
 
                             {/* Info Box */}
-                            <div className="flex items-start gap-4 p-4 bg-zinc-900/50 border border-white/5 rounded-[10px]">
+                            <div className="flex items-start gap-4 p-4 bg-zinc-900/50 border border-white/5 rounded-[6px]">
                                 <AlertCircle className="text-zinc-600 shrink-0" size={18} />
                                 <p className="text-[10px] font-bold text-zinc-500 leading-relaxed uppercase tracking-widest">
                                     Balance will be updated instantly and the transaction will be recorded in user history.
@@ -561,7 +561,7 @@ const AdminUsers = () => {
 
                             <button
                                 onClick={() => handleWalletUpdate(editingUser.id)}
-                                className={`w-full py-6 rounded-[10px] font-black uppercase italic tracking-widest transition-all shadow-2xl active:scale-95 ${walletAction.type === 'add' ? 'btn-accent shadow-accent/20' : 'bg-red-600 hover:bg-red-500 text-white shadow-red-600/20'
+                                className={`w-full py-6 rounded-[6px] font-black uppercase italic tracking-widest transition-all shadow-2xl active:scale-95 ${walletAction.type === 'add' ? 'btn-accent shadow-accent/20' : 'bg-red-600 hover:bg-red-500 text-white shadow-red-600/20'
                                     }`}
                             >
                                 Confirm {walletAction.type === 'add' ? 'Addition' : 'Deduction'}

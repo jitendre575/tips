@@ -11,7 +11,7 @@ const CasinoCard = ({ game, onPlay }) => {
             onClick={() => onPlay(game)}
         >
             {/* Image/Art Container */}
-            <div className="relative aspect-[3/4] rounded-[10px] overflow-hidden bg-white ring-1 ring-black/[0.05] transition-transform duration-300 group-hover:-translate-y-2 shadow-sm group-hover:shadow-2xl">
+            <div className="relative aspect-[3/4] rounded-[6px] overflow-hidden bg-white ring-1 ring-black/[0.05] transition-transform duration-300 group-hover:-translate-y-2 shadow-sm group-hover:shadow-2xl">
                 <img
                     src={game.image}
                     alt={game.name}
@@ -30,7 +30,7 @@ const CasinoCard = ({ game, onPlay }) => {
 
                 {/* Play Button Overlay */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-accent/40 backdrop-blur-[2px]">
-                    <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center text-accent shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-300">
+                    <div className="w-14 h-14 bg-white rounded-[6px] flex items-center justify-center text-accent shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-300">
                         <Play size={28} className="fill-current ml-1" />
                     </div>
                 </div>
@@ -38,8 +38,8 @@ const CasinoCard = ({ game, onPlay }) => {
 
             {/* Live Indicator Below Card */}
             <div className="mt-3 flex items-center gap-2 px-1">
-                <div className="flex items-center gap-1 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
-                    <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" />
+                <div className="flex items-center gap-1 bg-emerald-50 px-2 py-0.5 rounded-[6px] border border-emerald-100">
+                    <div className="w-1 h-1 bg-emerald-500 rounded-[6px] animate-pulse" />
                     <span className="text-[8px] font-black text-emerald-600 uppercase tracking-tight">{game.activePlayers} Live</span>
                 </div>
             </div>

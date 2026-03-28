@@ -113,15 +113,15 @@ const SupportChat = () => {
         <div className="fixed bottom-24 right-4 sm:bottom-6 sm:right-6 z-[1000] flex flex-col items-end">
             {/* Chat Window */}
             {isOpen && (
-                <div className="mb-4 w-full sm:w-[380px] h-[500px] border-r-0 sm:border-r border-t border-b border-l border-white/5 bg-surface-light sm:rounded-[10px] shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
+                <div className="mb-4 w-full sm:w-[380px] h-[500px] border-r-0 sm:border-r border-t border-b border-l border-white/5 bg-surface-light sm:rounded-[6px] shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
                     {/* Header */}
                     <div className="bg-zinc-900 px-4 py-5 flex items-center justify-between border-b border-white/5">
                         <div className="flex items-center gap-3">
                             <div className="relative">
-                                <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white font-black">
+                                <div className="w-10 h-10 bg-accent rounded-[6px] flex items-center justify-center text-white font-black">
                                     C
                                 </div>
-                                <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-zinc-900 rounded-full"></div>
+                                <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-zinc-900 rounded-[6px]"></div>
                             </div>
                             <div>
                                 <h3 className="text-sm font-black text-white">CricWin Support</h3>
@@ -151,12 +151,12 @@ const SupportChat = () => {
                         ) : (
                             messages.map((msg) => (
                                 <div key={msg.id} className={`flex ${msg.senderId === user.uid ? 'justify-end' : 'justify-start'}`}>
-                                    <div className={`max-w-[80%] rounded-[10px] px-4 py-2.5 space-y-1 relative group ${msg.senderId === user.uid
+                                    <div className={`max-w-[80%] rounded-[6px] px-4 py-2.5 space-y-1 relative group ${msg.senderId === user.uid
                                         ? 'bg-accent text-white rounded-tr-none'
                                         : 'bg-zinc-800 text-zinc-200 rounded-tl-none'
                                         }`}>
                                         {msg.type === 'image' ? (
-                                            <img src={msg.imageUrl} alt="chat" className="rounded-[10px] w-full max-h-60 object-cover mb-1" />
+                                            <img src={msg.imageUrl} alt="chat" className="rounded-[6px] w-full max-h-60 object-cover mb-1" />
                                         ) : (
                                             <p className="text-sm leading-relaxed">{msg.text}</p>
                                         )}
@@ -184,12 +184,12 @@ const SupportChat = () => {
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             placeholder="Type your message..."
-                            className="flex-1 bg-surface-light border border-white/5 rounded-[10px] px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accent/50 transition-all"
+                            className="flex-1 bg-white border border-black/[0.1] rounded-[6px] px-4 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-accent/50 transition-all shadow-inner"
                         />
                         <button
                             type="submit"
                             disabled={!newMessage.trim() && !uploading}
-                            className="p-2.5 bg-accent text-white rounded-[10px] hover:bg-accent-hover transition-all disabled:opacity-50"
+                            className="p-2.5 bg-accent text-white rounded-[6px] hover:bg-accent-hover transition-all disabled:opacity-50"
                         >
                             <Send size={18} />
                         </button>

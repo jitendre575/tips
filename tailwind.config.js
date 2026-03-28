@@ -19,6 +19,17 @@ export default {
       fontFamily: {
         sans: ['Outfit', 'Inter', 'sans-serif'],
       },
+      borderRadius: {
+        'none': '0',
+        'sm': '6px',
+        DEFAULT: '6px',
+        'md': '6px',
+        'lg': '6px',
+        'xl': '6px',
+        '2xl': '6px',
+        '3xl': '6px',
+        'full': '6px', // Literally matching user request "ONLY 6px"
+      },
     },
   },
   plugins: [],

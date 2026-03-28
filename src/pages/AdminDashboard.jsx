@@ -137,27 +137,27 @@ const AdminDashboard = () => {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.1 }}
-                        className={`p-10 rounded-[24px] border border-black/[0.03] group hover:border-black/[0.08] transition-all relative overflow-hidden bg-white shadow-[0_10px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] cursor-default`}
+                        className={`p-10 rounded-[6px] border border-black/[0.03] group hover:border-black/[0.08] transition-all relative overflow-hidden bg-white shadow-[0_10px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] cursor-default`}
                     >
                         <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.1] transition-all group-hover:scale-125 group-hover:-rotate-12 duration-700">
                             <s.icon size={120} />
                         </div>
-                        <div className={`w-16 h-16 rounded-[16px] ${s.bg} flex items-center justify-center ${s.color} mb-8 border ${s.border} shadow-sm group-hover:scale-110 transition-transform duration-500`}>
+                        <div className={`w-16 h-16 rounded-[6px] ${s.bg} flex items-center justify-center ${s.color} mb-8 border ${s.border} shadow-sm group-hover:scale-110 transition-transform duration-500`}>
                             <s.icon size={32} />
                         </div>
                         <p className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400 mb-2 group-hover:text-slate-600 transition-colors">{s.label}</p>
-                        <h4 className="text-4xl font-black italic tracking-tighter uppercase tabular-nums text-slate-900 group-hover:text-accent transition-colors duration-500">{s.val}</h4>
+                        <h4 className="text-4xl font-black italic tracking-tighter uppercase tabular-nums text-white group-hover:text-accent transition-colors duration-500">{s.val}</h4>
                     </motion.div>
                 ))}
             </div>
 
                         <div className="grid lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 p-12 border border-black/[0.03] bg-white rounded-[24px] relative overflow-hidden group shadow-sm">
-                    <div className="absolute top-0 right-0 p-12 opacity-[0.02] pointer-events-none group-hover:opacity-[0.05] transition-opacity text-slate-900 group-hover:scale-110 duration-700">
+                <div className="lg:col-span-2 p-12 border border-black/[0.03] bg-white rounded-[6px] relative overflow-hidden group shadow-sm">
+                    <div className="absolute top-0 right-0 p-12 opacity-[0.02] pointer-events-none group-hover:opacity-[0.05] transition-opacity text-white group-hover:scale-110 duration-700">
                         <Activity size={200} />
                     </div>
-                    <h3 className="text-3xl font-black italic uppercase tracking-tighter mb-12 flex items-center gap-4 text-slate-900">
-                        <span className="w-2 h-8 bg-accent rounded-full" />
+                    <h3 className="text-3xl font-black italic uppercase tracking-tighter mb-12 flex items-center gap-4 text-white">
+                        <span className="w-2 h-8 bg-accent rounded-[6px]" />
                         Network <span className="logo-accent">Pulse</span>
                     </h3>
                     <div className="grid sm:grid-cols-2 gap-12">
@@ -166,11 +166,11 @@ const AdminDashboard = () => {
                                 <span>Deposit Queue</span>
                                 <span className={stats.pendingRecharges > 0 ? 'text-amber-600' : 'text-emerald-500'}>{stats.pendingRecharges} Pending</span>
                             </div>
-                            <div className="h-5 bg-slate-50 rounded-full overflow-hidden border border-black/[0.03] p-1.5 shadow-inner relative">
+                            <div className="h-5 bg-slate-50 rounded-[6px] overflow-hidden border border-black/[0.03] p-1.5 shadow-inner relative">
                                 <motion.div
                                     initial={{ width: 0 }}
                                     animate={{ width: `${Math.min(100, stats.pendingRecharges * 20)}%` }}
-                                    className={`h-full rounded-full ${stats.pendingRecharges > 5 ? 'bg-red-500' : 'bg-amber-500'} transition-all duration-1000 relative shadow-lg`}
+                                    className={`h-full rounded-[6px] ${stats.pendingRecharges > 5 ? 'bg-red-500' : 'bg-amber-500'} transition-all duration-1000 relative shadow-lg`}
                                 />
                             </div>
                         </div>
@@ -179,47 +179,47 @@ const AdminDashboard = () => {
                                 <span>Payout Queue</span>
                                 <span className={stats.pendingWithdrawals > 0 ? 'text-accent' : 'text-emerald-500'}>{stats.pendingWithdrawals} Pending</span>
                             </div>
-                            <div className="h-5 bg-slate-50 rounded-full overflow-hidden border border-black/[0.03] p-1.5 shadow-inner relative">
+                            <div className="h-5 bg-slate-50 rounded-[6px] overflow-hidden border border-black/[0.03] p-1.5 shadow-inner relative">
                                 <motion.div
                                     initial={{ width: 0 }}
                                     animate={{ width: `${Math.min(100, stats.pendingWithdrawals * 20)}%` }}
-                                    className="h-full bg-accent rounded-full transition-all duration-1000 shadow-lg"
+                                    className="h-full bg-accent rounded-[6px] transition-all duration-1000 shadow-lg"
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="p-12 border border-black/[0.03] bg-white rounded-[24px] flex flex-col justify-center text-center space-y-8 relative overflow-hidden group shadow-sm">
+                <div className="p-12 border border-black/[0.03] bg-white rounded-[6px] flex flex-col justify-center text-center space-y-8 relative overflow-hidden group shadow-sm">
                     <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="w-24 h-24 bg-accent/[0.05] rounded-[24px] flex items-center justify-center text-accent mx-auto border border-accent/10 group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 shadow-sm relative">
+                    <div className="w-24 h-24 bg-accent/[0.05] rounded-[6px] flex items-center justify-center text-accent mx-auto border border-accent/10 group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 shadow-sm relative">
                         <ShieldCheck size={48} className="relative z-10" />
                         <motion.div 
                             animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
                             transition={{ repeat: Infinity, duration: 4 }}
-                            className="absolute inset-0 bg-accent rounded-full blur-2xl" 
+                            className="absolute inset-0 bg-accent rounded-[6px] blur-2xl" 
                         />
                     </div>
                     <div className="space-y-3 relative z-10">
-                        <h4 className="text-2xl font-black italic uppercase tracking-tighter text-slate-900">Quantum <span className="text-accent">Encryption</span></h4>
+                        <h4 className="text-2xl font-black italic uppercase tracking-tighter text-white">Quantum <span className="text-accent">Encryption</span></h4>
                         <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed max-w-[200px] mx-auto">Active Level 7 E2E Encrypted Terminal Link</p>
                     </div>
                 </div>
             </div>
 
                         {/* Live Feed Component */}
-            <div className="p-12 bg-white border border-black/[0.03] rounded-[24px] relative overflow-hidden group shadow-sm">
-                <div className="absolute top-0 right-0 p-12 opacity-[0.02] pointer-events-none group-hover:opacity-[0.05] transition-opacity text-slate-900 group-hover:scale-110 duration-700">
+            <div className="p-12 bg-white border border-black/[0.03] rounded-[6px] relative overflow-hidden group shadow-sm">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.02] pointer-events-none group-hover:opacity-[0.05] transition-opacity text-white group-hover:scale-110 duration-700">
                     <Zap size={200} />
                 </div>
-                <h3 className="text-3xl font-black italic uppercase tracking-tighter mb-12 flex items-center justify-between text-slate-900">
+                <h3 className="text-3xl font-black italic uppercase tracking-tighter mb-12 flex items-center justify-between text-white">
                     <div className="flex items-center gap-4">
-                        <span className="w-2 h-8 bg-amber-500 rounded-full" />
+                        <span className="w-2 h-8 bg-amber-500 rounded-[6px]" />
                         Live <span className="logo-accent">Alerts</span>
                     </div>
                     {recentRequests.length > 0 && (
-                        <div className="flex items-center gap-3 px-6 py-2 bg-amber-500/10 border border-amber-500/20 rounded-full">
-                            <span className="w-2 h-2 bg-amber-500 rounded-full animate-ping" />
+                        <div className="flex items-center gap-3 px-6 py-2 bg-amber-500/10 border border-amber-500/20 rounded-[6px]">
+                            <span className="w-2 h-2 bg-amber-500 rounded-[6px] animate-ping" />
                             <span className="text-amber-600 text-[10px] font-black uppercase tracking-widest">
                                 {recentRequests.length} Active Nodes
                             </span>
@@ -230,11 +230,11 @@ const AdminDashboard = () => {
                 <div className="space-y-6">
                     {recentRequests.length === 0 ? (
                         <div className="py-24 text-center space-y-6">
-                            <div className="w-24 h-24 bg-slate-50 border border-black/[0.03] rounded-[32px] flex items-center justify-center mx-auto text-slate-200 group-hover:text-emerald-500/20 transition-colors duration-500 shadow-inner">
+                            <div className="w-24 h-24 bg-slate-50 border border-black/[0.03] rounded-[6px] flex items-center justify-center mx-auto text-slate-200 group-hover:text-emerald-500/20 transition-colors duration-500 shadow-inner">
                                 <CheckCheck size={48} />
                             </div>
                             <div className="space-y-2">
-                                <p className="text-slate-900 text-sm font-black uppercase tracking-[0.2em]">Signal Clear</p>
+                                <p className="text-white text-sm font-black uppercase tracking-[0.2em]">Signal Clear</p>
                                 <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Master Panel Fully Synchronized</p>
                             </div>
                         </div>
@@ -247,20 +247,20 @@ const AdminDashboard = () => {
                                     transition={{ delay: i * 0.05 }}
                                     key={req.id}
                                     onClick={() => setActiveTab('recharges')}
-                                    className="p-8 bg-slate-50/50 border border-black/[0.03] rounded-[20px] hover:bg-white hover:border-amber-500/20 transition-all cursor-pointer group/alert shadow-sm hover:shadow-2xl hover:-translate-y-1 active:scale-95 duration-300"
+                                    className="p-8 bg-slate-50/50 border border-black/[0.03] rounded-[6px] hover:bg-white hover:border-amber-500/20 transition-all cursor-pointer group/alert shadow-sm hover:shadow-2xl hover:-translate-y-1 active:scale-95 duration-300"
                                 >
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-6">
-                                            <div className="w-16 h-16 bg-white border border-black/[0.05] rounded-[20px] flex items-center justify-center text-amber-500 group-hover/alert:bg-amber-500 group-hover/alert:text-white transition-all duration-500 rotate-3 group-hover/alert:rotate-0 shadow-sm relative overflow-hidden">
+                                            <div className="w-16 h-16 bg-white border border-black/[0.05] rounded-[6px] flex items-center justify-center text-amber-500 group-hover/alert:bg-amber-500 group-hover/alert:text-white transition-all duration-500 rotate-3 group-hover/alert:rotate-0 shadow-sm relative overflow-hidden">
                                                 <Wallet size={28} className="relative z-10" />
                                                 <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover/alert:opacity-100 transition-opacity" />
                                             </div>
                                             <div>
                                                 <div className="flex items-center gap-2 mb-2">
-                                                    <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse" />
-                                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover/alert:text-slate-900 transition-colors">Deposit Signal</span>
+                                                    <span className="w-1.5 h-1.5 bg-amber-500 rounded-[6px] animate-pulse" />
+                                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover/alert:text-white transition-colors">Deposit Signal</span>
                                                 </div>
-                                                <h4 className="text-xl font-black italic tracking-tighter uppercase text-slate-900 group-hover/alert:text-amber-600 transition-colors">{req.userName}</h4>
+                                                <h4 className="text-xl font-black italic tracking-tighter uppercase text-white group-hover/alert:text-amber-600 transition-colors">{req.userName}</h4>
                                                 {req.utr && <p className="text-[10px] font-mono font-black text-slate-400 mt-1 uppercase">UTR: {req.utr}</p>}
                                             </div>
                                         </div>
@@ -279,28 +279,28 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* System Diagnostics Terminal - Extremely obvious for debugging */}
-                <div className="mt-16 bg-slate-900 rounded-[10px] p-10 border border-white/10 relative overflow-hidden shadow-2xl">
+                <div className="mt-16 bg-slate-900 rounded-[6px] p-10 border border-white/10 relative overflow-hidden shadow-2xl">
                     <div className="absolute top-0 right-0 p-8 opacity-20 text-accent animate-pulse">
                         <Activity size={100} />
                     </div>
                     <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                         <div className="space-y-4">
                             <div className="flex items-center gap-3">
-                                <div className={`w-3 h-3 rounded-full ${userData?.isAdmin ? 'bg-emerald-500 animate-pulse' : 'bg-red-500 shadow-[0_0_20px_rgba(239,68,68,0.8)]'}`} />
+                                <div className={`w-3 h-3 rounded-[6px] ${userData?.isAdmin ? 'bg-emerald-500 animate-pulse' : 'bg-red-500 shadow-[0_0_20px_rgba(239,68,68,0.8)]'}`} />
                                 <h4 className="text-white font-black uppercase tracking-[0.2em] italic text-lg">System <span className="text-accent underline">Diagnostics</span></h4>
                             </div>
                             <div className="space-y-2">
                                 <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Active Identity UID:</p>
-                                <code className="block bg-black/40 px-4 py-2 rounded-[10px] text-emerald-400 font-mono text-xs border border-white/5 break-all">{user?.uid}</code>
+                                <code className="block bg-black/40 px-4 py-2 rounded-[6px] text-emerald-400 font-mono text-xs border border-white/5 break-all">{user?.uid}</code>
                             </div>
                             <div className="space-y-2 mt-4">
                                 <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest leading-none">Database Matrix Sync:</p>
                                 <div className="flex flex-wrap gap-2">
-                                    <span className="px-3 py-1 bg-black/40 text-[9px] font-mono text-amber-500 rounded border border-white/5 uppercase">DB: tips-94f01</span>
-                                    <span className="px-3 py-1 bg-black/40 text-[9px] font-mono text-blue-500 rounded border border-white/5 uppercase italic">TOTAL RECH: {stats.totalRechargeDocs || 0}</span>
-                                    <span className="px-3 py-1 bg-black/40 text-[9px] font-mono text-emerald-500 rounded border border-white/5 uppercase">PENDING: {recentRequests.length}</span>
+                                    <span className="px-3 py-1 bg-black/40 text-[9px] font-mono text-amber-500 rounded-[6px] border border-white/5 uppercase">DB: tips-94f01</span>
+                                    <span className="px-3 py-1 bg-black/40 text-[9px] font-mono text-blue-500 rounded-[6px] border border-white/5 uppercase italic">TOTAL RECH: {stats.totalRechargeDocs || 0}</span>
+                                    <span className="px-3 py-1 bg-black/40 text-[9px] font-mono text-emerald-500 rounded-[6px] border border-white/5 uppercase">PENDING: {recentRequests.length}</span>
                                 </div>
-                                <div className="mt-4 p-4 bg-black/60 rounded-[10px] border border-white/5 font-mono text-[8px] text-zinc-500 overflow-x-auto whitespace-pre">
+                                <div className="mt-4 p-4 bg-black/60 rounded-[6px] border border-white/5 font-mono text-[8px] text-zinc-500 overflow-x-auto whitespace-pre">
                                     RAW_IDENTITY: {JSON.stringify(userData || {}, null, 2)}
                                 </div>
                             </div>
@@ -339,7 +339,7 @@ const AdminDashboard = () => {
                                             console.log("FIX RULES: match /users/{uid} { allow read, write: if request.auth != null; }");
                                         }
                                     }}
-                                    className="px-10 py-6 bg-red-600 hover:bg-red-500 text-white rounded-[10px] font-black uppercase italic tracking-[5px] text-[11px] transition-all shadow-[0_20px_60px_rgba(220,38,38,0.4)] animate-bounce"
+                                    className="px-10 py-6 bg-red-600 hover:bg-red-500 text-white rounded-[6px] font-black uppercase italic tracking-[5px] text-[11px] transition-all shadow-[0_20px_60px_rgba(220,38,38,0.4)] animate-bounce"
                                 >
                                     Activate Master Control
                                 </button>
@@ -354,7 +354,7 @@ const AdminDashboard = () => {
                 {recentRequests.length > 0 && (
                     <button
                         onClick={() => setActiveTab('recharges')}
-                        className="w-full mt-10 py-5 bg-white border border-black/[0.05] hover:border-amber-500/20 text-slate-500 hover:text-amber-600 rounded-[10px] text-[10px] font-black uppercase italic tracking-[4px] transition-all shadow-sm flex items-center justify-center gap-4"
+                        className="w-full mt-10 py-5 bg-white border border-black/[0.05] hover:border-amber-500/20 text-slate-500 hover:text-amber-600 rounded-[6px] text-[10px] font-black uppercase italic tracking-[4px] transition-all shadow-sm flex items-center justify-center gap-4"
                     >
                         Enter Recharge Terminal <ArrowRight size={16} />
                     </button>
@@ -436,8 +436,8 @@ const AdminDashboard = () => {
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     className="max-w-2xl w-full relative z-10"
                 >
-                    <div className="bg-white/[0.03] backdrop-blur-3xl border border-white/[0.08] rounded-[40px] p-2 sm:p-4 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)]">
-                        <div className="bg-[#0a0a0a] rounded-[32px] p-12 sm:p-20 border border-white/[0.05] relative overflow-hidden">
+                    <div className="bg-white/[0.03] backdrop-blur-3xl border border-white/[0.08] rounded-[6px] p-2 sm:p-4 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)]">
+                        <div className="bg-[#0a0a0a] rounded-[6px] p-12 sm:p-20 border border-white/[0.05] relative overflow-hidden">
                             {/* Inner Glow */}
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
                             
@@ -447,9 +447,9 @@ const AdminDashboard = () => {
                                         initial={{ rotateY: 90 }}
                                         animate={{ rotateY: 0 }}
                                         transition={{ delay: 0.3, duration: 1 }}
-                                        className="w-24 h-24 bg-gradient-to-br from-accent to-emerald-600 rounded-3xl mx-auto flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.3)] relative group"
+                                        className="w-24 h-24 bg-gradient-to-br from-accent to-emerald-600 rounded-[6px] mx-auto flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.3)] relative group"
                                     >
-                                        <div className="absolute inset-0 bg-white/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <div className="absolute inset-0 bg-white/20 rounded-[6px] opacity-0 group-hover:opacity-100 transition-opacity" />
                                         <ShieldCheck size={48} className="text-white drop-shadow-lg" />
                                     </motion.div>
                                     
@@ -470,12 +470,12 @@ const AdminDashboard = () => {
                                         <div className="flex justify-between items-center px-2">
                                             <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Secret Clearance Code</label>
                                             <div className="flex items-center gap-2">
-                                                <div className="w-1.5 h-1.5 bg-accent rounded-full animate-ping" />
+                                                <div className="w-1.5 h-1.5 bg-accent rounded-[6px] animate-ping" />
                                                 <span className="text-[9px] font-black text-accent uppercase tracking-widest">Live Link</span>
                                             </div>
                                         </div>
                                         <div className="relative group">
-                                            <div className="absolute -inset-0.5 bg-gradient-to-r from-accent/50 to-emerald-500/50 rounded-2xl blur opacity-20 group-focus-within:opacity-100 transition duration-1000 group-focus-within:duration-200" />
+                                            <div className="absolute -inset-0.5 bg-gradient-to-r from-accent/50 to-emerald-500/50 rounded-[6px] blur opacity-20 group-focus-within:opacity-100 transition duration-1000 group-focus-within:duration-200" />
                                             <div className="relative flex items-center">
                                                 <Lock className="absolute left-8 text-white/20 group-focus-within:text-accent transition-colors" size={24} />
                                                 <input
@@ -484,7 +484,7 @@ const AdminDashboard = () => {
                                                     onChange={(e) => setLocalPin(e.target.value)}
                                                     placeholder="ENTER CLEARANCE KEY"
                                                     autoFocus
-                                                    className="w-full bg-black/40 border border-white/10 rounded-2xl py-10 pl-20 pr-8 text-4xl font-black tracking-[12px] text-center text-accent focus:outline-none focus:border-accent/50 transition-all placeholder:tracking-normal placeholder:text-white/5 uppercase shadow-2xl"
+                                                    className="w-full bg-black/40 border border-white/10 rounded-[6px] py-10 pl-20 pr-8 text-4xl font-black tracking-[12px] text-center text-accent focus:outline-none focus:border-accent/50 transition-all placeholder:tracking-normal placeholder:text-white/5 uppercase shadow-2xl"
                                                 />
                                             </div>
                                         </div>
@@ -492,7 +492,7 @@ const AdminDashboard = () => {
 
                                     <button
                                         type="submit"
-                                        className="w-full py-10 bg-accent hover:bg-emerald-400 text-white rounded-2xl font-black uppercase italic tracking-[0.5em] text-lg transition-all shadow-[0_0_40px_rgba(16,185,129,0.2)] active:scale-[0.98] group relative overflow-hidden"
+                                        className="w-full py-10 bg-accent hover:bg-emerald-400 text-white rounded-[6px] font-black uppercase italic tracking-[0.5em] text-lg transition-all shadow-[0_0_40px_rgba(16,185,129,0.2)] active:scale-[0.98] group relative overflow-hidden"
                                     >
                                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 skew-x-12" />
                                         <span className="relative z-10 flex items-center justify-center gap-4">
@@ -513,7 +513,7 @@ const AdminDashboard = () => {
                                             <p className="text-[11px] font-black text-emerald-500 uppercase italic tracking-tighter leading-none font-mono">Bypassing...</p>
                                         </div>
                                     </div>
-                                    <code className="px-6 py-2 bg-white/[0.02] rounded-full text-[9px] font-mono text-white/20 border border-white/[0.05]">{user?.uid || 'AWAITING_MASTER_SIGNAL'}</code>
+                                    <code className="px-6 py-2 bg-white/[0.02] rounded-[6px] text-[9px] font-mono text-white/20 border border-white/[0.05]">{user?.uid || 'AWAITING_MASTER_SIGNAL'}</code>
                                 </div>
                             </div>
                         </div>
@@ -527,39 +527,40 @@ const AdminDashboard = () => {
         );
     };
 
-    if (!isAuthorized) return <MasterLock />;
+    // Let authenticated admins bypass the PIN for a direct experience when typing /jrt
+    if (!isAuthorized && !userData?.isAdmin) return <MasterLock />;
 
     const AdminSettings = () => (
         <div className="max-w-2xl mx-auto space-y-10">
-            <div className="glass-card p-10 border-white/5">
-                <h3 className="text-2xl font-black italic uppercase tracking-tight mb-8">Admin <span className="logo-accent">Profile</span></h3>
+            <div className="glass-card p-10 border-white/5 bg-slate-900">
+                <h3 className="text-2xl font-black italic uppercase tracking-tight mb-8 text-white">Admin <span className="logo-accent">Profile</span></h3>
 
                 <div className="space-y-8">
                     <div className="flex items-center gap-6">
-                        <div className="w-20 h-20 bg-zinc-900 border border-white/10 rounded-[10px] flex items-center justify-center text-accent shadow-2xl">
+                        <div className="w-20 h-20 bg-zinc-900 border border-white/10 rounded-[6px] flex items-center justify-center text-accent shadow-2xl">
                             <UserCircle size={40} />
                         </div>
                         <div className="flex-1">
                             <div className="flex items-center gap-3">
-                                <h4 className="text-3xl font-black italic tracking-tighter uppercase text-slate-900">{userData?.name || 'MASTER ADMIN'}</h4>
+                                <h4 className="text-3xl font-black italic tracking-tighter uppercase text-white">{userData?.name || 'MASTER ADMIN'}</h4>
                             </div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-700 mt-1">{user?.email}</p>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">{user?.email}</p>
                         </div>
                     </div>
 
-                    <div className="p-6 bg-accent/5 border border-accent/10 rounded-[10px] space-y-4">
+                    <div className="p-6 bg-accent/5 border border-accent/10 rounded-[6px] space-y-4">
                         <div className="flex items-center gap-3 text-accent">
                             <Info size={16} />
                             <span className="text-[10px] font-black uppercase tracking-widest">Public Control Terminal</span>
                         </div>
-                        <p className="text-xs text-slate-700 font-medium leading-relaxed">
+                        <p className="text-xs text-slate-400 font-bold leading-relaxed">
                             This interface is currently open for public access as per request. Use with caution.
                         </p>
                     </div>
 
                     <button
                         onClick={handleLogout}
-                        className="w-full flex items-center justify-center gap-4 py-6 bg-slate-100 border border-black/[0.05] hover:bg-white text-slate-500 hover:text-black rounded-[10px] font-black uppercase italic tracking-[4px] transition-all group active:scale-95 shadow-sm"
+                        className="w-full flex items-center justify-center gap-4 py-6 bg-slate-800 border border-white/5 hover:bg-slate-700 text-slate-300 hover:text-white rounded-[6px] font-black uppercase italic tracking-[4px] transition-all group active:scale-95 shadow-sm"
                     >
                         Exit Terminal <LogOut size={20} className="group-hover:translate-x-1 transition-transform" />
                     </button>
@@ -567,8 +568,8 @@ const AdminDashboard = () => {
             </div>
 
             <div className="text-center opacity-30">
-                <p className="text-[10px] font-black uppercase tracking-[5px] text-slate-700">JRT MASTER ENGINE V4.0.2</p>
-                <div className="flex justify-center gap-4 mt-4 text-slate-800">
+                <p className="text-[10px] font-black uppercase tracking-[5px] text-slate-500">JRT MASTER ENGINE V4.0.2</p>
+                <div className="flex justify-center gap-4 mt-4 text-slate-700">
                     <RefreshCcw size={14} className="animate-spin-slow" />
                     <Activity size={14} />
                     <Zap size={14} />
@@ -578,29 +579,29 @@ const AdminDashboard = () => {
     );
 
     return (
-        <div className="min-h-screen bg-transparent text-slate-900 selection:bg-accent/30 font-['Outfit']">
+        <div className="min-h-screen bg-slate-950 text-white selection:bg-accent/30 font-['Outfit']">
             {/* Super Admin Top Bar - Platinum Edition */}
-                        <header className="sticky top-0 z-[110] bg-white/40 backdrop-blur-xl border-b border-black/[0.03] py-4 px-8 lg:px-12 flex items-center justify-between shadow-sm">
+            <header className="sticky top-0 z-[110] bg-slate-950/80 backdrop-blur-xl border-b border-white/5 py-4 px-8 lg:px-12 flex items-center justify-between shadow-2xl">
                 <div className="flex items-center gap-6">
                     <div className="relative group">
                         <motion.div 
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            className="absolute inset-0 bg-accent rounded-[12px] blur-xl opacity-20 group-hover:opacity-40 transition-opacity" 
+                            className="absolute inset-0 bg-accent rounded-[6px] blur-xl opacity-20 group-hover:opacity-40 transition-opacity" 
                         />
-                        <div className="relative bg-white/80 p-3 rounded-[12px] border border-black/[0.05] flex items-center justify-center shadow-xl backdrop-blur-md">
+                        <div className="relative bg-zinc-900 p-3 rounded-[6px] border border-white/10 flex items-center justify-center shadow-xl backdrop-blur-md">
                             <ShieldCheck size={24} className={userData?.isAdmin ? "text-accent animate-pulse" : "text-red-500"} />
                         </div>
                     </div>
                     <div>
                         <h1 className="text-2xl font-black italic tracking-tighter uppercase leading-none flex items-baseline gap-2">
-                            <span className="text-slate-900">JRT</span>
+                            <span className="text-white">JRT</span>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-indigo-500 to-red-600 bg-[length:200%_auto] animate-gradient-x">MASTER PANEL</span>
                         </h1>
                         <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-2 px-2 py-0.5 bg-slate-100 rounded-full border border-black/[0.03]">
-                                <span className={`w-1.5 h-1.5 rounded-full animate-ping ${userData?.isAdmin ? 'bg-emerald-500' : 'bg-red-500'}`} />
-                                <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${userData?.isAdmin ? 'text-slate-500' : 'text-red-500'}`}>
+                            <div className="flex items-center gap-2 px-2 py-0.5 bg-slate-900 rounded-[6px] border border-white/5">
+                                <span className={`w-1.5 h-1.5 rounded-[6px] animate-ping ${userData?.isAdmin ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                                <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${userData?.isAdmin ? 'text-slate-400' : 'text-red-500'}`}>
                                     {userData?.isAdmin ? 'Authority Verified' : 'Access Restricted'}
                                 </p>
                             </div>
@@ -609,29 +610,29 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <div className="hidden lg:flex items-center gap-2 bg-slate-900/5 px-4 py-2 rounded-xl border border-black/[0.02]">
+                    <div className="hidden lg:flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-[6px] border border-white/5">
                         <Clock size={12} className="text-slate-400" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 tabular-nums">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 tabular-nums">
                             {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                         </span>
                     </div>
 
                     <button
                         onClick={handleLogout}
-                        className="p-3 bg-white hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-xl transition-all active:scale-90 border border-black/[0.05] group relative shadow-sm"
+                        className="p-3 bg-slate-900 hover:bg-red-900/20 text-slate-400 hover:text-red-400 rounded-[6px] transition-all active:scale-90 border border-white/5 group relative shadow-sm"
                     >
                         <LogOut size={20} className="group-hover:-translate-x-0.5 transition-transform" />
-                        <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-slate-900 text-[9px] font-black uppercase rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none text-white whitespace-nowrap">Terminate Session</span>
+                        <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-slate-900 text-[9px] font-black uppercase rounded-[6px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none text-white whitespace-nowrap">Terminate Session</span>
                     </button>
                 </div>
             </header>
 
-                        <div className="max-w-[1780px] mx-auto p-8 lg:p-12 relative">
+            <div className="max-w-[1780px] mx-auto p-8 lg:p-12 relative">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-b from-accent/5 to-transparent pointer-events-none -z-10 blur-3xl opacity-50" />
 
                 {/* Navigation System */}
                 <div className="mb-16 flex items-center justify-center">
-                    <nav className="flex items-center gap-1.5 bg-white/50 backdrop-blur-md p-1.5 rounded-[18px] border border-black/[0.05] shadow-2xl overflow-x-auto no-scrollbar max-w-full">
+                    <nav className="flex items-center gap-2 p-1.5 bg-slate-900/50 backdrop-blur-lg rounded-[6px] border border-white/10 shadow-2xl overflow-x-auto no-scrollbar max-w-full">
                         {tabs.map((tab) => {
                             const isActive = activeTab === tab.id;
                             const hasBadge = (tab.id === 'recharges' && stats.pendingRecharges > 0) || 
@@ -645,16 +646,16 @@ const AdminDashboard = () => {
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
-                                    className={`flex items-center gap-3 px-8 py-4 rounded-[14px] font-black uppercase italic tracking-widest text-[10px] transition-all relative shrink-0 group ${
+                                    className={`flex items-center gap-3 px-8 py-4 rounded-[6px] font-black uppercase italic tracking-widest text-[10px] transition-all relative shrink-0 group ${
                                         isActive 
-                                        ? 'bg-slate-900 text-white shadow-xl translate-y-[-2px]' 
-                                        : 'text-slate-500 hover:text-slate-900 hover:bg-black/[0.03]'
+                                        ? 'bg-zinc-800 text-white shadow-xl translate-y-[-2px]' 
+                                        : 'text-slate-500 hover:text-white hover:bg-white/5'
                                     }`}
                                 >
                                     {isActive && (
                                         <motion.div 
                                             layoutId="activeTabGlow"
-                                            className="absolute inset-0 bg-accent rounded-[14px] blur-md opacity-20 -z-10"
+                                            className="absolute inset-0 bg-accent rounded-[6px] blur-md opacity-20 -z-10"
                                         />
                                     )}
                                     <tab.icon size={16} className={`${isActive ? 'text-accent' : 'group-hover:rotate-12 transition-transform'}`} />
@@ -664,7 +665,7 @@ const AdminDashboard = () => {
                                         <motion.span 
                                             initial={{ scale: 0 }}
                                             animate={{ scale: 1 }}
-                                            className="absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] px-1.5 bg-red-600 text-white text-[9px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-lg z-10 animate-bounce"
+                                            className="absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] px-1.5 bg-red-600 text-white text-[9px] font-black rounded-[6px] flex items-center justify-center border-2 border-white shadow-lg z-10 animate-bounce"
                                         >
                                             {badgeValue}
                                         </motion.span>
@@ -703,6 +704,7 @@ const AdminCasino = ({ stats }) => {
         houseEdge: 1, // 1%
         crashMultiplierLimit: 100,
         minesProbBias: 0,
+        defaultMines: 3,
         activeGames: ['mines', 'dice', 'crash', 'color', 'chicken', 'plinko'],
         // Precision Controls
         forceCrashPoint: 1.5,
@@ -746,27 +748,27 @@ const AdminCasino = ({ stats }) => {
     return (
         <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 relative">
             {/* Ambient subtle glows */}
-            <div className="absolute -top-40 -left-40 w-[800px] h-[800px] bg-accent/5 blur-[150px] rounded-full pointer-events-none opacity-50" />
-            <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] bg-emerald-500/5 blur-[150px] rounded-full pointer-events-none opacity-50" />
+            <div className="absolute -top-40 -left-40 w-[800px] h-[800px] bg-accent/5 blur-[150px] rounded-[6px] pointer-events-none opacity-50" />
+            <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] bg-emerald-500/5 blur-[150px] rounded-[6px] pointer-events-none opacity-50" />
 
             <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-10 relative z-10">
                 <div className="space-y-5">
                     <div className="flex items-center gap-5">
-                        <div className="w-2 h-12 bg-accent rounded-full shadow-lg" />
+                        <div className="w-2 h-12 bg-accent rounded-[6px] shadow-lg" />
                         <div>
-                            <h3 className="text-5xl font-black italic uppercase tracking-tighter text-slate-900">
+                            <h3 className="text-5xl font-black italic uppercase tracking-tighter text-white">
                                 CASINO <span className="text-accent">COMMAND</span>
                             </h3>
-                            <p className="text-slate-600 text-[11px] font-black uppercase tracking-[0.5em] mt-2">Neural Risk Architecture & Game Logic Terminal</p>
+                            <p className="text-slate-400 text-[11px] font-black uppercase tracking-[0.5em] mt-2">Neural Risk Architecture & Game Logic Terminal</p>
                         </div>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-4 px-10 py-6 bg-white rounded-[10px] border border-black/5 shadow-sm">
-                        <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse shadow-md" />
+                    <div className="flex items-center gap-4 px-10 py-6 bg-slate-900 rounded-[6px] border border-white/5 shadow-sm">
+                        <div className="w-3 h-3 bg-emerald-500 rounded-[6px] animate-pulse shadow-md" />
                         <div className="flex flex-col">
-                            <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest leading-none mb-1">Grid Status</span>
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Grid Status</span>
                             <span className="text-xs font-black uppercase italic tracking-tighter text-emerald-600">Node Sync: 100%</span>
                         </div>
                     </div>
@@ -774,8 +776,8 @@ const AdminCasino = ({ stats }) => {
             </div>
 
             {/* Control Matrix Table (Quick Reference) */}
-            <div className="glass-card p-1 pb-1 border-black/[0.05] bg-white relative z-10 overflow-hidden text-slate-900">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 divide-x divide-black/[0.05]">
+            <div className="glass-card p-1 pb-1 border-white/5 bg-slate-900 relative z-10 overflow-hidden text-white">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 divide-x divide-white/5">
                     {[
                         { label: 'Risk Scale', val: 'House Edge', icon: BarChart3 },
                         { label: 'Chaos Bias', val: 'Mine Density', icon: Bomb },
@@ -784,11 +786,11 @@ const AdminCasino = ({ stats }) => {
                         { label: 'Availability', val: 'Service Grid', icon: Gamepad2 },
                         { label: 'Live Audit', val: 'Revenue Map', icon: TrendingUp },
                     ].map((item, i) => (
-                        <div key={i} className="p-8 flex flex-col items-center gap-3 hover:bg-slate-50 transition-colors group">
-                            <item.icon size={24} className="text-slate-600 group-hover:text-accent transition-colors" />
+                        <div key={i} className="p-8 flex flex-col items-center gap-3 hover:bg-slate-800 transition-colors group">
+                            <item.icon size={24} className="text-slate-500 group-hover:text-accent transition-colors" />
                             <div className="text-center">
-                                <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{item.label}</p>
-                                <p className="text-[11px] font-black text-slate-900 uppercase italic tracking-tighter">{item.val}</p>
+                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{item.label}</p>
+                                <p className="text-[11px] font-black text-white uppercase italic tracking-tighter">{item.val}</p>
                             </div>
                         </div>
                     ))}
@@ -798,26 +800,26 @@ const AdminCasino = ({ stats }) => {
             <div className="grid lg:grid-cols-3 gap-10">
                 {/* Global Risk control */}
                 <div className="lg:col-span-1 space-y-10">
-                    <div className="glass-card p-12 !bg-white border-black/[0.05] space-y-12 relative overflow-hidden group">
-                        <div className="absolute -top-10 -right-10 w-40 h-40 bg-accent/5 blur-[80px] rounded-full group-hover:scale-150 transition-transform duration-1000" />
+                    <div className="glass-card p-12 !bg-slate-900 border-white/5 space-y-12 relative overflow-hidden group">
+                        <div className="absolute -top-10 -right-10 w-40 h-40 bg-accent/5 blur-[80px] rounded-[6px] group-hover:scale-150 transition-transform duration-1000" />
 
                         <div className="flex items-center gap-6">
-                            <div className="p-5 bg-accent/5 rounded-[10px] text-accent border border-accent/10 shadow-sm transition-transform duration-1000">
+                            <div className="p-5 bg-accent/5 rounded-[6px] text-accent border border-accent/10 shadow-sm transition-transform duration-1000">
                                 <BarChart3 size={32} />
                             </div>
                             <div>
-                                <h4 className="text-2xl font-black italic uppercase tracking-tighter text-slate-900">Global <span className="text-accent">Risk</span></h4>
-                                <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest mt-1">Platform Margin Logic</p>
+                                <h4 className="text-2xl font-black italic uppercase tracking-tighter text-white">Global <span className="text-accent">Risk</span></h4>
+                                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-1">Platform Margin Logic</p>
                             </div>
                         </div>
 
                         <div className="space-y-10">
                             <div className="space-y-5">
                                 <div className="flex justify-between items-center px-2">
-                                    <span className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-600">HOUSE EDGE</span>
-                                    <span className="px-4 py-1.5 bg-emerald-50 text-emerald-600 text-[11px] font-black rounded-[10px] border border-emerald-100">{settings.houseEdge}%</span>
+                                    <span className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400">HOUSE EDGE</span>
+                                    <span className="px-4 py-1.5 bg-emerald-900/20 text-emerald-500 text-[11px] font-black rounded-[6px] border border-emerald-900/30">{settings.houseEdge}%</span>
                                 </div>
-                                <div className="relative h-2 bg-slate-100 rounded-full overflow-hidden border border-black/[0.03] group/slider">
+                                <div className="relative h-2 bg-slate-950 rounded-[6px] overflow-hidden border border-white/5 group/slider">
                                     <div className="absolute inset-0 bg-accent/5" />
                                     <input
                                         type="range" min="0" max="10" step="0.5"
@@ -831,10 +833,26 @@ const AdminCasino = ({ stats }) => {
 
                             <div className="space-y-5">
                                 <div className="flex justify-between items-center px-2">
-                                    <span className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-600">DIFFICULTY BIAS</span>
-                                    <span className="px-4 py-1.5 bg-accent/5 text-accent text-[11px] font-black rounded-[10px] border border-accent/10">{settings.minesProbBias}%</span>
+                                    <span className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400">DEFAULT MINES COUNT</span>
+                                    <span className="px-4 py-1.5 bg-emerald-900/20 text-emerald-500 text-[11px] font-black rounded-[6px] border border-emerald-900/30">{settings.defaultMines || 3}</span>
                                 </div>
-                                <div className="relative h-2 bg-slate-100 rounded-full overflow-hidden border border-black/[0.03]">
+                                <div className="relative h-2 bg-slate-950 rounded-[6px] overflow-hidden border border-white/5">
+                                    <input
+                                        type="range" min="1" max="24" step="1"
+                                        value={settings.defaultMines || 3}
+                                        onChange={e => updateSettings({ defaultMines: parseInt(e.target.value) })}
+                                        className="absolute inset-0 w-full opacity-0 cursor-pointer z-10"
+                                    />
+                                    <div className="h-full bg-emerald-500 shadow-md transition-all duration-300" style={{ width: `${((settings.defaultMines || 3) / 24) * 100}%` }} />
+                                </div>
+                            </div>
+
+                            <div className="space-y-5">
+                                <div className="flex justify-between items-center px-2">
+                                    <span className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400">DIFFICULTY BIAS</span>
+                                    <span className="px-4 py-1.5 bg-accent/10 text-accent text-[11px] font-black rounded-[6px] border border-accent/20">{settings.minesProbBias}%</span>
+                                </div>
+                                <div className="relative h-2 bg-slate-950 rounded-[6px] overflow-hidden border border-white/5">
                                     <div className="absolute inset-0 bg-accent/5" />
                                     <input
                                         type="range" min="-10" max="10" step="1"
@@ -849,53 +867,53 @@ const AdminCasino = ({ stats }) => {
                     </div>
 
                     {/* Precision Controls */}
-                    <div className="glass-card p-12 bg-white border-black/[0.05] space-y-10 relative overflow-hidden ring-1 ring-red-500/10 group shadow-lg">
+                    <div className="glass-card p-12 bg-slate-900 border-white/5 space-y-10 relative overflow-hidden ring-1 ring-red-500/10 group shadow-lg">
                         <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-10 transition-opacity">
                             <ShieldAlert size={120} className="text-red-500 rotate-12" />
                         </div>
 
                         <div className="flex items-center gap-6">
-                            <div className="p-5 bg-red-500/10 rounded-[10px] text-red-500 border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)] group-hover:scale-110 transition-transform">
+                            <div className="p-5 bg-red-500/10 rounded-[6px] text-red-500 border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)] group-hover:scale-110 transition-transform">
                                 <Zap size={32} />
                             </div>
                             <div>
                                 <h4 className="text-2xl font-black italic uppercase tracking-tighter text-red-500 flex items-center gap-3">
-                                    Manual <span className="text-slate-900">Overrides</span>
+                                    Manual <span className="text-white">Overrides</span>
                                 </h4>
-                                <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest mt-1">Direct Matrix Intervention</p>
+                                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-1">Direct Matrix Intervention</p>
                             </div>
                         </div>
 
                         <div className="space-y-8">
                             {/* Crash Control */}
-                            <div className="p-8 bg-slate-50 rounded-[10px] border border-black/[0.05] space-y-8 relative group/rig shadow-inner">
+                            <div className="p-8 bg-zinc-950 rounded-[6px] border border-white/5 space-y-8 relative group/rig shadow-inner">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3 text-orange-600">
-                                        <div className="p-2 bg-orange-50 rounded-[10px] border border-orange-100">
+                                        <div className="p-2 bg-orange-900/20 rounded-[6px] border border-orange-900/30">
                                             <Rocket size={18} />
                                         </div>
-                                        <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-600">Crash rigging</span>
+                                        <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Crash rigging</span>
                                     </div>
-                                    <div className={`w-3 h-3 rounded-full ${settings.rigNextCrash ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)] animate-pulse' : 'bg-slate-200'}`} />
+                                    <div className={`w-3 h-3 rounded-[6px] ${settings.rigNextCrash ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)] animate-pulse' : 'bg-zinc-800'}`} />
                                 </div>
 
                                 <div className="space-y-4">
-                                    <label className="text-[11px] font-black text-slate-600 uppercase tracking-widest block ml-2">force crash point (x)</label>
+                                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest block ml-2">force crash point (x)</label>
                                     <div className="relative">
                                         <input
                                             type="number" step="0.01"
                                             value={settings.forceCrashPoint}
                                             onChange={e => updateSettings({ forceCrashPoint: parseFloat(e.target.value) })}
-                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[10px] px-8 py-7 text-4xl font-black text-slate-900 focus:outline-none focus:border-red-500/30 transition-all text-center tracking-tighter shadow-sm"
+                                            className="w-full bg-zinc-900 border-2 border-white/5 rounded-[6px] px-8 py-7 text-4xl font-black text-white focus:outline-none focus:border-red-500/30 transition-all text-center tracking-tighter shadow-sm"
                                             placeholder="1.50"
                                         />
-                                        <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 font-black italic text-xl">X</div>
+                                        <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-500 font-black italic text-xl">X</div>
                                     </div>
                                 </div>
 
                                 <button
                                     onClick={() => updateSettings({ rigNextCrash: !settings.rigNextCrash })}
-                                    className={`w-full py-7 rounded-[10px] text-[12px] font-black uppercase italic tracking-[5px] transition-all relative overflow-hidden group/btn ${settings.rigNextCrash ? 'bg-red-500 text-white shadow-[0_25px_50px_rgba(239,68,68,0.4)]' : 'bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 border border-black/[0.05] shadow-sm'}`}
+                                    className={`w-full py-7 rounded-[6px] text-[12px] font-black uppercase italic tracking-[5px] transition-all relative overflow-hidden group/btn ${settings.rigNextCrash ? 'bg-red-500 text-white shadow-[0_25px_50px_rgba(239,68,68,0.4)]' : 'bg-zinc-900 hover:bg-zinc-800 text-slate-400 hover:text-white border border-white/5 shadow-sm'}`}
                                 >
                                     <div className="relative z-10 flex items-center justify-center gap-4">
                                         {settings.rigNextCrash ? 'DEACTIVATE RIG' : 'ACTIVATE FIXED CRASH'}
@@ -904,57 +922,57 @@ const AdminCasino = ({ stats }) => {
                                 </button>
 
                                 {/* 2x - 4x Range Rig */}
-                                <div className="pt-4 mt-4 border-t border-black/5 space-y-4">
+                                <div className="pt-4 mt-4 border-t border-white/5 space-y-4">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3 text-orange-600">
-                                            <div className="p-2 bg-orange-50 rounded-[10px] border border-orange-100">
+                                            <div className="p-2 bg-orange-900/20 rounded-[6px] border border-orange-900/30">
                                                 <Rocket size={14} />
                                             </div>
-                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Force Range (2x-4x)</span>
+                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Force Range (2x-4x)</span>
                                         </div>
-                                        <div className={`w-2.5 h-2.5 rounded-full ${settings.rigCrashRange2_4x ? 'bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.8)] animate-pulse' : 'bg-slate-200'}`} />
+                                        <div className={`w-2.5 h-2.5 rounded-[6px] ${settings.rigCrashRange2_4x ? 'bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.8)] animate-pulse' : 'bg-zinc-800'}`} />
                                     </div>
 
                                     <button
                                         onClick={() => updateSettings({ rigCrashRange2_4x: !settings.rigCrashRange2_4x })}
-                                        className={`w-full py-5 rounded-[10px] text-[10px] font-black uppercase italic tracking-[4px] transition-all relative overflow-hidden group/btn flex items-center justify-center gap-3 ${settings.rigCrashRange2_4x ? 'bg-orange-500 text-white shadow-[0_15px_30px_rgba(249,115,22,0.4)]' : 'bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 border border-black/[0.05] shadow-sm'}`}
+                                        className={`w-full py-5 rounded-[6px] text-[10px] font-black uppercase italic tracking-[4px] transition-all relative overflow-hidden group/btn flex items-center justify-center gap-3 ${settings.rigCrashRange2_4x ? 'bg-orange-500 text-white shadow-[0_15px_30px_rgba(249,115,22,0.4)]' : 'bg-zinc-900 hover:bg-zinc-800 text-slate-400 hover:text-white border border-white/5 shadow-sm'}`}
                                     >
                                         {settings.rigCrashRange2_4x ? 'DEACTIVATE RANGE' : 'ACTIVATE RANGE RIG'}
                                     </button>
                                 </div>
 
                                 {/* Auto Max Limit */}
-                                <div className="pt-4 mt-4 border-t border-black/5 space-y-4">
+                                <div className="pt-4 mt-4 border-t border-white/5 space-y-4">
                                     <div className="flex items-center gap-3 text-blue-600">
-                                        <div className="p-2 bg-blue-50 rounded-[10px] border border-blue-100">
+                                        <div className="p-2 bg-blue-900/20 rounded-[6px] border border-blue-900/30">
                                             <Rocket size={14} />
                                         </div>
-                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Auto Max Limit</span>
+                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Auto Max Limit</span>
                                     </div>
                                     <div className="relative">
                                         <input
                                             type="number" step="0.01"
                                             value={settings.autoMaxCrashLimit || ''}
                                             onChange={e => updateSettings({ autoMaxCrashLimit: parseFloat(e.target.value) || 0 })}
-                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[10px] px-8 py-5 text-2xl font-black text-slate-900 focus:outline-none focus:border-blue-500/30 transition-all text-center tracking-tighter shadow-sm"
+                                            className="w-full bg-zinc-900 border-2 border-white/5 rounded-[6px] px-8 py-5 text-2xl font-black text-white focus:outline-none focus:border-blue-500/30 transition-all text-center tracking-tighter shadow-sm"
                                             placeholder="No Limit (0)"
                                         />
-                                        <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 font-black italic text-xl">X</div>
+                                        <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-500 font-black italic text-xl">X</div>
                                     </div>
-                                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest text-center px-4">Set to 0 to remove limit. If set, normal auto games will never exceed this multiplier.</p>
+                                    <p className="text-[9px] text-slate-500 font-black uppercase tracking-widest text-center px-4">Set to 0 to remove limit. If set, normal auto games will never exceed this multiplier.</p>
                                 </div>
                             </div>
 
                             {/* Mines Control */}
-                            <div className="p-8 bg-slate-50 rounded-[10px] border border-black/[0.1] space-y-8 group/trap hover:border-emerald-500/40 transition-colors shadow-inner">
+                            <div className="p-8 bg-zinc-950 rounded-[6px] border border-white/5 space-y-8 group/trap hover:border-emerald-500/40 transition-colors shadow-inner">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-4 text-emerald-600">
-                                        <div className="p-2.5 bg-emerald-50 rounded-[10px] border border-emerald-100">
+                                        <div className="p-2.5 bg-emerald-900/20 rounded-[6px] border border-emerald-900/30">
                                             <Bomb size={20} />
                                         </div>
-                                        <span className="text-[12px] font-black uppercase tracking-[0.2em] text-slate-600">Mines trap</span>
+                                        <span className="text-[12px] font-black uppercase tracking-[0.2em] text-slate-400">Mines trap</span>
                                     </div>
-                                    <div className={`w-3.5 h-3.5 rounded-full ${settings.trapNextMine ? 'bg-red-500 shadow-[0_0_25px_rgba(239,68,68,1)] animate-pulse' : 'bg-slate-200'}`} />
+                                    <div className={`w-3.5 h-3.5 rounded-[6px] ${settings.trapNextMine ? 'bg-red-500 shadow-[0_0_25px_rgba(239,68,68,1)] animate-pulse' : 'bg-zinc-800'}`} />
                                 </div>
 
                                 <p className="text-[10px] text-slate-500 font-black uppercase leading-relaxed tracking-wider px-2 text-center">
@@ -963,22 +981,22 @@ const AdminCasino = ({ stats }) => {
 
                                 <button
                                     onClick={() => updateSettings({ trapNextMine: !settings.trapNextMine })}
-                                    className={`w-full py-7 rounded-[10px] text-[12px] font-black uppercase italic tracking-[5px] transition-all relative overflow-hidden ${settings.trapNextMine ? 'bg-red-500 text-white shadow-[0_25px_50px_rgba(239,68,68,0.4)]' : 'bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-900 border border-black/[0.05] shadow-sm'}`}
+                                    className={`w-full py-7 rounded-[6px] text-[12px] font-black uppercase italic tracking-[5px] transition-all relative overflow-hidden ${settings.trapNextMine ? 'bg-red-500 text-white shadow-[0_25px_50px_rgba(239,68,68,0.4)]' : 'bg-zinc-900 hover:bg-zinc-800 text-slate-400 hover:text-white border border-white/5 shadow-sm'}`}
                                 >
                                     <div className="relative z-10 flex items-center justify-center gap-4">
                                         {settings.trapNextMine ? 'DISARM TRAP' : 'ARM NEURAL TRAP'}
-                                        <div className={`w-2 h-2 rounded-full ${settings.trapNextMine ? 'bg-white animate-ping' : 'bg-transparent'}`} />
+                                        <div className={`w-2 h-2 rounded-[6px] ${settings.trapNextMine ? 'bg-white animate-ping' : 'bg-transparent'}`} />
                                     </div>
                                 </button>
 
                                 {/* Exact Click Trap Option */}
-                                <div className="pt-4 mt-4 border-t border-black/5 space-y-4">
+                                <div className="pt-4 mt-4 border-t border-white/5 space-y-4">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3 text-emerald-600">
-                                            <div className="p-2 bg-emerald-50 rounded-[10px] border border-emerald-100">
+                                            <div className="p-2 bg-emerald-900/20 rounded-[6px] border border-emerald-900/30">
                                                 <Bomb size={14} />
                                             </div>
-                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Fix Bomb at Click</span>
+                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Fix Bomb at Click</span>
                                         </div>
                                     </div>
 
@@ -987,33 +1005,33 @@ const AdminCasino = ({ stats }) => {
                                             type="number" step="1"
                                             value={settings.trapAtClick || ''}
                                             onChange={e => updateSettings({ trapAtClick: parseInt(e.target.value) || 0 })}
-                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[10px] px-8 py-5 text-2xl font-black text-slate-900 focus:outline-none focus:border-emerald-500/30 transition-all text-center tracking-tighter shadow-sm"
+                                            className="w-full bg-zinc-900 border-2 border-white/5 rounded-[6px] px-8 py-5 text-2xl font-black text-white focus:outline-none focus:border-emerald-500/30 transition-all text-center tracking-tighter shadow-sm"
                                             placeholder="Ex: 2 (for 2nd box)"
                                         />
-                                        <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 font-[10px] font-black uppercase italic">Click</div>
+                                        <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-500 font-[10px] font-black uppercase italic">Click</div>
                                     </div>
-                                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest text-center px-4">Set to 0 to disable. If set, this exact box number will always be a bomb.</p>
+                                    <p className="text-[9px] text-slate-500 font-black uppercase tracking-widest text-center px-4">Set to 0 to disable. If set, this exact box number will always be a bomb.</p>
                                 </div>
 
                                 {/* Auto Max Mines Multiplier Limit */}
-                                <div className="pt-4 mt-4 border-t border-black/5 space-y-4">
+                                <div className="pt-4 mt-4 border-t border-white/5 space-y-4">
                                     <div className="flex items-center gap-3 text-cyan-600">
-                                        <div className="p-2 bg-cyan-50 rounded-[10px] border border-cyan-100">
+                                        <div className="p-2 bg-cyan-900/20 rounded-[6px] border border-cyan-900/30">
                                             <Rocket size={14} />
                                         </div>
-                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Auto Max Multiplier</span>
+                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Auto Max Multiplier</span>
                                     </div>
                                     <div className="relative">
                                         <input
                                             type="number" step="0.01"
                                             value={settings.autoMaxMinesMultiplier || ''}
                                             onChange={e => updateSettings({ autoMaxMinesMultiplier: parseFloat(e.target.value) || 0 })}
-                                            className="w-full bg-white border-2 border-black/[0.1] rounded-[10px] px-8 py-5 text-2xl font-black text-slate-900 focus:outline-none focus:border-cyan-500/30 transition-all text-center tracking-tighter shadow-sm"
+                                            className="w-full bg-zinc-900 border-2 border-white/5 rounded-[6px] px-8 py-5 text-2xl font-black text-white focus:outline-none focus:border-cyan-500/30 transition-all text-center tracking-tighter shadow-sm"
                                             placeholder="No Limit (0)"
                                         />
-                                        <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 font-black italic text-xl">X</div>
+                                        <div className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-500 font-black italic text-xl">X</div>
                                     </div>
-                                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest text-center px-4">Set to 0 to remove limit. Game forces a bomb if winning exceeds this X.</p>
+                                    <p className="text-[9px] text-slate-500 font-black uppercase tracking-widest text-center px-4">Set to 0 to remove limit. Game forces a bomb if winning exceeds this X.</p>
                                 </div>
                             </div>
                         </div>
@@ -1021,7 +1039,7 @@ const AdminCasino = ({ stats }) => {
                 </div>
 
                 {/* Service Availability Grid */}
-                <div className="lg:col-span-2 glass-card p-12 border-black/[0.05] bg-white relative overflow-hidden shadow-lg">
+                <div className="lg:col-span-2 glass-card p-12 border-white/5 bg-slate-900 relative overflow-hidden shadow-2xl">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none" />
 
                     <div className="flex items-center justify-between mb-16 relative z-10">
@@ -1029,11 +1047,11 @@ const AdminCasino = ({ stats }) => {
                             <h4 className="text-4xl font-black italic uppercase tracking-tighter">Global <span className="text-accent underline decoration-accent/20 underline-offset-8">Service</span> Grid</h4>
                             <p className="text-slate-500 text-[11px] font-black uppercase tracking-[0.4em] mt-3">Algorithmic Node Availability Control</p>
                         </div>
-                        <div className="flex items-center gap-4 px-8 py-4 bg-slate-100 rounded-full border border-black/[0.05] shadow-inner">
+                        <div className="flex items-center gap-4 px-8 py-4 bg-zinc-950 rounded-[6px] border border-white/5 shadow-inner">
                             <Gamepad2 size={24} className="text-accent animate-pulse" />
                             <div className="flex flex-col">
-                                <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest leading-none mb-1">Active Nodes</span>
-                                <span className="text-lg font-black italic tracking-tighter text-slate-900">{settings.activeGames.length} Online</span>
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Active Nodes</span>
+                                <span className="text-lg font-black italic tracking-tighter text-white">{settings.activeGames.length} Online</span>
                             </div>
                         </div>
                     </div>
@@ -1053,19 +1071,19 @@ const AdminCasino = ({ stats }) => {
                                 <motion.div
                                     key={game.id}
                                     whileHover={{ y: -8, scale: 1.03 }}
-                                    className={`p-10 rounded-[10px] border transition-all duration-700 flex flex-col items-center text-center gap-8 group/game relative overflow-hidden ${isActive ? 'bg-white border-black/[0.05] shadow-xl hover:border-accent/50' : 'bg-slate-50 border-black/[0.05] grayscale opacity-40 shadow-none'}`}
+                                    className={`p-10 rounded-[6px] border transition-all duration-700 flex flex-col items-center text-center gap-8 group/game relative overflow-hidden ${isActive ? 'bg-slate-900 border-white/5 shadow-2xl hover:border-accent/50' : 'bg-zinc-950 border-white/5 grayscale opacity-40 shadow-none'}`}
                                 >
-                                    <div className={`p-8 bg-slate-50 rounded-[10px] border border-black/[0.05] relative group-hover/game:shadow-[0_0_40px_rgba(var(--accent)/0.3)] transition-all duration-500 ${game.color} shadow-inner`}>
+                                    <div className={`p-8 bg-zinc-950 rounded-[6px] border border-white/5 relative group-hover/game:shadow-[0_0_40px_rgba(var(--accent)/0.3)] transition-all duration-500 ${game.color} shadow-inner`}>
                                         <game.icon size={48} className="relative z-10 group-hover/game:scale-110 transition-transform duration-500" />
-                                        <div className={`absolute inset-0 blur-3xl opacity-30 ${game.color} bg-current rounded-full group-hover:opacity-50 transition-opacity`} />
+                                        <div className={`absolute inset-0 blur-3xl opacity-30 ${game.color} bg-current rounded-[6px] group-hover:opacity-50 transition-opacity`} />
                                     </div>
                                     <div className="space-y-3">
-                                        <h5 className="font-black italic uppercase tracking-tighter text-2xl text-slate-900">{game.name}</h5>
-                                        <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">{game.desc}</p>
+                                        <h5 className="font-black italic uppercase tracking-tighter text-2xl text-white">{game.name}</h5>
+                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{game.desc}</p>
                                     </div>
                                     <button
                                         onClick={() => toggleGame(game.id)}
-                                        className={`w-full py-5 rounded-[10px] text-[11px] font-black uppercase italic tracking-[4px] transition-all flex items-center justify-center gap-4 ${isActive ? 'bg-slate-50 hover:bg-red-500 hover:text-white text-slate-500 border border-black/[0.05] shadow-sm' : 'bg-accent text-white shadow-lg'}`}
+                                        className={`w-full py-5 rounded-[6px] text-[11px] font-black uppercase italic tracking-[4px] transition-all flex items-center justify-center gap-4 ${isActive ? 'bg-zinc-950 hover:bg-red-900 hover:text-white text-slate-400 border border-white/5 shadow-sm' : 'bg-accent text-white shadow-lg'}`}
                                     >
                                         {isActive ? (
                                             <><Lock size={16} /> Disable Node</>
@@ -1082,11 +1100,11 @@ const AdminCasino = ({ stats }) => {
 
             {/* Platform Analytics Card */}
             <div className="glass-card p-20 border-white/10 relative overflow-hidden group bg-gradient-to-r from-emerald-500/[0.05] via-transparent to-accent/[0.05] shadow-[0_30px_70px_rgba(0,0,0,0.6)] z-10">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/5 blur-[150px] rounded-full group-hover:scale-125 transition-transform duration-1000" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/5 blur-[150px] rounded-[6px] group-hover:scale-125 transition-transform duration-1000" />
                 <div className="relative flex flex-col xl:flex-row items-center justify-between gap-20">
                     <div className="space-y-8 max-w-xl">
                         <div className="flex items-center gap-8">
-                            <div className="w-24 h-24 bg-emerald-500/10 rounded-[10px] flex items-center justify-center text-emerald-500 border border-emerald-500/20 shadow-[0_0_50px_rgba(16,185,129,0.2)] relative">
+                            <div className="w-24 h-24 bg-emerald-500/10 rounded-[6px] flex items-center justify-center text-emerald-500 border border-emerald-500/20 shadow-[0_0_50px_rgba(16,185,129,0.2)] relative">
                                 <TrendingUp size={48} />
                                 <div className="absolute inset-0 bg-emerald-500/30 blur-2xl animate-pulse" />
                             </div>
@@ -1171,9 +1189,9 @@ const AdminSupport = () => {
         return (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 h-[calc(100vh-350px)] min-h-[700px]">
             {/* Chat List */}
-            <div className="lg:col-span-1 border border-black/[0.03] rounded-[24px] overflow-hidden flex flex-col bg-white shadow-sm">
-                <div className="p-8 border-b border-black/[0.03] bg-gradient-to-br from-slate-50 to-transparent">
-                    <h3 className="text-2xl font-black italic uppercase tracking-tighter flex items-center gap-3 text-slate-900">
+            <div className="lg:col-span-1 border border-white/5 rounded-[6px] overflow-hidden flex flex-col bg-slate-900 shadow-2xl">
+                <div className="p-8 border-b border-white/5 bg-gradient-to-br from-white/5 to-transparent">
+                    <h3 className="text-2xl font-black italic uppercase tracking-tighter flex items-center gap-3 text-white">
                         <MessageCircle size={24} className="text-accent group-hover:rotate-12 transition-transform" />
                         Live <span className="text-accent underline decoration-accent/10">Inbound</span>
                     </h3>
@@ -1184,20 +1202,20 @@ const AdminSupport = () => {
                         <button
                             key={chat.id}
                             onClick={() => setSelectedChat(chat)}
-                            className={`w-full p-8 flex items-center gap-6 hover:bg-slate-50 transition-all text-left border-b border-black/[0.02] relative group ${selectedChat?.id === chat.id ? 'bg-slate-50' : ''}`}
+                            className={`w-full p-8 flex items-center gap-6 hover:bg-slate-800 transition-all text-left border-b border-white/5 relative group ${selectedChat?.id === chat.id ? 'bg-slate-800' : ''}`}
                         >
                             {selectedChat?.id === chat.id && (
                                 <motion.div layoutId="activeChatBar" className="absolute left-0 inset-y-0 w-1.5 bg-accent rounded-r-full shadow-lg" />
                             )}
-                            <div className="w-16 h-16 rounded-[20px] bg-slate-100 flex items-center justify-center text-slate-400 shrink-0 border border-black/[0.05] shadow-inner group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 overflow-hidden relative">
+                            <div className="w-16 h-16 rounded-[6px] bg-zinc-950 flex items-center justify-center text-slate-500 shrink-0 border border-white/5 shadow-inner group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 overflow-hidden relative">
                                 <UserCircle size={32} className="relative z-10" />
                                 <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center justify-between mb-1.5">
-                                    <h4 className="font-black text-sm truncate pr-2 uppercase italic tracking-tighter text-slate-900 group-hover:text-accent transition-colors">{chat.userName || 'Root Node'}</h4>
+                                    <h4 className="font-black text-sm truncate pr-2 uppercase italic tracking-tighter text-white group-hover:text-accent transition-colors">{chat.userName || 'Root Node'}</h4>
                                     {chat.unreadAdmin && (
-                                        <span className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse shadow-lg shadow-red-500/20" />
+                                        <span className="w-2.5 h-2.5 bg-red-500 rounded-[6px] animate-pulse shadow-lg shadow-red-500/20" />
                                     )}
                                 </div>
                                 <p className="text-[10px] text-slate-500 truncate font-black uppercase tracking-widest">{chat.lastMessage}</p>
@@ -1206,7 +1224,7 @@ const AdminSupport = () => {
                     ))}
                     {chats.length === 0 && (
                         <div className="p-20 text-center space-y-6">
-                            <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto border border-black/[0.03] shadow-inner text-slate-200">
+                            <div className="w-20 h-20 bg-black/20 rounded-[6px] flex items-center justify-center mx-auto border border-white/5 shadow-inner text-slate-200">
                                 <MessageCircle size={32} />
                             </div>
                             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">No Active Data Stream</p>
@@ -1221,19 +1239,19 @@ const AdminSupport = () => {
                     <>
                         <div className="p-8 border-b border-white/5 bg-[#0a0a14]/60 flex items-center justify-between">
                             <div className="flex items-center gap-6">
-                                <div className="w-14 h-14 rounded-[10px] bg-accent/20 flex items-center justify-center text-accent ring-1 ring-accent/30 shadow-2xl">
+                                <div className="w-14 h-14 rounded-[6px] bg-accent/20 flex items-center justify-center text-accent ring-1 ring-accent/30 shadow-2xl">
                                     <Headset size={28} />
                                 </div>
                                 <div>
                                     <h4 className="text-xl font-black uppercase italic tracking-tighter text-white">{selectedChat.userName}</h4>
                                     <div className="flex items-center gap-2 mt-1">
-                                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-[6px] animate-pulse" />
                                         <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Signal Stable • {selectedChat.id}</p>
                                     </div>
                                 </div>
                             </div>
                             <div className="flex items-center gap-4">
-                                <div className="px-5 py-2.5 bg-zinc-900/50 border border-white/10 rounded-full text-[9px] font-black uppercase tracking-widest text-zinc-500">
+                                <div className="px-5 py-2.5 bg-zinc-900/50 border border-white/10 rounded-[6px] text-[9px] font-black uppercase tracking-widest text-zinc-500">
                                     Live Terminal
                                 </div>
                             </div>
@@ -1241,7 +1259,7 @@ const AdminSupport = () => {
                         <div className="flex-1 overflow-y-auto p-12 space-y-8 no-scrollbar bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-fixed opacity-90">
                             {messages.map(msg => (
                                 <div key={msg.id} className={`flex ${msg.senderId === 'admin' ? 'justify-end' : 'justify-start'}`}>
-                                    <div className={`max-w-[65%] min-w-[120px] rounded-[10px] px-8 py-5 space-y-2 relative group shadow-2xl ${msg.senderId === 'admin' ? 'bg-accent text-white rounded-tr-none' : 'bg-[#0a0a14] border border-white/5 text-zinc-200 rounded-tl-none'}`}>
+                                    <div className={`max-w-[65%] min-w-[120px] rounded-[6px] px-8 py-5 space-y-2 relative group shadow-2xl ${msg.senderId === 'admin' ? 'bg-accent text-white rounded-tr-none' : 'bg-[#0a0a14] border border-white/5 text-zinc-200 rounded-tl-none'}`}>
                                         <p className="text-sm leading-relaxed font-medium">{msg.text}</p>
                                         <div className="flex items-center justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
                                             <span className="text-[8px] font-black tracking-widest uppercase">{msg.createdAt?.toDate ? msg.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
@@ -1259,10 +1277,10 @@ const AdminSupport = () => {
                                     value={reply}
                                     onChange={e => setReply(e.target.value)}
                                     placeholder="TYPE COMMAND RESPONSE..."
-                                    className="relative w-full bg-black/50 border border-white/10 rounded-[10px] px-10 py-6 text-sm font-black italic tracking-[0.1em] text-white focus:outline-none focus:border-accent transition-all uppercase placeholder:opacity-20 shadow-inner"
+                                    className="relative w-full bg-black/50 border border-white/10 rounded-[6px] px-10 py-6 text-sm font-black italic tracking-[0.1em] text-white focus:outline-none focus:border-accent transition-all uppercase placeholder:opacity-20 shadow-inner"
                                 />
                             </div>
-                            <button className="px-10 bg-accent text-white rounded-[10px] shadow-[0_15px_30px_rgba(79,70,229,0.3)] hover:bg-indigo-500 active:scale-95 transition-all flex items-center justify-center">
+                            <button className="px-10 bg-accent text-white rounded-[6px] shadow-[0_15px_30px_rgba(79,70,229,0.3)] hover:bg-indigo-500 active:scale-95 transition-all flex items-center justify-center">
                                 <Send size={24} />
                             </button>
                         </form>
@@ -1270,8 +1288,8 @@ const AdminSupport = () => {
                 ) : (
                     <div className="flex-1 flex flex-col items-center justify-center p-16 text-center">
                         <div className="relative mb-10">
-                            <div className="absolute inset-0 bg-accent/20 blur-3xl rounded-full scale-150 animate-pulse" />
-                            <div className="w-28 h-28 bg-[#0a0a14] border border-white/10 rounded-[10px] flex items-center justify-center text-accent relative shadow-2xl">
+                            <div className="absolute inset-0 bg-accent/20 blur-3xl rounded-[6px] scale-150 animate-pulse" />
+                            <div className="w-28 h-28 bg-[#0a0a14] border border-white/10 rounded-[6px] flex items-center justify-center text-accent relative shadow-2xl">
                                 <Headset size={54} className="opacity-40" />
                             </div>
                         </div>

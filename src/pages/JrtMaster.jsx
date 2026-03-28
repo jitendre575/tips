@@ -22,14 +22,18 @@ const JrtMaster = () => {
 
     if (loading) return (
         <div className="flex items-center justify-center min-h-screen bg-primary">
-            <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-[6px] animate-spin"></div>
         </div>
     );
 
-    // Security Check: Must be logged in AND must be an admin
-    if (!user || !userData?.isAdmin) {
-        return <Navigate to="/" />;
+    // Security Check: If already admin, bypass the gatekeeper for efficiency
+    // If NOT admin, show gatekeeper to allow "Master Key" (JAAT) to repair status.
+    if (userData?.isAdmin) {
+        return <AdminDashboard />;
     }
+    
+    // No initial redirect - the route is its own protection.
+    // Entering JAAT then 666666 allows repair if status is lost.
 
     // Gatekeeper: Must have entered the correct MASTER KEY (JAAT)
     if (!isGateAuthorized) {

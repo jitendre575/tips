@@ -90,39 +90,35 @@ const ChickenRoadGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
     };
 
     return (
-        <div className="flex flex-col gap-6 max-w-4xl mx-auto">
-            {/* Game Canvas */}
-            <div className="relative bg-[#2a2a2a] rounded-[10px] overflow-hidden border-4 border-[#333] shadow-2xl aspect-[21/9] sm:aspect-[24/10]">
-                {/* Sidewalks */}
-                <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-16 bg-[#555] border-r-4 border-dashed border-white/20 z-10 flex flex-col items-center justify-center">
-                    <div className="text-[10px] font-black text-white/20 uppercase vertical-text tracking-widest">Sidewalk</div>
+        <div className="flex flex-col bg-[#0f212e] min-h-[600px] w-full items-center">
+            {/* Game Canvas - Fixed width 440px to fit 480px container comfortably */}
+            <div className="relative w-[340px] xs:w-[400px] aspect-[4/6] bg-[#2a2a2a] rounded-[6px] overflow-hidden border-4 border-[#333] shadow-2xl mt-4 shrink-0">
+                {/* Sidewalks (Top & Bottom for vertical road) */}
+                <div className="absolute top-0 left-0 right-0 h-10 bg-[#555] border-b-2 border-dashed border-white/20 z-10 flex items-center justify-center">
+                    <div className="text-[10px] font-black text-white/40 uppercase tracking-[4px]">Finish Line</div>
                 </div>
-                <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-16 bg-[#555] border-l-4 border-dashed border-white/20 z-10 flex flex-col items-center justify-center">
-                    <div className="text-[10px] font-black text-white/20 uppercase vertical-text tracking-widest">Safe Zone</div>
+                <div className="absolute bottom-0 left-0 right-0 h-10 bg-[#555] border-t-2 border-dashed border-white/20 z-10 flex items-center justify-center">
+                    <div className="text-[10px] font-black text-white/40 uppercase tracking-[4px]">Start Zone</div>
                 </div>
 
-                {/* Road Lanes */}
-                <div className="absolute inset-x-12 sm:inset-x-16 inset-y-0 flex">
+                {/* Road Lanes (Vertical stack) */}
+                <div className="absolute inset-x-0 bottom-10 top-10 flex flex-col-reverse">
                     {Array.from({ length: currentSettings.lanes }).map((_, i) => (
-                        <div key={i} className={`flex-1 border-r border-white/10 relative ${i === currentLane ? 'bg-white/5' : ''}`}>
-                            {/* Lane Marker */}
-                            <div className="absolute top-0 bottom-0 right-0 w-px bg-white/20 border-dashed border-r-4 opacity-50" />
-
-                            {/* Multiplier Indicator */}
-                            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-                                <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-zinc-800/80 border-2 border-white/10 flex items-center justify-center text-[10px] sm:text-xs font-black text-zinc-500 shadow-inner">
-                                    {Math.pow(currentSettings.multiStep, i + 1).toFixed(2)}x
-                                </div>
+                        <div key={i} className={`flex-1 border-b border-white/10 relative ${i === currentLane ? 'bg-white/5' : ''}`}>
+                            {/* Multiplier Indicator - on the right */}
+                            <div className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-[6px] bg-black/40 border border-white/10 flex items-center justify-center text-[8px] font-black text-[#b1bad3]">
+                                {Math.pow(currentSettings.multiStep, i + 1).toFixed(2)}x
                             </div>
 
-                            {/* Obstacle (Hidden unless game over or hit) */}
+                            {/* Obstacle */}
                             {gameState === 'over' && obstacles[i] && (
                                 <motion.div
-                                    initial={{ y: -100, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-blue-400"
+                                    initial={{ x: -100, opacity: 0 }}
+                                    animate={{ x: 100, opacity: 1 }}
+                                    transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+                                    className="absolute inset-y-0 left-0 flex items-center text-blue-400"
                                 >
-                                    <Truck size={32} className="sm:size-48" />
+                                    <Truck size={32} />
                                 </motion.div>
                             )}
                         </div>
@@ -131,20 +127,18 @@ const ChickenRoadGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
 
                 {/* The Chicken */}
                 <motion.div
-                    className="absolute z-20"
+                    className="absolute z-20 left-1/2 -translate-x-1/2"
                     animate={{
-                        left: currentLane === -1 ? '4%' : `calc(50px + ${(currentLane / currentSettings.lanes) * 85 + (1 / currentSettings.lanes) * 42}%)`,
-                        top: '40%'
+                        bottom: currentLane === -1 ? '4%' : `calc(45px + ${(currentLane / currentSettings.lanes) * 85 + (1 / currentSettings.lanes) * 42}%)`
                     }}
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 >
                     <div className="relative group">
-                        <div className="absolute -inset-4 bg-yellow-400/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="absolute -inset-4 bg-yellow-400/20 blur-xl rounded-[6px] opacity-0 group-hover:opacity-100 transition-opacity" />
                         <Bird
-                            size={32}
-                            className={`sm:size-48 text-white drop-shadow-lg transition-transform ${gameState === 'over' && !isCashedOut && currentLane === -1 ? 'rotate-90 text-red-500' : ''}`}
+                            size={40}
+                            className={`text-white drop-shadow-lg transition-transform ${gameState === 'over' && !isCashedOut && currentLane === i ? 'rotate-90 text-red-500' : ''}`}
                         />
-                        {/* Crown if Cashed Out */}
                         {isCashedOut && (
                             <motion.div
                                 initial={{ scale: 0 }}
@@ -162,15 +156,16 @@ const ChickenRoadGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                     {gameState === 'idle' && (
                         <motion.div
                             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                            className="absolute inset-0 z-30 bg-black/60 backdrop-blur-sm flex items-center justify-center border-4 border-dashed border-white/10 rounded-[10px] m-4"
+                            className="absolute inset-0 z-30 bg-black/80 backdrop-blur-sm flex items-center justify-center m-4 rounded-[6px] border border-white/10"
                         >
-                            <div className="text-center">
-                                <h3 className="text-white text-3xl font-black uppercase italic tracking-tighter mb-4">Chicken 2 Road</h3>
+                            <div className="text-center px-4">
+                                <h3 className="text-white text-2xl font-black uppercase italic tracking-tighter mb-4">Chicken 2 Road</h3>
+                                <p className="text-[#b1bad3] text-[10px] uppercase tracking-[2px] mb-6">Cross the road to win!</p>
                                 <button
                                     onClick={startGame}
-                                    className="bg-emerald-500 hover:bg-emerald-400 text-black px-8 py-3 rounded-full font-black uppercase tracking-widest text-sm transition-all active:scale-95"
+                                    className="w-full bg-[#00e701] hover:bg-[#1fff20] text-[#05200a] py-4 rounded-[6px] font-black uppercase tracking-widest text-sm shadow-[0_4px_0_rgb(0,180,1)] active:translate-y-0.5 transition-all"
                                 >
-                                    Start Cross
+                                    Start Game
                                 </button>
                             </div>
                         </motion.div>
@@ -179,72 +174,74 @@ const ChickenRoadGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
             </div>
 
             {/* Controls */}
-            <div className="bg-[#1a1a1a] rounded-[10px] p-6 sm:p-8 border border-white/5 space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Bet Amount */}
-                    <div className="space-y-4">
-                        <div className="flex justify-between items-center text-[10px] font-black text-zinc-500 uppercase tracking-[3px]">
-                            <span>Wager Amount</span>
-                            <span>{betAmount}.00 INR</span>
-                        </div>
-                        <div className="flex bg-black/40 border-2 border-white/5 rounded-[10px] p-2 h-16 items-center">
-                            <button onClick={() => setBetAmount(Math.max(1, betAmount - 10))} className="w-12 h-12 flex items-center justify-center text-zinc-500 hover:text-white"><Minus /></button>
-                            <input
-                                type="number"
-                                value={betAmount}
-                                onChange={(e) => setBetAmount(parseInt(e.target.value) || 0)}
-                                className="flex-1 bg-transparent text-center text-xl font-black italic text-white outline-none"
-                            />
-                            <button onClick={() => setBetAmount(betAmount + 10)} className="w-12 h-12 flex items-center justify-center text-zinc-500 hover:text-white"><Plus /></button>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                            <button onClick={() => setBetAmount(p => Math.floor(p * 0.5))} className="py-2 bg-white/5 rounded-[10px] text-xs font-bold text-zinc-400 hover:text-white transition-colors">x0.5</button>
-                            <button onClick={() => setBetAmount(p => p * 2)} className="py-2 bg-white/5 rounded-[10px] text-xs font-bold text-zinc-400 hover:text-white transition-colors">x2.0</button>
-                        </div>
+            <div className="w-full bg-[#213743] p-4 space-y-4 shrink-0 border-t border-[#0f212e] mt-4">
+                {/* Bet Amount */}
+                <div className="space-y-1.5">
+                    <div className="flex justify-between text-[#b1bad3] text-[10px] font-black uppercase tracking-[2px] px-1">
+                        <span>Bet Amount</span>
+                        <span>₹{betAmount.toFixed(2)}</span>
                     </div>
+                    <div className="flex bg-[#0f212e] border-2 border-[#2f4553] rounded-[6px] h-[42px] overflow-hidden hover:border-[#557086] transition-all">
+                        <button onClick={() => setBetAmount(Math.max(1, betAmount - 10))} className="px-3 text-zinc-500 hover:text-white transition-colors"><Minus size={16}/></button>
+                        <input
+                            type="number"
+                            value={betAmount}
+                            onChange={(e) => setBetAmount(parseInt(e.target.value) || 0)}
+                            className="flex-1 bg-transparent text-center text-sm font-black text-white outline-none"
+                        />
+                        <button onClick={() => setBetAmount(betAmount + 10)} className="px-3 text-zinc-500 hover:text-white transition-colors"><Plus size={16}/></button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                        <button onClick={() => setBetAmount(p => Math.floor(p * 0.5))} className="py-2 bg-[#2f4553] rounded-[6px] font-bold text-[10px] text-[#b1bad3] hover:text-white transition-colors uppercase">½ Bet</button>
+                        <button onClick={() => setBetAmount(p => p * 2)} className="py-2 bg-[#2f4553] rounded-[6px] font-bold text-[10px] text-[#b1bad3] hover:text-white transition-colors uppercase">2× Bet</button>
+                    </div>
+                </div>
 
-                    {/* Difficulty */}
-                    <div className="space-y-4">
-                        <div className="text-[10px] font-black text-zinc-500 uppercase tracking-[3px]">Set Difficulty</div>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-black/40 p-1.5 rounded-[10px] h-16 border-2 border-white/5">
-                            {Object.keys(difficultySettings).map(d => (
-                                <button
-                                    key={d}
-                                    onClick={() => setDifficulty(d)}
-                                    disabled={gameState === 'playing'}
-                                    className={`rounded-[10px] text-[10px] font-black uppercase tracking-widest transition-all ${difficulty === d ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/20' : 'text-zinc-500 hover:text-white disabled:opacity-30'}`}
-                                >
-                                    {d}
-                                </button>
-                            ))}
-                        </div>
+                {/* Difficulty */}
+                <div className="space-y-1.5">
+                    <div className="text-[#b1bad3] text-[10px] font-black uppercase tracking-[2px] px-1">Difficulty</div>
+                    <div className="grid grid-cols-4 gap-1 p-1 bg-[#0f212e] rounded-[6px] border border-[#2f4553]">
+                        {Object.keys(difficultySettings).map(d => (
+                            <button
+                                key={d}
+                                onClick={() => setDifficulty(d)}
+                                disabled={gameState === 'playing'}
+                                className={`py-2 rounded-[6px] text-[8px] font-black uppercase tracking-wider transition-all ${
+                                    difficulty === d 
+                                        ? 'bg-[#2f4553] text-white shadow-md' 
+                                        : 'text-[#b1bad3] hover:text-white disabled:opacity-30'
+                                }`}
+                            >
+                                {d}
+                            </button>
+                        ))}
                     </div>
                 </div>
 
                 {/* Main Action Bar */}
-                <div className="flex gap-4">
+                <div className="flex gap-2">
                     {gameState === 'playing' ? (
                         <>
                             <button
                                 onClick={moveToNextLane}
-                                className="flex-1 py-5 bg-white text-black rounded-[10px] font-black uppercase text-lg shadow-lg active:scale-95 transition-all flex items-center justify-center gap-3"
+                                className="flex-[2] py-4 bg-white text-black rounded-[6px] font-black uppercase text-sm shadow-lg active:translate-y-0.5 transition-all flex items-center justify-center gap-2"
                             >
-                                <Play size={24} fill="currentColor" /> Move Next
+                                <Play size={18} fill="currentColor" /> Move
                             </button>
                             <button
                                 onClick={() => handleCashOut()}
-                                className="flex-1 py-5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-[10px] font-black uppercase text-lg shadow-lg active:scale-95 transition-all flex flex-col items-center justify-center leading-none"
+                                className="flex-[3] py-4 bg-[#00e701] hover:bg-[#1fff20] text-[#05200a] rounded-[6px] font-black uppercase text-sm shadow-[0_4px_0_rgb(0,180,1)] active:translate-y-0.5 transition-all flex flex-col items-center justify-center leading-none"
                             >
-                                <span className="text-[10px] uppercase mb-1">Cash Out</span>
-                                <span>₹{(betAmount * multiplier).toFixed(2)}</span>
+                                <span className="text-[8px] uppercase mb-1 opacity-70">Cash Out</span>
+                                <span>₹{(betAmount * multiplier).toFixed(0)}</span>
                             </button>
                         </>
                     ) : (
                         <button
                             onClick={startGame}
-                            className="w-full py-5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-[10px] font-black uppercase text-lg shadow-lg active:scale-95 transition-all"
+                            className="w-full py-5 bg-[#00e701] hover:bg-[#1fff20] text-[#05200a] rounded-[6px] font-black uppercase text-base shadow-[0_4px_0_rgb(0,180,1)] active:translate-y-0.5 transition-all"
                         >
-                            Play
+                            Play (Next Round)
                         </button>
                     )}
                 </div>

@@ -90,12 +90,12 @@ const History = () => {
                     <p className="text-slate-500 font-medium text-sm sm:text-base mt-1">Track your performance and previous transactions</p>
                 </div>
 
-                <div className="flex bg-white shadow-sm p-1.5 rounded-[10px] border border-black/5 w-fit">
+                <div className="flex bg-white shadow-sm p-1.5 rounded-[6px] border border-black/5 w-fit">
                     {['bets', 'transactions'].map((tab) => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
-                            className={`px-6 py-2.5 rounded-[10px] text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all ${activeTab === tab
+                            className={`px-6 py-2.5 rounded-[6px] text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all ${activeTab === tab
                                 ? 'bg-accent text-white shadow-md shadow-accent/20'
                                 : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
                                 }`}
@@ -110,13 +110,13 @@ const History = () => {
                 <div className="flex gap-4">
                     <button
                         onClick={() => setFilterType('all')}
-                        className={`px-4 py-2 rounded-[10px] text-[10px] font-black uppercase tracking-widest transition-all border ${filterType === 'all' ? 'bg-white text-black border-white' : 'bg-transparent text-zinc-500 border-white/5 hover:border-white/20'}`}
+                        className={`px-4 py-2 rounded-[6px] text-[10px] font-black uppercase tracking-widest transition-all border ${filterType === 'all' ? 'bg-white text-black border-white' : 'bg-transparent text-zinc-500 border-white/5 hover:border-white/20'}`}
                     >
                         All Bets
                     </button>
                     <button
                         onClick={() => setFilterType('six_bonus')}
-                        className={`px-4 py-2 rounded-[10px] text-[10px] font-black uppercase tracking-widest transition-all border flex items-center gap-2 ${filterType === 'six_bonus' ? 'bg-amber-500 text-black border-amber-500' : 'bg-transparent text-amber-500/50 border-amber-500/10 hover:border-amber-500'}`}
+                        className={`px-4 py-2 rounded-[6px] text-[10px] font-black uppercase tracking-widest transition-all border flex items-center gap-2 ${filterType === 'six_bonus' ? 'bg-amber-500 text-black border-amber-500' : 'bg-transparent text-amber-500/50 border-amber-500/10 hover:border-amber-500'}`}
                     >
                         <Zap size={12} className={filterType === 'six_bonus' ? 'fill-black' : ''} />
                         Six Bonus
@@ -138,7 +138,7 @@ const History = () => {
 
                             if (filteredBets.length === 0) {
                                 return (
-                                    <div className="bg-white border border-black/5 shadow-sm rounded-[10px] py-32 text-center flex flex-col items-center">
+                                    <div className="bg-white border border-black/5 shadow-sm rounded-[6px] py-32 text-center flex flex-col items-center">
                                         <Archive size={64} className="text-slate-300 mb-6" />
                                         <h3 className="text-2xl font-black italic text-slate-900 uppercase">
                                             {filterType === 'six_bonus' ? 'No Six Bonus Bets' : 'No bets found'}
@@ -157,10 +157,10 @@ const History = () => {
                                             initial={{ opacity: 0, x: -20 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             key={bet.id}
-                                            className="bg-white border border-black/5 shadow-sm rounded-[10px] sm:rounded-[10px] p-4 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-md transition-shadow"
+                                            className="bg-white border border-black/5 shadow-sm rounded-[6px] sm:rounded-[6px] p-4 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-md transition-shadow"
                                         >
                                             <div className="flex items-center gap-6 flex-1">
-                                                <div className={`w-14 h-14 rounded-[10px] flex items-center justify-center shrink-0 ${bet.status === 'won' ? 'bg-emerald-500/10 text-emerald-500' :
+                                                <div className={`w-14 h-14 rounded-[6px] flex items-center justify-center shrink-0 ${bet.status === 'won' ? 'bg-emerald-500/10 text-emerald-500' :
                                                     bet.status === 'lost' ? 'bg-red-500/10 text-red-500' :
                                                         'bg-zinc-900 text-zinc-500'
                                                     }`}>
@@ -174,11 +174,11 @@ const History = () => {
                                                         <h3 className="text-xl sm:text-2xl text-slate-900 font-black italic tracking-tighter uppercase whitespace-nowrap">
                                                             {bet.teamA} VS {bet.teamB}
                                                         </h3>
-                                                        <div className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${bet.status === 'won' ? 'bg-emerald-500 flex text-white' :
+                                                        <div className={`px-2 py-0.5 rounded-[6px] text-[8px] font-black uppercase tracking-widest ${bet.status === 'won' ? 'bg-emerald-500 flex text-white' :
                                                             bet.status === 'lost' ? 'bg-red-500 text-white' :
                                                                 'bg-slate-200 text-slate-500'
                                                             }`}>
-                                                            {bet.status}
+                                                            {bet.status === 'pending' ? 'CONFIRMED' : bet.status}
                                                         </div>
                                                     </div>
                                                     <div className="flex flex-wrap items-center gap-1 sm:gap-3 text-[9px] sm:text-[10px] text-slate-500 font-bold uppercase tracking-widest">
@@ -206,7 +206,7 @@ const History = () => {
                                                             }`}>
                                                             {bet.status === 'won' ? `+${bet.payout?.toFixed(0)}` :
                                                                 bet.status === 'lost' ? `-${bet.amount}` :
-                                                                    'Pending'}
+                                                                    'Awaiting Outcome'}
                                                         </span>
                                                         {bet.sixRewardApplied && (
                                                             <div className="flex items-center gap-1 text-[8px] text-amber-500 font-bold uppercase tracking-widest mt-1">
@@ -223,7 +223,7 @@ const History = () => {
                         })()
                     ) : (
                         (pendingRecharges.length + pendingWithdrawals.length) === 0 && transactions.length === 0 ? (
-                            <div className="bg-white border border-black/5 shadow-sm rounded-[10px] py-32 text-center flex flex-col items-center">
+                            <div className="bg-white border border-black/5 shadow-sm rounded-[6px] py-32 text-center flex flex-col items-center">
                                 <HistoryIcon size={64} className="text-slate-300 mb-6" />
                                 <h3 className="text-2xl font-black italic text-slate-900 uppercase">No transactions</h3>
                                 <p className="text-slate-500 font-medium mt-2">Your wallet activity will appear here.</p>
@@ -238,9 +238,9 @@ const History = () => {
                                         return timeB - timeA;
                                     })
                                     .map((req) => (
-                                        <div key={req.id} className="bg-amber-50/80 border border-amber-200/50 rounded-[10px] sm:rounded-[10px] flex items-center justify-between p-4 sm:p-6 shadow-sm">
+                                        <div key={req.id} className="bg-amber-50/80 border border-amber-200/50 rounded-[6px] sm:rounded-[6px] flex items-center justify-between p-4 sm:p-6 shadow-sm">
                                             <div className="flex items-center gap-3 sm:gap-5">
-                                                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-[10px] flex items-center justify-center bg-amber-500/10 text-amber-600 shrink-0 border border-amber-500/20">
+                                                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-[6px] flex items-center justify-center bg-amber-500/10 text-amber-600 shrink-0 border border-amber-500/20">
                                                     <Clock size={20} className="animate-pulse" />
                                                 </div>
                                                 <div>
@@ -264,9 +264,9 @@ const History = () => {
                                     ))}
 
                                 {transactions.map((trans, idx) => (
-                                    <div key={trans.id} className="bg-white border border-black/5 rounded-[10px] sm:rounded-[10px] flex items-center justify-between p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+                                    <div key={trans.id} className="bg-white border border-black/5 rounded-[6px] sm:rounded-[6px] flex items-center justify-between p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
                                         <div className="flex items-center gap-3 sm:gap-5">
-                                            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-[10px] flex items-center justify-center shrink-0 border ${trans.type === 'deposit' ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-red-500/10 text-red-600 border-red-500/20'
+                                            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-[6px] flex items-center justify-center shrink-0 border ${trans.type === 'deposit' ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-red-500/10 text-red-600 border-red-500/20'
                                                 }`}>
                                                 {trans.type === 'deposit' ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
                                             </div>

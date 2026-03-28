@@ -34,7 +34,7 @@
   }
 
   .glass-card {
-    @apply bg-white border border-black/[0.05] rounded-[2rem] p-8 transition-all duration-500 hover:border-accent/20;
+    @apply bg-white border border-black/[0.05] rounded-[6px] p-8 transition-all duration-500 hover:border-accent/20;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
   }
 
@@ -44,7 +44,7 @@
   }
 
   .nav-link {
-    @apply flex items-center gap-3 text-slate-500 hover:text-accent transition-all font-bold py-4 px-6 rounded-2xl hover:bg-accent/5 uppercase tracking-widest text-[10px];
+    @apply flex items-center gap-3 text-slate-500 hover:text-accent transition-all font-bold py-4 px-6 rounded-[6px] hover:bg-accent/5 uppercase tracking-widest text-[10px];
   }
 
   .nav-link.active {
@@ -52,7 +52,7 @@
   }
 
   .btn-accent {
-    @apply px-10 py-5 text-white rounded-[1.5rem] font-black italic uppercase tracking-[0.1em] transition-all active:scale-95 flex items-center justify-center gap-3 text-xs overflow-hidden relative shadow-lg;
+    @apply px-10 py-5 text-white rounded-[6px] font-black italic uppercase tracking-[0.1em] transition-all active:scale-95 flex items-center justify-center gap-3 text-xs overflow-hidden relative shadow-lg;
     background: linear-gradient(135deg, #d11b1b 0%, #a01515 100%);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   }
@@ -77,11 +77,11 @@
   }
 
   .btn-outline {
-    @apply px-10 py-5 border-2 border-accent/20 hover:border-accent text-accent rounded-[1.5rem] font-black uppercase tracking-[0.1em] text-xs transition-all active:scale-95 flex items-center justify-center gap-3 bg-white;
+    @apply px-10 py-5 border-2 border-accent/20 hover:border-accent text-accent rounded-[6px] font-black uppercase tracking-[0.1em] text-xs transition-all active:scale-95 flex items-center justify-center gap-3 bg-white;
   }
 
   .odds-badge {
-    @apply px-6 py-4 bg-white rounded-3xl border border-black/[0.05] flex flex-col items-center gap-1.5 min-w-[130px] transition-all duration-500 hover:border-accent hover:bg-accent/5 shadow-sm;
+    @apply px-6 py-4 bg-white rounded-[6px] border border-black/[0.05] flex flex-col items-center gap-1.5 min-w-[130px] transition-all duration-500 hover:border-accent hover:bg-accent/5 shadow-sm;
   }
 
   .cricwin-logo {
@@ -94,7 +94,7 @@
   }
 
   .sidebar-item {
-    @apply flex items-center gap-3 px-6 py-4 rounded-2xl text-slate-500 hover:text-accent hover:bg-accent/5 transition-all font-bold italic uppercase tracking-wider text-[11px];
+    @apply flex items-center gap-3 px-6 py-4 rounded-[6px] text-slate-500 hover:text-accent hover:bg-accent/5 transition-all font-bold italic uppercase tracking-wider text-[11px];
   }
 
   .sidebar-item.active {
@@ -102,7 +102,7 @@
   }
 
   .input-field {
-    @apply w-full bg-slate-100 border border-black/[0.05] rounded-2xl py-5 px-8 outline-none transition-all font-bold text-slate-900 placeholder:text-slate-400 tracking-wide focus:border-accent/30 focus:bg-white;
+    @apply w-full bg-slate-100 border border-black/[0.05] rounded-[6px] py-5 px-8 outline-none transition-all font-bold text-slate-900 placeholder:text-slate-400 tracking-wide focus:border-accent/30 focus:bg-white;
   }
 
   .label-sm {
@@ -163,7 +163,7 @@
 
   .btn-accent,
   .btn-outline {
-    @apply py-4 px-6 text-[11px] rounded-xl font-black uppercase tracking-[2px];
+    @apply py-4 px-6 text-[11px] rounded-[6px] font-black uppercase tracking-[2px];
     height: 54px;
     width: 100%;
   }
@@ -181,11 +181,11 @@
   }
 
   .glass-card {
-    @apply p-6 rounded-[32px] border-white/10;
+    @apply p-6 rounded-[6px] border-white/10;
   }
 
   .input-field {
-    @apply py-4 text-sm rounded-xl;
+    @apply py-4 text-sm rounded-[6px];
   }
 
   .label-sm {

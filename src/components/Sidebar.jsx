@@ -41,24 +41,30 @@ const Sidebar = ({ isOpen, onClose }) => {
             {/* Mobile Overlay */}
             {isOpen && (
                 <div
-                    className="absolute inset-0 bg-black/60 backdrop-blur-sm z-[150]"
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[950]"
                     onClick={onClose}
                 />
             )}
 
             <aside className={`
-                absolute inset-y-0 left-0 z-[200] w-[280px] 
+                fixed inset-y-0 left-0 z-[1000] w-[280px] 
                 bg-white border-r border-black/[0.05] shadow-2xl
                 transform transition-transform duration-300 ease-in-out
-                ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0
+                ${isOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
                 <div className="h-full flex flex-col p-6">
                     <div className="flex items-center justify-between mb-10 pl-2 lg:mb-12">
                         <Link to="/dashboard" className="cricwin-logo !text-accent flex items-center gap-2" onClick={onClose}>
-                            <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-white text-xs font-black not-italic"><Trophy size={16}/></div>
+                            <div className="w-8 h-8 rounded-[6px] bg-accent flex items-center justify-center text-white text-xs font-black not-italic"><Trophy size={16}/></div>
                             <span>WIN</span>
                         </Link>
-                        <button onClick={onClose} className="text-slate-600 lg:hidden hover:text-accent transition-colors">
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onClose();
+                            }}
+                            className="p-2 bg-slate-50 border border-black/[0.05] rounded-[6px] text-slate-600 hover:text-accent transition-all active:scale-90 hover:shadow-lg relative z-[210]"
+                        >
                             <X size={24} />
                         </button>
                     </div>

@@ -66,12 +66,12 @@ const JrtGatekeeper = ({ onAuthorized }) => {
             </div>
 
             {/* Glowing Orbs */}
-            <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-accent/20 blur-[150px] rounded-full animate-pulse" />
-            <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-accent/10 blur-[120px] rounded-full" />
+            <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-accent/20 blur-[150px] rounded-[6px] animate-pulse" />
+            <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-accent/10 blur-[120px] rounded-[6px]" />
 
             {/* Main Content Card */}
             <div className="w-full max-w-[460px] relative z-10 animate-in fade-in zoom-in-95 duration-1000">
-                <div className="bg-white/[0.98] rounded-[48px] border border-white/20 p-10 sm:p-16 shadow-[0_40px_100px_rgba(0,0,0,0.4)] backdrop-blur-3xl relative overflow-hidden group/card hover:translate-y-[-5px] transition-all duration-700">
+                <div className="bg-white/[0.98] rounded-[6px] border border-white/20 p-10 sm:p-16 shadow-[0_40px_100px_rgba(0,0,0,0.4)] backdrop-blur-3xl relative overflow-hidden group/card hover:translate-y-[-5px] transition-all duration-700">
                     {/* Dynamic Scanning Line */}
                     <div className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-accent to-transparent top-0 animate-[scan_3s_ease-in-out_infinite]" />
                     
@@ -81,8 +81,8 @@ const JrtGatekeeper = ({ onAuthorized }) => {
                     </div>
 
                     <div className="text-center mb-14 relative">
-                        <div className="w-28 h-28 bg-slate-950 rounded-[35px] flex items-center justify-center mx-auto mb-10 shadow-[0_20px_40px_rgba(0,0,0,0.2)] relative group/icon">
-                            <div className="absolute inset-0 bg-accent/20 blur-2xl rounded-full scale-0 group-hover/card:scale-100 transition-transform duration-1000" />
+                        <div className="w-28 h-28 bg-slate-950 rounded-[6px] flex items-center justify-center mx-auto mb-10 shadow-[0_20px_40px_rgba(0,0,0,0.2)] relative group/icon">
+                            <div className="absolute inset-0 bg-accent/20 blur-2xl rounded-[6px] scale-0 group-hover/card:scale-100 transition-transform duration-1000" />
                             <ShieldCheck className="text-accent relative z-10 group-hover/icon:rotate-[360deg] transition-transform duration-1000" size={48} strokeWidth={1} />
                         </div>
                         
@@ -92,7 +92,7 @@ const JrtGatekeeper = ({ onAuthorized }) => {
                                 <span className="text-slate-900 group-hover/card:tracking-[1px] transition-all duration-700">ACCESS</span>
                                 <span className="text-slate-900/40 relative">
                                     GATEWAY
-                                    <div className="absolute -right-8 top-1/2 -translate-y-1/2 w-6 h-6 bg-accent rounded-full flex items-center justify-center animate-bounce shadow-lg shadow-accent/20">
+                                    <div className="absolute -right-8 top-1/2 -translate-y-1/2 w-6 h-6 bg-accent rounded-[6px] flex items-center justify-center animate-bounce shadow-lg shadow-accent/20">
                                         <Lock size={10} className="text-white" />
                                     </div>
                                 </span>
@@ -104,7 +104,7 @@ const JrtGatekeeper = ({ onAuthorized }) => {
                         <div className="space-y-5">
                             <div className="flex items-center justify-between px-4">
                                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] flex items-center gap-2">
-                                    <div className="w-1 h-1 bg-accent rounded-full animate-ping" />
+                                    <div className="w-1 h-1 bg-accent rounded-[6px] animate-ping" />
                                     Identity Verification
                                 </label>
                                 <span className="text-[9px] font-black text-accent/30 uppercase tracking-widest">Digital-Auth v4.0</span>
@@ -116,7 +116,7 @@ const JrtGatekeeper = ({ onAuthorized }) => {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     autoFocus
-                                    className="w-full bg-slate-50 border-2 border-slate-100 rounded-[30px] py-8 text-center text-4xl font-black tracking-[15px] text-accent focus:outline-none focus:border-accent/40 focus:bg-white focus:ring-[20px] focus:ring-accent/5 transition-all duration-700 placeholder:text-slate-200 placeholder:tracking-widest"
+                                    className="w-full bg-slate-50 border-2 border-slate-100 rounded-[6px] py-8 text-center text-4xl font-black tracking-[15px] text-accent focus:outline-none focus:border-accent/40 focus:bg-white focus:ring-[20px] focus:ring-accent/5 transition-all duration-700 placeholder:text-slate-200 placeholder:tracking-widest"
                                 />
                             </div>
                         </div>
@@ -124,7 +124,7 @@ const JrtGatekeeper = ({ onAuthorized }) => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-slate-950 hover:bg-accent text-white py-8 rounded-[30px] font-black uppercase italic tracking-[0.2em] transition-all duration-700 flex items-center justify-center gap-5 group active:scale-[0.95] shadow-[0_30px_60px_rgba(0,0,0,0.2)] relative overflow-hidden"
+                            className="w-full bg-slate-950 hover:bg-accent text-white py-8 rounded-[6px] font-black uppercase italic tracking-[0.2em] transition-all duration-700 flex items-center justify-center gap-5 group active:scale-[0.95] shadow-[0_30px_60px_rgba(0,0,0,0.2)] relative overflow-hidden"
                         >
                             <span className="relative z-10 flex items-center gap-4 text-lg">
                                 {loading ? 'BYPASSING FIREWALL...' : 'INITIALIZE SYSTEM'}

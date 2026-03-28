@@ -90,16 +90,16 @@ const Payment = () => {
     if (submitted) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-primary p-6 overflow-hidden relative">
-                <div className="absolute inset-0 bg-accent/5 blur-[120px] rounded-full translate-y-1/2 scale-150" />
+                <div className="absolute inset-0 bg-accent/5 blur-[120px] rounded-[6px] translate-y-1/2 scale-150" />
                 <div className="max-w-md w-full relative animate-in zoom-in-95 duration-500">
-                    <div className="bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-[10px] p-10 space-y-10 shadow-2xl relative overflow-hidden">
+                    <div className="bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-[6px] p-10 space-y-10 shadow-2xl relative overflow-hidden">
                         <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500" />
 
                         <div className="relative mx-auto">
-                            <div className="w-32 h-32 bg-emerald-500/10 rounded-[10px] flex items-center justify-center mx-auto border border-emerald-500/20 shadow-2xl animate-bounce">
+                            <div className="w-32 h-32 bg-emerald-500/10 rounded-[6px] flex items-center justify-center mx-auto border border-emerald-500/20 shadow-2xl animate-bounce">
                                 <CheckCircle2 className="text-emerald-500 w-16 h-16" />
                             </div>
-                            <div className="absolute inset-0 bg-emerald-500/20 blur-3xl rounded-full -z-10" />
+                            <div className="absolute inset-0 bg-emerald-500/20 blur-3xl rounded-[6px] -z-10" />
                         </div>
 
                         <div className="space-y-6 text-center">
@@ -108,7 +108,7 @@ const Payment = () => {
                                     <span className="text-white drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)]">Request</span> <br />
                                     <span className="logo-accent text-emerald-500">Logged</span>
                                 </h1>
-                                <div className="h-1 w-12 bg-emerald-500/50 mx-auto rounded-full" />
+                                <div className="h-1 w-12 bg-emerald-500/50 mx-auto rounded-[6px]" />
                             </div>
                             <p className="text-zinc-400 font-bold uppercase text-[11px] tracking-widest leading-relaxed px-4">
                                 Your payment is being verified by our <span className="text-emerald-400">elite security team</span>. Balance will update within 5-10 minutes.
@@ -117,7 +117,7 @@ const Payment = () => {
 
                         <button
                             onClick={() => navigate('/dashboard')}
-                            className="w-full py-6 bg-white text-black rounded-[10px] font-black uppercase italic tracking-widest transition-all hover:bg-emerald-500 hover:text-white active:scale-95 shadow-xl shadow-white/5"
+                            className="w-full py-6 bg-white text-black rounded-[6px] font-black uppercase italic tracking-widest transition-all hover:bg-emerald-500 hover:text-white active:scale-95 shadow-xl shadow-white/5"
                         >
                             Return to Dashboard
                         </button>
@@ -131,142 +131,66 @@ const Payment = () => {
     }
 
     return (
-        <div className="min-h-screen bg-primary p-4 lg:p-6 pb-20 mt-[-20px]">
-            <div className="max-w-2xl mx-auto space-y-6">
-                {/* Header */}
-                <div className="flex items-center gap-6">
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="p-3 bg-zinc-900 rounded-[10px] border border-white/5 text-zinc-400 hover:text-white transition-all shadow-2xl active:scale-95"
-                    >
-                        <ArrowLeft size={20} />
-                    </button>
-                    <div>
-                        <div className="flex items-center gap-2 mb-1">
-                            <ShieldCheck className="text-accent" size={14} />
-                            <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Secure Checkout</span>
+        <div className="min-h-screen bg-[#f5f5f9] flex items-center justify-center p-0 font-['Outfit',sans-serif]">
+            <div className="w-full space-y-6 animate-in zoom-in-95 duration-700">
+                {/* Main Scanning Pad - The Only Active Area */}
+                <div className="bg-slate-900 rounded-[6px] p-8 sm:p-10 text-center space-y-8 shadow-[0_40px_100px_-20px_rgba(15,23,42,0.5)] relative overflow-hidden group">
+                    {/* Animated Scan Line */}
+                    <div className="absolute top-0 inset-x-0 h-1 bg-blue-500/50 blur-sm animate-[scan_3s_infinite]" />
+                    
+                    <div className="relative mx-auto w-fit">
+                        <div className="bg-white p-4 rounded-[6px] shadow-2xl relative z-10">
+                            <img
+                                src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=upi://pay?pa=aryan.genral@upi&pn=ARYAN%20GENERAL%20STORE&am=${amount}&cu=INR`}
+                                alt="Payment QR"
+                                className="w-56 h-56 sm:w-64 sm:h-64 object-contain mx-auto"
+                            />
                         </div>
-                        <h1 className="text-2xl lg:text-3xl font-[1000] text-slate-900 italic tracking-[-0.05em] uppercase leading-none">
-                            COMPLETE <span className="text-[#3b82f6]">PAYMENT</span>
-                        </h1>
-                        <p className="text-zinc-500 text-[13px] font-medium mt-1">Send ₹{amount.toLocaleString()} to our verified wallet.</p>
-                    </div>
-                </div>
-
-            {/* QR Section */}
-                <div className="group relative bg-white rounded-[10px] border border-black/5 p-6 lg:p-8 overflow-hidden hover:border-accent/20 transition-all duration-500 shadow-sm">
-                    <div className="absolute top-0 right-0 p-10 opacity-[0.03] pointer-events-none">
-                        <QrCode size={200} />
+                        {/* Glow under QR */}
+                        <div className="absolute inset-x-[-20px] inset-y-[-20px] bg-blue-500/20 blur-[60px] rounded-[6px] -z-10 group-hover:bg-blue-50/40 transition-all duration-700" />
                     </div>
 
-                    <div className="flex flex-col lg:flex-row items-center gap-6 relative">
-                        <div className="space-y-4 flex-1 text-center lg:text-left">
-                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 rounded-full border border-emerald-500/20 h-fit">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Fast Verification Active</span>
+                    <div className="space-y-6">
+                        <div className="space-y-3 text-left">
+                            <div className="flex justify-between items-center px-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">UTR / Transaction ID</label>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-blue-500 italic">₹{amount}</span>
                             </div>
-                            <h2 className="text-4xl sm:text-5xl font-black italic tracking-tighter text-slate-900 leading-none">₹{amount.toLocaleString()}</h2>
-                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-[2px]">Total Payable Amount</p>
-
-                            <div className="flex flex-wrap justify-center lg:justify-start gap-5 transition-all duration-500 mt-2">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.svg/200px-PhonePe_Logo.svg.png" alt="PhonePe" className="h-8 object-contain drop-shadow-sm" />
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/200px-Paytm_Logo_%28standalone%29.svg.png" alt="Paytm" className="h-6 object-contain mt-1 drop-shadow-sm" />
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo.png/200px-UPI-Logo.png" alt="UPI" className="h-6 object-contain mt-1 drop-shadow-sm" />
-                            </div>
+                            <input
+                                type="text"
+                                placeholder="ENTER 12-DIGIT UTR"
+                                value={utr}
+                                onChange={(e) => setUtr(e.target.value)}
+                                className="w-full bg-slate-800 border border-white/10 rounded-[6px] py-5 px-8 text-xl font-black text-white focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-700 uppercase tracking-[0.2em]"
+                            />
                         </div>
 
-                        <div className="relative">
-                            <div className="w-56 h-56 bg-white p-4 rounded-[10px] shadow-[0_0_60px_rgba(0,0,0,0.5)] transform transition-transform group-hover:scale-105 duration-500">
-                                <img
-                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=aryan.genral@upi&pn=ARYAN%20GENERAL%20STORE&am=${amount}&cu=INR`}
-                                    alt="Payment QR"
-                                    className="w-full h-full object-contain"
-                                />
-                                <div className="absolute inset-x-0 bottom-4 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <p className="text-[8px] font-black uppercase tracking-widest text-zinc-400">Merchant: Aryan General Store</p>
-                                </div>
-                            </div>
-                            <div className="absolute -inset-4 bg-accent/10 blur-3xl -z-10 group-hover:bg-accent/20 transition-all duration-500" />
-                        </div>
-                    </div>
-                </div>
-
-                {/* UTR Input Section */}
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between px-4">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Transaction Details</label>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-[#3b82f6]">12 Digit UTR / Ref ID</span>
-                    </div>
-                    <div className="relative group">
-                        <input
-                            type="text"
-                            placeholder="Enter 12-digit UTR Number"
-                            value={utr}
-                            onChange={(e) => setUtr(e.target.value)}
-                            className="w-full bg-white border border-black/5 rounded-[10px] py-4 px-6 text-lg font-black text-slate-900 focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-400 uppercase tracking-widest shadow-sm"
-                        />
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 bg-blue-500/10 rounded-[10px] text-blue-500 pointer-events-none group-focus-within:scale-110 transition-transform">
-                            <ShieldCheck size={20} />
-                        </div>
-                    </div>
-                </div>
-
-
-
-                {/* Info Cards */}
-                <div className="grid sm:grid-cols-2 gap-3 mt-4">
-                    <div className="p-4 bg-blue-50/80 border border-blue-100 rounded-[10px] flex gap-3 shadow-sm hover:shadow-md transition-shadow">
-                        <div className="p-2.5 bg-blue-500/10 rounded-[10px] text-blue-600 h-fit shadow-inner">
-                            <Info size={16} />
-                        </div>
-                        <div className="space-y-0.5">
-                            <p className="text-[10px] font-black text-blue-900 uppercase tracking-widest">Steps to Pay</p>
-                            <p className="text-[11px] text-blue-700/80 font-medium leading-relaxed">Scan QR → Pay amount → Take screenshot → Upload.</p>
-                        </div>
-                    </div>
-                    <div className="p-4 bg-violet-50/80 border border-violet-100 rounded-[10px] flex gap-3 shadow-sm hover:shadow-md transition-shadow">
-                        <div className="p-2.5 bg-violet-500/10 rounded-[10px] text-violet-600 h-fit shadow-inner">
-                            <Smartphone size={16} />
-                        </div>
-                        <div className="space-y-0.5">
-                            <p className="text-[10px] font-black text-violet-900 uppercase tracking-widest">Phone Match</p>
-                            <p className="text-[11px] text-violet-700/80 font-medium leading-relaxed">Ensure number <span className="font-bold">{userData?.phone || ''}</span> matches payment app.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Action Button */}
-                <button
-                    onClick={handleSubmit}
-                    disabled={!utr || utr.length < 6 || loading}
-                    className="group relative w-full overflow-hidden p-4 bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:grayscale text-white rounded-[10px] font-black uppercase italic tracking-widest transition-all shadow-xl shadow-accent/20 active:scale-95 text-sm sm:text-base"
-                >
-                    {loading && (
-                        <div
-                            className="absolute inset-y-0 left-0 bg-white/20 transition-all duration-700 ease-out"
-                            style={{ width: `${uploadProgress}%` }}
+                        <button
+                            onClick={handleSubmit}
+                            disabled={!utr || utr.length < 6 || loading}
+                            className="w-full py-6 bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:grayscale text-white rounded-[6px] font-black uppercase italic tracking-[5px] transition-all shadow-xl shadow-blue-900/40 active:scale-[0.98] text-sm flex items-center justify-center gap-3"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
-                        </div>
-                    )}
-                    <div className="relative z-10 flex items-center justify-center gap-4">
-                        {loading ? (
-                            <>
+                            {loading ? (
                                 <Loader2 className="animate-spin" size={24} />
-                                <span>{statusText || 'Processing...'}</span>
-                            </>
-                        ) : (
-                            <>
-                                <span>Submit for Verification</span>
-                                <ShieldCheck size={20} className="group-hover:rotate-12 transition-transform" />
-                            </>
-                        )}
+                            ) : (
+                                <>
+                                    <span>Submit Deposit</span>
+                                    <CheckCircle2 size={20} />
+                                </>
+                            )}
+                        </button>
                     </div>
-                </button>
+                </div>
             </div>
+            
+            <style dangerouslySetInnerHTML={{ __html: `
+                @keyframes scan {
+                    0%, 100% { top: 5%; opacity: 0.1; }
+                    50% { top: 95%; opacity: 1; }
+                }
+            `}} />
         </div>
     );
 };
 
 export default Payment;
-

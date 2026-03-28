@@ -128,18 +128,18 @@ const PlinkoGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
     };
 
     return (
-        <div className="flex flex-col lg:flex-row bg-[#0f212e] overflow-hidden min-h-[550px]">
+        <div className="flex flex-col bg-[#0f212e] overflow-y-auto min-h-[550px] w-full">
             {/* ===== LEFT SIDEBAR CONTROLS ===== */}
-            <div className="w-full lg:w-[280px] bg-[#213743] p-4 flex flex-col gap-4 z-10 border-r border-[#0f212e] order-2 lg:order-1">
+            <div className="w-full bg-[#1a2c38] p-4 flex flex-col gap-4 z-10 border-b border-[#0f212e] shrink-0">
                 {/* Manual / Auto Toggle */}
-                <div className="bg-[#0f212e] p-1 rounded-full flex">
+                <div className="bg-[#0f212e] p-1 rounded-[6px] flex">
                     <button
                         onClick={() => setMode('manual')}
-                        className={`flex-1 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${mode === 'manual' ? 'bg-[#2f4553] text-white shadow-md' : 'text-[#b1bad3] hover:text-white'}`}
+                        className={`flex-1 py-2.5 rounded-[6px] text-[11px] font-bold uppercase tracking-wider transition-all ${mode === 'manual' ? 'bg-[#2f4553] text-white shadow-md' : 'text-[#b1bad3] hover:text-white'}`}
                     >Manual</button>
                     <button
                         onClick={() => setMode('auto')}
-                        className={`flex-1 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${mode === 'auto' ? 'bg-[#2f4553] text-white shadow-md' : 'text-[#b1bad3] hover:text-white'}`}
+                        className={`flex-1 py-2.5 rounded-[6px] text-[11px] font-bold uppercase tracking-wider transition-all ${mode === 'auto' ? 'bg-[#2f4553] text-white shadow-md' : 'text-[#b1bad3] hover:text-white'}`}
                     >Auto</button>
                 </div>
 
@@ -149,7 +149,7 @@ const PlinkoGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                         <span>Bet Amount</span>
                         <span>₹{betAmount.toLocaleString()}</span>
                     </div>
-                    <div className="flex bg-[#0f212e] border-2 border-[#2f4553] rounded h-[42px] overflow-hidden hover:border-[#557086] transition-all">
+                    <div className="flex bg-[#0f212e] border-2 border-[#2f4553] rounded-[6px] h-[42px] overflow-hidden hover:border-[#557086] transition-all">
                         <input
                             type="number"
                             value={betAmount === 0 ? '' : betAmount}
@@ -159,7 +159,7 @@ const PlinkoGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                             className="flex-1 bg-transparent px-3 text-white font-bold outline-none text-sm placeholder:text-[#557086]"
                         />
                         <div className="flex items-center px-1">
-                            <div className="w-4 h-4 rounded-full bg-yellow-500 flex items-center justify-center text-[9px] font-black text-black">₹</div>
+                            <div className="w-4 h-4 rounded-[6px] bg-yellow-500 flex items-center justify-center text-[9px] font-black text-black">₹</div>
                         </div>
                         <div className="flex bg-[#2f4553]">
                             <button onClick={() => setBetAmount(prev => Math.max(1, Math.floor(prev / 2)))} disabled={isDropping} className="px-3 text-white font-bold hover:bg-[#3b5568] transition-colors border-r border-[#0f212e] text-xs">½</button>
@@ -176,7 +176,7 @@ const PlinkoGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                             value={risk}
                             onChange={(e) => setRisk(e.target.value)}
                             disabled={isDropping}
-                            className="w-full bg-[#0f212e] border-2 border-[#2f4553] rounded py-2.5 px-3 text-white font-bold outline-none appearance-none hover:border-[#557086] transition-all text-sm cursor-pointer pr-10"
+                            className="w-full bg-[#0f212e] border-2 border-[#2f4553] rounded-[6px] py-2.5 px-3 text-white font-bold outline-none appearance-none hover:border-[#557086] transition-all text-sm cursor-pointer pr-10"
                         >
                             <option value="Low" className="bg-[#0f212e]">Low</option>
                             <option value="Medium" className="bg-[#0f212e]">Medium</option>
@@ -194,7 +194,7 @@ const PlinkoGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                             value={rows}
                             onChange={(e) => setRows(Number(e.target.value))}
                             disabled={isDropping}
-                            className="w-full bg-[#0f212e] border-2 border-[#2f4553] rounded py-2.5 px-3 text-white font-bold outline-none appearance-none hover:border-[#557086] transition-all text-sm cursor-pointer pr-10"
+                            className="w-full bg-[#0f212e] border-2 border-[#2f4553] rounded-[6px] py-2.5 px-3 text-white font-bold outline-none appearance-none hover:border-[#557086] transition-all text-sm cursor-pointer pr-10"
                         >
                             <option value={8} className="bg-[#0f212e]">8</option>
                             <option value={12} className="bg-[#0f212e]">12</option>
@@ -209,7 +209,7 @@ const PlinkoGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                     <button
                         onClick={dropBall}
                         disabled={isDropping}
-                        className="w-full py-3.5 bg-[#00e701] hover:bg-[#1fff1f] text-[#05200a] rounded font-black text-sm shadow-[0_4px_0_rgb(0,180,1)] active:translate-y-0.5 active:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full py-3.5 bg-[#00e701] hover:bg-[#1fff1f] text-[#05200a] rounded-[6px] font-black text-sm shadow-[0_4px_0_rgb(0,180,1)] active:translate-y-0.5 active:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isDropping ? 'Dropping...' : 'Bet'}
                     </button>
@@ -217,7 +217,7 @@ const PlinkoGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
             </div>
 
             {/* ===== PLINKO BOARD ===== */}
-            <div className="flex-1 bg-[#0f212e] p-3 sm:p-6 flex flex-col items-center justify-center relative overflow-hidden order-1 lg:order-2 min-h-[450px]">
+            <div className="flex-1 bg-[#0f212e] p-3 sm:p-6 flex flex-col items-center justify-center relative overflow-hidden min-h-[450px] shrink-0">
                 {/* Plinko board area */}
                 <div className="relative w-full max-w-[550px]" style={{ aspectRatio: '1.2/1' }}>
                     {/* Rows of pegs */}
@@ -238,7 +238,7 @@ const PlinkoGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                                     {Array.from({ length: pegsInRow }).map((_, pegIndex) => (
                                         <div
                                             key={pegIndex}
-                                            className="w-[6px] h-[6px] sm:w-2 sm:h-2 rounded-full bg-[#2f4553] shadow-[0_0_4px_rgba(47,69,83,0.5)]"
+                                            className="w-[6px] h-[6px] sm:w-2 sm:h-2 rounded-[6px] bg-[#2f4553] shadow-[0_0_4px_rgba(47,69,83,0.5)]"
                                         />
                                     ))}
                                 </div>
@@ -262,7 +262,7 @@ const PlinkoGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                                     transition={{ type: 'spring', stiffness: 300, damping: 20, mass: 0.5 }}
                                     style={{ transform: 'translate(-50%, -50%)' }}
                                 >
-                                    <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-[#ff6b35] shadow-[0_0_12px_rgba(255,107,53,0.7),0_0_25px_rgba(255,107,53,0.3)]" />
+                                    <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-[6px] bg-[#ff6b35] shadow-[0_0_12px_rgba(255,107,53,0.7),0_0_25px_rgba(255,107,53,0.3)]" />
                                 </motion.div>
                             );
                         })}
@@ -278,7 +278,7 @@ const PlinkoGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                                     key={i}
                                     animate={isHit ? { scale: [1, 1.2, 1] } : {}}
                                     transition={{ duration: 0.3 }}
-                                    className="rounded-[10px] text-center font-black leading-none transition-all relative overflow-hidden"
+                                    className="rounded-[6px] text-center font-black leading-none transition-all relative overflow-hidden"
                                     style={{
                                         background: colors.bg,
                                         color: colors.text,
@@ -303,7 +303,7 @@ const PlinkoGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                             initial={{ scale: 0, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0, opacity: 0 }}
-                            className="absolute z-30 bg-[#0f212e]/90 backdrop-blur-md border-2 border-[#00e701]/40 rounded-[10px] px-8 py-5 text-center shadow-[0_0_50px_rgba(0,231,1,0.2)]"
+                            className="absolute z-30 bg-[#0f212e]/90 backdrop-blur-md border-2 border-[#00e701]/40 rounded-[6px] px-8 py-5 text-center shadow-[0_0_50px_rgba(0,231,1,0.2)]"
                         >
                             <p className="text-[#00e701] text-3xl font-black">{lastWin.multiplier}x</p>
                             <p className="text-white/60 text-xs font-bold mt-1">+₹{lastWin.amount}</p>

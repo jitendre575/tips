@@ -90,7 +90,7 @@ const AddBalance = () => {
                 <div className="flex items-start sm:items-center gap-3 sm:gap-4">
                     <button
                         onClick={() => navigate(-1)}
-                        className="p-3 bg-white rounded-[10px] border border-black/5 text-slate-500 hover:text-slate-800 transition-all shadow-xl active:scale-95"
+                        className="p-3 bg-white rounded-[6px] border border-black/5 text-slate-500 hover:text-slate-800 transition-all shadow-xl active:scale-95"
                     >
                         <ArrowLeft size={20} />
                     </button>
@@ -105,13 +105,13 @@ const AddBalance = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <button
                                 onClick={selectINR}
-                                className="group relative p-8 bg-white hover:bg-slate-50 border border-black/10 hover:border-blue-500/30 rounded-[10px] transition-all active:scale-[0.98] text-left overflow-hidden shadow-sm"
+                                className="group relative p-8 bg-white hover:bg-slate-50 border border-black/10 hover:border-blue-500/30 rounded-[6px] transition-all active:scale-[0.98] text-left overflow-hidden shadow-sm"
                             >
                                 <div className="absolute top-0 right-0 p-8 opacity-[0.05] group-hover:opacity-[0.1] transition-opacity">
                                     <Wallet size={120} className="text-blue-500" />
                                 </div>
                                 <div className="relative space-y-4">
-                                    <div className="w-16 h-16 bg-blue-50 rounded-[10px] flex items-center justify-center text-blue-500 border border-blue-500/20">
+                                    <div className="w-16 h-16 bg-blue-50 rounded-[6px] flex items-center justify-center text-blue-500 border border-blue-500/20">
                                         <Wallet size={32} />
                                     </div>
                                     <div>
@@ -123,13 +123,13 @@ const AddBalance = () => {
 
                             <button
                                 onClick={selectCrypto}
-                                className="group relative p-8 bg-white hover:bg-slate-50 border border-black/10 hover:border-amber-500/30 rounded-[10px] transition-all active:scale-[0.98] text-left overflow-hidden shadow-sm"
+                                className="group relative p-8 bg-white hover:bg-slate-50 border border-black/10 hover:border-amber-500/30 rounded-[6px] transition-all active:scale-[0.98] text-left overflow-hidden shadow-sm"
                             >
                                 <div className="absolute top-0 right-0 p-8 opacity-[0.05] group-hover:opacity-[0.1] transition-opacity">
                                     <Coins size={120} className="text-amber-500" />
                                 </div>
                                 <div className="relative space-y-4">
-                                    <div className="w-16 h-16 bg-amber-50 rounded-[10px] flex items-center justify-center text-amber-500 border border-amber-500/20">
+                                    <div className="w-16 h-16 bg-amber-50 rounded-[6px] flex items-center justify-center text-amber-500 border border-amber-500/20">
                                         <Coins size={32} />
                                     </div>
                                     <div>
@@ -143,7 +143,7 @@ const AddBalance = () => {
                 ) : !showUSDTDetails ? (
                     <>
                         {/* Amount Input */}
-                        <div className="bg-white border border-black/5 rounded-[10px] p-5 sm:p-8 relative overflow-hidden group shadow-sm">
+                        <div className="bg-white border border-black/5 rounded-[6px] p-5 sm:p-8 relative overflow-hidden group shadow-sm">
                             <div className="absolute top-0 right-0 p-5 sm:p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
                                 {currency === 'INR' ? <Wallet size={160} className="text-blue-500" /> : <Coins size={160} className="text-amber-500" />}
                             </div>
@@ -163,7 +163,7 @@ const AddBalance = () => {
                                             setSelectedQuickAmount(null);
                                         }}
                                         placeholder="0.00"
-                                        className={`w-full bg-slate-50 border border-black/5 rounded-[10px] py-4 sm:py-6 pl-14 pr-6 text-3xl sm:text-4xl font-[1000] text-slate-900 focus:outline-none transition-all placeholder:text-slate-300 tracking-tight ${currency === 'INR' ? 'focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10' : 'focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10'}`}
+                                        className={`w-full bg-slate-50 border border-black/5 rounded-[6px] py-4 sm:py-6 pl-14 pr-6 text-3xl sm:text-4xl font-[1000] text-slate-900 focus:outline-none transition-all placeholder:text-slate-300 tracking-tight ${currency === 'INR' ? 'focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10' : 'focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10'}`}
                                     />
                                     <div className={`absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent opacity-0 group-focus-within:opacity-100 transition-opacity ${currency === 'INR' ? 'via-blue-500/20' : 'via-amber-500/20'}`} />
                                 </div>
@@ -173,7 +173,7 @@ const AddBalance = () => {
                                         <button
                                             key={val}
                                             onClick={() => handleQuickAmountClick(val)}
-                                            className={`relative group/btn py-3 px-2 sm:py-5 sm:px-4 rounded-[10px] sm:rounded-[10px] border transition-all duration-300 text-xs sm:text-sm font-black italic tracking-tight overflow-hidden ${selectedQuickAmount === val
+                                            className={`relative group/btn py-3 px-2 sm:py-5 sm:px-4 rounded-[6px] sm:rounded-[6px] border transition-all duration-300 text-xs sm:text-sm font-black italic tracking-tight overflow-hidden ${selectedQuickAmount === val
                                                 ? (currency === 'INR' ? 'bg-blue-600 border-blue-600' : 'bg-amber-500 border-amber-500') + ' text-white shadow-xl -translate-y-1'
                                                 : 'bg-slate-50 border-black/5 text-slate-600 hover:border-black/10 hover:bg-slate-100 hover:-translate-y-1'
                                                 }`}
@@ -187,8 +187,8 @@ const AddBalance = () => {
                         </div>
 
                         {/* Info Card */}
-                        <div className={`flex items-start gap-5 p-5 border rounded-[10px] ${currency === 'INR' ? 'bg-blue-500/5 border-blue-500/20' : 'bg-emerald-500/5 border-emerald-500/20'}`}>
-                            <div className={`p-3 rounded-[10px] shadow-lg ${currency === 'INR' ? 'bg-blue-500/20 text-blue-500 shadow-blue-500/10' : 'bg-emerald-500/20 text-emerald-500 shadow-emerald-500/10'}`}>
+                        <div className={`flex items-start gap-5 p-5 border rounded-[6px] ${currency === 'INR' ? 'bg-blue-500/5 border-blue-500/20' : 'bg-emerald-500/5 border-emerald-500/20'}`}>
+                            <div className={`p-3 rounded-[6px] shadow-lg ${currency === 'INR' ? 'bg-blue-500/20 text-blue-500 shadow-blue-500/10' : 'bg-emerald-500/20 text-emerald-500 shadow-emerald-500/10'}`}>
                                 <Zap size={20} />
                             </div>
                             <div className="space-y-1">
@@ -203,26 +203,26 @@ const AddBalance = () => {
                         <button
                             onClick={handleContinue}
                             disabled={!amount || parseFloat(amount) <= 0}
-                            className={`w-full flex items-center justify-between p-4 sm:p-5 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-[10px] font-black uppercase tracking-widest transition-all group shadow-xl active:scale-[0.98] ${currency === 'INR' ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/20' : 'bg-accent hover:bg-accent-hover shadow-accent/20'}`}
+                            className={`w-full flex items-center justify-between p-4 sm:p-5 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-[6px] font-black uppercase tracking-widest transition-all group shadow-xl active:scale-[0.98] ${currency === 'INR' ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/20' : 'bg-accent hover:bg-accent-hover shadow-accent/20'}`}
                         >
                             <div className="flex items-center gap-3">
-                                <div className="p-1.5 bg-white/10 rounded-[10px]">
+                                <div className="p-1.5 bg-white/10 rounded-[6px]">
                                     <PlusCircle className="w-5 h-5" />
                                 </div>
                                 <span className="text-base sm:text-lg italic tracking-tight">Proceed to {currency === 'INR' ? 'Pay' : 'Submit'}</span>
                             </div>
-                            <div className="p-1.5 bg-white/20 rounded-[10px] group-hover:translate-x-1 transition-transform">
+                            <div className="p-1.5 bg-white/20 rounded-[6px] group-hover:translate-x-1 transition-transform">
                                 <ChevronRight className="w-5 h-5" />
                             </div>
                         </button>
                     </>
                 ) : (
-                    <div className="bg-white border border-black/5 rounded-[10px] p-8 space-y-8 shadow-2xl animate-in zoom-in-95 duration-200 overflow-hidden relative">
+                    <div className="bg-white border border-black/5 rounded-[6px] p-8 space-y-8 shadow-2xl animate-in zoom-in-95 duration-200 overflow-hidden relative">
                         <div className="absolute top-0 inset-x-0 h-1.5 bg-amber-500" />
                         
                         <div className="flex justify-between items-start">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-amber-50 rounded-[10px] flex items-center justify-center text-amber-500 font-bold border border-amber-500/20 text-xl">₮</div>
+                                <div className="w-12 h-12 bg-amber-50 rounded-[6px] flex items-center justify-center text-amber-500 font-bold border border-amber-500/20 text-xl">₮</div>
                                 <div>
                                     <h3 className="text-2xl font-black italic uppercase tracking-tighter text-slate-900 leading-none">USDT <span className="logo-accent text-amber-500">DEPOSIT</span></h3>
                                     <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mt-1">
@@ -235,18 +235,18 @@ const AddBalance = () => {
                                     setShowUSDTDetails(false);
                                     setShowAmountInput(false);
                                 }} 
-                                className="p-3 bg-slate-100 rounded-[10px] text-slate-500 hover:text-slate-900 transition-all"
+                                className="p-3 bg-slate-100 rounded-[6px] text-slate-500 hover:text-slate-900 transition-all"
                             >
                                 <ArrowLeft size={20} />
                             </button>
                         </div>
 
                         <div className="space-y-6">
-                            <div className="p-5 bg-slate-900 rounded-[10px] border border-white/10 space-y-4">
+                            <div className="p-5 bg-slate-900 rounded-[6px] border border-white/10 space-y-4">
                                 <div>
                                     <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2">Admin USDT Wallet</p>
                                     <div className="flex items-center gap-3">
-                                        <code className="flex-1 bg-black/40 p-3 rounded-[10px] text-amber-500 font-mono text-xs break-all border border-white/5 uppercase">
+                                        <code className="flex-1 bg-black/40 p-3 rounded-[6px] text-amber-500 font-mono text-xs break-all border border-white/5 uppercase">
                                             TH6T9x8qZp9W1V7rX6y5Q2mN8K3L4vA1B2
                                         </code>
                                         <button 
@@ -254,7 +254,7 @@ const AddBalance = () => {
                                                 navigator.clipboard.writeText('TH6T9x8qZp9W1V7rX6y5Q2mN8K3L4vA1B2');
                                                 toast.success('Wallet Address Copied');
                                             }}
-                                            className="p-3 px-4 bg-amber-500 text-white rounded-[10px] hover:bg-amber-600 transition-all font-black text-xs uppercase"
+                                            className="p-3 px-4 bg-amber-500 text-white rounded-[6px] hover:bg-amber-600 transition-all font-black text-xs uppercase"
                                         >
                                             COPY
                                         </button>
@@ -273,7 +273,7 @@ const AddBalance = () => {
                                     value={usdtHash}
                                     onChange={(e) => setUsdtHash(e.target.value)}
                                     placeholder="Enter your TXID hash here..."
-                                    className="w-full bg-slate-50 border border-black/5 rounded-[10px] py-4 px-6 text-sm font-bold text-slate-900 focus:outline-none focus:border-amber-500/30 transition-all"
+                                    className="w-full bg-slate-50 border border-black/5 rounded-[6px] py-4 px-6 text-sm font-bold text-slate-900 focus:outline-none focus:border-amber-500/30 transition-all"
                                 />
                                 <p className="text-[9px] text-slate-400 font-medium ml-1">Verify your transaction on TronScan before submitting.</p>
                             </div>
@@ -281,7 +281,7 @@ const AddBalance = () => {
                             <button
                                 onClick={submitUSDT}
                                 disabled={!usdtHash || isSubmitting}
-                                className="w-full py-5 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white rounded-[10px] font-black uppercase italic tracking-widest transition-all shadow-xl shadow-amber-500/20 active:scale-95 flex items-center justify-center gap-3"
+                                className="w-full py-5 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white rounded-[6px] font-black uppercase italic tracking-widest transition-all shadow-xl shadow-amber-500/20 active:scale-95 flex items-center justify-center gap-3"
                             >
                                 {isSubmitting ? <Loader2 className="animate-spin" size={20} /> : <CheckCircle2 size={20} />}
                                 <span>{isSubmitting ? 'Verifying...' : 'Submit Deposit'}</span>

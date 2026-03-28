@@ -174,124 +174,13 @@ const CrashGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
     const lastPoint = trailPoints.length > 0 ? trailPoints[trailPoints.length - 1] : null;
 
     return (
-        <div className="flex flex-col lg:flex-row overflow-hidden" style={{ background: '#1a2c38' }}>
-            {/* ====== LEFT SIDEBAR ====== */}
-            <div className="w-full lg:w-[260px] xl:w-[280px] p-3 sm:p-4 flex flex-col gap-3 border-r border-[#0f212e] order-2 lg:order-1" style={{ background: '#213743' }}>
-                {/* Manual / Auto */}
-                <div className="bg-[#0f212e] p-1 rounded-full flex">
-                    <button
-                        onClick={() => setMode('manual')}
-                        className={`flex-1 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${mode === 'manual' ? 'bg-[#2f4553] text-white' : 'text-[#b1bad3]'}`}
-                    >Manual</button>
-                    <button
-                        onClick={() => setMode('auto')}
-                        className={`flex-1 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${mode === 'auto' ? 'bg-[#2f4553] text-white' : 'text-[#b1bad3]'}`}
-                    >Auto</button>
-                </div>
-
-                {/* Bet Amount */}
-                <div className="space-y-1">
-                    <div className="flex justify-between text-[#b1bad3] text-[11px] font-semibold px-0.5">
-                        <span>Bet Amount</span>
-                        <span>₹{(betAmount || 0).toFixed(2)}</span>
-                    </div>
-                    <div className="flex bg-[#0f212e] border-2 border-[#2f4553] rounded h-[40px] overflow-hidden hover:border-[#557086] transition-colors">
-                        <input
-                            type="number"
-                            value={betAmount === 0 ? '' : betAmount}
-                            onChange={(e) => setBetAmount(Math.max(0, parseFloat(e.target.value) || 0))}
-                            disabled={betPlaced}
-                            className="flex-1 bg-transparent px-3 text-white font-bold outline-none text-sm"
-                            placeholder="0.00"
-                        />
-                        <div className="flex items-center px-1.5">
-                            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-[10px] font-black text-white shadow-sm">₹</div>
-                        </div>
-                        <div className="flex bg-[#2f4553]">
-                            <button onClick={() => setBetAmount(prev => Math.max(1, Math.floor(prev / 2)))} className="px-2.5 text-white font-bold hover:bg-[#3b5568] transition-colors border-r border-[#0f212e] text-xs">½</button>
-                            <button onClick={() => setBetAmount(prev => prev * 2)} className="px-2.5 text-white font-bold hover:bg-[#3b5568] transition-colors text-xs">2×</button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Cashout At */}
-                <div className="space-y-1">
-                    <div className="text-[#b1bad3] text-[11px] font-semibold px-0.5">Cashout At</div>
-                    <div className="flex bg-[#0f212e] border-2 border-[#2f4553] rounded h-[40px] overflow-hidden hover:border-[#557086] transition-colors">
-                        <input
-                            type="number"
-                            step="0.01"
-                            value={autoCashout}
-                            onChange={(e) => setAutoCashout(Math.max(1.01, parseFloat(e.target.value) || 1.01))}
-                            className="flex-1 bg-transparent px-3 text-white font-bold outline-none text-sm"
-                        />
-                        <div className="flex bg-[#2f4553]">
-                            <button onClick={() => setAutoCashout(prev => Math.max(1.01, prev - 0.1))} className="px-2 text-white hover:bg-[#3b5568] transition-colors border-r border-[#0f212e]">
-                                <ChevronDown size={14} />
-                            </button>
-                            <button onClick={() => setAutoCashout(prev => prev + 0.1)} className="px-2 text-white hover:bg-[#3b5568] transition-colors">
-                                <ChevronUp size={14} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Bet Button */}
-                <button
-                    onClick={gameState === 'flying' && betPlaced && !cashedOut ? handleCashOut : placeBet}
-                    disabled={gameState === 'starting'}
-                    className={`w-full py-3.5 rounded font-black text-sm transition-all active:translate-y-0.5 disabled:opacity-50 ${
-                        gameState === 'flying' && betPlaced && !cashedOut
-                            ? 'bg-[#f59e0b] text-black shadow-[0_4px_0_#b45309] hover:bg-[#fbbf24]'
-                            : 'bg-[#00e701] text-[#05200a] shadow-[0_4px_0_rgb(0,180,1)] hover:bg-[#1fff20]'
-                    }`}
-                >
-                    {gameState === 'starting'
-                        ? 'Starting...'
-                        : gameState === 'flying' && betPlaced && !cashedOut
-                            ? <><span>Cash Out</span><br/><span className="text-base">₹{Math.floor(betAmount * multiplier).toLocaleString()}</span></>
-                            : 'Bet (Next Round)'}
-                </button>
-
-                {/* Profit on Win */}
-                <div className="space-y-1">
-                    <div className="flex justify-between text-[#b1bad3] text-[11px] font-semibold px-0.5">
-                        <span>Profit on Win</span>
-                        <span>₹{profitOnWin.toFixed(2)}</span>
-                    </div>
-                    <div className="flex bg-[#0f212e] border-2 border-[#2f4553] rounded h-[40px] overflow-hidden">
-                        <input
-                            type="text"
-                            value={profitOnWin.toFixed(2)}
-                            readOnly
-                            className="flex-1 bg-transparent px-3 text-white/60 font-bold outline-none text-sm"
-                        />
-                        <div className="flex items-center px-1.5">
-                            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-[10px] font-black text-white shadow-sm">₹</div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Bottom Info */}
-                <div className="mt-auto bg-[#0f212e] rounded p-2.5 flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2 text-[#b1bad3]">
-                        <span>👥</span>
-                        <span className="font-bold">239</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-[#b1bad3]">
-                        <div className="w-4 h-4 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-[8px] font-black text-white">₹</div>
-                        <span className="font-bold">24,831.58</span>
-                        <ChevronDown size={12} />
-                    </div>
-                </div>
-            </div>
-
+        <div className="flex flex-col bg-[#0f212e] overflow-y-auto min-h-[500px] w-full">
             {/* ====== MAIN GRAPH AREA ====== */}
-            <div className="flex-1 flex flex-col order-1 lg:order-2" style={{ background: '#0f212e', minHeight: '350px' }}>
+            <div className="flex-none flex flex-col w-full h-[350px] shrink-0 border-b border-[#0f212e]" style={{ background: '#0f212e' }}>
                 {/* History ribbon */}
-                <div className="flex items-center gap-1.5 px-3 py-2 overflow-x-auto no-scrollbar">
+                <div className="flex items-center gap-1.5 px-3 py-2 overflow-x-auto no-scrollbar bg-[#0a0a0a]/30">
                     {history.map((h, i) => (
-                        <span key={i} className={`px-2.5 py-1 rounded-full text-[11px] font-black shrink-0 ${
+                        <span key={i} className={`px-2.5 py-1 rounded-[6px] text-[11px] font-black shrink-0 ${
                             h.val >= 2
                                 ? 'bg-[#00e701] text-[#05200a]'
                                 : 'bg-[#2f4553] text-[#b1bad3]'
@@ -300,7 +189,7 @@ const CrashGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                         </span>
                     ))}
                     {history.length > 0 && (
-                        <button className="p-1.5 bg-[#2f4553] rounded-full text-[#b1bad3] hover:text-white transition-colors shrink-0 ml-auto">
+                        <button className="p-1.5 bg-[#2f4553] rounded-[6px] text-[#b1bad3] hover:text-white transition-colors shrink-0 ml-auto">
                             <RefreshCw size={12} />
                         </button>
                     )}
@@ -370,13 +259,6 @@ const CrashGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                                 <animate attributeName="r" values="4;6;4" dur="1s" repeatCount="indefinite" />
                             </circle>
                         )}
-
-                        {/* Total time */}
-                        {elapsedTime > 0 && (
-                            <text x="495" y={298} fill="#557086" fontSize="9" fontWeight="700" textAnchor="end">
-                                Total {elapsedTime.toFixed(0)}s
-                            </text>
-                        )}
                     </svg>
 
                     {/* Multiplier overlay */}
@@ -420,13 +302,86 @@ const CrashGame = ({ onBet, onWin, onLoss, isMuted, settings }) => {
                             )}
                         </AnimatePresence>
                     </div>
+                </div>
+            </div>
 
-                    {/* Network status */}
-                    <div className="absolute bottom-3 right-4 flex items-center gap-1.5">
-                        <span className="text-[#557086] text-[9px] font-bold">Network Status</span>
-                        <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            {/* ====== SIDEBAR CONTROLS (Below Graph) ====== */}
+            <div className="w-full p-4 flex flex-col gap-4 border-t border-[#0f212e] shrink-0" style={{ background: '#213743' }}>
+                {/* Manual / Auto */}
+                <div className="bg-[#0f212e] p-1 rounded-[6px] flex">
+                    <button
+                        onClick={() => setMode('manual')}
+                        className={`flex-1 py-2.5 rounded-[6px] text-[11px] font-bold uppercase tracking-wider transition-all ${mode === 'manual' ? 'bg-[#2f4553] text-white shadow-md' : 'text-[#b1bad3]'}`}
+                    >Manual</button>
+                    <button
+                        onClick={() => setMode('auto')}
+                        className={`flex-1 py-2.5 rounded-[6px] text-[11px] font-bold uppercase tracking-wider transition-all ${mode === 'auto' ? 'bg-[#2f4553] text-white shadow-md' : 'text-[#b1bad3]'}`}
+                    >Auto</button>
+                </div>
+
+                {/* Bet Amount */}
+                <div className="space-y-1.5">
+                    <div className="flex justify-between text-[#b1bad3] text-[11px] font-bold uppercase tracking-wider px-1">
+                        <span>Bet Amount</span>
+                        <span>₹{(betAmount || 0).toFixed(2)}</span>
+                    </div>
+                    <div className="flex bg-[#0f212e] border-2 border-[#2f4553] rounded-[6px] h-[42px] overflow-hidden hover:border-[#557086] transition-all">
+                        <input
+                            type="number"
+                            value={betAmount === 0 ? '' : betAmount}
+                            onChange={(e) => setBetAmount(Math.max(0, parseFloat(e.target.value) || 0))}
+                            disabled={betPlaced}
+                            className="flex-1 bg-transparent px-3 text-white font-bold outline-none text-sm"
+                            placeholder="0.00"
+                        />
+                        <div className="flex items-center px-1.5">
+                            <div className="w-4 h-4 rounded-[6px] bg-yellow-500 flex items-center justify-center text-[9px] font-black text-black">₹</div>
+                        </div>
+                        <div className="flex bg-[#2f4553]">
+                            <button onClick={() => setBetAmount(prev => Math.max(1, Math.floor(prev / 2)))} className="px-3 text-white font-bold hover:bg-[#3b5568] transition-colors border-r border-[#0f212e] text-xs">½</button>
+                            <button onClick={() => setBetAmount(prev => prev * 2)} className="px-3 text-white font-bold hover:bg-[#3b5568] transition-colors text-xs">2×</button>
+                        </div>
                     </div>
                 </div>
+
+                {/* Cashout At */}
+                <div className="space-y-1.5">
+                    <div className="text-[#b1bad3] text-[11px] font-bold uppercase tracking-wider px-1">Cashout At</div>
+                    <div className="flex bg-[#0f212e] border-2 border-[#2f4553] rounded-[6px] h-[42px] overflow-hidden hover:border-[#557086] transition-all">
+                        <input
+                            type="number"
+                            step="0.01"
+                            value={autoCashout}
+                            onChange={(e) => setAutoCashout(Math.max(1.01, parseFloat(e.target.value) || 1.01))}
+                            className="flex-1 bg-transparent px-3 text-white font-bold outline-none text-sm"
+                        />
+                        <div className="flex bg-[#2f4553]">
+                            <button onClick={() => setAutoCashout(prev => Math.max(1.01, prev - 0.1))} className="px-3 text-white hover:bg-[#3b5568] transition-colors border-r border-[#0f212e]">
+                                <ChevronDown size={14} />
+                            </button>
+                            <button onClick={() => setAutoCashout(prev => prev + 0.1)} className="px-3 text-white hover:bg-[#3b5568] transition-colors">
+                                <ChevronUp size={14} />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bet Button */}
+                <button
+                    onClick={gameState === 'flying' && betPlaced && !cashedOut ? handleCashOut : placeBet}
+                    disabled={gameState === 'starting'}
+                    className={`w-full py-4 rounded-[6px] font-black text-[15px] uppercase transition-all shadow-lg active:translate-y-0.5 disabled:opacity-50 ${
+                        gameState === 'flying' && betPlaced && !cashedOut
+                            ? 'bg-[#f59e0b] text-black shadow-[0_4px_0_#b45309] hover:bg-[#fbbf24]'
+                            : 'bg-[#00e701] text-[#05200a] shadow-[0_4px_0_rgb(0,180,1)] hover:bg-[#1fff20]'
+                    }`}
+                >
+                    {gameState === 'starting'
+                        ? 'Starting...'
+                        : gameState === 'flying' && betPlaced && !cashedOut
+                            ? <div><span className="text-[10px] opacity-70">Cash Out</span><br/><span>₹{Math.floor(betAmount * multiplier).toLocaleString()}</span></div>
+                            : 'Bet'}
+                </button>
             </div>
         </div>
     );

@@ -86,7 +86,7 @@ const SlotGame = ({ gameId, onBet, onWin, onLoss }) => {
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-8 items-start">
-            <div className="lg:col-span-4 bg-zinc-950/50 border border-white/5 rounded-[10px] sm:rounded-[10px] p-5 sm:p-8 space-y-6 sm:space-y-8 order-2 lg:order-1 shadow-2xl">
+            <div className="lg:col-span-4 bg-zinc-950/50 border border-white/5 rounded-[6px] sm:rounded-[6px] p-5 sm:p-8 space-y-6 sm:space-y-8 order-2 lg:order-1 shadow-2xl">
                 <div className="space-y-4">
                     <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[3px] italic">Wager Amount</label>
                     <div className="relative">
@@ -95,13 +95,13 @@ const SlotGame = ({ gameId, onBet, onWin, onLoss }) => {
                             type="number"
                             value={betAmount}
                             onChange={(e) => setBetAmount(Math.max(0, parseInt(e.target.value) || 0))}
-                            className="w-full bg-primary border border-white/5 rounded-[10px] py-4 sm:py-6 pl-14 pr-8 text-xl sm:text-2xl font-black text-white outline-none"
+                            className="w-full bg-primary border border-white/5 rounded-[6px] py-4 sm:py-6 pl-14 pr-8 text-xl sm:text-2xl font-black text-white outline-none"
                         />
                     </div>
                 </div>
 
                 <div className="space-y-4">
-                    <div className="bg-zinc-900/50 p-6 rounded-[10px] border border-white/5 text-center">
+                    <div className="bg-zinc-900/50 p-6 rounded-[6px] border border-white/5 text-center">
                         <span className="text-[10px] font-black text-zinc-600 uppercase tracking-[4px] block mb-2">Last Win</span>
                         <div className="text-3xl font-black italic text-yellow-500">₹{lastWin}</div>
                     </div>
@@ -109,15 +109,15 @@ const SlotGame = ({ gameId, onBet, onWin, onLoss }) => {
                     <button
                         onClick={spin}
                         disabled={isSpinning}
-                        className="w-full py-4 sm:py-5 bg-accent hover:bg-accent-hover text-white rounded-[10px] sm:rounded-[10px] font-black uppercase italic tracking-[3px] sm:tracking-[4px] text-lg sm:text-xl shadow-2xl shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                        className="w-full py-4 sm:py-5 bg-accent hover:bg-accent-hover text-white rounded-[6px] sm:rounded-[6px] font-black uppercase italic tracking-[3px] sm:tracking-[4px] text-lg sm:text-xl shadow-2xl shadow-accent/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                     >
-                        {isSpinning ? <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" /> : <>Spin Reels <RotateCcw size={20} /></>}
+                        {isSpinning ? <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-[6px] animate-spin" /> : <>Spin Reels <RotateCcw size={20} /></>}
                     </button>
                 </div>
             </div>
 
-            <div className="lg:col-span-8 bg-[#0a0a0a] border border-white/5 rounded-[10px] sm:rounded-[10px] p-4 sm:p-12 order-1 lg:order-2 shadow-inner">
-                <div className="grid grid-cols-3 gap-2 sm:gap-6 bg-zinc-900/50 p-4 sm:p-8 rounded-[10px] sm:rounded-[10px] border border-white/5">
+            <div className="lg:col-span-8 bg-[#0a0a0a] border border-white/5 rounded-[6px] sm:rounded-[6px] p-4 sm:p-12 order-1 lg:order-2 shadow-inner">
+                <div className="grid grid-cols-3 gap-2 sm:gap-6 bg-zinc-900/50 p-4 sm:p-8 rounded-[6px] sm:rounded-[6px] border border-white/5">
                     {reels.map((col, i) => (
                         <div key={i} className="space-y-2 sm:space-y-6">
                             {col.map((symbol, j) => (
@@ -125,7 +125,7 @@ const SlotGame = ({ gameId, onBet, onWin, onLoss }) => {
                                     key={`${i}-${j}`}
                                     animate={isSpinning ? { y: [0, 10, 0] } : {}}
                                     transition={{ repeat: Infinity, duration: 0.1 }}
-                                    className="aspect-square bg-[#1a2c38] rounded-[10px] sm:rounded-[10px] flex items-center justify-center text-3xl sm:text-6xl shadow-xl border border-white/5"
+                                    className="aspect-square bg-[#1a2c38] rounded-[6px] sm:rounded-[6px] flex items-center justify-center text-3xl sm:text-6xl shadow-xl border border-white/5"
                                 >
                                     {symbol}
                                 </motion.div>

@@ -20,7 +20,7 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-screen bg-primary">
-      <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin"></div>
+      <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-[6px] animate-spin"></div>
     </div>
   );
 
@@ -96,7 +96,7 @@ function App() {
               } />
 
               <Route path="/jrt" element={
-                <div className="w-full min-h-screen bg-[#f5f5f9]">
+                <div className="w-full min-h-screen bg-[#0a0a0c] text-white">
                   <AdminDashboard />
                 </div>
               } />
@@ -125,7 +125,7 @@ function App() {
             <Toaster
               position="top-center"
               toastOptions={{
-                className: '!bg-white !text-slate-900 !border !border-black/[0.05] !rounded-[10px] !p-6 !font-black !text-[11px] !uppercase !tracking-[0.1em] !shadow-2xl',
+                className: '!bg-white !text-slate-900 !border !border-black/[0.05] !rounded-[6px] !p-6 !font-black !text-[11px] !uppercase !tracking-[0.1em] !shadow-2xl',
                 duration: 4000,
                 success: {
                   iconTheme: { primary: '#10b981', secondary: '#fff' }

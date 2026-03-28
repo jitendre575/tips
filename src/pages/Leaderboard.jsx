@@ -29,9 +29,9 @@ const Leaderboard = () => {
 
     const getRankBadge = (rank) => {
         switch (rank) {
-            case 1: return <div className="bg-yellow-400 p-2 rounded-[10px] shadow-lg shadow-yellow-400/20"><Crown className="text-black" size={24} /></div>;
-            case 2: return <div className="bg-slate-300 p-2 rounded-[10px] shadow-lg shadow-slate-300/20"><Medal className="text-black" size={24} /></div>;
-            case 3: return <div className="bg-amber-600 p-2 rounded-[10px] shadow-lg shadow-amber-600/20"><Medal className="text-black" size={24} /></div>;
+            case 1: return <div className="bg-yellow-400 p-2 rounded-[6px] shadow-lg shadow-yellow-400/20"><Crown className="text-black" size={24} /></div>;
+            case 2: return <div className="bg-slate-300 p-2 rounded-[6px] shadow-lg shadow-slate-300/20"><Medal className="text-black" size={24} /></div>;
+            case 3: return <div className="bg-amber-600 p-2 rounded-[6px] shadow-lg shadow-amber-600/20"><Medal className="text-black" size={24} /></div>;
             default: return <span className="text-zinc-600 font-black text-xl italic ml-4">#{rank}</span>;
         }
     };
@@ -39,9 +39,9 @@ const Leaderboard = () => {
     return (
         <div className="max-w-5xl mx-auto space-y-12 pb-20">
             <div className="flex flex-col items-center text-center space-y-6">
-                <div className="bg-accent/10 p-5 rounded-[10px] border border-accent/20 shadow-2xl relative">
+                <div className="bg-accent/10 p-5 rounded-[6px] border border-accent/20 shadow-2xl relative">
                     <Trophy className="text-accent group-hover:animate-float" size={64} />
-                    <div className="absolute -top-2 -right-2 bg-yellow-500 p-2 rounded-full border-4 border-[#050505]">
+                    <div className="absolute -top-2 -right-2 bg-yellow-500 p-2 rounded-[6px] border-4 border-[#050505]">
                         <Star className="text-black fill-current" size={16} />
                     </div>
                 </div>
@@ -63,7 +63,7 @@ const Leaderboard = () => {
 
                 {loading ? (
                     <div className="p-20 text-center">
-                        <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin mx-auto mb-4" />
+                        <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-[6px] animate-spin mx-auto mb-4" />
                         <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Calculating Standings...</span>
                     </div>
                 ) : (
@@ -81,7 +81,7 @@ const Leaderboard = () => {
                                     {getRankBadge(leader.rank)}
                                 </div>
                                 <div className="col-span-6 flex items-center gap-5">
-                                    <div className={`w-14 h-14 rounded-[10px] flex items-center justify-center relative ${index === 0 ? 'bg-yellow-400/10 border-2 border-yellow-400/30' :
+                                    <div className={`w-14 h-14 rounded-[6px] flex items-center justify-center relative ${index === 0 ? 'bg-yellow-400/10 border-2 border-yellow-400/30' :
                                         index === 1 ? 'bg-slate-300/10 border-2 border-slate-300/30' :
                                             index === 2 ? 'bg-amber-600/10 border-2 border-amber-600/30' :
                                                 'bg-zinc-900 border border-white/5'
@@ -89,10 +89,10 @@ const Leaderboard = () => {
                                         <img
                                             src={`https://api.dicebear.com/7.x/initials/svg?seed=${leader.email}`}
                                             alt=""
-                                            className="w-full h-full rounded-[10px] p-1"
+                                            className="w-full h-full rounded-[6px] p-1"
                                         />
                                         {index < 3 && (
-                                            <div className="absolute -bottom-1 -right-1 bg-accent w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#121212] shadow-[0_0_10px_rgba(var(--accent),0.3)]">
+                                            <div className="absolute -bottom-1 -right-1 bg-accent w-5 h-5 rounded-[6px] flex items-center justify-center border-2 border-[#121212] shadow-[0_0_10px_rgba(var(--accent),0.3)]">
                                                 <Star className="text-white fill-current" size={8} />
                                             </div>
                                         )}
@@ -105,7 +105,7 @@ const Leaderboard = () => {
                                         <div className="flex items-center gap-2">
                                             <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Level {Math.floor((leader.totalBets || 0) / 5) + 1}</span>
                                             {leader.isAdmin && (
-                                                <span className="text-[8px] bg-accent/10 text-accent px-1.5 py-0.5 rounded border border-accent/20 font-black uppercase">Admin</span>
+                                                <span className="text-[8px] bg-accent/10 text-accent px-1.5 py-0.5 rounded-[6px] border border-accent/20 font-black uppercase">Admin</span>
                                             )}
                                         </div>
                                     </div>
@@ -131,19 +131,19 @@ const Leaderboard = () => {
             <div className="grid md:grid-cols-2 gap-8">
                 <div className="glass-card p-10 bg-gradient-to-br from-[#121212] to-[#1a1a1a] relative overflow-hidden group">
                     <div className="relative z-10">
-                        <div className="bg-accent/10 w-12 h-12 rounded-[10px] flex items-center justify-center text-accent mb-6">
+                        <div className="bg-accent/10 w-12 h-12 rounded-[6px] flex items-center justify-center text-accent mb-6">
                             <Star size={24} />
                         </div>
                         <h4 className="text-2xl font-black italic tracking-tighter uppercase mb-4">Master <span className="logo-accent">Rewards</span></h4>
                         <p className="text-zinc-500 text-sm leading-relaxed mb-8">Top 3 performers every month receive exclusive profile badges and 20,000 bonus coins for our upcoming tournaments. Keep predicting to climb!</p>
                         <button className="text-[10px] font-black uppercase tracking-widest text-white hover:text-accent flex items-center gap-2 group/link">
-                            View Reward Schedule <div className="w-1 h-1 bg-white rounded-full transition-all group-hover/link:w-4 group-hover/link:bg-accent" />
+                            View Reward Schedule <div className="w-1 h-1 bg-white rounded-[6px] transition-all group-hover/link:w-4 group-hover/link:bg-accent" />
                         </button>
                     </div>
                 </div>
 
                 <div className="glass-card p-10 flex flex-col items-center justify-center text-center border-dashed border-zinc-800">
-                    <div className="bg-zinc-900 w-16 h-16 rounded-full flex items-center justify-center text-zinc-700 mb-6 border border-white/5">
+                    <div className="bg-zinc-900 w-16 h-16 rounded-[6px] flex items-center justify-center text-zinc-700 mb-6 border border-white/5">
                         <User size={32} />
                     </div>
                     <h4 className="text-xl font-bold text-zinc-500 mb-2">Showcase Your Progress</h4>
