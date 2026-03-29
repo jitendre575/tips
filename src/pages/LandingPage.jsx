@@ -95,11 +95,13 @@ const LandingPage = () => {
 
                 // Save phone to Firestore for the new user
                 const { doc, setDoc } = await import('firebase/firestore');
+                const initialBalance = referralCode?.trim() ? 500 : 0;
+                
                 await setDoc(doc(db, 'users', user.uid), {
                     email: email,
                     phone: phone,
                     referralCode: referralCode || 'NONE',
-                    balance: 500, // Welcome Bonus
+                    balance: initialBalance, // Bonus only if promo code used
                     totalDeposit: 0,
                     totalWithdraw: 0,
                     totalBets: 0,
