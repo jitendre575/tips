@@ -121,6 +121,8 @@ const AddBalance = () => {
                                 </div>
                             </button>
 
+                            {/* USDT Pay Locked Temporarily */}
+                            {/* 
                             <button
                                 onClick={selectCrypto}
                                 className="group relative p-8 bg-white hover:bg-slate-50 border border-black/10 hover:border-amber-500/30 rounded-[6px] transition-all active:scale-[0.98] text-left overflow-hidden shadow-sm"
@@ -137,7 +139,8 @@ const AddBalance = () => {
                                         <p className="text-slate-500 text-[11px] font-black uppercase tracking-widest leading-relaxed">Fast Global Crypto Transfer (TRC-20)</p>
                                     </div>
                                 </div>
-                            </button>
+                            </button> 
+                            */}
                         </div>
                     </div>
                 ) : !showUSDTDetails ? (

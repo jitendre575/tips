@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { db } from '../firebase';
 import { collection, query, onSnapshot, doc, updateDoc, addDoc, serverTimestamp, increment, setDoc, orderBy, deleteDoc, where } from 'firebase/firestore';
-import { User, Mail, Wallet, TrendingUp, CreditCard, Edit2, Check, X, Search, Shield, Phone, Calendar, ArrowUpCircle, ArrowDownCircle, Plus, Minus, AlertCircle, FileText, MessageCircle, Send, CheckCheck, Trash2, Gamepad2, Coins, Clock } from 'lucide-react';
+import { User, Mail, Wallet, TrendingUp, CreditCard, Edit2, Check, X, Search, Shield, Phone, Calendar, ArrowUpCircle, ArrowDownCircle, Plus, Minus, AlertCircle, FileText, MessageCircle, Send, CheckCheck, Trash2, Gamepad2, Coins, Clock, Gift } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 
@@ -197,7 +197,7 @@ const AdminUsers = () => {
                         <div className="h-2 w-8 bg-accent rounded-[6px]" />
                         <span className="text-slate-600 text-[10px] font-black uppercase tracking-[4px]">System Overview</span>
                     </div>
-                    <h1 className="text-5xl font-black italic tracking-tighter uppercase leading-none text-slate-900">
+                    <h1 className="text-5xl font-black italic tracking-tighter uppercase leading-none text-white">
                         User <span className="logo-accent">Management</span>
                     </h1>
                     <p className="text-slate-500 font-medium mt-2">Monitor {users.length} registered accounts and control their wallets.</p>
@@ -275,9 +275,12 @@ const AdminUsers = () => {
                                         <Phone size={16} className="text-slate-500" />
                                         <span className="text-sm font-bold text-zinc-400">{user.phone || 'No phone added'}</span>
                                     </div>
-                                    <div className="flex items-center gap-3 px-4 py-3 bg-black/20 rounded-[6px] border border-white/5">
-                                        <Coins size={16} className="text-slate-500" />
-                                        <span className="text-sm font-bold text-zinc-400 truncate">{user.usdtAddress || 'No USDT wallet linked'}</span>
+                                    <div className="flex items-center justify-between px-4 py-3 bg-black/20 rounded-[6px] border border-white/5">
+                                        <div className="flex items-center gap-3">
+                                            <Gift size={16} className="text-accent" />
+                                            <span className="text-[10px] font-black uppercase text-slate-500 tracking-widest leading-none">Referral</span>
+                                        </div>
+                                        <span className="text-sm font-black text-white italic tracking-tighter">{user.referralCode || 'NONE'}</span>
                                     </div>
                                 </div>
 
@@ -457,7 +460,8 @@ const AdminUsers = () => {
                                 value={newMessage}
                                 onChange={(e) => setNewMessage(e.target.value)}
                                 placeholder="Type your reply..."
-                                className="flex-1 bg-primary border border-white/5 rounded-[6px] px-6 py-4 text-sm text-white focus:outline-none focus:border-accent/50 transition-all font-medium"
+                                className="flex-1 bg-black/40 border border-white/5 rounded-[6px] px-6 py-4 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-accent/50 transition-all font-medium"
+                                style={{ color: 'white' }}
                             />
                             <button
                                 type="submit"
@@ -531,7 +535,7 @@ const AdminUsers = () => {
                                             placeholder="0.00"
                                             value={walletAction.amount}
                                             onChange={(e) => setWalletAction({ ...walletAction, amount: e.target.value })}
-                                            className="w-full bg-surface border border-white/5 rounded-[6px] py-6 pl-14 pr-6 text-3xl font-black text-white focus:outline-none focus:border-accent/50 transition-all placeholder:text-zinc-800"
+                                            className="w-full bg-black/40 border border-white/5 rounded-[6px] py-6 pl-14 pr-6 text-3xl font-black text-white focus:outline-none focus:border-accent/50 transition-all placeholder:text-zinc-800"
                                         />
                                     </div>
                                 </div>
@@ -545,7 +549,7 @@ const AdminUsers = () => {
                                             value={walletAction.note}
                                             onChange={(e) => setWalletAction({ ...walletAction, note: e.target.value })}
                                             rows={2}
-                                            className="w-full bg-surface border border-white/5 rounded-[6px] py-4 pl-14 pr-6 text-sm font-medium text-white focus:outline-none focus:border-accent/50 transition-all resize-none"
+                                            className="w-full bg-black/40 border border-white/5 rounded-[6px] py-4 pl-14 pr-6 text-sm font-medium text-white focus:outline-none focus:border-accent/50 transition-all resize-none"
                                         />
                                     </div>
                                 </div>

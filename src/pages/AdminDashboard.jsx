@@ -137,7 +137,7 @@ const AdminDashboard = () => {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.1 }}
-                        className={`p-10 rounded-[6px] border border-black/[0.03] group hover:border-black/[0.08] transition-all relative overflow-hidden bg-white shadow-[0_10px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] cursor-default`}
+                        className={`p-10 rounded-[6px] border border-white/[0.05] group hover:border-white/[0.1] transition-all relative overflow-hidden bg-slate-900 shadow-2xl hover:shadow-accent/5 cursor-default`}
                     >
                         <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.1] transition-all group-hover:scale-125 group-hover:-rotate-12 duration-700">
                             <s.icon size={120} />
@@ -152,7 +152,7 @@ const AdminDashboard = () => {
             </div>
 
                         <div className="grid lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 p-12 border border-black/[0.03] bg-white rounded-[6px] relative overflow-hidden group shadow-sm">
+                <div className="lg:col-span-2 p-12 border border-white/[0.05] bg-slate-900 rounded-[6px] relative overflow-hidden group shadow-2xl">
                     <div className="absolute top-0 right-0 p-12 opacity-[0.02] pointer-events-none group-hover:opacity-[0.05] transition-opacity text-white group-hover:scale-110 duration-700">
                         <Activity size={200} />
                     </div>
@@ -190,7 +190,7 @@ const AdminDashboard = () => {
                     </div>
                 </div>
 
-                <div className="p-12 border border-black/[0.03] bg-white rounded-[6px] flex flex-col justify-center text-center space-y-8 relative overflow-hidden group shadow-sm">
+                <div className="p-12 border border-white/[0.05] bg-slate-900 rounded-[6px] flex flex-col justify-center text-center space-y-8 relative overflow-hidden group shadow-2xl">
                     <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="w-24 h-24 bg-accent/[0.05] rounded-[6px] flex items-center justify-center text-accent mx-auto border border-accent/10 group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 shadow-sm relative">
                         <ShieldCheck size={48} className="relative z-10" />
@@ -208,7 +208,7 @@ const AdminDashboard = () => {
             </div>
 
                         {/* Live Feed Component */}
-            <div className="p-12 bg-white border border-black/[0.03] rounded-[6px] relative overflow-hidden group shadow-sm">
+            <div className="p-12 bg-slate-900 border border-white/5 rounded-[6px] relative overflow-hidden group shadow-2xl">
                 <div className="absolute top-0 right-0 p-12 opacity-[0.02] pointer-events-none group-hover:opacity-[0.05] transition-opacity text-white group-hover:scale-110 duration-700">
                     <Zap size={200} />
                 </div>

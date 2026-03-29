@@ -47,7 +47,18 @@ const Dashboard = () => {
     useEffect(() => {
         const q = query(collection(db, 'matches'), orderBy('matchTime', 'asc'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            setMatches(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            const allMatches = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            // Filter matches that are more than 5 hours old
+            const currentTime = new Date().getTime();
+            const fiveHoursInMs = 5 * 60 * 60 * 1000;
+            
+            const validMatches = allMatches.filter(match => {
+                const matchTimeMs = new Date(match.matchTime).getTime();
+                return (currentTime - matchTimeMs) < fiveHoursInMs;
+            });
+
+            setMatches(validMatches);
             setLoading(false);
         });
         return () => unsubscribe();

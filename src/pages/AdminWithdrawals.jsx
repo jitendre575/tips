@@ -180,10 +180,10 @@ const AdminWithdrawals = () => {
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
-                                    className="bg-white border-2 border-dashed border-black/[0.1] rounded-[6px] p-24 text-center shadow-lg"
+                                    className="bg-slate-900 border-2 border-dashed border-white/5 rounded-[6px] p-24 text-center shadow-2xl"
                                 >
-                                    <Filter size={48} className="mx-auto text-slate-300 mb-6" />
-                                    <h3 className="text-xl font-black text-slate-900 italic uppercase tracking-tighter">No Requests Identified</h3>
+                                    <Filter size={48} className="mx-auto text-slate-600 mb-6" />
+                                    <h3 className="text-xl font-black text-white italic uppercase tracking-tighter">No Requests Identified</h3>
                                     <p className="text-slate-500 text-sm font-medium mt-1">Clear filters or check again later for new submissions.</p>
                                 </motion.div>
                             ) : (
@@ -218,19 +218,19 @@ const AdminWithdrawals = () => {
                                                         </div>
                                                         <span className="text-[10px] text-slate-400 font-mono tracking-widest uppercase">ID: {req.id.slice(0, 10)}</span>
                                                     </div>
-                                                    <h3 className="text-2xl font-black italic tracking-tighter uppercase text-slate-900 leading-none mb-2">
+                                                    <h3 className="text-2xl font-black italic tracking-tighter uppercase text-white leading-none mb-2">
                                                         {req.userEmail}
                                                     </h3>
                                                     <div className="flex flex-wrap items-center gap-4 text-[10px] font-black text-slate-600 uppercase tracking-widest">
-                                                        <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-[6px] border border-black/[0.05]">
+                                                        <div className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-[6px] border border-white/5">
                                                             <Calendar size={12} className="text-accent" />
                                                             {req.createdAt?.toDate ? req.createdAt.toDate().toLocaleDateString() : 'N/A'}
                                                         </div>
-                                                        <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-[6px] border border-black/[0.05]">
+                                                        <div className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-[6px] border border-white/5">
                                                             <Clock size={12} className="text-accent" />
                                                             {req.createdAt?.toDate ? req.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A'}
                                                         </div>
-                                                        <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-[6px] border border-black/[0.05]">
+                                                        <div className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-[6px] border border-white/5">
                                                             <CreditCard size={12} className="text-accent" />
                                                             {req.method}
                                                         </div>
@@ -241,8 +241,8 @@ const AdminWithdrawals = () => {
                                             {/* Details Section */}
                                             <div className="lg:border-l border-black/[0.05] lg:pl-10 space-y-3 lg:max-w-xs w-full">
                                                 <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest block">Transfer Credentials</span>
-                                                <div className="bg-slate-50 p-5 rounded-[6px] border border-black/[0.01] group/details hover:border-black/10 transition-all shadow-inner">
-                                                    <p className="text-xs font-bold text-slate-500 leading-relaxed font-mono break-all line-clamp-2 group-hover:line-clamp-none transition-all">
+                                                <div className="bg-black/40 p-5 rounded-[6px] border border-white/5 group/details hover:border-accent/20 transition-all shadow-inner">
+                                                    <p className="text-xs font-bold text-slate-400 leading-relaxed font-mono break-all line-clamp-2 group-hover:line-clamp-none transition-all">
                                                         {req.details}
                                                     </p>
                                                 </div>
@@ -294,13 +294,13 @@ const AdminWithdrawals = () => {
             {/* Quick Stats Overlay (Floating or Inline) */}
             {!loading && filteredRequests.length > 0 && (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-4 lg:px-0 mt-20">
-                    <div className="bg-white border border-black/[0.05] p-6 rounded-[6px] shadow-sm">
+                    <div className="bg-slate-900 border border-white/5 p-6 rounded-[6px] shadow-2xl">
                         <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Queue Size</p>
-                        <p className="text-2xl font-black italic text-slate-900">{requests.filter(r => r.status === 'pending').length}</p>
+                        <p className="text-2xl font-black italic text-white">{requests.filter(r => r.status === 'pending').length}</p>
                     </div>
-                    <div className="bg-white border border-black/[0.05] p-6 rounded-[6px] shadow-sm">
+                    <div className="bg-slate-900 border border-white/5 p-6 rounded-[6px] shadow-2xl">
                         <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Total Audited</p>
-                        <p className="text-2xl font-black italic text-slate-900">{requests.filter(r => r.status !== 'pending').length}</p>
+                        <p className="text-2xl font-black italic text-white">{requests.filter(r => r.status !== 'pending').length}</p>
                     </div>
                 </div>
             )}

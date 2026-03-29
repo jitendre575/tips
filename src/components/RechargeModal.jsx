@@ -74,6 +74,8 @@ const RechargeModal = ({ isOpen, onClose }) => {
                                 </div>
                             </button>
 
+                            {/* USDT Pay Locked Temporarily */}
+                            {/* 
                             <button
                                 onClick={selectCrypto}
                                 className="w-full group p-4 bg-slate-50 hover:bg-slate-100 border border-black/10 hover:border-black/20 rounded-[6px] flex items-center gap-4 transition-all active:scale-[0.98]"
@@ -86,6 +88,7 @@ const RechargeModal = ({ isOpen, onClose }) => {
                                     <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest truncate">Global Tether Transfer (TRC-20)</p>
                                 </div>
                             </button>
+                            */}
                         </div>
                     ) : (
                         <div className="grid grid-cols-3 gap-3">

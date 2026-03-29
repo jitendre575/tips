@@ -14,6 +14,7 @@ import AddBalance from './pages/AddBalance';
 import Payment from './pages/Payment';
 import AdminDashboard from './pages/AdminDashboard';
 import CasinoGame from './pages/CasinoGame';
+import CrashGame from './pages/CrashGame';
 
 const ProtectedRoute = ({ children, adminOnly = false }) => {
   const { user, userData, loading } = useAuth();
@@ -110,6 +111,12 @@ function App() {
               <Route path="/payment" element={
                 <ProtectedRoute>
                   <Payment />
+                </ProtectedRoute>
+              } />
+
+              <Route path="/casino/crash" element={
+                <ProtectedRoute>
+                  <CrashGame />
                 </ProtectedRoute>
               } />
 

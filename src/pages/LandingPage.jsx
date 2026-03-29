@@ -20,6 +20,7 @@ const LandingPage = () => {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
+    const [referralCode, setReferralCode] = useState('');
     const [loading, setLoading] = useState(false);
     const [matches, setMatches] = useState([]);
     const [activeCategory, setActiveCategory] = useState('Lobby');
@@ -29,7 +30,18 @@ const LandingPage = () => {
     useEffect(() => {
         const q = query(collection(db, 'matches'), orderBy('matchTime', 'asc'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            setMatches(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            const allMatches = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            // Filter matches that are more than 5 hours old
+            const currentTime = new Date().getTime();
+            const fiveHoursInMs = 5 * 60 * 60 * 1000;
+            
+            const validMatches = allMatches.filter(match => {
+                const matchTimeMs = new Date(match.matchTime).getTime();
+                return (currentTime - matchTimeMs) < fiveHoursInMs;
+            });
+
+            setMatches(validMatches);
         });
         return () => unsubscribe();
     }, []);
@@ -86,7 +98,8 @@ const LandingPage = () => {
                 await setDoc(doc(db, 'users', user.uid), {
                     email: email,
                     phone: phone,
-                    balance: 0,
+                    referralCode: referralCode || 'NONE',
+                    balance: 500, // Welcome Bonus
                     totalDeposit: 0,
                     totalWithdraw: 0,
                     totalBets: 0,
@@ -368,7 +381,7 @@ const LandingPage = () => {
                             animate={{ y: 0 }}
                             exit={{ y: '100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="relative w-full max-w-md bg-white rounded-[6px] sm:rounded-[6px] p-8 sm:p-12 shadow-2xl overflow-hidden"
+                            className="relative w-full max-w-md bg-white rounded-t-[30px] sm:rounded-[6px] p-6 sm:p-10 shadow-2xl overflow-hidden"
                         >
                             <div className="flex justify-center mb-6 sm:hidden">
                                 <div className="w-12 h-1.5 bg-slate-200 rounded-[6px]" />
@@ -381,11 +394,11 @@ const LandingPage = () => {
                                 <X size={24} />
                             </button>
 
-                            <div className="mb-12 text-center">
-                                <div className="w-20 h-20 bg-accent/5 rounded-[6px] flex items-center justify-center text-accent mx-auto mb-6 border border-accent/10">
-                                    {isLogin ? <LogIn size={36} /> : <UserPlus size={36} />}
+                            <div className="mb-6 text-center">
+                                <div className="w-16 h-16 bg-accent/5 rounded-[6px] flex items-center justify-center text-accent mx-auto mb-4 border border-accent/10">
+                                    {isLogin ? <LogIn size={30} /> : <UserPlus size={30} />}
                                 </div>
-                                <h2 className="text-4xl font-black italic tracking-tighter mb-3 uppercase text-slate-900 leading-none">
+                                <h2 className="text-3xl font-black italic tracking-tighter mb-2 uppercase text-slate-900 leading-none">
                                     {isLogin ? 'WELCOME BACK' : 'START WINNING'}
                                 </h2>
                                 <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">
@@ -393,27 +406,27 @@ const LandingPage = () => {
                                 </p>
                             </div>
 
-                            <form onSubmit={handleSubmit} className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="label-sm">Mobile or Email</label>
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <div className="space-y-1.5">
+                                    <label className="label-sm">Email Address</label>
                                     <div className="relative">
                                         <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                         <input
-                                            type="text" required value={email} onChange={e => setEmail(e.target.value)}
-                                            className="w-full bg-slate-50 border-2 border-slate-100 rounded-[6px] py-5 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900"
-                                            placeholder="Mobile or Email"
+                                            type="email" required value={email} onChange={e => setEmail(e.target.value)}
+                                            className="w-full bg-slate-50 border-2 border-slate-100 rounded-[6px] py-4 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900 shadow-sm"
+                                            placeholder="your@email.com"
                                         />
                                     </div>
                                 </div>
 
                                 {!isLogin && (
-                                    <div className="space-y-2 animate-in slide-in-from-left duration-500">
+                                    <div className="space-y-1.5 animate-in slide-in-from-left duration-500">
                                         <label className="label-sm">Mobile Number</label>
                                         <div className="relative">
                                             <TrendingUp className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                             <input
                                                 type="tel" required value={phone} onChange={e => setPhone(e.target.value)}
-                                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-[6px] py-5 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900"
+                                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-[6px] py-4 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900 shadow-sm"
                                                 placeholder="10-digit number"
                                                 maxLength={10}
                                             />
@@ -421,21 +434,36 @@ const LandingPage = () => {
                                     </div>
                                 )}
 
-                                <div className="space-y-2">
+                                <div className="space-y-1.5">
                                     <label className="label-sm">Password</label>
                                     <div className="relative">
                                         <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                         <input
                                             type="password" required value={password} onChange={e => setPassword(e.target.value)}
-                                            className="w-full bg-slate-50 border-2 border-slate-100 rounded-[6px] py-5 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900"
+                                            className="w-full bg-slate-50 border-2 border-slate-100 rounded-[6px] py-4 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900 shadow-sm"
                                             placeholder="••••••••"
                                         />
                                     </div>
                                 </div>
 
+                                {!isLogin && (
+                                    <div className="space-y-1.5 animate-in slide-in-from-right duration-700">
+                                        <label className="label-sm">Referral Code (Optional)</label>
+                                        <div className="relative">
+                                            <Gift className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+                                            <input
+                                                type="text" value={referralCode} onChange={e => setReferralCode(e.target.value.replace(/\D/g, '').slice(0, 5))}
+                                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-[6px] py-4 pl-16 pr-6 outline-none focus:border-accent/30 transition-all font-bold text-slate-900 shadow-sm"
+                                                placeholder="5-digit code"
+                                                maxLength={5}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
                                 <button
                                     type="submit" disabled={loading}
-                                    className="w-full btn-accent py-5 group relative overflow-hidden !rounded-[6px]"
+                                    className="w-full btn-accent py-4 group relative overflow-hidden !rounded-[6px] mt-2 shadow-xl shadow-accent/20"
                                 >
                                     <span className="relative z-10 flex items-center justify-center gap-3 font-black text-lg">
                                         {loading ? <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-[6px] animate-spin" /> : (isLogin ? 'Login Now' : 'Join the Club')}
@@ -443,7 +471,7 @@ const LandingPage = () => {
                                 </button>
                             </form>
 
-                            <div className="mt-8 text-center">
+                            <div className="mt-6 text-center">
                                 <button
                                     onClick={() => setIsLogin(!isLogin)}
                                     className="text-xs font-black uppercase tracking-[2px] text-slate-400 hover:text-accent transition-colors"

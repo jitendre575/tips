@@ -235,11 +235,11 @@ const AdminRecharges = () => {
                         ))}
                     </div>
                 ) : filteredRequests.length === 0 ? (
-                    <div className="bg-white border-2 border-dashed border-black/[0.05] rounded-[6px] p-12 sm:p-24 text-center shadow-lg">
-                        <div className="w-20 h-20 sm:w-24 sm:h-24 bg-slate-100 rounded-[6px] flex items-center justify-center mx-auto mb-6 text-slate-400 shadow-inner">
+                    <div className="bg-slate-900 border-2 border-dashed border-white/5 rounded-[6px] p-12 sm:p-24 text-center shadow-lg">
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 bg-black/40 rounded-[6px] flex items-center justify-center mx-auto mb-6 text-slate-600 shadow-inner">
                             <ImageIcon size={40} />
                         </div>
-                        <h3 className="text-xl sm:text-2xl font-black text-slate-900 italic uppercase tracking-tight leading-tight">No Requests Found</h3>
+                        <h3 className="text-xl sm:text-2xl font-black text-white italic uppercase tracking-tight leading-tight">No Requests Found</h3>
                         <p className="text-slate-500 font-medium max-w-xs mx-auto mt-2 text-sm">No {filter.toLowerCase()} requests found matching your criteria.</p>
                     </div>
                 ) : (
@@ -289,7 +289,7 @@ const AdminRecharges = () => {
                                                 <User size={14} />
                                                 <span className="text-[10px] font-black uppercase tracking-widest">Player</span>
                                             </div>
-                                            <p className="text-xl font-black italic uppercase tracking-tight text-slate-900">{req.userName}</p>
+                                            <p className="text-xl font-black italic uppercase tracking-tight text-white">{req.userName}</p>
                                         </div>
                                         <div className="text-right space-y-1.5 flex flex-col justify-end items-end">
                                             <div className="flex items-center gap-2 justify-end text-slate-600 font-black">
@@ -301,10 +301,10 @@ const AdminRecharges = () => {
                                             </p>
                                             {(req.utr || req.hash) && (
                                                 <div className="mt-2 text-right">
-                                                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest block">
+                                                    <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block">
                                                         {req.currency === 'USDT' ? 'TXID / HASH' : 'UTR / REF ID'}
                                                     </span>
-                                                    <p className="text-xs font-mono font-black text-slate-900 group-hover:text-accent transition-colors">
+                                                    <p className="text-xs font-mono font-black text-white group-hover:text-accent transition-colors">
                                                         {req.hash || req.utr}
                                                     </p>
                                                 </div>
@@ -349,9 +349,9 @@ const AdminRecharges = () => {
                                         </div>
                                     ) : (
                                         <div className="flex flex-col gap-4 mt-auto w-full">
-                                            <div className="flex items-center gap-3 p-4 bg-slate-50 border border-black/[0.05] rounded-[6px] shadow-inner">
-                                                <AlertCircle size={16} className="text-slate-600" />
-                                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">
+                                            <div className="flex items-center gap-3 p-4 bg-black/40 border border-white/5 rounded-[6px] shadow-inner">
+                                                <AlertCircle size={16} className="text-slate-500" />
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
                                                     Processed on {req.processedAt?.toDate ? req.processedAt.toDate().toLocaleString() : 'N/A'}
                                                 </span>
                                             </div>

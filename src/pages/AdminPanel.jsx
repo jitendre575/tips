@@ -26,10 +26,31 @@ const AdminPanel = () => {
 
     useEffect(() => {
         if (!userData?.isAdmin) return;
-        const q = query(collection(db, 'matches'), orderBy('matchTime', 'desc'));
+        const q = query(collection(db, 'matches'), orderBy('matchTime', 'asc'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            setMatches(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            const allMatches = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            // Filter matches that are more than 5 hours old locally
+            const currentTime = new Date().getTime();
+            const fiveHoursInMs = 5 * 60 * 60 * 1000;
+            
+            const validMatches = allMatches.filter(match => {
+                const matchTimeMs = new Date(match.matchTime).getTime();
+                return (currentTime - matchTimeMs) < fiveHoursInMs;
+            });
+
+            setMatches(validMatches);
             setLoading(false);
+
+            // Cleanup: Automatically delete expired matches from Firestore
+            allMatches.forEach(async (match) => {
+                const matchTimeMs = new Date(match.matchTime).getTime();
+                if ((currentTime - matchTimeMs) >= fiveHoursInMs) {
+                    try {
+                        await deleteDoc(doc(db, 'matches', match.id));
+                    } catch (e) { console.error("Auto-delete failed", e); }
+                }
+            });
         }, (error) => {
             console.error("Snapshot error:", error);
             setLoading(false);
@@ -104,25 +125,19 @@ const AdminPanel = () => {
     };
 
     const declareWinner = async (match, winnerName) => {
-        const loadingToast = toast.loading('Settling bets and declaring winner...');
+        const settleToast = toast.loading('Settling bets and declaring winner...');
         try {
             const batch = writeBatch(db);
             const matchRef = doc(db, 'matches', match.id);
 
-            batch.update(matchRef, {
-                status: 'Finished',
-                winner: winnerName,
-                finishedAt: serverTimestamp()
-            });
-
-            // Fetch all bets for this match and filter 'pending' in memory to avoid index requirement
+            // Fetch all bets for this match
             const betsQuery = query(collection(db, 'bets'), where('matchId', '==', match.id));
             const betsSnapshot = await getDocs(betsQuery);
 
             let winnersCount = 0;
             betsSnapshot.forEach((betDoc) => {
                 const bet = betDoc.data();
-                if (bet.status !== 'pending') return; // Filter in JS
+                if (bet.status !== 'pending') return;
 
                 const betRef = doc(db, 'bets', betDoc.id);
                 const userRef = doc(db, 'users', bet.userId);
@@ -151,10 +166,12 @@ const AdminPanel = () => {
             });
 
             await batch.commit();
-            toast.success(`Winner declared! ${winnersCount} bets settled.`, { id: loadingToast });
+            // Delete the match after settlement so it disappears immediately
+            await deleteDoc(matchRef);
+            toast.success(`${match.teamA} vs ${match.teamB} settled and removed.`, { id: settleToast });
         } catch (error) {
             console.error('Declaration error:', error);
-            toast.error('Failed to settle bets', { id: loadingToast });
+            toast.error('Failed to settle bets', { id: settleToast });
         }
     };
 

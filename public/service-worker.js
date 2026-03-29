@@ -17,37 +17,40 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
+  // Skip Firebase Storage and other external APIs to avoid CORS/Fetch issues in SW
+  if (event.request.url.includes('firebasestorage.googleapis.com') || 
+      event.request.url.includes('firestore.googleapis.com')) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Cache hit - return response
         if (response) {
           return response;
         }
-        return fetch(event.request).then(
-          function(response) {
-            // Check if we received a valid response
+
+        return fetch(event.request)
+          .then(function(response) {
             if(!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
 
-            // IMPORTANT: Clone the response. A response is a stream
-            // and because we want the browser to consume the response
-            // as well as the cache consuming the response, we need
-            // to clone it so we have two streams.
             var responseToCache = response.clone();
-
             caches.open(CACHE_NAME)
               .then(function(cache) {
-                // Ignore API calls or other non-GET methods or external resources if needed
                 if (event.request.method === 'GET' && event.request.url.startsWith(self.location.origin)) {
                    cache.put(event.request, responseToCache);
                 }
               });
 
             return response;
-          }
-        );
+          })
+          .catch(err => {
+            // Silently fail for network errors to avoid console spam
+            console.log('[SW] Fetch failed for:', event.request.url);
+            return null;
+          });
       })
   );
 });

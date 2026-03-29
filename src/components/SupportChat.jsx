@@ -184,7 +184,8 @@ const SupportChat = () => {
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             placeholder="Type your message..."
-                            className="flex-1 bg-white border border-black/[0.1] rounded-[6px] px-4 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-accent/50 transition-all shadow-inner"
+                            className="flex-1 bg-white border border-black/[0.1] rounded-[6px] px-4 py-2.5 text-sm text-black placeholder:text-zinc-400 focus:outline-none focus:border-accent/50 transition-all shadow-inner"
+                            style={{ color: 'black' }}
                         />
                         <button
                             type="submit"
