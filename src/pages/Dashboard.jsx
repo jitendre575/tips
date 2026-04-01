@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { db } from '../firebase';
 import { collection, query, onSnapshot, orderBy, doc, updateDoc, serverTimestamp, getDocs, limit, addDoc } from 'firebase/firestore';
 import { useSearchParams, useNavigate } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import MatchCard from '../components/MatchCard';
 import BetModal from '../components/BetModal';
 import CasinoCard from '../components/CasinoCard';
-import { Activity, LayoutDashboard, Search, Calendar, Ghost, Zap, Trophy, Gamepad2, Sparkles, Flame } from 'lucide-react';
+import { Activity, LayoutDashboard, Search, Calendar, Ghost, Zap, Trophy, Gamepad2, Sparkles, Flame, ChevronLeft, ChevronRight } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const Dashboard = () => {
@@ -16,9 +16,18 @@ const Dashboard = () => {
     const [matches, setMatches] = useState([]);
     const [selectedMatch, setSelectedMatch] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [selectedDate, setSelectedDate] = useState(null); // null = show today's + 4 default
+    const calendarRef = useRef(null);
 
     const activeTab = searchParams.get('view') || 'Sports';
     const filter = searchParams.get('filter') || 'Upcoming';
+
+    // Build next 14 days strip
+    const dateStrip = Array.from({ length: 14 }, (_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() + i);
+        return d;
+    });
 
     const setActiveTab = (tab) => {
         const newParams = new URLSearchParams(searchParams);
@@ -58,30 +67,41 @@ const Dashboard = () => {
                 return (currentTime - matchTimeMs) < fiveHoursInMs;
             });
 
-            setMatches(validMatches);
+            // Deduplicate: keep only first occurrence of each unique match (teamA+teamB+time)
+            const seen = new Set();
+            const uniqueMatches = validMatches.filter(match => {
+                const key = `${match.teamA}-${match.teamB}-${match.matchTime}`;
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
+            });
+
+            setMatches(uniqueMatches);
             setLoading(false);
         });
         return () => unsubscribe();
     }, []);
 
-    // One-time seeding logic for the requested IPL schedule
+    // One-time seeding logic — StrictMode safe via sessionStorage guard
     useEffect(() => {
         if (!user) return;
+        if (sessionStorage.getItem('matchesSeeded')) return; // Prevent double-run in StrictMode
+        sessionStorage.setItem('matchesSeeded', '1');
         const seedMatches = async () => {
             const q = query(collection(db, 'matches'), limit(1));
             const snapshot = await getDocs(q);
             if (snapshot.empty) {
                 const iplMatches = [
-                    { teamA: 'Sunrisers Hyderabad', teamB: 'Royal Challengers Bengaluru', matchTime: '2026-03-28T19:30', oddsTeamA: 1.9, oddsTeamB: 1.9, status: 'Upcoming', sixInPowerplay: true },
-                    { teamA: 'Kolkata Knight Riders', teamB: 'Mumbai Indians', matchTime: '2026-03-29T19:30', oddsTeamA: 1.8, oddsTeamB: 2.1, status: 'Upcoming', sixInPowerplay: true },
-                    { teamA: 'Chennai Super Kings', teamB: 'Rajasthan Royals', matchTime: '2026-03-30T19:30', oddsTeamA: 1.9, oddsTeamB: 1.9, status: 'Upcoming', sixInPowerplay: true },
-                    { teamA: 'Gujarat Titans', teamB: 'Punjab Kings', matchTime: '2026-03-31T19:30', oddsTeamA: 2.0, oddsTeamB: 1.8, status: 'Upcoming', sixInPowerplay: true },
-                    { teamA: 'Delhi Capitals', teamB: 'Lucknow Super Giants', matchTime: '2026-04-01T19:30', oddsTeamA: 1.9, oddsTeamB: 1.9, status: 'Upcoming', sixInPowerplay: true },
-                    { teamA: 'Sunrisers Hyderabad', teamB: 'Kolkata Knight Riders', matchTime: '2026-04-02T19:30', oddsTeamA: 1.8, oddsTeamB: 2.2, status: 'Upcoming', sixInPowerplay: true },
-                    { teamA: 'Punjab Kings', teamB: 'Chennai Super Kings', matchTime: '2026-04-03T19:30', oddsTeamA: 2.1, oddsTeamB: 1.7, status: 'Upcoming', sixInPowerplay: true },
-                    { teamA: 'Mumbai Indians', teamB: 'Delhi Capitals', matchTime: '2026-04-04T15:30', oddsTeamA: 1.9, oddsTeamB: 1.9, status: 'Upcoming', sixInPowerplay: true },
-                    { teamA: 'Rajasthan Royals', teamB: 'Gujarat Titans', matchTime: '2026-04-04T19:30', oddsTeamA: 1.9, oddsTeamB: 1.9, status: 'Upcoming', sixInPowerplay: true },
-                    { teamA: 'Lucknow Super Giants', teamB: 'Sunrisers Hyderabad', matchTime: '2026-04-05T15:30', oddsTeamA: 1.8, oddsTeamB: 2.2, status: 'Upcoming', sixInPowerplay: true }
+                    { teamA: 'Sunrisers Hyderabad', teamB: 'Royal Challengers Bengaluru', matchTime: '2026-04-02T19:30', oddsTeamA: 1.9, oddsTeamB: 1.9, status: 'Upcoming', sixInPowerplay: true },
+                    { teamA: 'Kolkata Knight Riders', teamB: 'Mumbai Indians', matchTime: '2026-04-03T19:30', oddsTeamA: 1.8, oddsTeamB: 2.1, status: 'Upcoming', sixInPowerplay: true },
+                    { teamA: 'Chennai Super Kings', teamB: 'Rajasthan Royals', matchTime: '2026-04-04T15:30', oddsTeamA: 1.9, oddsTeamB: 1.9, status: 'Upcoming', sixInPowerplay: true },
+                    { teamA: 'Gujarat Titans', teamB: 'Punjab Kings', matchTime: '2026-04-04T19:30', oddsTeamA: 2.0, oddsTeamB: 1.8, status: 'Upcoming', sixInPowerplay: true },
+                    { teamA: 'Delhi Capitals', teamB: 'Lucknow Super Giants', matchTime: '2026-04-05T15:30', oddsTeamA: 1.9, oddsTeamB: 1.9, status: 'Upcoming', sixInPowerplay: true },
+                    { teamA: 'Sunrisers Hyderabad', teamB: 'Kolkata Knight Riders', matchTime: '2026-04-06T19:30', oddsTeamA: 1.8, oddsTeamB: 2.2, status: 'Upcoming', sixInPowerplay: true },
+                    { teamA: 'Punjab Kings', teamB: 'Chennai Super Kings', matchTime: '2026-04-07T19:30', oddsTeamA: 2.1, oddsTeamB: 1.7, status: 'Upcoming', sixInPowerplay: true },
+                    { teamA: 'Mumbai Indians', teamB: 'Delhi Capitals', matchTime: '2026-04-08T15:30', oddsTeamA: 1.9, oddsTeamB: 1.9, status: 'Upcoming', sixInPowerplay: true },
+                    { teamA: 'Rajasthan Royals', teamB: 'Gujarat Titans', matchTime: '2026-04-09T19:30', oddsTeamA: 1.9, oddsTeamB: 1.9, status: 'Upcoming', sixInPowerplay: true },
+                    { teamA: 'Lucknow Super Giants', teamB: 'Sunrisers Hyderabad', matchTime: '2026-04-10T19:30', oddsTeamA: 1.8, oddsTeamB: 2.2, status: 'Upcoming', sixInPowerplay: true }
                 ];
                 for (const match of iplMatches) {
                     await addDoc(collection(db, 'matches'), { ...match, createdAt: serverTimestamp() });
@@ -91,11 +111,21 @@ const Dashboard = () => {
         seedMatches();
     }, [user]);
 
+    const toDateStr = (d) => new Date(d).toDateString();
+
     const filteredMatches = matches.filter(m => {
+        // Date filter first
+        if (selectedDate) {
+            if (toDateStr(m.matchTime) !== toDateStr(selectedDate)) return false;
+        }
         if (filter === 'All') return true;
         if (filter === 'Six Bonus') return m.sixInPowerplay;
         return m.status === filter;
     });
+
+    // Default view: show only first 4 matches (when no date selected)
+    const displayedMatches = selectedDate ? filteredMatches : filteredMatches.slice(0, 4);
+    const hiddenCount = selectedDate ? 0 : Math.max(0, filteredMatches.length - 4);
 
     const originalGames = [
         { id: 'mines', name: 'Mines', image: '/casino/mines.png', activePlayers: '2,683', provider: 'ORIGINALS' },
@@ -191,8 +221,8 @@ const Dashboard = () => {
                     </div>
 
                     {activeTab === 'Sports' && (
-                        <div className="flex flex-col gap-8 w-full max-w-4xl mx-auto px-2">
-                             {/* Filters */}
+                        <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto px-2">
+                            {/* Status Filters */}
                             <div className="flex flex-wrap justify-center gap-3 sm:gap-5">
                                 {['All', 'Live', 'Upcoming', 'Six Bonus'].map(f => (
                                     <button
@@ -209,6 +239,47 @@ const Dashboard = () => {
                                         {f}
                                     </button>
                                 ))}
+                            </div>
+
+                            {/* Date Calendar Strip */}
+                            <div className="relative">
+                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-[3px] mb-2 flex items-center gap-2"><Calendar size={10}/> Browse by Date</p>
+                                <div ref={calendarRef} className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x">
+                                    {/* All Dates button */}
+                                    <button
+                                        onClick={() => setSelectedDate(null)}
+                                        className={`shrink-0 snap-start flex flex-col items-center justify-center w-14 h-16 rounded-[6px] border text-center transition-all ${
+                                            !selectedDate
+                                                ? 'bg-[#b91c1c] border-[#b91c1c] text-white shadow-lg shadow-red-500/20'
+                                                : 'bg-white/70 border-slate-200 text-slate-500 hover:bg-white'
+                                        }`}
+                                    >
+                                        <span className="text-[8px] font-black uppercase tracking-widest">All</span>
+                                        <span className="text-lg font-black leading-none">★</span>
+                                    </button>
+                                    {dateStrip.map((d, i) => {
+                                        const isSelected = selectedDate && toDateStr(d) === toDateStr(selectedDate);
+                                        const hasMatch = matches.some(m => toDateStr(m.matchTime) === toDateStr(d));
+                                        return (
+                                            <button
+                                                key={i}
+                                                onClick={() => setSelectedDate(d)}
+                                                className={`shrink-0 snap-start flex flex-col items-center justify-center w-14 h-16 rounded-[6px] border text-center transition-all relative ${
+                                                    isSelected
+                                                        ? 'bg-[#b91c1c] border-[#b91c1c] text-white shadow-lg shadow-red-500/20 scale-105'
+                                                        : 'bg-white/70 border-slate-200 text-slate-500 hover:bg-white hover:border-slate-300'
+                                                }`}
+                                            >
+                                                <span className="text-[8px] font-black uppercase tracking-widest">{d.toLocaleDateString('en',{weekday:'short'})}</span>
+                                                <span className="text-xl font-black leading-tight">{d.getDate()}</span>
+                                                <span className="text-[7px] font-black uppercase">{d.toLocaleDateString('en',{month:'short'})}</span>
+                                                {hasMatch && !isSelected && (
+                                                    <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                                )}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
                     )}
@@ -241,13 +312,25 @@ const Dashboard = () => {
                                     </div>
                                 ) : (
                                     <div className="grid grid-cols-1 gap-6 sm:gap-8">
-                                        {filteredMatches.map(match => (
+                                        {displayedMatches.map(match => (
                                             <MatchCard
                                                 key={match.id}
                                                 match={match}
                                                 onBet={(m) => setSelectedMatch(m)}
                                             />
                                         ))}
+                                        {/* Show More via Calendar hint */}
+                                        {hiddenCount > 0 && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                className="bg-white border-2 border-dashed border-slate-200 rounded-[6px] p-8 text-center flex flex-col items-center gap-3"
+                                            >
+                                                <Calendar size={32} className="text-slate-300" />
+                                                <p className="text-slate-800 font-black italic uppercase text-lg tracking-tight">{hiddenCount} More Matches</p>
+                                                <p className="text-slate-500 text-xs font-medium">Select a date from the calendar above to view upcoming matches</p>
+                                            </motion.div>
+                                        )}
                                     </div>
                                 )}
                             </>

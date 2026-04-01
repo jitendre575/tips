@@ -22,7 +22,7 @@ const AdminUsers = () => {
     useEffect(() => {
         if (!userData?.isAdmin) return;
         // Sync Users
-        const qUsers = query(collection(db, 'users'), orderBy('createdAt', 'desc'), limit(300));
+        const qUsers = query(collection(db, 'users'));
         const unsubUsers = onSnapshot(qUsers, (snapshot) => {
             const usersData = snapshot.docs.map(doc => ({
                 id: doc.id, ...doc.data()
