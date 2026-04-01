@@ -37,12 +37,15 @@ const Withdraw = () => {
         e.preventDefault();
         const withdrawAmount = Number(amount);
 
-        if (withdrawAmount < 500) {
-            return toast.error('Minimum withdrawal is 500 Coins');
+        const activeBalance = paymentMethod === 'USDT' ? (userData?.usdtBalance || 0) : (userData?.inrBalance || 0);
+        const minWithdraw = paymentMethod === 'USDT' ? 15 : 900;
+
+        if (withdrawAmount < minWithdraw) {
+            return toast.error(`Minimum withdrawal is ${minWithdraw} ${paymentMethod === 'USDT' ? 'USDT' : 'INR'}`);
         }
 
-        if (withdrawAmount > userData.balance) {
-            return toast.error('Insufficient balance');
+        if (withdrawAmount > activeBalance) {
+            return toast.error(`Insufficient ${paymentMethod === 'USDT' ? 'USDT' : 'INR'} balance`);
         }
 
         let finalDetails = paymentDetails;
@@ -51,6 +54,11 @@ const Withdraw = () => {
                 return toast.error('Please fill all bank details');
             }
             finalDetails = `A/c: ${bankDetails.account} | IFSC: ${bankDetails.ifsc} | Name: ${bankDetails.name} | Email: ${bankDetails.email}`;
+        } else if (paymentMethod === 'USDT') {
+            if (!paymentDetails) {
+                return toast.error('Please provide USDT Address');
+            }
+            finalDetails = `USDT Addr: ${paymentDetails}`;
         } else {
             if (!paymentDetails) {
                 return toast.error('Please provide UPI ID');
@@ -70,9 +78,11 @@ const Withdraw = () => {
                 createdAt: serverTimestamp()
             });
 
-            // 2. Deduct from user balance immediately
+            // 2. Deduct from correct user balance immediately
+            const updateField = paymentMethod === 'USDT' ? 'usdtBalance' : 'inrBalance';
             await updateDoc(doc(db, 'users', user.uid), {
-                balance: increment(-withdrawAmount),
+                [updateField]: increment(-withdrawAmount),
+                balance: increment(-withdrawAmount), // Keep legacy sync
                 activeWithdrawals: increment(1)
             });
 
@@ -105,7 +115,7 @@ const Withdraw = () => {
                             </div>
                             <div>
                                 <h3 className="font-bold text-lg">Request Payout</h3>
-                                <p className="text-xs text-zinc-500 uppercase font-black tracking-widest">Min 500 Coins</p>
+                                <p className="text-xs text-zinc-500 uppercase font-black tracking-widest">Min {paymentMethod === 'USDT' ? '15 USDT' : '900 INR'}</p>
                             </div>
                         </div>
 
@@ -121,20 +131,27 @@ const Withdraw = () => {
                                         placeholder="Enter amount"
                                         className="input-field"
                                     />
-                                    <span className="absolute right-4 top-1/2 -translate-y-1/2 font-black italic text-zinc-600 uppercase text-xs">Coins</span>
+                                    <span className="absolute right-4 top-1/2 -translate-y-1/2 font-black italic text-zinc-600 uppercase text-xs">{paymentMethod === 'USDT' ? 'USDT' : 'INR'}</span>
                                 </div>
-                                <p className="text-[10px] text-zinc-500 pl-1">Available: {userData?.balance?.toLocaleString()} Coins</p>
+                                <p className="text-[10px] text-zinc-500 pl-1 uppercase font-black tracking-widest leading-none mt-2">Available: {(paymentMethod === 'USDT' ? (userData?.usdtBalance || 0) : (userData?.inrBalance || 0)).toLocaleString()} {paymentMethod === 'USDT' ? 'USDT' : 'Coins'}</p>
                             </div>
 
                             <div className="space-y-2">
                                 <label className="label-sm">Payment Method</label>
-                                <div className="grid grid-cols-2 gap-3">
-                                    {['UPI', 'BANK'].map(method => (
+                                <div className="grid grid-cols-3 gap-3">
+                                    {['UPI', 'BANK', 'USDT'].map(method => (
                                         <button
                                             key={method}
                                             type="button"
-                                            onClick={() => setPaymentMethod(method)}
-                                            className={`py-3 rounded-[6px] font-bold transition-all border ${paymentMethod === method
+                                            onClick={() => {
+                                                setPaymentMethod(method);
+                                                if (method === 'USDT' && userData?.usdtAddress) {
+                                                    setPaymentDetails(userData.usdtAddress);
+                                                } else {
+                                                    setPaymentDetails('');
+                                                }
+                                            }}
+                                            className={`py-3 rounded-[6px] font-black italic uppercase tracking-widest transition-all border text-[10px] sm:text-xs ${paymentMethod === method
                                                 ? 'bg-accent/10 border-accent/50 text-accent'
                                                 : 'bg-zinc-900 border-white/[0.05] text-zinc-500'
                                                 }`}
@@ -156,6 +173,19 @@ const Withdraw = () => {
                                         placeholder="Enter VPA (e.g. name@upi)"
                                         className="input-field py-4"
                                     />
+                                </div>
+                            ) : paymentMethod === 'USDT' ? (
+                                <div className="space-y-2">
+                                    <label className="label-sm text-emerald-500">USDT (TRC-20) Address</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={paymentDetails}
+                                        onChange={(e) => setPaymentDetails(e.target.value)}
+                                        placeholder="Enter TRC-20 Wallet Address"
+                                        className="input-field py-4 font-mono text-[10px]"
+                                    />
+                                    <p className="text-[9px] text-[#dc2626] font-black uppercase tracking-widest pl-1 mt-1">Network: TRON (TRC-20) Only</p>
                                 </div>
                             ) : (
                                 <div className="space-y-4">

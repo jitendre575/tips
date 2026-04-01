@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, query, orderBy, onSnapshot, doc, updateDoc, increment, addDoc, serverTimestamp, deleteDoc, limit } from 'firebase/firestore';
-import { ArrowLeft, Check, X, ExternalLink, Calendar, User, IndianRupee, Clock, Search, Filter, AlertCircle, Image as ImageIcon, Trash2, Activity } from 'lucide-react';
+import { ArrowLeft, Check, X, ExternalLink, Calendar, User, IndianRupee, Clock, Search, Filter, AlertCircle, Image as ImageIcon, Trash2, Activity, Coins } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -21,7 +21,7 @@ const AdminRecharges = () => {
         // 2s Delay to allow Firestore Rules to catch up
         const syncDelay = setTimeout(() => {
             console.log("[RechargeTracker] INITIALIZING ADMIN STREAM...");
-            const q = query(collection(db, 'rechargeRequests'));
+            const q = query(collection(db, 'rechargeRequests'), orderBy('createdAt', 'desc'), limit(100));
 
             const unsubscribe = onSnapshot(q, (snapshot) => {
                 console.log(`[RechargeTracker] REFRESH: ${snapshot.size} total docs retrieved.`);
@@ -77,17 +77,28 @@ const AdminRecharges = () => {
         }
     };
 
-    const handleAction = async (requestId, userId, amount, action) => {
+    const handleAction = async (requestId, userId, amount, currency, action) => {
         try {
             const requestRef = doc(db, 'rechargeRequests', requestId);
             const userRef = doc(db, 'users', userId);
+            const symbol = currency === 'USDT' ? '₮' : '₹';
 
             if (action === 'Approve') {
-                // Update user balance and total deposit
-                await updateDoc(userRef, {
-                    balance: increment(amount),
+                // Update user specific sub-balances
+                const updateData = {
                     totalDeposit: increment(amount)
-                });
+                };
+
+                if (currency === 'USDT') {
+                    updateData.usdtBalance = increment(amount);
+                } else {
+                    updateData.inrBalance = increment(amount);
+                }
+                
+                // Keep the 'total balance' for legacy components if needed
+                updateData.balance = increment(amount);
+
+                await updateDoc(userRef, updateData);
 
                 // Update request status
                 await updateDoc(requestRef, {
@@ -100,6 +111,7 @@ const AdminRecharges = () => {
                     userId,
                     type: 'deposit',
                     amount,
+                    currency: currency || 'INR',
                     status: 'success',
                     description: 'Wallet Recharge Approved',
                     createdAt: serverTimestamp()
@@ -109,7 +121,7 @@ const AdminRecharges = () => {
                 await addDoc(collection(db, 'notifications'), {
                     userId,
                     type: 'recharge_approved',
-                    message: `Your recharge of ₹${amount} has been approved!`,
+                    message: `Your recharge of ${symbol}${amount} has been approved!`,
                     createdAt: serverTimestamp(),
                     read: false
                 });
@@ -126,7 +138,7 @@ const AdminRecharges = () => {
                 await addDoc(collection(db, 'notifications'), {
                     userId,
                     type: 'recharge_rejected',
-                    message: `Your recharge of ₹${amount} was rejected. Please contact support.`,
+                    message: `Your recharge of ${symbol}${amount} was rejected. Please contact support.`,
                     createdAt: serverTimestamp(),
                     read: false
                 });
@@ -326,14 +338,14 @@ const AdminRecharges = () => {
                                     {req.status === 'Pending' ? (
                                         <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4 mt-auto">
                                             <button
-                                                onClick={() => handleAction(req.id, req.userId, req.amount, 'Reject')}
+                                                onClick={() => handleAction(req.id, req.userId, req.amount, req.currency, 'Reject')}
                                                 className="flex items-center justify-center gap-2 py-4 bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-500 rounded-[6px] font-black uppercase tracking-widest transition-all border border-black/[0.05] active:scale-95 shadow-sm"
                                             >
                                                 <X size={18} />
                                                 <span>Reject</span>
                                             </button>
                                             <button
-                                                onClick={() => handleAction(req.id, req.userId, req.amount, 'Approve')}
+                                                onClick={() => handleAction(req.id, req.userId, req.amount, req.currency, 'Approve')}
                                                 className="flex items-center justify-center gap-2 py-4 bg-accent hover:bg-accent-hover text-white rounded-[6px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-accent/20"
                                             >
                                                 <Check size={18} />

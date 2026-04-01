@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, query, onSnapshot, orderBy, doc, updateDoc, increment, serverTimestamp, addDoc } from 'firebase/firestore';
+import { collection, query, onSnapshot, orderBy, doc, updateDoc, increment, serverTimestamp, addDoc, limit } from 'firebase/firestore';
 import { Wallet, Clock, CheckCircle2, XCircle, Search, Filter, Mail, CreditCard, ArrowRight, ShieldCheck, Activity, AlertCircle, TrendingDown, ExternalLink, Calendar } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -19,7 +19,7 @@ const AdminWithdrawals = () => {
 
         // 2s Delay to allow Firestore Rules to catch up
         const syncDelay = setTimeout(() => {
-            const q = query(collection(db, 'withdrawals'));
+            const q = query(collection(db, 'withdrawals'), orderBy('createdAt', 'desc'), limit(100));
             const unsubscribe = onSnapshot(q, (snapshot) => {
                 const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 data.sort((a, b) => {

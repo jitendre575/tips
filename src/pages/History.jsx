@@ -282,9 +282,9 @@ const History = () => {
                                         <div className="text-right">
                                             <p className={`text-xl sm:text-2xl font-black italic tracking-tighter ${trans.type === 'deposit' ? 'text-emerald-500' : 'text-red-500'
                                                 }`}>
-                                                {trans.type === 'deposit' ? '+' : '-'}{trans.amount.toLocaleString()}
+                                                {trans.type === 'deposit' ? '+' : '-'}{trans.currency === 'USDT' ? '₮' : '₹'}{trans.amount.toLocaleString()}
                                             </p>
-                                            <span className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest">Coins</span>
+                                            <span className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest">{trans.currency === 'USDT' ? 'USDT' : 'Coins'}</span>
                                         </div>
                                     </div>
                                 ))}

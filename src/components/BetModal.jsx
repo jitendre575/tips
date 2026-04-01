@@ -10,11 +10,14 @@ const BetModal = ({ match, onClose }) => {
     const { user, userData } = useAuth();
     const [betTeam, setBetTeam] = useState('teamA');
     const [amount, setAmount] = useState(500);
+    const [betCurrency, setBetCurrency] = useState('INR'); // INR or USDT
     const [loading, setLoading] = useState(false);
 
+    const activeBalance = betCurrency === 'USDT' ? (userData?.usdtBalance || 0) : (userData?.inrBalance || 0);
+
     const handlePlaceBet = async () => {
-        if (amount > userData.balance) {
-            toast.error('Insufficient balance!');
+        if (amount > activeBalance) {
+            toast.error(`Insufficient ${betCurrency} balance!`);
             return;
         }
 
@@ -34,6 +37,7 @@ const BetModal = ({ match, onClose }) => {
                 selectedTeam: betTeam === 'teamA' ? match.teamA : match.teamB,
                 odds: betTeam === 'teamA' ? match.oddsTeamA : match.oddsTeamB,
                 amount: Number(amount),
+                currency: betCurrency,
                 status: 'pending',
                 sixRewardAppliedAtBet: match.sixInPowerplay || false,
                 timestamp: serverTimestamp()
@@ -42,10 +46,12 @@ const BetModal = ({ match, onClose }) => {
             // Add bet record
             await addDoc(collection(db, 'bets'), betData);
 
-            // Update user balance and total bets count
+            // Update user specific sub-balance and total bets count
             const userRef = doc(db, 'users', user.uid);
+            const updateField = betCurrency === 'USDT' ? 'usdtBalance' : 'inrBalance';
             await updateDoc(userRef, {
-                balance: increment(-amount),
+                [updateField]: increment(-amount),
+                balance: increment(-amount), // Keep legacy sync
                 totalBets: increment(1)
             });
 
@@ -132,25 +138,33 @@ const BetModal = ({ match, onClose }) => {
                             ))}
                         </div>
 
-                        {/* Amount Input */}
+                        {/* Currency Selection & Amount Input */}
                         <div className="bg-white/[0.03] border border-white/[0.08] p-5 sm:p-6 rounded-[6px] shadow-inner space-y-5 relative overflow-hidden group">
-                            <div className="flex justify-between items-end px-1 relative z-10">
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 px-1 relative z-10">
                                 <div>
-                                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-[2px] leading-none mb-1 block">Wager Amount</label>
-                                    <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400/80">
-                                        <TrendingUp size={12} /> Minimum 100
+                                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-[2px] leading-none mb-3 block">Currency & Stake</label>
+                                    <div className="flex items-center gap-2 p-1 bg-black/40 rounded-[6px] border border-white/5 w-fit">
+                                        {['INR', 'USDT'].map(curr => (
+                                            <button
+                                                key={curr}
+                                                onClick={() => { setBetCurrency(curr); setAmount(curr === 'USDT' ? 5 : 500); }}
+                                                className={`px-4 py-1.5 rounded-[6px] text-[10px] font-black tracking-widest transition-all ${betCurrency === curr ? 'bg-accent text-white shadow-lg shadow-accent/20' : 'text-slate-500 hover:text-slate-300'}`}
+                                            >
+                                                {curr === 'INR' ? '₹ INR' : '₮ USDT'}
+                                            </button>
+                                        ))}
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2 px-4 py-2 bg-black/40 rounded-[6px] border border-white/10 shadow-xl backdrop-blur-md">
-                                    <Wallet size={14} className="text-yellow-500" />
-                                    <span className="text-[11px] font-black text-white italic tracking-[1px]">BAL: {(userData.balance || 0).toLocaleString()}</span>
+                                    <Wallet size={14} className={betCurrency === 'INR' ? "text-emerald-500" : "text-blue-500"} />
+                                    <span className="text-[11px] font-black text-white italic tracking-[1px]">BAL: {(activeBalance || 0).toLocaleString()}</span>
                                 </div>
                             </div>
 
                             <div className="space-y-4 relative z-10">
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-                                        <span className="text-3xl font-black text-slate-500 italic">₹</span>
+                                        <span className="text-3xl font-black text-slate-500 italic">{betCurrency === 'INR' ? '₹' : '₮'}</span>
                                     </div>
                                     <input
                                         type="number"
@@ -162,7 +176,7 @@ const BetModal = ({ match, onClose }) => {
                                 </div>
 
                                 <div className="flex gap-2 sm:gap-3">
-                                    {[100, 500, 1000, 5000].map(val => (
+                                    {(betCurrency === 'INR' ? [100, 500, 1000, 5000] : [1, 5, 10, 50]).map(val => (
                                         <button
                                             key={val}
                                             onClick={() => setAmount(Number(amount || 0) + val)}
@@ -185,7 +199,7 @@ const BetModal = ({ match, onClose }) => {
                                     <span className="text-[10px] text-slate-400 font-black uppercase tracking-[3px] leading-none mb-2 block">Potential Return</span>
                                     <div className="flex items-baseline gap-2">
                                         <span className="text-4xl sm:text-5xl font-black italic text-emerald-400 tracking-tighter leading-none drop-shadow-md">
-                                            ₹ {potentialReturn}
+                                            {betCurrency === 'INR' ? '₹' : '₮'}{potentialReturn}
                                         </span>
                                     </div>
                                 </div>
@@ -216,7 +230,7 @@ const BetModal = ({ match, onClose }) => {
                         {/* Submit CTA */}
                         <div className="pt-2">
                             <button
-                                disabled={loading || amount > (userData.balance || 0) || amount < 100}
+                                disabled={loading || amount > (activeBalance || 0) || (betCurrency === 'INR' ? (amount || 0) < 100 : (amount || 0) < 1)}
                                 onClick={handlePlaceBet}
                                 className="w-full bg-gradient-to-r from-accent via-blue-600 to-indigo-600 hover:from-accent-hover hover:via-blue-700 hover:to-indigo-700 text-white py-6 sm:py-7 rounded-[6px] font-black italic uppercase tracking-[4px] text-xl sm:text-2xl shadow-2xl shadow-accent/40 active:scale-[0.98] transition-all flex items-center justify-center gap-3 relative overflow-hidden group disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed"
                             >
@@ -237,13 +251,13 @@ const BetModal = ({ match, onClose }) => {
                             </button>
                             
                             {/* Validation Messages */}
-                            {amount > (userData.balance || 0) ? (
+                            {amount > (activeBalance || 0) ? (
                                 <p className="text-center mt-4 text-[11px] font-black text-rose-500 uppercase tracking-[2px] animate-pulse flex items-center justify-center gap-2 bg-rose-500/10 py-2 rounded-[6px] border border-rose-500/20">
-                                    <AlertCircle size={14} /> Insufficient Balance. Please Recharge.
+                                    <AlertCircle size={14} /> Insufficient {betCurrency} Balance.
                                 </p>
-                            ) : amount > 0 && amount < 100 ? (
+                            ) : (amount || 0) > 0 && (betCurrency === 'INR' ? (amount || 0) < 100 : (amount || 0) < 1) ? (
                                 <p className="text-center mt-4 text-[11px] font-black text-amber-500 uppercase tracking-[2px] flex items-center justify-center gap-2 bg-amber-500/10 py-2 rounded-[6px] border border-amber-500/20">
-                                    Minimum Wager is 100 Coins
+                                    Min {betCurrency === 'INR' ? '100 INR' : '1 USDT'}
                                 </p>
                             ) : null}
                         </div>

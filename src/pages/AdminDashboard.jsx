@@ -73,23 +73,17 @@ const AdminDashboard = () => {
                 }));
             }, err => console.error("User Sync Error:", err));
 
-            const unsubRecharges = onSnapshot(query(collection(db, 'rechargeRequests')), s => {
-                const pendingCount = s.docs.filter(d => d.data().status?.toLowerCase() === 'pending').length;
-                setStats(prev => ({ ...prev, pendingRecharges: pendingCount }));
-            }, err => console.error("Recharge Summary Error:", err));
-
-            const unsubWithdrawals = onSnapshot(query(collection(db, 'withdrawals')), s => {
-                const pendingCount = s.docs.filter(d => d.data().status?.toLowerCase() === 'pending').length;
-                setStats(prev => ({ ...prev, pendingWithdrawals: pendingCount }));
-            }, err => console.error("Withdrawal Summary Error:", err));
-
-            const unsubRecent = onSnapshot(collection(db, 'rechargeRequests'), s => {
-                setStats(prev => ({ ...prev, totalRechargeDocs: s.size }));
+            // Optimize by combining Pending Recharges and Recent Requests into one query
+            const unsubRecharges = onSnapshot(query(collection(db, 'rechargeRequests'), where('status', 'in', ['Pending', 'pending'])), s => {
+                setStats(prev => ({ ...prev, pendingRecharges: s.size }));
                 const reqs = s.docs.map(d => ({ id: d.id, ...d.data() }))
-                    .filter(d => d.status?.toLowerCase() === 'pending')
                     .sort((a, b) => (b.createdAt?.seconds || Date.now() / 1000) - (a.createdAt?.seconds || Date.now() / 1000));
                 setRecentRequests(reqs.slice(0, 10));
-            }, err => console.error("Recent Recharges Error:", err));
+            }, err => console.error("Recharge Summary Error:", err));
+
+            const unsubWithdrawals = onSnapshot(query(collection(db, 'withdrawals'), where('status', 'in', ['Pending', 'pending'])), s => {
+                setStats(prev => ({ ...prev, pendingWithdrawals: s.size }));
+            }, err => console.error("Withdrawal Summary Error:", err));
 
             const unsubMatches = onSnapshot(collection(db, 'matches'), s => {
                 setStats(prev => ({ ...prev, activeMatches: s.docs.filter(d => d.data().status !== 'Finished').length }));
@@ -108,7 +102,6 @@ const AdminDashboard = () => {
                 unsubUsers();
                 unsubRecharges();
                 unsubWithdrawals();
-                unsubRecent();
                 unsubMatches();
                 unsubSupport();
                 unsubAlerts();

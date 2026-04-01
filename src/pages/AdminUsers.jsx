@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { db } from '../firebase';
-import { collection, query, onSnapshot, doc, updateDoc, addDoc, serverTimestamp, increment, setDoc, orderBy, deleteDoc, where } from 'firebase/firestore';
+import { collection, query, onSnapshot, doc, updateDoc, addDoc, serverTimestamp, increment, setDoc, orderBy, deleteDoc, where, limit } from 'firebase/firestore';
 import { User, Mail, Wallet, TrendingUp, CreditCard, Edit2, Check, X, Search, Shield, Phone, Calendar, ArrowUpCircle, ArrowDownCircle, Plus, Minus, AlertCircle, FileText, MessageCircle, Send, CheckCheck, Trash2, Gamepad2, Coins, Clock, Gift } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
@@ -22,7 +22,7 @@ const AdminUsers = () => {
     useEffect(() => {
         if (!userData?.isAdmin) return;
         // Sync Users
-        const qUsers = query(collection(db, 'users'));
+        const qUsers = query(collection(db, 'users'), orderBy('createdAt', 'desc'), limit(300));
         const unsubUsers = onSnapshot(qUsers, (snapshot) => {
             const usersData = snapshot.docs.map(doc => ({
                 id: doc.id, ...doc.data()

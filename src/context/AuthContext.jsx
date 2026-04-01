@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, setDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 
 const AuthContext = createContext();
@@ -24,10 +24,11 @@ export const AuthProvider = ({ children }) => {
                     // Initial fetch
                     const userSnap = await getDoc(userRef);
                     if (!userSnap.exists()) {
-                        // Initialize user in Firestore if not exists
                         const initialData = {
                             email: currentUser.email,
-                            balance: 0,
+                            inrBalance: 0,
+                            usdtBalance: 0,
+                            balance: 0, // Legacy
                             totalDeposit: 0,
                             totalWithdraw: 0,
                             totalBets: 0,
@@ -37,7 +38,22 @@ export const AuthProvider = ({ children }) => {
                         await setDoc(userRef, initialData);
                         setUserData(initialData);
                     } else {
-                        setUserData(userSnap.data());
+                        const data = userSnap.data();
+                        // Migration logic: If user has old 'balance' but no 'inrBalance', move it
+                        if (data.balance !== undefined && data.inrBalance === undefined) {
+                            const migratedData = {
+                                ...data,
+                                inrBalance: data.balance,
+                                usdtBalance: data.usdtBalance || 0
+                            };
+                            await updateDoc(userRef, {
+                                inrBalance: data.balance,
+                                usdtBalance: data.usdtBalance || 0
+                            });
+                            setUserData(migratedData);
+                        } else {
+                            setUserData(data);
+                        }
                     }
 
                     // Real-time listener for balance updates

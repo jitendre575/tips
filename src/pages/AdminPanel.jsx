@@ -145,8 +145,10 @@ const AdminPanel = () => {
                 if (bet.selectedTeam === winnerName) {
                     const multiplier = match.sixInPowerplay ? 2 : 1;
                     const reward = bet.amount * bet.odds * multiplier;
+                    const balanceField = bet.currency === 'USDT' ? 'usdtBalance' : 'inrBalance';
                     batch.update(userRef, {
-                        balance: increment(reward),
+                        [balanceField]: increment(reward),
+                        balance: increment(reward), // Legacy sync
                         totalWon: increment(reward)
                     });
                     batch.update(betRef, {

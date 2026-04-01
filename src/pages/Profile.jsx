@@ -107,6 +107,15 @@ const Profile = () => {
                                 <Calendar size={14} className="shrink-0" />
                                 <span className="text-xs font-medium">Joined {new Date(userData?.createdAt).toLocaleDateString()}</span>
                             </div>
+                            {userData?.usdtAddress && (
+                                <div className="mt-6 flex flex-col gap-2 p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-[6px] relative overflow-hidden group/usdt">
+                                    <div className="absolute top-0 right-0 p-4 opacity-[0.05] text-emerald-500 group-hover/usdt:scale-110 transition-transform">
+                                        <Wallet size={32} />
+                                    </div>
+                                    <span className="text-[8px] font-black uppercase tracking-[0.3em] text-[#dc2626] relative z-10">USDT (TRC-20) WALLET Address</span>
+                                    <span className="text-[10px] font-mono break-all text-emerald-400 leading-tight relative z-10">{userData?.usdtAddress}</span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
