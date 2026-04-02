@@ -24,8 +24,42 @@ const LandingPage = () => {
     const [loading, setLoading] = useState(false);
     const [matches, setMatches] = useState([]);
     const [activeCategory, setActiveCategory] = useState('Lobby');
+    const [deferredPrompt, setDeferredPrompt] = useState(null);
+    const [showInstallBanner, setShowInstallBanner] = useState(false);
+    const [isInstalled, setIsInstalled] = useState(false);
     const { user, userData, loading: authLoading } = useAuth();
     const navigate = useNavigate();
+
+    // PWA Install Prompt
+    useEffect(() => {
+        // Check if already installed
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            setIsInstalled(true);
+            return;
+        }
+        const handler = (e) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+            setShowInstallBanner(true);
+        };
+        window.addEventListener('beforeinstallprompt', handler);
+        window.addEventListener('appinstalled', () => {
+            setIsInstalled(true);
+            setShowInstallBanner(false);
+            setDeferredPrompt(null);
+        });
+        return () => window.removeEventListener('beforeinstallprompt', handler);
+    }, []);
+
+    const handleInstall = async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+            setShowInstallBanner(false);
+        }
+        setDeferredPrompt(null);
+    };
 
     useEffect(() => {
         const q = query(collection(db, 'matches'), orderBy('matchTime', 'asc'));
@@ -149,6 +183,16 @@ const LandingPage = () => {
                         </div>
                     </div>
                 <div className="flex items-center gap-2">
+                    {/* PWA Install Button in Header */}
+                    {!isInstalled && deferredPrompt && (
+                        <button
+                            onClick={handleInstall}
+                            className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-green-500/10 hover:bg-green-500/20 text-green-600 rounded-[6px] border border-green-500/20 text-[9px] font-black uppercase tracking-widest transition-all active:scale-95"
+                        >
+                            <Download size={13} />
+                            Install
+                        </button>
+                    )}
                     <button
                         onClick={() => setShowAuth(true)}
                         className="px-6 py-3 bg-slate-900 text-white rounded-[6px] text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all shadow-xl active:scale-95"
@@ -335,6 +379,45 @@ const LandingPage = () => {
                     <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-500 italic">CRICWIN • THE ULTIMATE ARENA • EST 2026</p>
                 </div>
             </main>
+
+            {/* PWA Install Banner - Bottom Floating */}
+            <AnimatePresence>
+                {showInstallBanner && !isInstalled && (
+                    <motion.div
+                        initial={{ y: 120, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 120, opacity: 0 }}
+                        transition={{ type: 'spring', damping: 20, stiffness: 200 }}
+                        className="fixed bottom-28 left-0 right-0 mx-auto max-w-[460px] z-[250] px-4"
+                    >
+                        <div className="bg-slate-900 rounded-[6px] p-4 flex items-center gap-4 shadow-2xl border border-white/[0.08] relative overflow-hidden">
+                            {/* Glow effect */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-accent/10 to-transparent pointer-events-none" />
+                            <div className="w-12 h-12 bg-accent rounded-[6px] flex items-center justify-center shrink-0 shadow-lg shadow-accent/30 relative z-10">
+                                <Download size={22} className="text-white" />
+                            </div>
+                            <div className="flex-1 relative z-10">
+                                <p className="text-white font-black text-sm uppercase tracking-tight leading-none mb-1">Install CRICWIN App</p>
+                                <p className="text-slate-400 text-[10px] font-medium">Fast access • Works offline • No browser needed</p>
+                            </div>
+                            <div className="flex items-center gap-2 relative z-10">
+                                <button
+                                    onClick={handleInstall}
+                                    className="px-4 py-2.5 bg-accent text-white rounded-[6px] text-[10px] font-black uppercase tracking-widest shadow-lg shadow-accent/30 active:scale-95 transition-all whitespace-nowrap"
+                                >
+                                    Install
+                                </button>
+                                <button
+                                    onClick={() => setShowInstallBanner(false)}
+                                    className="p-2 text-slate-500 hover:text-white transition-colors"
+                                >
+                                    <X size={16} />
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <div className="fixed bottom-0 left-0 right-0 mx-auto max-w-[480px] z-[200] bg-white/95 backdrop-blur-2xl border-t border-black/[0.05] px-6 py-4 rounded-t-[30px] shadow-[0_-20px_50px_rgba(0,0,0,0.1)] pb-safe">
                 <div className="w-full flex items-center justify-between relative">

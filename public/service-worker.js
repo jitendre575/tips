@@ -1,11 +1,13 @@
-const CACHE_NAME = 'cricbet-pwa-cache-v3';
-const DYNAMIC_CACHE = 'cricbet-dynamic-cache-v3';
+const CACHE_NAME = 'cricbet-pwa-cache-v4';
+const DYNAMIC_CACHE = 'cricbet-dynamic-cache-v4';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/manifest.json',
   '/icon-192x192.png',
   '/icon-512x512.png',
+  '/screenshot-mobile.png',
+  '/screenshot-wide.png',
   '/vite.svg'
 ];
 

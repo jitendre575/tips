@@ -5,14 +5,29 @@
     {
       "src": "/icon-192x192.png",
       "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "any maskable"
+      "sizes": "640x640",
+      "purpose": "any"
     },
     {
       "src": "/icon-512x512.png",
       "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "any maskable"
+      "sizes": "640x640",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "type": "image/png",
+      "sizes": "1080x1920",
+      "label": "Mobile Dashboard"
+    },
+    {
+      "src": "/screenshot-wide.png",
+      "type": "image/png",
+      "sizes": "1920x1080",
+      "form_factor": "wide",
+      "label": "Desktop Dashboard"
     }
   ],
   "start_url": "/",
