@@ -1,5 +1,5 @@
-const CACHE_NAME = 'cricbet-pwa-cache-v4';
-const DYNAMIC_CACHE = 'cricbet-dynamic-cache-v4';
+const CACHE_NAME = 'cricbet-pwa-cache-v5';
+const DYNAMIC_CACHE = 'cricbet-dynamic-cache-v5';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',

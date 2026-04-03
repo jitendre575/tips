@@ -6,6 +6,7 @@ import { collection, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/fi
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import qrInr from '../assets/qr_inr.png';
 
 const Payment = () => {
     const location = useLocation();
@@ -141,7 +142,7 @@ const Payment = () => {
                     <div className="relative mx-auto w-fit">
                         <div className="bg-white p-4 rounded-[6px] shadow-2xl relative z-10">
                             <img
-                                src="/qr_inr.png"
+                                src={qrInr}
                                 alt="Payment QR"
                                 className="w-56 h-56 sm:w-64 sm:h-64 object-contain mx-auto"
                             />

@@ -20,7 +20,13 @@ const AdminUsers = () => {
     const scrollRef = useRef();
 
     useEffect(() => {
-        if (!userData?.isAdmin) return;
+        // Wait for userData to load
+        if (userData === null) return; // still loading
+        if (!userData?.isAdmin) {
+            setLoading(false);
+            return;
+        }
+
         // Sync Users
         const qUsers = query(collection(db, 'users'));
         const unsubUsers = onSnapshot(qUsers, (snapshot) => {
@@ -28,6 +34,10 @@ const AdminUsers = () => {
                 id: doc.id, ...doc.data()
             }));
             setUsers(usersData);
+            setLoading(false);
+        }, (error) => {
+            console.error('Users fetch error:', error);
+            toast.error('Failed to load users: ' + error.message);
             setLoading(false);
         });
 
@@ -81,7 +91,7 @@ const AdminUsers = () => {
             unsubRecharges();
             unsubWithdrawals();
         };
-    }, [userData?.isAdmin]);
+    }, [userData]);
 
     // Sync Messages when chatting with a user
     useEffect(() => {
