@@ -141,7 +141,7 @@ const Payment = () => {
                     <div className="relative mx-auto w-fit">
                         <div className="bg-white p-4 rounded-[6px] shadow-2xl relative z-10">
                             <img
-                                src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=upi://pay?pa=aryan.genral@upi&pn=ARYAN%20GENERAL%20STORE&am=${amount}&cu=INR`}
+                                src="/qr_inr.png"
                                 alt="Payment QR"
                                 className="w-56 h-56 sm:w-64 sm:h-64 object-contain mx-auto"
                             />
