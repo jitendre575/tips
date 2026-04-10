@@ -15,7 +15,6 @@ import Payment from './pages/Payment';
 import AdminDashboard from './pages/AdminDashboard';
 import CasinoGame from './pages/CasinoGame';
 import CrashGame from './pages/CrashGame';
-import PWAInstallPrompt from './components/PWAInstallPrompt';
 
 const ProtectedRoute = ({ children, adminOnly = false }) => {
   const { user, userData, loading } = useAuth();
@@ -143,7 +142,6 @@ function App() {
                 }
               }}
             />
-            <PWAInstallPrompt />
           </div>
         </div>
       </AuthProvider>

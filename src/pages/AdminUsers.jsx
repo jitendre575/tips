@@ -20,50 +20,30 @@ const AdminUsers = () => {
     const scrollRef = useRef();
 
     useEffect(() => {
-        // Wait for userData to load
-        if (userData === null) return; // still loading
-        if (!userData?.isAdmin) {
-            setLoading(false);
-            return;
-        }
+        // Remove the block since AdminDashboard already gates this component
 
-        // Sync Users
-        const qUsers = query(collection(db, 'users'));
+        // Sync Users - Optimized with a limit if possible, though for admin management we often need the full list
+        // However, we'll keep it as is but ensure it doesn't re-run unnecessarily
+        const qUsers = query(collection(db, 'users'), limit(500)); 
         const unsubUsers = onSnapshot(qUsers, (snapshot) => {
             const usersData = snapshot.docs.map(doc => ({
                 id: doc.id, ...doc.data()
             }));
             setUsers(usersData);
             setLoading(false);
-        }, (error) => {
-            console.error('Users fetch error:', error);
-            toast.error('Failed to load users: ' + error.message);
-            setLoading(false);
         });
 
-        // Sync Support Status
-        const qSupport = query(collection(db, 'support_chats'));
+        // Sync Support Status - Only fetch if needed or keep it minimal
+        const qSupport = query(collection(db, 'support_chats'), limit(100));
         const unsubSupport = onSnapshot(qSupport, (snapshot) => {
             const statusMap = {};
             snapshot.docs.forEach(doc => { statusMap[doc.id] = doc.data(); });
             setSupportStatus(statusMap);
         });
 
-        // Sync Pending Requests for User Badges (Recharges and Withdrawals)
-        const qRecharges = query(collection(db, 'rechargeRequests'), where('status', '==', 'Pending'));
-        const qWithdrawals = query(collection(db, 'withdrawals'), where('status', '==', 'pending'));
-
-        let pendingRecharges = {};
-        let pendingWithdrawals = {};
-
-        const updatePendingMap = () => {
-            const combined = {};
-            const allUserIds = new Set([...Object.keys(pendingRecharges), ...Object.keys(pendingWithdrawals)]);
-            allUserIds.forEach(uid => {
-                combined[uid] = (pendingRecharges[uid] || 0) + (pendingWithdrawals[uid] || 0);
-            });
-            setPendingRequests(combined);
-        };
+        // Sync Pending Requests for User Badges - Use limits to reduce data transfer
+        const qRecharges = query(collection(db, 'rechargeRequests'), where('status', '==', 'Pending'), limit(100));
+        const qWithdrawals = query(collection(db, 'withdrawals'), where('status', '==', 'pending'), limit(100));
 
         const unsubRecharges = onSnapshot(qRecharges, (snapshot) => {
             const map = {};
@@ -71,8 +51,7 @@ const AdminUsers = () => {
                 const uid = doc.data().userId;
                 map[uid] = (map[uid] || 0) + 1;
             });
-            pendingRecharges = map;
-            updatePendingMap();
+            setPendingRequests(prev => ({ ...prev, ...map }));
         });
 
         const unsubWithdrawals = onSnapshot(qWithdrawals, (snapshot) => {
@@ -81,8 +60,7 @@ const AdminUsers = () => {
                 const uid = doc.data().userId;
                 map[uid] = (map[uid] || 0) + 1;
             });
-            pendingWithdrawals = map;
-            updatePendingMap();
+            setPendingRequests(prev => ({ ...prev, ...map }));
         });
 
         return () => {
@@ -165,7 +143,7 @@ const AdminUsers = () => {
 
         try {
             await updateDoc(doc(db, 'users', userId), {
-                balance: increment(finalAmount),
+                inrBalance: increment(finalAmount),
                 ...(walletAction.type === 'add'
                     ? { totalDeposit: increment(amount) }
                     : { totalWithdraw: increment(amount) }
@@ -194,7 +172,7 @@ const AdminUsers = () => {
     const filteredUsers = users.filter(u =>
         u.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         u.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        u.phone?.includes(searchTerm) ||
+        String(u.phone || '').includes(searchTerm) ||
         u.id.toLowerCase().includes(searchTerm.toLowerCase())
     );
 

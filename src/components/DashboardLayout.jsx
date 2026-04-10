@@ -63,7 +63,7 @@ const DashboardLayout = ({ children }) => {
                                 <span className="text-[6px] font-black text-slate-600 uppercase leading-none mb-1 tracking-widest">Balance</span>
                                 <span className="font-black text-slate-900 tracking-tighter leading-none text-sm flex items-center gap-1">
                                     <span className="text-[10px] text-slate-400">∑</span>
-                                    {((userData?.inrBalance || 0) + (userData?.usdtBalance || 0)).toLocaleString()}
+                                    {((userData?.balance || userData?.inrBalance || 0) + (userData?.usdtBalance || 0)).toLocaleString()}
                                 </span>
                             </div>
                         </div>
@@ -90,7 +90,7 @@ const DashboardLayout = ({ children }) => {
                                                 <div className="w-6 h-6 bg-emerald-100 rounded-[6px] flex items-center justify-center text-emerald-600 text-xs font-black">₹</div>
                                                 <span className="text-[10px] font-black text-slate-600 uppercase">INR Wallet</span>
                                             </div>
-                                            <span className="text-xs font-black text-slate-900">{(userData?.inrBalance || 0).toLocaleString()}</span>
+                                            <span className="text-xs font-black text-slate-900">{(userData?.balance || userData?.inrBalance || 0).toLocaleString()}</span>
                                         </div>
                                         <div className="flex justify-between items-center group/item hover:bg-slate-50 p-2 rounded-[6px] transition-colors">
                                             <div className="flex items-center gap-2">

@@ -16,39 +16,23 @@ const AdminRecharges = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!userData?.isAdmin) return;
+        // Load immediately — no artificial delay
+        const q = query(collection(db, 'rechargeRequests'), orderBy('createdAt', 'desc'), limit(100));
 
-        // 2s Delay to allow Firestore Rules to catch up
-        const syncDelay = setTimeout(() => {
-            console.log("[RechargeTracker] INITIALIZING ADMIN STREAM...");
-            const q = query(collection(db, 'rechargeRequests'), orderBy('createdAt', 'desc'), limit(100));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const reqs = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setRequests(reqs);
+            setLoading(false);
+        }, (error) => {
+            console.error("Recharge snapshot error:", error);
+            setLoading(false);
+        });
 
-            const unsubscribe = onSnapshot(q, (snapshot) => {
-                console.log(`[RechargeTracker] REFRESH: ${snapshot.size} total docs retrieved.`);
-                const reqs = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                })).sort((a, b) => {
-                    const dateA = a.createdAt?.seconds || Date.now() / 1000;
-                    const dateB = b.createdAt?.seconds || Date.now() / 1000;
-                    return dateB - dateA;
-                });
-                setRequests(reqs);
-                setLoading(false);
-            }, (error) => {
-                console.error("Critical Admin Snapshot Error:", error);
-                toast.error(`PERMISSION ERROR: UID ${user?.uid}. Metadata: ${JSON.stringify(userData || {})}`, {
-                    duration: 10000,
-                    id: 'recharge-admin-err'
-                });
-                setLoading(false);
-            });
-
-            return () => unsubscribe();
-        }, 2000);
-
-        return () => clearTimeout(syncDelay);
-    }, [user?.uid, userData?.isAdmin]);
+        return () => unsubscribe();
+    }, []);
 
     const repairAdmin = async () => {
         if (!user?.uid) return;

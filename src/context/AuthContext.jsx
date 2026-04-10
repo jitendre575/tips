@@ -40,14 +40,16 @@ export const AuthProvider = ({ children }) => {
                     } else {
                         const data = userSnap.data();
                         // Migration logic: If user has old 'balance' but no 'inrBalance', move it
-                        if (data.balance !== undefined && data.inrBalance === undefined) {
+                        if (data.balance !== undefined && (data.inrBalance === undefined || data.balance > (data.inrBalance || 0))) {
                             const migratedData = {
                                 ...data,
-                                inrBalance: data.balance,
+                                inrBalance: data.balance || data.inrBalance || 0,
+                                balance: 0,
                                 usdtBalance: data.usdtBalance || 0
                             };
                             await updateDoc(userRef, {
-                                inrBalance: data.balance,
+                                inrBalance: data.balance || data.inrBalance || 0,
+                                balance: 0,
                                 usdtBalance: data.usdtBalance || 0
                             });
                             setUserData(migratedData);

@@ -25,7 +25,7 @@ const AdminPanel = () => {
     });
 
     useEffect(() => {
-        if (!userData?.isAdmin) return;
+        // Removed gatekeeping check
         const q = query(collection(db, 'matches'), orderBy('matchTime', 'asc'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const allMatches = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -56,7 +56,7 @@ const AdminPanel = () => {
             setLoading(false);
         });
         return () => unsubscribe();
-    }, [userData?.isAdmin]);
+    }, []);
 
     const handleFileUpload = async (file, type, matchId = null) => {
         if (!file) return;

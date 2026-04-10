@@ -15,29 +15,19 @@ const AdminWithdrawals = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!userData?.isAdmin) return;
+        // Load immediately — no artificial delay
+        const q = query(collection(db, 'withdrawals'), orderBy('createdAt', 'desc'), limit(100));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setRequests(data);
+            setLoading(false);
+        }, (error) => {
+            console.error("Snapshot error:", error);
+            setLoading(false);
+        });
 
-        // 2s Delay to allow Firestore Rules to catch up
-        const syncDelay = setTimeout(() => {
-            const q = query(collection(db, 'withdrawals'), orderBy('createdAt', 'desc'), limit(100));
-            const unsubscribe = onSnapshot(q, (snapshot) => {
-                const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                data.sort((a, b) => {
-                    const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date();
-                    const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date();
-                    return dateB - dateA;
-                });
-                setRequests(data);
-                setLoading(false);
-            }, (error) => {
-                console.error("Snapshot error:", error);
-                setLoading(false);
-            });
-            return () => unsubscribe();
-        }, 2000);
-
-        return () => clearTimeout(syncDelay);
-    }, [userData?.isAdmin]);
+        return () => unsubscribe();
+    }, []);
 
     const handleAction = async (request, action) => {
         const loadingToast = toast.loading(`Processing ${action}...`);

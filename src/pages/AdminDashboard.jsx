@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, query, onSnapshot, orderBy, doc, updateDoc, increment, addDoc, serverTimestamp, where } from 'firebase/firestore';
+import { collection, query, onSnapshot, orderBy, doc, updateDoc, increment, addDoc, serverTimestamp, where, limit } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
 import {
     Users, LayoutDashboard, Wallet, CreditCard, Search, Filter,
@@ -14,11 +14,13 @@ import { setDoc } from 'firebase/firestore';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Import sub-components
-import AdminPanel from './AdminPanel';
-import AdminUsers from './AdminUsers';
-import AdminRecharges from './AdminRecharges';
-import AdminWithdrawals from './AdminWithdrawals';
+import { lazy, Suspense } from 'react';
+
+// Lazy load sub-components for performance
+const AdminPanel = lazy(() => import('./AdminPanel'));
+const AdminUsers = lazy(() => import('./AdminUsers'));
+const AdminRecharges = lazy(() => import('./AdminRecharges'));
+const AdminWithdrawals = lazy(() => import('./AdminWithdrawals'));
 
 const AdminDashboard = () => {
     const { user, userData } = useAuth();
@@ -50,20 +52,22 @@ const AdminDashboard = () => {
     ];
 
     useEffect(() => {
-        // Wait for authorization AND user data
-        if (!isAuthorized || !userData?.isAdmin) {
-            console.log("[AdminSync] WAITING: Auth=" + isAuthorized + " Admin=" + userData?.isAdmin);
-            return;
-        }
+        const isAdminAuthorized = isAuthorized || userData?.isAdmin;
+        if (!isAdminAuthorized) return;
 
-        // 2s Delay to allow Firestore Rules to catch up after a repair
+        // Reduced delay to 1s for better responsiveness
         const syncDelay = setTimeout(() => {
-            console.log("[AdminSync] INITIALIZING MASTER HANDLES...");
+            console.log("[AdminSync] STARTING OPTIMIZED SYNC...");
 
+            // USERS SYNC: Only fetch essential stats if possible, but keep current for balance calculation
             const unsubUsers = onSnapshot(collection(db, 'users'), s => {
-                const usersData = s.docs.map(d => d.data());
-                const tDeposit = usersData.reduce((acc, u) => acc + (u.totalDeposit || 0), 0);
-                const tWithdraw = usersData.reduce((acc, u) => acc + (u.totalWithdraw || 0), 0);
+                let tDeposit = 0;
+                let tWithdraw = 0;
+                s.docs.forEach(d => {
+                    const data = d.data();
+                    tDeposit += (data.totalDeposit || 0);
+                    tWithdraw += (data.totalWithdraw || 0);
+                });
                 setStats(prev => ({
                     ...prev,
                     totalUsers: s.size,
@@ -73,31 +77,30 @@ const AdminDashboard = () => {
                 }));
             }, err => console.error("User Sync Error:", err));
 
-            // Optimize by combining Pending Recharges and Recent Requests into one query
-            const unsubRecharges = onSnapshot(query(collection(db, 'rechargeRequests'), where('status', 'in', ['Pending', 'pending'])), s => {
+            // RECHARGES & ALERTS SYNC: Combined filter
+            const unsubRecharges = onSnapshot(query(collection(db, 'rechargeRequests'), where('status', 'in', ['Pending', 'pending']), limit(20)), s => {
                 setStats(prev => ({ ...prev, pendingRecharges: s.size }));
                 const reqs = s.docs.map(d => ({ id: d.id, ...d.data() }))
-                    .sort((a, b) => (b.createdAt?.seconds || Date.now() / 1000) - (a.createdAt?.seconds || Date.now() / 1000));
+                    .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
                 setRecentRequests(reqs.slice(0, 10));
-            }, err => console.error("Recharge Summary Error:", err));
+            });
 
-            const unsubWithdrawals = onSnapshot(query(collection(db, 'withdrawals'), where('status', 'in', ['Pending', 'pending'])), s => {
+            const unsubWithdrawals = onSnapshot(query(collection(db, 'withdrawals'), where('status', 'in', ['Pending', 'pending']), limit(20)), s => {
                 setStats(prev => ({ ...prev, pendingWithdrawals: s.size }));
-            }, err => console.error("Withdrawal Summary Error:", err));
+            });
 
-            const unsubMatches = onSnapshot(collection(db, 'matches'), s => {
+            const unsubMatches = onSnapshot(query(collection(db, 'matches'), limit(50)), s => {
                 setStats(prev => ({ ...prev, activeMatches: s.docs.filter(d => d.data().status !== 'Finished').length }));
-            }, err => console.error("Match Sync Error:", err));
+            });
 
-            const unsubSupport = onSnapshot(query(collection(db, 'support_chats'), where('unreadAdmin', '==', true)), s => {
+            const unsubSupport = onSnapshot(query(collection(db, 'support_chats'), where('unreadAdmin', '==', true), limit(50)), s => {
                 setStats(prev => ({ ...prev, unreadSupport: s.size }));
-            }, err => console.error("Support Sync Error:", err));
+            });
 
-            const unsubAlerts = onSnapshot(query(collection(db, 'notifications'), where('userId', '==', 'admin_global'), where('read', '==', false)), s => {
+            const unsubAlerts = onSnapshot(query(collection(db, 'notifications'), where('userId', '==', 'admin_global'), where('read', '==', false), limit(20)), s => {
                 setStats(prev => ({ ...prev, adminAlerts: s.size }));
-            }, err => console.error("Alerts Sync Error:", err));
+            });
 
-            // Clean up
             return () => {
                 unsubUsers();
                 unsubRecharges();
@@ -106,7 +109,7 @@ const AdminDashboard = () => {
                 unsubSupport();
                 unsubAlerts();
             };
-        }, 2000);
+        }, 1000);
 
         return () => clearTimeout(syncDelay);
     }, [isAuthorized, userData?.isAdmin]);
@@ -429,25 +432,25 @@ const AdminDashboard = () => {
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     className="max-w-2xl w-full relative z-10"
                 >
-                    <div className="bg-white/[0.03] backdrop-blur-3xl border border-white/[0.08] rounded-[6px] p-2 sm:p-4 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)]">
-                        <div className="bg-[#0a0a0a] rounded-[6px] p-12 sm:p-20 border border-white/[0.05] relative overflow-hidden">
+                    <div className="bg-white/[0.03] backdrop-blur-3xl border border-white/[0.08] rounded-[6px] p-2 sm:p-3 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)]">
+                        <div className="bg-[#0a0a0a] rounded-[6px] p-8 sm:p-12 border border-white/[0.05] relative overflow-hidden">
                             {/* Inner Glow */}
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
                             
-                            <div className="relative z-10 space-y-16">
+                            <div className="relative z-10 space-y-10 sm:space-y-12">
                                 <div className="space-y-8 text-center">
                                     <motion.div
                                         initial={{ rotateY: 90 }}
                                         animate={{ rotateY: 0 }}
                                         transition={{ delay: 0.3, duration: 1 }}
-                                        className="w-24 h-24 bg-gradient-to-br from-accent to-emerald-600 rounded-[6px] mx-auto flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.3)] relative group"
+                                        className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-accent to-emerald-600 rounded-[6px] mx-auto flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.3)] relative group"
                                     >
                                         <div className="absolute inset-0 bg-white/20 rounded-[6px] opacity-0 group-hover:opacity-100 transition-opacity" />
-                                        <ShieldCheck size={48} className="text-white drop-shadow-lg" />
+                                        <ShieldCheck className="w-8 h-8 sm:w-10 sm:h-10 text-white drop-shadow-lg" />
                                     </motion.div>
                                     
                                     <div className="space-y-3">
-                                        <h2 className="text-5xl sm:text-6xl font-black italic tracking-tighter text-white uppercase leading-none">
+                                        <h2 className="text-4xl sm:text-5xl font-black italic tracking-tighter text-white uppercase leading-none">
                                             MASTER <span className="text-accent underline decoration-accent/20">CONTROL</span>
                                         </h2>
                                         <div className="flex items-center justify-center gap-4 text-emerald-500/40">
@@ -458,26 +461,26 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
 
-                                <form onSubmit={handleSubmit} className="space-y-12">
-                                    <div className="space-y-6">
+                                <form onSubmit={handleSubmit} className="space-y-8 sm:space-y-10">
+                                    <div className="space-y-4">
                                         <div className="flex justify-between items-center px-2">
-                                            <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Secret Clearance Code</label>
+                                            <label className="text-[10px] sm:text-xs font-black text-white/30 uppercase tracking-[0.2em] sm:tracking-[0.4em]">Secret Clearance Code</label>
                                             <div className="flex items-center gap-2">
                                                 <div className="w-1.5 h-1.5 bg-accent rounded-[6px] animate-ping" />
-                                                <span className="text-[9px] font-black text-accent uppercase tracking-widest">Live Link</span>
+                                                <span className="text-[9px] font-black text-accent uppercase tracking-widest hidden sm:inline">Live Link</span>
                                             </div>
                                         </div>
                                         <div className="relative group">
                                             <div className="absolute -inset-0.5 bg-gradient-to-r from-accent/50 to-emerald-500/50 rounded-[6px] blur opacity-20 group-focus-within:opacity-100 transition duration-1000 group-focus-within:duration-200" />
                                             <div className="relative flex items-center">
-                                                <Lock className="absolute left-8 text-white/20 group-focus-within:text-accent transition-colors" size={24} />
+                                                <Lock className="absolute left-4 sm:left-6 text-white/20 group-focus-within:text-accent transition-colors w-5 h-5 sm:w-6 sm:h-6" />
                                                 <input
                                                     type="password"
                                                     value={localPin}
                                                     onChange={(e) => setLocalPin(e.target.value)}
                                                     placeholder="ENTER CLEARANCE KEY"
                                                     autoFocus
-                                                    className="w-full bg-black/40 border border-white/10 rounded-[6px] py-10 pl-20 pr-8 text-4xl font-black tracking-[12px] text-center text-accent focus:outline-none focus:border-accent/50 transition-all placeholder:tracking-normal placeholder:text-white/5 uppercase shadow-2xl"
+                                                    className="w-full bg-black/40 border border-white/10 rounded-[6px] py-4 sm:py-6 pl-12 sm:pl-16 pr-4 sm:pr-8 text-xl sm:text-3xl font-black tracking-[4px] sm:tracking-[8px] text-center text-accent focus:outline-none focus:border-accent/50 transition-all placeholder:tracking-normal placeholder:text-white/5 uppercase shadow-2xl"
                                                 />
                                             </div>
                                         </div>
@@ -485,17 +488,17 @@ const AdminDashboard = () => {
 
                                     <button
                                         type="submit"
-                                        className="w-full py-10 bg-accent hover:bg-emerald-400 text-white rounded-[6px] font-black uppercase italic tracking-[0.5em] text-lg transition-all shadow-[0_0_40px_rgba(16,185,129,0.2)] active:scale-[0.98] group relative overflow-hidden"
+                                        className="w-full py-4 sm:py-6 bg-accent hover:bg-emerald-400 text-white rounded-[6px] font-black uppercase italic tracking-[0.3em] sm:tracking-[0.5em] text-sm sm:text-lg transition-all shadow-[0_0_40px_rgba(16,185,129,0.2)] active:scale-[0.98] group relative overflow-hidden"
                                     >
                                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 skew-x-12" />
-                                        <span className="relative z-10 flex items-center justify-center gap-4">
-                                            Initialize Core <Zap size={24} className="group-hover:scale-125 transition-transform" />
+                                        <span className="relative z-10 flex items-center justify-center gap-2 sm:gap-4">
+                                            Initialize Core <Zap className="w-4 h-4 sm:w-6 sm:h-6 group-hover:scale-125 transition-transform" />
                                         </span>
                                     </button>
                                 </form>
 
-                                <div className="pt-10 border-t border-white/[0.05] flex flex-col items-center gap-8">
-                                    <div className="flex items-center gap-10">
+                                <div className="pt-8 border-t border-white/[0.05] flex flex-col items-center gap-6">
+                                    <div className="flex items-center gap-6 sm:gap-10">
                                         <div className="text-center space-y-1">
                                             <p className="text-[8px] font-black text-white/20 uppercase tracking-widest leading-none">Authority</p>
                                             <p className="text-[11px] font-black text-white/60 uppercase italic tracking-tighter leading-none">Master Admin</p>
@@ -611,6 +614,14 @@ const AdminDashboard = () => {
                     </div>
 
                     <button
+                        onClick={() => window.location.reload()}
+                        className="p-3 bg-slate-900 hover:bg-accent/20 text-slate-400 hover:text-accent rounded-[6px] transition-all active:rotate-180 border border-white/5"
+                        title="Refresh Terminal"
+                    >
+                        <RefreshCcw size={20} />
+                    </button>
+
+                    <button
                         onClick={handleLogout}
                         className="p-3 bg-slate-900 hover:bg-red-900/20 text-slate-400 hover:text-red-400 rounded-[6px] transition-all active:scale-90 border border-white/5 group relative shadow-sm"
                     >
@@ -670,21 +681,28 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Main Content Area - Render sub-pages based on tab */}
-                                <motion.div
+                <motion.div
                     key={activeTab}
                     initial={{ opacity: 0, x: 20, filter: 'blur(15px)' }}
                     animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
                     transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                     className="min-h-[700px] relative z-20"
                 >
-                    {activeTab === 'overview' && <AdminOverview />}
-                    {activeTab === 'markets' && <AdminPanel />}
-                    {activeTab === 'users' && <AdminUsers />}
-                    {activeTab === 'recharges' && <AdminRecharges />}
-                    {activeTab === 'withdrawals' && <AdminWithdrawals />}
-                    {activeTab === 'casino' && <AdminCasino stats={stats} />}
-                    {activeTab === 'support' && <AdminSupport />}
-                    {activeTab === 'settings' && <AdminSettings />}
+                    <Suspense fallback={
+                        <div className="flex flex-col items-center justify-center min-h-[400px] gap-6">
+                            <RefreshCcw size={40} className="text-accent animate-spin-slow" />
+                            <p className="text-[10px] font-black uppercase tracking-[5px] text-slate-500">Synchronizing Matrix...</p>
+                        </div>
+                    }>
+                        {activeTab === 'overview' && <AdminOverview />}
+                        {activeTab === 'markets' && <AdminPanel />}
+                        {activeTab === 'users' && <AdminUsers />}
+                        {activeTab === 'recharges' && <AdminRecharges />}
+                        {activeTab === 'withdrawals' && <AdminWithdrawals />}
+                        {activeTab === 'casino' && <AdminCasino stats={stats} />}
+                        {activeTab === 'support' && <AdminSupport />}
+                        {activeTab === 'settings' && <AdminSettings />}
+                    </Suspense>
                 </motion.div>
             </div>
         </div>
